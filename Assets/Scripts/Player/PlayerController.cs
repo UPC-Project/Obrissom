@@ -81,8 +81,12 @@ namespace Obrissom.Player
         private void LateUpdate()
         {
             // Movement it's updated, now define camera rotation based on input
+            if ( _playerLocomotionInput.CameraPressed)
+            {
+                
             _cameraRotation.x += lookSenseH * _playerLocomotionInput.LookInput.x;
             _cameraRotation.y = Mathf.Clamp(_cameraRotation.y - lookSenseV * _playerLocomotionInput.LookInput.y, -lookLimitV, lookLimitV);
+            }
 
             _playerCamera.transform.rotation = Quaternion.Euler(_cameraRotation.y, _cameraRotation.x, 0f);
         }
@@ -147,7 +151,7 @@ namespace Obrissom.Player
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-                _hitNormal = hit.normal;
+            _hitNormal = hit.normal;
         }
     }
 }

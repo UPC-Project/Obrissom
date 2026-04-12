@@ -16,7 +16,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Look",
+                    "name": "Camera Look",
                     "type": "Value",
                     "id": "ebb9b368-9e48-42bd-ae07-389440e6063b",
                     "expectedControlType": "Vector2",
@@ -41,6 +41,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Camera Controls",
+                    "type": "Button",
+                    "id": "2fb64eb8-921a-4ddf-9cce-cba43e128528",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Scroll Camera",
+                    "type": "Value",
+                    "id": "0c3981d8-fcc2-489f-b241-282eb69a0aa2",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -161,7 +179,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -184,6 +202,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5e0a1e5-7e6b-4c47-8cac-1997e2a69437",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Controls",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1733a13d-9602-477c-9c73-955bccace29e",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll Camera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
