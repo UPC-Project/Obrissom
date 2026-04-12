@@ -75,17 +75,15 @@ namespace Obrissom.Player
 
             // Unity suggests only calling this once per tick
             _characterController.Move(_newVelocity * Time.deltaTime);
-
         }
 
         private void LateUpdate()
         {
             // Movement it's updated, now define camera rotation based on input
-            if ( _playerLocomotionInput.CameraPressed)
+            if (_playerLocomotionInput.CameraPressed)
             {
-                
-            _cameraRotation.x += lookSenseH * _playerLocomotionInput.LookInput.x;
-            _cameraRotation.y = Mathf.Clamp(_cameraRotation.y - lookSenseV * _playerLocomotionInput.LookInput.y, -lookLimitV, lookLimitV);
+                _cameraRotation.x += lookSenseH * _playerLocomotionInput.LookInput.x;
+                _cameraRotation.y = Mathf.Clamp(_cameraRotation.y - lookSenseV * _playerLocomotionInput.LookInput.y, -lookLimitV, lookLimitV);
             }
 
             _playerCamera.transform.rotation = Quaternion.Euler(_cameraRotation.y, _cameraRotation.x, 0f);
@@ -136,7 +134,7 @@ namespace Obrissom.Player
         {
             if (_isGrounded && _verticalVelocity < 0f)
             {
-                _verticalVelocity = -2f;
+                _verticalVelocity = -5f;
             }
 
             _verticalVelocity -= gravity * Time.deltaTime;
@@ -151,7 +149,13 @@ namespace Obrissom.Player
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            _hitNormal = hit.normal;
+            if (hit.gameObject.tag == "Stairs")
+            {
+                _hitNormal = Vector3.zero;    
+            } else
+            {
+                _hitNormal = hit.normal;
+            }
         }
     }
 }
