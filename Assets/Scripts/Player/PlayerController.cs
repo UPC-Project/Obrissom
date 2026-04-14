@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngineInternal;
 
 namespace Obrissom.Player
 {
@@ -21,6 +20,7 @@ namespace Obrissom.Player
         public float drag = 0.1f;
         public float gravity = 9.81f;
         public float jumpSpeed = 1f;
+        public float playerRotationSpeed = 1f;
         [SerializeField] private bool _isGrounded;
         [SerializeField] private float _groundCheckDistance = 1f;
         [SerializeField] private float _radius = 1f;
@@ -34,7 +34,6 @@ namespace Obrissom.Player
         public float lookSenseH = 0.1f;
         public float lookSenseV = 0.1f;
         public float lookLimitV = 89f;
-        public float playerRotationSpeed = 12f;
 
         private PlayerLocomotionInput _playerLocomotionInput;
         private Vector2 _cameraRotation = Vector2.zero;
@@ -151,8 +150,9 @@ namespace Obrissom.Player
         {
             if (hit.gameObject.tag == "Stairs")
             {
-                _hitNormal = Vector3.zero;    
-            } else
+                _hitNormal = Vector3.zero;
+            }
+            else
             {
                 _hitNormal = hit.normal;
             }
