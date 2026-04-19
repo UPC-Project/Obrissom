@@ -6,12 +6,10 @@ public class GameStateController : MonoBehaviour
     {
         var input = InputManager.Instance.PlayerInput;
 
-        // primero desactivás todo
         input.PlayerLocomotionMap.Disable();
         input.UIMap.Disable();
         input.CombatMap.Disable();
 
-        // activás lo necesario
         switch (state)
         {
             case GameState.Gameplay:

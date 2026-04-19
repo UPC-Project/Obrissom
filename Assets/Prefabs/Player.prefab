@@ -2487,7 +2487,8 @@ GameObject:
   - component: {fileID: 7285104877395667145}
   - component: {fileID: 4870543239085801756}
   - component: {fileID: 7382067627771135810}
-  - component: {fileID: 4284822295111754367}
+  - component: {fileID: 432170278802938963}
+  - component: {fileID: 4818393549731637891}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -2573,7 +2574,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   _characterController: {fileID: 7285104877395667145}
   _playerCamera: {fileID: 2103886175672732199}
-  PlayerState: {fileID: 0}
   walkAcceleration: 35
   walkSpeed: 4
   runAcceleration: 50
@@ -2592,9 +2592,6 @@ MonoBehaviour:
   lookSenseH: 0.1
   lookSenseV: 0.1
   lookLimitV: 50
-  _groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &7382067627771135810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2608,10 +2605,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotionInput
   _cameraZoomSpeed: 0.2
-  _CameraZoomMinZoom: 3
-  _CameraZoomMaxZoom: 5
+  _cameraZoomMinZoom: 3
+  _cameraZoomMaxZoom: 5
   _camera: {fileID: 87435436670976574}
---- !u!114 &4284822295111754367
+--- !u!114 &432170278802938963
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2620,10 +2617,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 3369722021179245616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c393d777f05bb3244a10bf637a7d1cf6, type: 3}
+  m_Script: {fileID: 11500000, guid: 545402b62f6d5464e95741a32858eb05, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerState
-  <CurrentPlayerMovementState>k__BackingField: 0
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+  _health: 0
+  _isUsingSkill: 0
+  skills: []
+  attackBoost: 1
+  mitigateDamage: 1
+  speedBoost: 1
+--- !u!114 &4818393549731637891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3369722021179245616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f0886d6caf4da49825240045a48f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerXP
+  xpNeeded: 0
+  currentLevel: 1
 --- !u!1 &3570136884128279993
 GameObject:
   m_ObjectHideFlags: 0

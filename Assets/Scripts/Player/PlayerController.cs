@@ -6,24 +6,24 @@ namespace Obrissom.Player
     public class PlayerController : MonoBehaviour
     {
         #region Class variables
+
         [Header("Component")]
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private GameObject _playerCamera;
 
         [Header("Movement")]
-        public PlayerState PlayerState;
-        public float walkAcceleration = 0.15f;
+        public float walkAcceleration = 35f;
         public float walkSpeed = 4f;
-        public float runAcceleration = 0.35f;
-        public float runSpeed = 8f;
-        public float airAcceleration = 0.35f;
-        public float drag = 0.1f;
-        public float gravity = 9.81f;
+        public float runAcceleration = 50f;
+        public float runSpeed = 7f;
+        public float airAcceleration = 4f;
+        public float drag = 15f;
         public float jumpSpeed = 1f;
         public float playerRotationSpeed = 1f;
+        private float _gravity = 9.81f;
         [SerializeField] private bool _isGrounded;
-        [SerializeField] private float _groundCheckDistance = 1f;
-        [SerializeField] private float _radius = 1f;
+        [SerializeField] private float _groundCheckDistance = 0.4f;
+        [SerializeField] private float _radius = 0.23f;
         [SerializeField] private Vector3 _originGroundCheck;
         [SerializeField] private float _verticalVelocity;
         [SerializeField] private Vector3 _newVelocity;
@@ -33,13 +33,11 @@ namespace Obrissom.Player
         [Header("Camera Settings")]
         public float lookSenseH = 0.1f;
         public float lookSenseV = 0.1f;
-        public float lookLimitV = 89f;
+        public float lookLimitV = 50f;
 
         private PlayerLocomotionInput _playerLocomotionInput;
         private Vector2 _cameraRotation = Vector2.zero;
 
-        [Header("Environment Details")]
-        [SerializeField] private LayerMask _groundLayers;
         #endregion
 
         private void Awake()
@@ -60,7 +58,6 @@ namespace Obrissom.Player
 
         private void Update()
         {
-            HandlePlayerState();
 
             HandleHorizontalMovement();
 
@@ -86,11 +83,6 @@ namespace Obrissom.Player
             }
 
             _playerCamera.transform.rotation = Quaternion.Euler(_cameraRotation.y, _cameraRotation.x, 0f);
-        }
-
-        private void HandlePlayerState()
-        {
-            // TODO
         }
 
         private void HandleHorizontalMovement()
@@ -136,11 +128,11 @@ namespace Obrissom.Player
                 _verticalVelocity = -5f;
             }
 
-            _verticalVelocity -= gravity * Time.deltaTime;
+            _verticalVelocity -= _gravity * Time.deltaTime;
 
             if (_playerLocomotionInput.JumpPressed && _isGrounded)
             {
-                _verticalVelocity = Mathf.Sqrt(jumpSpeed * 3 * gravity);
+                _verticalVelocity = Mathf.Sqrt(jumpSpeed * 3 * _gravity);
             }
 
             _newVelocity.y = _verticalVelocity;

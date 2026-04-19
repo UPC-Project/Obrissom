@@ -8,7 +8,6 @@ namespace Obrissom.Player
     public class PlayerLocomotionInput : MonoBehaviour, PlayerInput.IPlayerLocomotionMapActions
     {
         #region Class variables
-        // { get; private set; } for read only
         [Header("Player Movement")]
         public bool RunToggledOn { get; private set; }
         public bool JumpPressed { get; private set; }
@@ -17,12 +16,12 @@ namespace Obrissom.Player
         public Vector2 MovementInput { get; private set; }
         
         [Header("Player Camera")]
+        [SerializeField] private float _cameraZoomSpeed;
+        [SerializeField, Range(2,4)] private int _cameraZoomMinZoom = 3;
+        [SerializeField, Range(4,7)] private int _cameraZoomMaxZoom = 5;
+        [SerializeField] private CinemachineThirdPersonFollow _camera;
         public Vector2 LookInput { get; private set; }
         public Vector2 ScrollInput { get; private set; }
-        [SerializeField] private float _cameraZoomSpeed;
-        [SerializeField] private float _CameraZoomMinZoom = 3f;
-        [SerializeField] private float _CameraZoomMaxZoom = 5f;
-        [SerializeField] private CinemachineThirdPersonFollow _camera;
         #endregion
 
         private void OnEnable()
@@ -44,7 +43,7 @@ namespace Obrissom.Player
 
         private void Update()
         {
-            _camera.CameraDistance = Mathf.Clamp(_camera.CameraDistance + ScrollInput.y, _CameraZoomMinZoom, _CameraZoomMaxZoom);
+            _camera.CameraDistance = Mathf.Clamp(_camera.CameraDistance + ScrollInput.y, _cameraZoomMinZoom, _cameraZoomMaxZoom);
         }
 
         private void LateUpdate()
