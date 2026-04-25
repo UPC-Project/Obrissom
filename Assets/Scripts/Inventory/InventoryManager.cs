@@ -67,8 +67,8 @@ public class InventoryManager : MonoBehaviour
     private void SetInventoryState(bool isOpen)
     {
         inventoryPanel?.SetActive(isOpen);
-        Cursor.visible = isOpen;
-        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        //Cursor.visible = isOpen;
+        //Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     /// <summary>
@@ -177,6 +177,3 @@ public class InventoryManager : MonoBehaviour
         }
     }
 }
-
-
-
