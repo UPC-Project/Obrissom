@@ -80,5 +80,4 @@ public class Inventory : MonoBehaviour
         OnInventoryChanged?.Invoke();
     }
 
-
 }

@@ -79,7 +79,6 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void MoveItem()
     {
-
         // 1. Start dragging
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
