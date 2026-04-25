@@ -1,17 +1,19 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Obrissom.Player
 {
     [DefaultExecutionOrder(-1)]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         #region Class variables
         [Header("Component")]
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private GameObject _playerCamera;
+        private PlayerLocomotionInput _playerLocomotionInput;
+
 
         [Header("Movement")]
-        public PlayerState PlayerState;
         public float walkAcceleration = 0.15f;
         public float walkSpeed = 4f;
         public float runAcceleration = 0.35f;
@@ -35,11 +37,7 @@ namespace Obrissom.Player
         public float lookSenseV = 0.1f;
         public float lookLimitV = 89f;
 
-        private PlayerLocomotionInput _playerLocomotionInput;
         private Vector2 _cameraRotation = Vector2.zero;
-
-        [Header("Environment Details")]
-        [SerializeField] private LayerMask _groundLayers;
         #endregion
 
         private void Awake()
@@ -49,6 +47,8 @@ namespace Obrissom.Player
 
         private void FixedUpdate()
         {
+            if (!IsOwner) return;
+
             _originGroundCheck = transform.position + Vector3.up * 0.5f;
             _isGrounded = Physics.SphereCast(
                             _originGroundCheck,
@@ -60,7 +60,7 @@ namespace Obrissom.Player
 
         private void Update()
         {
-            HandlePlayerState();
+            if (!IsOwner) return;
 
             HandleHorizontalMovement();
 
@@ -78,6 +78,8 @@ namespace Obrissom.Player
 
         private void LateUpdate()
         {
+            if (!IsOwner) return;
+
             // Movement it's updated, now define camera rotation based on input
             if (_playerLocomotionInput.CameraPressed)
             {
@@ -86,11 +88,6 @@ namespace Obrissom.Player
             }
 
             _playerCamera.transform.rotation = Quaternion.Euler(_cameraRotation.y, _cameraRotation.x, 0f);
-        }
-
-        private void HandlePlayerState()
-        {
-            // TODO
         }
 
         private void HandleHorizontalMovement()
@@ -157,5 +154,12 @@ namespace Obrissom.Player
                 _hitNormal = hit.normal;
             }
         }
+
+        // NETWORKING
+        public override void OnNetworkSpawn()
+        {
+            _playerCamera.SetActive(IsOwner);
+        }
+
     }
 }
