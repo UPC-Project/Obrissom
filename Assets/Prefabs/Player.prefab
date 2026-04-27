@@ -5943,9 +5943,12 @@ GameObject:
   - component: {fileID: 5890721350154146254}
   - component: {fileID: 8267286461210429347}
   - component: {fileID: 6419683013819781245}
+  - component: {fileID: 5871663072920762172}
   - component: {fileID: 84489524129939551}
   - component: {fileID: 3073785928534601876}
-  - component: {fileID: 5871663072920762172}
+  - component: {fileID: 3178960986818618116}
+  - component: {fileID: 5872393580821372208}
+  - component: {fileID: 6505030365955138759}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -6030,67 +6033,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
   GlobalObjectIdHash: 3513636881
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 3513636881
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &84489524129939551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8583436400068803801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecfa38c3362b1764d8bafa29a57818d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  ShowTopMostFoldoutHeaderGroup: 1
-  _characterController: {fileID: 8267286461210429347}
-  _playerCamera: {fileID: 9095271886297372756}
-  walkAcceleration: 35
-  walkSpeed: 4
-  runAcceleration: 50
-  runSpeed: 7
-  airAcceleration: 4
-  drag: 15
-  gravity: 9.81
-  jumpSpeed: 1
-  playerRotationSpeed: 1
-  _isGrounded: 0
-  _groundCheckDistance: 0.4
-  _radius: 0.23
-  _originGroundCheck: {x: 0, y: 0, z: 0}
-  _verticalVelocity: 0
-  _newVelocity: {x: 0, y: 0, z: 0}
-  lookSenseH: 0.1
-  lookSenseV: 0.1
-  lookLimitV: 50
---- !u!114 &3073785928534601876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8583436400068803801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: add499a960eec7440919d6afc21e2537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotionInput
-  _cameraZoomSpeed: 0.2
-  _CameraZoomMinZoom: 3
-  _CameraZoomMaxZoom: 5
-  _camera: {fileID: 8739976622806315253}
 --- !u!114 &5871663072920762172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6137,6 +6091,119 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &84489524129939551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583436400068803801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecfa38c3362b1764d8bafa29a57818d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  ShowTopMostFoldoutHeaderGroup: 1
+  _characterController: {fileID: 8267286461210429347}
+  _playerCamera: {fileID: 9095271886297372756}
+  walkAcceleration: 35
+  walkSpeed: 4
+  runAcceleration: 50
+  runSpeed: 7
+  airAcceleration: 4
+  drag: 15
+  jumpSpeed: 1
+  playerRotationSpeed: 1
+  _isGrounded: 0
+  _groundCheckDistance: 0.4
+  _radius: 0.23
+  _originGroundCheck: {x: 0, y: 0, z: 0}
+  _verticalVelocity: 0
+  _newVelocity: {x: 0, y: 0, z: 0}
+  lookSenseH: 0.1
+  lookSenseV: 0.1
+  lookLimitV: 50
+--- !u!114 &3073785928534601876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583436400068803801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add499a960eec7440919d6afc21e2537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotionInput
+  _cameraZoomSpeed: 0.2
+  _cameraZoomMinZoom: 3
+  _cameraZoomMaxZoom: 5
+  _camera: {fileID: 8739976622806315253}
+--- !u!114 &3178960986818618116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583436400068803801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f0886d6caf4da49825240045a48f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerXP
+  xp: 0
+  xpNeeded: 0
+  currentLevel: 1
+--- !u!114 &5872393580821372208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583436400068803801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 545402b62f6d5464e95741a32858eb05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+  _health: 20
+  maxHealth: 0
+  resource: 0
+  maxResource: 0
+  _isUsingSkill: 0
+  skills: []
+  attackBoost: 1
+  damageReduction: 1
+  speedBoost: 1
+  criticChance: 0
+  criticPercentage: 0
+--- !u!54 &6505030365955138759
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583436400068803801}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8604654818854929268
 GameObject:
   m_ObjectHideFlags: 0

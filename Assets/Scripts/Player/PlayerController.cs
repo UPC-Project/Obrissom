@@ -8,7 +8,7 @@ namespace Obrissom.Player
     {
         #region Class variables
 
-        [Header("Component")]
+        [Header("Components")]
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private GameObject _playerCamera;
         private PlayerLocomotionInput _playerLocomotionInput;

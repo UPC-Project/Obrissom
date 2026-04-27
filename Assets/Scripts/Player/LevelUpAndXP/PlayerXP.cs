@@ -2,20 +2,24 @@ using UnityEngine;
 
 public class PlayerXP : MonoBehaviour
 {
-    public float xp { get; private set; }
+    public float xp;
     public float xpNeeded; // XP needed for next level
     public int currentLevel = 1;
-    //[SerializeField] private LevelUpRequirements requirements;
+    
+    [Header("Components")]
+    private PlayerCombat _playerCombat;
+
 
     private void Start()
     {
+        _playerCombat = GetComponent<PlayerCombat>();
         // TODO: save information
         // Load player data from file
-        //xpNeeded = requirements.LevelRequirements[currentLevel];
+        xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
     }
     public void GainXP(float amount)
     {
-        //if (currentLevel >= requirements.maxlevel) return; 
+        if (currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
         if (xp + amount >= xpNeeded)
         {
             float rest = (xp + amount) - xpNeeded;
@@ -32,8 +36,25 @@ public class PlayerXP : MonoBehaviour
     private void LevelUp()
     {
         currentLevel++;
-       //xpNeeded = requirements.LevelRequirements[currentLevel];
+        xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
 
-        // TODO: here will recieve the rewards and apply them
+        // Apply level up rewards
+        // TODO: change by class
+        LevelUpRewardsType rewards = LevelUpRewards.LevelRewardsDPS[currentLevel];
+        ApplyRewards(rewards);
+    }
+
+    private void ApplyRewards(LevelUpRewardsType rewards)
+    {
+        foreach (var buf in rewards.Stats)
+        {
+            if (buf.Value.HasValue)
+                _playerCombat.ApplyStat(buf.Key, buf.Value.Value);
+        }
+
+        foreach (Skill skill in rewards.NewSkills)
+        {
+            _playerCombat.UnlockSkill(skill);
+        }
     }
 }

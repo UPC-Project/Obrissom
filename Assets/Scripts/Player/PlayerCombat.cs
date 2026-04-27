@@ -5,13 +5,17 @@ public class PlayerCombat : MonoBehaviour
 {
     #region Class variables
     [SerializeField, Min(0)] private float _health;
+    [Min(0)] public float maxHealth;
+    [SerializeField, Min(0)] private float resource; // Mana / Stamina / Fury, etc
+    [Min(0)] public float maxResource;
     [SerializeField] private bool _isUsingSkill;
     public List<Skill> skills; // available skills
    
-    [Header("Bufs")]
+    [Header("Stats")]
     public float attackBoost = 1f;
-    public float mitigateDamage = 1f;
+    public float damageReduction = 1f;
     public float speedBoost = 1f;
+    [Min(0)]public float criticChance = 0f;
     [SerializeField, Range(0,100)] public int criticPercentage = 0;
     #endregion
 
@@ -22,6 +26,36 @@ public class PlayerCombat : MonoBehaviour
     private void Start()
     {
         // Load player data from file
+    }
+
+    public void ApplyStat(StatType stat, float value)
+    {
+        switch (stat)
+        {
+            case StatType.MoreHealth:
+                maxHealth += value;
+                break;
+            case StatType.MoreResource:
+                maxResource += value;
+                break;
+            case StatType.AttackBoost:
+                attackBoost += value;
+                break;
+            case StatType.MitigateDamage:
+                damageReduction += value;
+                break;
+            case StatType.SpeedBoost:
+                speedBoost += value;
+                break; // TODO
+            case StatType.CriticPercentage:
+                criticChance += value;
+                break;
+        }
+    }
+
+    public void UnlockSkill(Skill skill)
+    {
+        // TODO
     }
 
     public void Attack(Skill skill)

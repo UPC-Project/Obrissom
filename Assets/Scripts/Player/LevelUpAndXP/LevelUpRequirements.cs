@@ -5,8 +5,9 @@ public class LevelUpRequirements
 {
     // TODO: This class will also need to check another requirements: the craftable objects or other objects needed
     // For now, is only checking the XP needed
+    // Or maybe this will be delegated to Quests
 
-    public Dictionary<int, float> LevelRequirements = new Dictionary<int, float>()
+    public static readonly Dictionary<int, float> LevelRequirements = new Dictionary<int, float>()
     {
         { 1, 100f },
         { 2, 200f },
@@ -15,5 +16,5 @@ public class LevelUpRequirements
         { 5, 0f },
     };
 
-    public int MAX_LEVEL = 5; // constant
+    public static readonly int MAX_LEVEL = 5; // constant
 }
