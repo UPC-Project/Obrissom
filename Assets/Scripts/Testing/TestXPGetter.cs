@@ -6,7 +6,7 @@ public class TestXPGetter : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         Debug.Log($"Collided with {collision.gameObject.name}");
-        PlayerXP playerXP = collision.gameObject.GetComponent<PlayerXP>();
+        Obrissom.Player.PlayerXP playerXP = collision.gameObject.GetComponent<Obrissom.Player.PlayerXP>();
         if (playerXP != null)
         {
             playerXP.GainXP(xpAmount);

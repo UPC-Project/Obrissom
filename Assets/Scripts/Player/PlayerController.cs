@@ -12,6 +12,7 @@ namespace Obrissom.Player
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private GameObject _playerCamera;
         private PlayerLocomotionInput _playerLocomotionInput;
+        private PlayerStats _playerStats;
 
 
         [Header("Movement")]
@@ -23,7 +24,7 @@ namespace Obrissom.Player
         public float drag = 15f;
         public float jumpSpeed = 1f;
         public float playerRotationSpeed = 1f;
-        private float _gravity = 9.81f;
+        [SerializeField] private float _gravity = 9.81f;
         [SerializeField] private bool _isGrounded;
         [SerializeField] private float _groundCheckDistance = 0.4f;
         [SerializeField] private float _radius = 0.23f;
@@ -45,6 +46,7 @@ namespace Obrissom.Player
         private void Awake()
         {
             _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
+            _playerStats = GetComponent<PlayerStats>();
         }
 
         private void FixedUpdate()
@@ -96,6 +98,7 @@ namespace Obrissom.Player
         {
             // Check if is running or walking
             float speed = !_isGrounded ? airAcceleration : (_playerLocomotionInput.RunToggledOn ? runSpeed : walkSpeed);
+            speed += _playerStats.bonusSpeed;
             float acceleration = _playerLocomotionInput.RunToggledOn ? runAcceleration : walkAcceleration;
 
             // Update movement

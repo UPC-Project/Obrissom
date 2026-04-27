@@ -1,60 +1,67 @@
 using UnityEngine;
 
-public class PlayerXP : MonoBehaviour
+namespace Obrissom.Player
 {
-    public float xp;
-    public float xpNeeded; // XP needed for next level
-    public int currentLevel = 1;
-    
-    [Header("Components")]
-    private PlayerCombat _playerCombat;
+    public class PlayerXP : MonoBehaviour
+    {
+        public float xp;
+        [Tooltip("XP needed for next level")]
+        public float xpNeeded; // 
+        public int currentLevel = 1;
+
+        [Header("Components")]
+        private PlayerSkills _playerSkills;
+        private PlayerStats _playerStats;
 
 
-    private void Start()
-    {
-        _playerCombat = GetComponent<PlayerCombat>();
-        // TODO: save information
-        // Load player data from file
-        xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
-    }
-    public void GainXP(float amount)
-    {
-        if (currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
-        if (xp + amount >= xpNeeded)
+        private void Start()
         {
-            float rest = (xp + amount) - xpNeeded;
-            xp = rest;
-            LevelUp();
+            _playerSkills = GetComponent<PlayerSkills>();
+            _playerStats = GetComponent<PlayerStats>();
+            // TODO: save information
+            // Load player data from file
+            xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
         }
-        else
+        public void GainXP(float amount)
         {
-            xp += amount;
-        }
-    }
-
-    [ContextMenu("Level Up")]
-    private void LevelUp()
-    {
-        currentLevel++;
-        xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
-
-        // Apply level up rewards
-        // TODO: change by class
-        LevelUpRewardsType rewards = LevelUpRewards.LevelRewardsDPS[currentLevel];
-        ApplyRewards(rewards);
-    }
-
-    private void ApplyRewards(LevelUpRewardsType rewards)
-    {
-        foreach (var buf in rewards.Stats)
-        {
-            if (buf.Value.HasValue)
-                _playerCombat.ApplyStat(buf.Key, buf.Value.Value);
+            if (currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
+            if (xp + amount >= xpNeeded)
+            {
+                float rest = (xp + amount) - xpNeeded;
+                xp = rest;
+                LevelUp();
+            }
+            else
+            {
+                xp += amount;
+            }
         }
 
-        foreach (Skill skill in rewards.NewSkills)
+        [ContextMenu("Level Up")]
+        private void LevelUp()
         {
-            _playerCombat.UnlockSkill(skill);
+            currentLevel++;
+            xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
+
+            // Apply level up rewards
+            // TODO: change by class
+            LevelUpRewardsType rewards = LevelUpRewards.LevelRewardsDPS[currentLevel];
+            ApplyRewards(rewards);
+        }
+
+        private void ApplyRewards(LevelUpRewardsType rewards)
+        {
+            foreach (var stat in rewards.Stats)
+            {
+                if (stat.Value.HasValue)
+                    _playerStats.AddStat(stat.Key, stat.Value.Value);
+            }
+
+            foreach (Skill skill in rewards.NewSkills)
+            {
+                _playerSkills.UnlockSkill(skill);
+            }
         }
     }
+
 }

@@ -11,8 +11,8 @@ public class LevelUpRequirements
     {
         { 1, 100f },
         { 2, 200f },
-        { 3, 300f },
-        { 4, 400f },
+        { 3, 400f },
+        { 4, 1000f },
         { 5, 0f },
     };
 
