@@ -14,7 +14,6 @@ namespace Obrissom.Player
         private PlayerLocomotionInput _playerLocomotionInput;
         private PlayerStats _playerStats;
 
-
         [Header("Movement")]
         public float walkAcceleration = 35f;
         public float walkSpeed = 4f;

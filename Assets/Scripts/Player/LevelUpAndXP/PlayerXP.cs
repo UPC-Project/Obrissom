@@ -1,8 +1,10 @@
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Obrissom.Player
 {
-    public class PlayerXP : MonoBehaviour
+    public class PlayerXP : NetworkBehaviour
     {
         public float xp;
         [Tooltip("XP needed for next level")]
@@ -10,21 +12,25 @@ namespace Obrissom.Player
         public int currentLevel = 1;
 
         [Header("Components")]
+        private LevelAndXPUI _XpUi;
         private PlayerSkills _playerSkills;
         private PlayerStats _playerStats;
 
-
-        private void Start()
+        public override void OnNetworkSpawn()
         {
+            if (!IsOwner) return;
+
             _playerSkills = GetComponent<PlayerSkills>();
             _playerStats = GetComponent<PlayerStats>();
-            // TODO: save information
-            // Load player data from file
+            _XpUi = PlayerUIManager.Instance.GetLevelAndXPUI();
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
+            _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
         }
+
         public void GainXP(float amount)
         {
-            if (currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
+            if (!IsOwner || currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
+
             if (xp + amount >= xpNeeded)
             {
                 float rest = (xp + amount) - xpNeeded;
@@ -35,6 +41,11 @@ namespace Obrissom.Player
             {
                 xp += amount;
             }
+
+            // Update  UI
+            _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
+
+
         }
 
         [ContextMenu("Level Up")]

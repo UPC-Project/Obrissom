@@ -24,7 +24,7 @@ public class InventoryManager : MonoBehaviour
     public Image dragIcon; 
 
     private int _draggedSlotIndex = -1;  // Index of the slot being dragged
-    private bool _isInventoryOpen = false;
+    public bool isInventoryOpen = false;
     
     /// Initializes the inventory UI and subscribes to inventory changes.
     /// Also hides the drag icon and closes the inventory at start.
@@ -34,7 +34,6 @@ public class InventoryManager : MonoBehaviour
         UpdateUI();
 
         dragIcon.enabled = false;
-        SetInventoryState(false);
     }
 
     void Update()
@@ -50,11 +49,10 @@ public class InventoryManager : MonoBehaviour
 
         if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
         {
-            _isInventoryOpen = !_isInventoryOpen; 
-            SetInventoryState(_isInventoryOpen);
+            SetInventoryState(!isInventoryOpen);
         }
 
-        if (_isInventoryOpen)
+        if (isInventoryOpen)
         {
             MoveItem();
         }
@@ -64,9 +62,10 @@ public class InventoryManager : MonoBehaviour
     /// Opens or closes the inventory UI.
     /// Also updates cursor visibility and lock state.
     /// </summary>
-    private void SetInventoryState(bool isOpen)
+    public void SetInventoryState(bool isOpen)
     {
         inventoryPanel?.SetActive(isOpen);
+        isInventoryOpen = isOpen;
         //Cursor.visible = isOpen;
         //Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
     }
