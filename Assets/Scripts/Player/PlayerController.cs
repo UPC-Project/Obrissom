@@ -7,25 +7,26 @@ namespace Obrissom.Player
     public class PlayerController : NetworkBehaviour
     {
         #region Class variables
-        [Header("Component")]
+
+        [Header("Components")]
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private GameObject _playerCamera;
         private PlayerLocomotionInput _playerLocomotionInput;
-
+        private PlayerStats _playerStats;
 
         [Header("Movement")]
-        public float walkAcceleration = 0.15f;
+        public float walkAcceleration = 35f;
         public float walkSpeed = 4f;
-        public float runAcceleration = 0.35f;
-        public float runSpeed = 8f;
-        public float airAcceleration = 0.35f;
-        public float drag = 0.1f;
-        public float gravity = 9.81f;
+        public float runAcceleration = 50f;
+        public float runSpeed = 7f;
+        public float airAcceleration = 4f;
+        public float drag = 15f;
         public float jumpSpeed = 1f;
         public float playerRotationSpeed = 1f;
+        [SerializeField] private float _gravity = 9.81f;
         [SerializeField] private bool _isGrounded;
-        [SerializeField] private float _groundCheckDistance = 1f;
-        [SerializeField] private float _radius = 1f;
+        [SerializeField] private float _groundCheckDistance = 0.4f;
+        [SerializeField] private float _radius = 0.23f;
         [SerializeField] private Vector3 _originGroundCheck;
         [SerializeField] private float _verticalVelocity;
         [SerializeField] private Vector3 _newVelocity;
@@ -35,14 +36,16 @@ namespace Obrissom.Player
         [Header("Camera Settings")]
         public float lookSenseH = 0.1f;
         public float lookSenseV = 0.1f;
-        public float lookLimitV = 89f;
+        public float lookLimitV = 50f;
 
         private Vector2 _cameraRotation = Vector2.zero;
+
         #endregion
 
         private void Awake()
         {
             _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
+            _playerStats = GetComponent<PlayerStats>();
         }
 
         private void FixedUpdate()
@@ -94,6 +97,7 @@ namespace Obrissom.Player
         {
             // Check if is running or walking
             float speed = !_isGrounded ? airAcceleration : (_playerLocomotionInput.RunToggledOn ? runSpeed : walkSpeed);
+            speed += _playerStats.bonusSpeed;
             float acceleration = _playerLocomotionInput.RunToggledOn ? runAcceleration : walkAcceleration;
 
             // Update movement
@@ -133,11 +137,11 @@ namespace Obrissom.Player
                 _verticalVelocity = -5f;
             }
 
-            _verticalVelocity -= gravity * Time.deltaTime;
+            _verticalVelocity -= _gravity * Time.deltaTime;
 
             if (_playerLocomotionInput.JumpPressed && _isGrounded)
             {
-                _verticalVelocity = Mathf.Sqrt(jumpSpeed * 3 * gravity);
+                _verticalVelocity = Mathf.Sqrt(jumpSpeed * 3 * _gravity);
             }
 
             _newVelocity.y = _verticalVelocity;

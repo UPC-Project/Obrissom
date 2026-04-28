@@ -15,6 +15,7 @@ public class Inventory : MonoBehaviour
     /// Creates empty slots when the inventory starts
     private void Awake()
     {
+        // TODO: save information
         for (int i = 0; i < _inventorySize; i++)
             _slots.Add(new InventorySlot(null, 0));
     }
