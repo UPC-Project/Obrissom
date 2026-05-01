@@ -1,17 +1,20 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Obrissom.Player
 {
-    public class PlayerCombat : MonoBehaviour
+    public class PlayerCombat : NetworkBehaviour
     {
         #region Class variables
 
         [SerializeField, Min(0)] private float _health;
-        [SerializeField, Min(0)] private float _baseDamage;
         [SerializeField, Min(0)] private float _resource; // Mana / Stamina / Fury, etc
-        [SerializeField] private bool _isUsingSkill;
+
+        [SerializeField] private Skill _basicSkill;
+        [SerializeField] private Skill _Skill1; // Will change -> gained by leveling up
 
         private PlayerStats _playerStats;
+        private PlayerSkills _playerSkills;
 
         #endregion
 
@@ -22,20 +25,24 @@ namespace Obrissom.Player
         private void Awake()
         {
             _playerStats = GetComponent<PlayerStats>();
+            _playerSkills = GetComponent<PlayerSkills>();
+        }
+
+        public void Update()
+        {
         }
 
 
-        public void Attack(Skill skill)
+        public override void OnNetworkSpawn()
         {
-            if (_isUsingSkill) return;
-
-            _isUsingSkill = true;
-            Debug.Log($"Player is attacking with {skill.skillName}");
+            // Assign basic skill -> will change, what happen when player choose another button?
+            _playerSkills.AssignSkill(SkillKey.LB, _basicSkill);
+            _playerSkills.AssignSkill(SkillKey.ONE, _Skill1);
         }
 
         public void TakeDamage(float damageAmount, DamageType damageType)
         {
-            float reduction = (damageType == DamageType.PhysicalDamage) ? _playerStats.physicalDefense : _playerStats.magicDefense;
+            float reduction = (damageType == DamageType.PhysicDamage) ? _playerStats.physicalDefense : _playerStats.magicDefense;
             reduction = Mathf.Clamp(reduction, 0f, 0.99f);
 
             float finalDamage = damageAmount * (1 - reduction);
@@ -45,6 +52,28 @@ namespace Obrissom.Player
             {
                 Die();
             }
+        }
+
+        public int CalculatePhysicalDamage(int attackDamage)
+        {
+            float damage = (attackDamage + _playerStats.bonusPhysicalAttack) * _playerStats.physicalAttackMultiplier;
+            bool isCritical = Random.value < _playerStats.criticalChance;
+            if (isCritical)
+            {
+                damage *= _playerStats.criticalDamage;
+            }
+            return Mathf.RoundToInt(damage);
+        }
+
+        public int CalculateMagicDamage(int attackDamage)
+        {
+            float damage = (attackDamage + _playerStats.bonusMagicAttack) * _playerStats.magicAttackMultiplier;
+            bool isCritical = Random.value < _playerStats.criticalChance;
+            if (isCritical)
+            {
+                damage *= _playerStats.criticalDamage;
+            }
+            return Mathf.RoundToInt(damage);
         }
 
         private void Die()

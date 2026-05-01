@@ -7,6 +7,7 @@ public class PlayerUIManager : MonoBehaviour
 
     [SerializeField] private LevelAndXPUI _levelAndXPUI;
     [SerializeField] private PlayerMenu _playerMenu;
+    [SerializeField] private SkillCooldownUI _skillCooldownUI;
 
     private void Awake()
     {
@@ -21,4 +22,9 @@ public class PlayerUIManager : MonoBehaviour
 
     public LevelAndXPUI GetLevelAndXPUI() => _levelAndXPUI;
     public PlayerMenu GetPlayerMenu() => _playerMenu;
+
+    public void RegisterPlayer(PlayerSkills playerSkills)
+    {
+        _skillCooldownUI.SetPlayerSkills(playerSkills);
+    }
 }

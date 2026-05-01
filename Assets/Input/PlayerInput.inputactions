@@ -230,13 +230,49 @@
             ]
         },
         {
-            "name": "UIMap",
-            "id": "f34418b6-4f7f-4e03-b4ef-d709566986c7",
+            "name": "PlayerSkillMap",
+            "id": "b3a1b4f9-ba9b-4b09-bd61-ffe3f63eba96",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Basic",
                     "type": "Button",
-                    "id": "0787a7a2-6afa-4cf5-a12c-a77a76cee78a",
+                    "id": "d6d2ed6e-e50a-49c4-bbad-c42a0ee7be65",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill 1",
+                    "type": "Button",
+                    "id": "87d6e98d-d082-4ea3-8741-751088dd3646",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill 2",
+                    "type": "Button",
+                    "id": "67abb2e8-5541-4eb9-b180-e0fadb1ca1e2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill 3",
+                    "type": "Button",
+                    "id": "7aba5b0e-f9a5-40df-9e41-dca670222b27",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill 4",
+                    "type": "Button",
+                    "id": "81e39198-3055-4fc5-9330-fbb8dfddfd0c",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -246,40 +282,56 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "66cd9b87-8322-47af-abeb-eb99c3cef49b",
-                    "path": "",
+                    "id": "64721083-94a5-40e3-91c1-77781da978ba",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Basic",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "CombatMap",
-            "id": "d4c91ab9-9ea8-431e-b570-8a348371f77a",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "69981be6-b867-452e-8d16-0a267d5355a7",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "3b35ec58-2ee1-4617-a75a-b8a38a1997a2",
-                    "path": "",
+                    "id": "5f39f77f-1f8d-4bb9-8338-fa27c34f291f",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Skill 1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7db409c3-39ea-4d4e-8c7f-67a09d22d9ca",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "749c8c7b-4ea6-4ed1-9698-74caa25a8f8a",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill 3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "35181f19-7c85-44cf-abfd-f51d74faecbf",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill 4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
