@@ -21,11 +21,19 @@ public class InventoryManager : MonoBehaviour
     public int amount3 = 1;
 
     [Header("Drag Visuals")]
-    public Image dragIcon; 
+    public Image dragIcon;
+
+    [Header("Quick Inventory Buton")]
+    [SerializeField] private Button _qIB;
+
+    [Header("Quick Inventory")]
+    [SerializeField] private GameObject _quickInventoryPanel;
 
     private int _draggedSlotIndex = -1;  // Index of the slot being dragged
     public bool isInventoryOpen = false;
-    
+    private bool _isQuickInventoryOpen = false;
+
+
     /// Initializes the inventory UI and subscribes to inventory changes.
     /// Also hides the drag icon and closes the inventory at start.
     void Start()
@@ -34,6 +42,7 @@ public class InventoryManager : MonoBehaviour
         UpdateUI();
 
         dragIcon.enabled = false;
+
     }
 
     void Update()
@@ -66,8 +75,12 @@ public class InventoryManager : MonoBehaviour
     {
         inventoryPanel?.SetActive(isOpen);
         isInventoryOpen = isOpen;
+        _qIB.gameObject.SetActive(isOpen);
         //Cursor.visible = isOpen;
         //Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+
+        if (!isOpen)
+            SetQuickInventoryState(false);
     }
 
     /// <summary>
@@ -145,6 +158,24 @@ public class InventoryManager : MonoBehaviour
     //public void DropItemFromSlot() { } TODO
 
     /// <summary>
+    /// Called by the button inside the inventory panel.
+    /// Only works if the inventory is open.
+    /// </summary>
+    public void ToggleQuickInventory()
+    {
+        if (!isInventoryOpen) return;
+
+        _isQuickInventoryOpen = !_isQuickInventoryOpen;
+        SetQuickInventoryState(_isQuickInventoryOpen);
+    }
+
+    private void SetQuickInventoryState(bool isOpen)
+    {
+        _isQuickInventoryOpen = isOpen;
+        _quickInventoryPanel?.SetActive(isOpen);
+    }
+
+    /// <summary>
     /// Updates the inventory UI:
     /// - Sets item icons
     /// - Updates quantity text
@@ -152,6 +183,7 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     void UpdateUI()
     {
+
         for (int i = 0; i < slotContainer.childCount; i++)
         {
             Transform slotTransform = slotContainer.GetChild(i);

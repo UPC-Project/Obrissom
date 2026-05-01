@@ -14,6 +14,17 @@ public class Item : ScriptableObject
     public bool isStackable;
     public int maxStackSize = 1;
 
+    [Header("Type")]
+    public ItemType itemType;
+
     // [Header("Stat Modifiers")]
     // TODO: Implement modifier system when player statistics system is available
+
+    public enum ItemType
+    {
+        Rings,
+        Consumable,
+        QuestItem,
+        Misc
+    }
 }

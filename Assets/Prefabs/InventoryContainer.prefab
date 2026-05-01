@@ -2795,6 +2795,7 @@ GameObject:
   - component: {fileID: 8202796749773478076}
   - component: {fileID: 1609272275344862427}
   - component: {fileID: 7982531822563785978}
+  - component: {fileID: -3986887557141189120}
   m_Layer: 5
   m_Name: InventoryContainer
   m_TagString: Untagged
@@ -2859,6 +2860,21 @@ MonoBehaviour:
   testItem3: {fileID: 11400000, guid: 6a500e59e9ed55949ad82c0939807b6c, type: 2}
   amount3: 1
   dragIcon: {fileID: 3167349236631993307}
+  isInventoryOpen: 0
+--- !u!114 &-3986887557141189120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3397811521263719249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0cc4f35789e59946a107f4b9da8c27c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.QuickInventory
+  _maxSlots: 3
+  _inventory: {fileID: 0}
 --- !u!1 &3420232702312109547
 GameObject:
   m_ObjectHideFlags: 0
