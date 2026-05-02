@@ -81,4 +81,38 @@ public class Inventory : MonoBehaviour
         OnInventoryChanged?.Invoke();
     }
 
+    /// <summary>
+    /// Removes items from a specific slot by index. Supports partial drop on stacks.
+    /// amountToDrop = -1 removes the entire stack.
+    /// </summary>
+    public bool RemoveItemAt(int slotIndex, out Item removedItem, out int removedQuantity, int amountToDrop = -1)
+    {
+        removedItem = null;
+        removedQuantity = 0;
+
+        if (slotIndex < 0 || slotIndex >= _slots.Count) return false;
+
+        InventorySlot slot = _slots[slotIndex];
+        if (slot.IsEmpty) return false;
+
+        removedItem = slot.item;
+
+        bool dropAll = amountToDrop == -1 || !slot.item.isStackable || amountToDrop >= slot.quantity;
+
+        if (dropAll)
+        {
+            removedQuantity = slot.quantity;
+            slot.item = null;
+            slot.quantity = 0;
+        }
+        else
+        {
+            removedQuantity = amountToDrop;
+            slot.RemoveQuantity(amountToDrop);
+        }
+
+        OnInventoryChanged?.Invoke();
+        return true;
+    }
+
 }

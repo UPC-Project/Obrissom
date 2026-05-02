@@ -29,6 +29,9 @@ public class InventoryManager : MonoBehaviour
     [Header("Quick Inventory")]
     [SerializeField] private GameObject _quickInventoryPanel;
 
+    [Header("Drop")]
+    [SerializeField] private ItemDropper _itemDropper;
+
     private int _draggedSlotIndex = -1;  // Index of the slot being dragged
     public bool isInventoryOpen = false;
     private bool _isQuickInventoryOpen = false;
@@ -38,7 +41,11 @@ public class InventoryManager : MonoBehaviour
     /// Also hides the drag icon and closes the inventory at start.
     void Start()
     {
+
+
         inventory.OnInventoryChanged += UpdateUI;
+        _itemDropper = FindFirstObjectByType<ItemDropper>();
+
         UpdateUI();
 
         dragIcon.enabled = false;
@@ -108,6 +115,7 @@ public class InventoryManager : MonoBehaviour
             {
                 _draggedSlotIndex = -1;
             }
+
         }
 
         //Move drag icon with mouse
@@ -125,6 +133,27 @@ public class InventoryManager : MonoBehaviour
             dragIcon.enabled = false;
             _draggedSlotIndex = -1;
             UpdateUI();
+        }
+
+        if (Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            int slotIndex = GetSlotUnderMouse();
+
+            if (slotIndex != -1 && !inventory.Slots[slotIndex].IsEmpty)
+            {
+                // Buscar el ItemDropper en el momento de usarlo
+                if (_itemDropper == null)
+                    _itemDropper = FindFirstObjectByType<ItemDropper>();
+
+                if (_itemDropper == null)
+                {
+                    Debug.LogWarning("[InventoryManager] ItemDropper not found.");
+                    return;
+                }
+
+                if (inventory.RemoveItemAt(slotIndex, out Item item, out int qty))
+                    _itemDropper.DropItem(item, qty);
+            }
         }
 
     }

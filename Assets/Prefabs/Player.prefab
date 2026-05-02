@@ -5363,9 +5363,10 @@ GameObject:
   - component: {fileID: 5583513852371124613}
   - component: {fileID: 4676465422324529030}
   - component: {fileID: 7411236701876319284}
+  - component: {fileID: -1165999423735313429}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5473,7 +5474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3588319947
+  GlobalObjectIdHash: 745171078
   InScenePlacedSourceGlobalObjectIdHash: 3757385016
   DeferredDespawnTick: 0
   Ownership: 1
@@ -5668,6 +5669,21 @@ MonoBehaviour:
   _baseDamage: 0
   _resource: 0
   _isUsingSkill: 0
+--- !u!114 &-1165999423735313429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7568587711868824460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 876cd176f78130143b5977fedf5a9b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDropper
+  _worldItemPrefab: {fileID: 7397081805802448550, guid: 7edf0d9dde2663e4b9be6bd5018c6416, type: 3}
+  _dropForce: 3
+  _dropUpwardForce: 2
 --- !u!1 &7703308310641347162
 GameObject:
   m_ObjectHideFlags: 0
