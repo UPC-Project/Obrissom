@@ -34,6 +34,7 @@ namespace Obrissom.Player.Inventory
             {
                 foreach (var slot in _slots)
                 {
+                    if (!slot.CanAccept(item)) continue;
                     if (slot.item == item && slot.quantity < item.maxStackSize)
                     {
                         int space = item.maxStackSize - slot.quantity;
@@ -49,7 +50,7 @@ namespace Obrissom.Player.Inventory
 
             foreach (var slot in _slots)
             {
-                if (slot.IsEmpty)
+                if (slot.IsEmpty && slot.CanAccept(item))
                 {
                     slot.item = item;
                     slot.quantity = amount;
@@ -70,6 +71,9 @@ namespace Obrissom.Player.Inventory
 
             InventorySlot source = _slots[sourceIndex];
             InventorySlot destination = _slots[destinationIndex];
+
+            if (source.item != null && !destination.CanAccept(source.item)) return;
+            if (destination.item != null && !source.CanAccept(destination.item)) return;
 
             Item tempItem = destination.item;
             int tempQuantity = destination.quantity;
@@ -115,6 +119,12 @@ namespace Obrissom.Player.Inventory
 
             OnInventoryChanged?.Invoke();
             return true;
+        }
+
+
+        public void TriggerInventoryChanged()
+        {
+            OnInventoryChanged?.Invoke();
         }
 
     }

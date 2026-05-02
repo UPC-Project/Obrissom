@@ -28,18 +28,22 @@ namespace Obrissom.Player.Inventory
         [Header("Drop")]
         [SerializeField] private ItemDropper _itemDropper;
 
-        private int _draggedSlotIndex = -1;  // Index of the slot being dragged
+        [Header("Equipment")]
+        [SerializeField] private EquipmentInventory _equipmentInventory;
+        [SerializeField] private Transform _equipmentContainer;
+
+        private int _draggedSlotIndex = -1;
         public bool isInventoryOpen = false;
 
+        private bool _draggingFromEquipment = false;
+        private int _draggedEquipmentSlotIndex = -1;
 
-        /// Initializes the inventory UI and subscribes to inventory changes.
-        /// Also hides the drag icon and closes the inventory at start.
         void Start()
         {
             inventory.OnInventoryChanged += UpdateUI;
+            _equipmentInventory.OnEquipmentChanged += UpdateEquipmentUI;
 
             UpdateUI();
-
             dragIcon.enabled = false;
         }
 
@@ -53,14 +57,10 @@ namespace Obrissom.Player.Inventory
             }
 
             if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
-            {
                 SetInventoryState(!isInventoryOpen);
-            }
 
             if (isInventoryOpen)
-            {
                 MoveItem();
-            }
         }
 
         public void SetItemDropper(ItemDropper itemDropper)
@@ -70,61 +70,99 @@ namespace Obrissom.Player.Inventory
 
         /// <summary>
         /// Opens or closes the inventory UI.
-        /// Also updates cursor visibility and lock state.
         /// </summary>
         public void SetInventoryState(bool isOpen)
         {
             inventoryPanel?.SetActive(isOpen);
             isInventoryOpen = isOpen;
-            //Cursor.visible = isOpen;
-            //Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
         }
 
         /// <summary>
-        /// Handles drag and drop logic:
-        /// - Start dragging
-        /// - Move drag icon
-        /// - Drop item into another slot
+        /// Handles all drag and drop logic for both inventory and equipment slots.
         /// </summary>
         private void MoveItem()
         {
             // 1. Start dragging
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                _draggedSlotIndex = GetSlotUnderMouse();
+                int equipIndex = GetEquipmentSlotUnderMouse();
 
-                if (_draggedSlotIndex != -1 && !inventory.Slots[_draggedSlotIndex].IsEmpty)
+                if (equipIndex != -1)
                 {
-                    dragIcon.sprite = inventory.Slots[_draggedSlotIndex].item.icon;
-                    dragIcon.enabled = true;
-
-                    slotContainer.GetChild(_draggedSlotIndex)
-                        .Find("Item").GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+                    InventorySlot equipSlot = _equipmentInventory.GetSlotByIndex(equipIndex);
+                    if (equipSlot != null && !equipSlot.IsEmpty)
+                    {
+                        _draggingFromEquipment = true;
+                        _draggedEquipmentSlotIndex = equipIndex;
+                        _draggedSlotIndex = 0;
+                        dragIcon.sprite = equipSlot.item.icon;
+                        dragIcon.enabled = true;
+                    }
                 }
                 else
                 {
-                    _draggedSlotIndex = -1;
-                }
+                    _draggingFromEquipment = false;
+                    _draggedSlotIndex = GetSlotUnderMouse();
 
+                    if (_draggedSlotIndex != -1 && !inventory.Slots[_draggedSlotIndex].IsEmpty)
+                    {
+                        dragIcon.sprite = inventory.Slots[_draggedSlotIndex].item.icon;
+                        dragIcon.enabled = true;
+
+                        slotContainer.GetChild(_draggedSlotIndex)
+                            .Find("Item").GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+                    }
+                    else
+                    {
+                        _draggedSlotIndex = -1;
+                    }
+                }
             }
 
-            // Move drag icon with mouse
-            if (_draggedSlotIndex != -1 && dragIcon.enabled)
+            // 2. Move drag icon with mouse
+            if ((_draggedSlotIndex != -1 || _draggingFromEquipment) && dragIcon.enabled)
                 dragIcon.transform.position = Mouse.current.position.ReadValue();
 
-            // Drop item into another slot
-            if (Mouse.current.leftButton.wasReleasedThisFrame && _draggedSlotIndex != -1)
+            // 3. Drop
+            if (Mouse.current.leftButton.wasReleasedThisFrame && (_draggedSlotIndex != -1 || _draggingFromEquipment))
             {
-                int destinationIndex = GetSlotUnderMouse();
-
-                if (destinationIndex != -1)
-                    inventory.MoveItem(_draggedSlotIndex, destinationIndex);
+                if (_draggingFromEquipment)
+                {
+                    int equipIndex = GetEquipmentSlotUnderMouse();
+                    if (equipIndex != -1)
+                    {
+                        _equipmentInventory.MoveEquipment(_draggedEquipmentSlotIndex, equipIndex);
+                    }
+                    else
+                    {
+                        int destinationIndex = GetSlotUnderMouse();
+                        if (destinationIndex != -1)
+                            _equipmentInventory.Unequip(_draggedEquipmentSlotIndex);
+                    }
+                }
+                else
+                {
+                    // Origen: inventario → destino: equipment o inventario
+                    int equipIndex = GetEquipmentSlotUnderMouse();
+                    if (equipIndex != -1)
+                        _equipmentInventory.Equip(_draggedSlotIndex, equipIndex);
+                    else
+                    {
+                        int destinationIndex = GetSlotUnderMouse();
+                        if (destinationIndex != -1)
+                            inventory.MoveItem(_draggedSlotIndex, destinationIndex);
+                    }
+                }
 
                 dragIcon.enabled = false;
                 _draggedSlotIndex = -1;
+                _draggingFromEquipment = false;
+                _draggedEquipmentSlotIndex = -1;
                 UpdateUI();
+                UpdateEquipmentUI();
             }
 
+            // 4. Right click — drop to world
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {
                 int slotIndex = GetSlotUnderMouse();
@@ -135,11 +173,11 @@ namespace Obrissom.Player.Inventory
                         _itemDropper.DropItem(item, qty);
                 }
             }
-
         }
 
-        /// Detects which inventory slot is under the mouse using UI raycast.
-        /// Returns the slot index, or -1 if none is found.
+        /// <summary>
+        /// Detects which inventory slot is under the mouse. Returns -1 if none.
+        /// </summary>
         private int GetSlotUnderMouse()
         {
             PointerEventData pointerData = new PointerEventData(EventSystem.current)
@@ -163,17 +201,38 @@ namespace Obrissom.Player.Inventory
             return -1;
         }
 
+        /// <summary>
+        /// Detects which equipment slot is under the mouse. Returns -1 if none.
+        /// </summary>
+        private int GetEquipmentSlotUnderMouse()
+        {
+            PointerEventData pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = Mouse.current.position.ReadValue()
+            };
 
-        //public void DropItemFromSlot() { } TODO
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
 
+            foreach (RaycastResult result in results)
+            {
+                Transform hit = result.gameObject.transform;
+                for (int i = 0; i < _equipmentContainer.childCount; i++)
+                {
+                    Transform slotChild = _equipmentContainer.GetChild(i);
+                    if (hit == slotChild || hit.parent == slotChild)
+                        return i;
+                }
+            }
+            return -1;
+        }
+
+        // TODO: Implement DropItemFromSlot for equipment slots
 
         /// <summary>
-        /// Updates the inventory UI:
-        /// - Sets item icons
-        /// - Updates quantity text
-        /// - Clears empty slots
+        /// Redraws all inventory slots.
         /// </summary>
-        void UpdateUI()
+        private void UpdateUI()
         {
             for (int i = 0; i < slotContainer.childCount; i++)
             {
@@ -199,5 +258,34 @@ namespace Obrissom.Player.Inventory
             }
         }
 
+        /// <summary>
+        /// Redraws all equipment slots.
+        /// </summary>
+        private void UpdateEquipmentUI()
+        {
+            UpdateEquipmentSlot(0, _equipmentInventory.RingSlot1);
+            UpdateEquipmentSlot(1, _equipmentInventory.RingSlot2);
+            UpdateEquipmentSlot(2, _equipmentInventory.RingSlot3);
+        }
+
+        private void UpdateEquipmentSlot(int index, InventorySlot slot)
+        {
+            if (index >= _equipmentContainer.childCount) return;
+
+            Transform slotTransform = _equipmentContainer.GetChild(index);
+            Image itemImage = slotTransform.Find("Item").GetComponent<Image>();
+
+            if (!slot.IsEmpty)
+            {
+                itemImage.sprite = slot.item.icon;
+                itemImage.enabled = true;
+                itemImage.color = Color.white;
+            }
+            else
+            {
+                itemImage.sprite = null;
+                itemImage.enabled = false;
+            }
+        }
     }
 }

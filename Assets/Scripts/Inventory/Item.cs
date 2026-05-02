@@ -16,14 +16,26 @@ public class Item : ScriptableObject
     [Header("Type")]
     public ItemType itemType;
 
+    [Header("Equipment")]
+    public bool isEquippable;
+    public EquipmentSlotType equipmentSlotType;
+    // TODO: Implement ApplyStats() when player stats system is available
+
     // [Header("Stat Modifiers")]
     // TODO: Implement modifier system when player statistics system is available
 
     public enum ItemType
     {
-        Equippable, // TODO: equippable items should have stats
+        Equippable, 
         Consumable,
         QuestItem,
         Misc
+    }
+
+    public enum EquipmentSlotType
+    {
+        Ring,
+        Weapon,
+        Armor
     }
 }
