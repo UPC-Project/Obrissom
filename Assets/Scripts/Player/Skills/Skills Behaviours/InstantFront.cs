@@ -12,7 +12,6 @@ public class InstantFront : SkillBehaviour
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
         
-        Debug.Log("called");
         Vector3 origin = caster.transform.position + Vector3.up * 0.9f;
         Collider[] hits = Physics.OverlapSphere(caster.transform.position, range);
 
@@ -25,11 +24,11 @@ public class InstantFront : SkillBehaviour
 
             if (angleToTarget <= angle / 2f)
             {
-                int physicDamage = playerCombat.CalculatePhysicalDamage(skillData.minPhysicDamage,skillData.maxPhysicDamage);
-                int magicDamage = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
+                var (physicDamage, isCriticPhysic) = playerCombat.CalculatePhysicalDamage(skillData.minPhysicDamage,skillData.maxPhysicDamage);
+                var (magicDamage, isCriticMagic) = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
 
-                hit.GetComponent<TestEnemy>()?.TakeDamage(physicDamage, DamageType.PhysicDamage);
-                hit.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage);
+                if (physicDamage!=0) hit.GetComponent<TestEnemy>()?.TakeDamage(physicDamage, DamageType.PhysicDamage, isCriticPhysic, hit.transform.position);
+                if (magicDamage!=0) hit.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage, isCriticMagic, hit.transform.position);
             }
         }
     }

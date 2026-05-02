@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Obrissom.Player
+namespace Obrissom.UI
 {
     public class LevelAndXPUI : MonoBehaviour
     {
