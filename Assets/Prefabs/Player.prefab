@@ -5359,6 +5359,7 @@ GameObject:
   - component: {fileID: 5106317218648400632}
   - component: {fileID: 1155906604858391715}
   - component: {fileID: 8948318466663535907}
+  - component: {fileID: 7287814699749275071}
   - component: {fileID: 8220587703764858803}
   - component: {fileID: 5583513852371124613}
   - component: {fileID: 4676465422324529030}
@@ -5473,7 +5474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3588319947
+  GlobalObjectIdHash: 745171078
   InScenePlacedSourceGlobalObjectIdHash: 3757385016
   DeferredDespawnTick: 0
   Ownership: 1
@@ -5598,6 +5599,18 @@ MonoBehaviour:
   _cameraZoomMinZoom: 3
   _cameraZoomMaxZoom: 5
   _camera: {fileID: 4568553621637485684}
+--- !u!114 &7287814699749275071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7568587711868824460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d76750b0e2cf704aad293fcc6547f7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerCombatInput
 --- !u!114 &8220587703764858803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5639,7 +5652,7 @@ MonoBehaviour:
   physicalDefense: 0
   magicDefense: 0
   criticalChance: 0.1
-  criticalDamage: 1.1
+  criticalDamage: 1.5
 --- !u!114 &4676465422324529030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5652,6 +5665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5453eeed167d12043915b52d54d24e48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerSkills
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &7411236701876319284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5664,10 +5678,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 545402b62f6d5464e95741a32858eb05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+  ShowTopMostFoldoutHeaderGroup: 1
   _health: 20
-  _baseDamage: 0
   _resource: 0
-  _isUsingSkill: 0
+  _basicSkill: {fileID: 11400000, guid: 58d48b97dc295a342b0acc0f359e1ccb, type: 2}
+  _Skill1: {fileID: 11400000, guid: 3061d228492ffbd4baa82ed6c9714b47, type: 2}
 --- !u!1 &7703308310641347162
 GameObject:
   m_ObjectHideFlags: 0

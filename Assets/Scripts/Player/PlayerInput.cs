@@ -318,13 +318,49 @@ namespace Obrissom.Player
             ]
         },
         {
-            ""name"": ""UIMap"",
-            ""id"": ""f34418b6-4f7f-4e03-b4ef-d709566986c7"",
+            ""name"": ""PlayerSkillMap"",
+            ""id"": ""b3a1b4f9-ba9b-4b09-bd61-ffe3f63eba96"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Basic"",
                     ""type"": ""Button"",
-                    ""id"": ""0787a7a2-6afa-4cf5-a12c-a77a76cee78a"",
+                    ""id"": ""d6d2ed6e-e50a-49c4-bbad-c42a0ee7be65"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""87d6e98d-d082-4ea3-8741-751088dd3646"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""67abb2e8-5541-4eb9-b180-e0fadb1ca1e2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""7aba5b0e-f9a5-40df-9e41-dca670222b27"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""81e39198-3055-4fc5-9330-fbb8dfddfd0c"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -334,40 +370,56 @@ namespace Obrissom.Player
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""66cd9b87-8322-47af-abeb-eb99c3cef49b"",
-                    ""path"": """",
+                    ""id"": ""64721083-94a5-40e3-91c1-77781da978ba"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Basic"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""CombatMap"",
-            ""id"": ""d4c91ab9-9ea8-431e-b570-8a348371f77a"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""69981be6-b867-452e-8d16-0a267d5355a7"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""3b35ec58-2ee1-4617-a75a-b8a38a1997a2"",
-                    ""path"": """",
+                    ""id"": ""5f39f77f-1f8d-4bb9-8338-fa27c34f291f"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Skill 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7db409c3-39ea-4d4e-8c7f-67a09d22d9ca"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""749c8c7b-4ea6-4ed1-9698-74caa25a8f8a"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35181f19-7c85-44cf-abfd-f51d74faecbf"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill 4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -384,19 +436,19 @@ namespace Obrissom.Player
             m_PlayerLocomotionMap_Jump = m_PlayerLocomotionMap.FindAction("Jump", throwIfNotFound: true);
             m_PlayerLocomotionMap_CameraControls = m_PlayerLocomotionMap.FindAction("Camera Controls", throwIfNotFound: true);
             m_PlayerLocomotionMap_ScrollCamera = m_PlayerLocomotionMap.FindAction("Scroll Camera", throwIfNotFound: true);
-            // UIMap
-            m_UIMap = asset.FindActionMap("UIMap", throwIfNotFound: true);
-            m_UIMap_Newaction = m_UIMap.FindAction("New action", throwIfNotFound: true);
-            // CombatMap
-            m_CombatMap = asset.FindActionMap("CombatMap", throwIfNotFound: true);
-            m_CombatMap_Newaction = m_CombatMap.FindAction("New action", throwIfNotFound: true);
+            // PlayerSkillMap
+            m_PlayerSkillMap = asset.FindActionMap("PlayerSkillMap", throwIfNotFound: true);
+            m_PlayerSkillMap_Basic = m_PlayerSkillMap.FindAction("Basic", throwIfNotFound: true);
+            m_PlayerSkillMap_Skill1 = m_PlayerSkillMap.FindAction("Skill 1", throwIfNotFound: true);
+            m_PlayerSkillMap_Skill2 = m_PlayerSkillMap.FindAction("Skill 2", throwIfNotFound: true);
+            m_PlayerSkillMap_Skill3 = m_PlayerSkillMap.FindAction("Skill 3", throwIfNotFound: true);
+            m_PlayerSkillMap_Skill4 = m_PlayerSkillMap.FindAction("Skill 4", throwIfNotFound: true);
         }
 
         ~@PlayerInput()
         {
             UnityEngine.Debug.Assert(!m_PlayerLocomotionMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerLocomotionMap.Disable() has not been called.");
-            UnityEngine.Debug.Assert(!m_UIMap.enabled, "This will cause a leak and performance issues, PlayerInput.UIMap.Disable() has not been called.");
-            UnityEngine.Debug.Assert(!m_CombatMap.enabled, "This will cause a leak and performance issues, PlayerInput.CombatMap.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_PlayerSkillMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerSkillMap.Disable() has not been called.");
         }
 
         /// <summary>
@@ -620,29 +672,49 @@ namespace Obrissom.Player
         /// </summary>
         public PlayerLocomotionMapActions @PlayerLocomotionMap => new PlayerLocomotionMapActions(this);
 
-        // UIMap
-        private readonly InputActionMap m_UIMap;
-        private List<IUIMapActions> m_UIMapActionsCallbackInterfaces = new List<IUIMapActions>();
-        private readonly InputAction m_UIMap_Newaction;
+        // PlayerSkillMap
+        private readonly InputActionMap m_PlayerSkillMap;
+        private List<IPlayerSkillMapActions> m_PlayerSkillMapActionsCallbackInterfaces = new List<IPlayerSkillMapActions>();
+        private readonly InputAction m_PlayerSkillMap_Basic;
+        private readonly InputAction m_PlayerSkillMap_Skill1;
+        private readonly InputAction m_PlayerSkillMap_Skill2;
+        private readonly InputAction m_PlayerSkillMap_Skill3;
+        private readonly InputAction m_PlayerSkillMap_Skill4;
         /// <summary>
-        /// Provides access to input actions defined in input action map "UIMap".
+        /// Provides access to input actions defined in input action map "PlayerSkillMap".
         /// </summary>
-        public struct UIMapActions
+        public struct PlayerSkillMapActions
         {
             private @PlayerInput m_Wrapper;
 
             /// <summary>
             /// Construct a new instance of the input action map wrapper class.
             /// </summary>
-            public UIMapActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public PlayerSkillMapActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             /// <summary>
-            /// Provides access to the underlying input action "UIMap/Newaction".
+            /// Provides access to the underlying input action "PlayerSkillMap/Basic".
             /// </summary>
-            public InputAction @Newaction => m_Wrapper.m_UIMap_Newaction;
+            public InputAction @Basic => m_Wrapper.m_PlayerSkillMap_Basic;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerSkillMap/Skill1".
+            /// </summary>
+            public InputAction @Skill1 => m_Wrapper.m_PlayerSkillMap_Skill1;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerSkillMap/Skill2".
+            /// </summary>
+            public InputAction @Skill2 => m_Wrapper.m_PlayerSkillMap_Skill2;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerSkillMap/Skill3".
+            /// </summary>
+            public InputAction @Skill3 => m_Wrapper.m_PlayerSkillMap_Skill3;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerSkillMap/Skill4".
+            /// </summary>
+            public InputAction @Skill4 => m_Wrapper.m_PlayerSkillMap_Skill4;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
-            public InputActionMap Get() { return m_Wrapper.m_UIMap; }
+            public InputActionMap Get() { return m_Wrapper.m_PlayerSkillMap; }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
             public void Enable() { Get().Enable(); }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -650,9 +722,9 @@ namespace Obrissom.Player
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             public bool enabled => Get().enabled;
             /// <summary>
-            /// Implicitly converts an <see ref="UIMapActions" /> to an <see ref="InputActionMap" /> instance.
+            /// Implicitly converts an <see ref="PlayerSkillMapActions" /> to an <see ref="InputActionMap" /> instance.
             /// </summary>
-            public static implicit operator InputActionMap(UIMapActions set) { return set.Get(); }
+            public static implicit operator InputActionMap(PlayerSkillMapActions set) { return set.Get(); }
             /// <summary>
             /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
             /// </summary>
@@ -660,14 +732,26 @@ namespace Obrissom.Player
             /// <remarks>
             /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
             /// </remarks>
-            /// <seealso cref="UIMapActions" />
-            public void AddCallbacks(IUIMapActions instance)
+            /// <seealso cref="PlayerSkillMapActions" />
+            public void AddCallbacks(IPlayerSkillMapActions instance)
             {
-                if (instance == null || m_Wrapper.m_UIMapActionsCallbackInterfaces.Contains(instance)) return;
-                m_Wrapper.m_UIMapActionsCallbackInterfaces.Add(instance);
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
+                if (instance == null || m_Wrapper.m_PlayerSkillMapActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_PlayerSkillMapActionsCallbackInterfaces.Add(instance);
+                @Basic.started += instance.OnBasic;
+                @Basic.performed += instance.OnBasic;
+                @Basic.canceled += instance.OnBasic;
+                @Skill1.started += instance.OnSkill1;
+                @Skill1.performed += instance.OnSkill1;
+                @Skill1.canceled += instance.OnSkill1;
+                @Skill2.started += instance.OnSkill2;
+                @Skill2.performed += instance.OnSkill2;
+                @Skill2.canceled += instance.OnSkill2;
+                @Skill3.started += instance.OnSkill3;
+                @Skill3.performed += instance.OnSkill3;
+                @Skill3.canceled += instance.OnSkill3;
+                @Skill4.started += instance.OnSkill4;
+                @Skill4.performed += instance.OnSkill4;
+                @Skill4.canceled += instance.OnSkill4;
             }
 
             /// <summary>
@@ -676,21 +760,33 @@ namespace Obrissom.Player
             /// <remarks>
             /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
             /// </remarks>
-            /// <seealso cref="UIMapActions" />
-            private void UnregisterCallbacks(IUIMapActions instance)
+            /// <seealso cref="PlayerSkillMapActions" />
+            private void UnregisterCallbacks(IPlayerSkillMapActions instance)
             {
-                @Newaction.started -= instance.OnNewaction;
-                @Newaction.performed -= instance.OnNewaction;
-                @Newaction.canceled -= instance.OnNewaction;
+                @Basic.started -= instance.OnBasic;
+                @Basic.performed -= instance.OnBasic;
+                @Basic.canceled -= instance.OnBasic;
+                @Skill1.started -= instance.OnSkill1;
+                @Skill1.performed -= instance.OnSkill1;
+                @Skill1.canceled -= instance.OnSkill1;
+                @Skill2.started -= instance.OnSkill2;
+                @Skill2.performed -= instance.OnSkill2;
+                @Skill2.canceled -= instance.OnSkill2;
+                @Skill3.started -= instance.OnSkill3;
+                @Skill3.performed -= instance.OnSkill3;
+                @Skill3.canceled -= instance.OnSkill3;
+                @Skill4.started -= instance.OnSkill4;
+                @Skill4.performed -= instance.OnSkill4;
+                @Skill4.canceled -= instance.OnSkill4;
             }
 
             /// <summary>
-            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIMapActions.UnregisterCallbacks(IUIMapActions)" />.
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerSkillMapActions.UnregisterCallbacks(IPlayerSkillMapActions)" />.
             /// </summary>
-            /// <seealso cref="UIMapActions.UnregisterCallbacks(IUIMapActions)" />
-            public void RemoveCallbacks(IUIMapActions instance)
+            /// <seealso cref="PlayerSkillMapActions.UnregisterCallbacks(IPlayerSkillMapActions)" />
+            public void RemoveCallbacks(IPlayerSkillMapActions instance)
             {
-                if (m_Wrapper.m_UIMapActionsCallbackInterfaces.Remove(instance))
+                if (m_Wrapper.m_PlayerSkillMapActionsCallbackInterfaces.Remove(instance))
                     UnregisterCallbacks(instance);
             }
 
@@ -700,117 +796,21 @@ namespace Obrissom.Player
             /// <remarks>
             /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
             /// </remarks>
-            /// <seealso cref="UIMapActions.AddCallbacks(IUIMapActions)" />
-            /// <seealso cref="UIMapActions.RemoveCallbacks(IUIMapActions)" />
-            /// <seealso cref="UIMapActions.UnregisterCallbacks(IUIMapActions)" />
-            public void SetCallbacks(IUIMapActions instance)
+            /// <seealso cref="PlayerSkillMapActions.AddCallbacks(IPlayerSkillMapActions)" />
+            /// <seealso cref="PlayerSkillMapActions.RemoveCallbacks(IPlayerSkillMapActions)" />
+            /// <seealso cref="PlayerSkillMapActions.UnregisterCallbacks(IPlayerSkillMapActions)" />
+            public void SetCallbacks(IPlayerSkillMapActions instance)
             {
-                foreach (var item in m_Wrapper.m_UIMapActionsCallbackInterfaces)
+                foreach (var item in m_Wrapper.m_PlayerSkillMapActionsCallbackInterfaces)
                     UnregisterCallbacks(item);
-                m_Wrapper.m_UIMapActionsCallbackInterfaces.Clear();
+                m_Wrapper.m_PlayerSkillMapActionsCallbackInterfaces.Clear();
                 AddCallbacks(instance);
             }
         }
         /// <summary>
-        /// Provides a new <see cref="UIMapActions" /> instance referencing this action map.
+        /// Provides a new <see cref="PlayerSkillMapActions" /> instance referencing this action map.
         /// </summary>
-        public UIMapActions @UIMap => new UIMapActions(this);
-
-        // CombatMap
-        private readonly InputActionMap m_CombatMap;
-        private List<ICombatMapActions> m_CombatMapActionsCallbackInterfaces = new List<ICombatMapActions>();
-        private readonly InputAction m_CombatMap_Newaction;
-        /// <summary>
-        /// Provides access to input actions defined in input action map "CombatMap".
-        /// </summary>
-        public struct CombatMapActions
-        {
-            private @PlayerInput m_Wrapper;
-
-            /// <summary>
-            /// Construct a new instance of the input action map wrapper class.
-            /// </summary>
-            public CombatMapActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-            /// <summary>
-            /// Provides access to the underlying input action "CombatMap/Newaction".
-            /// </summary>
-            public InputAction @Newaction => m_Wrapper.m_CombatMap_Newaction;
-            /// <summary>
-            /// Provides access to the underlying input action map instance.
-            /// </summary>
-            public InputActionMap Get() { return m_Wrapper.m_CombatMap; }
-            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-            public void Enable() { Get().Enable(); }
-            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-            public void Disable() { Get().Disable(); }
-            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-            public bool enabled => Get().enabled;
-            /// <summary>
-            /// Implicitly converts an <see ref="CombatMapActions" /> to an <see ref="InputActionMap" /> instance.
-            /// </summary>
-            public static implicit operator InputActionMap(CombatMapActions set) { return set.Get(); }
-            /// <summary>
-            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-            /// </summary>
-            /// <param name="instance">Callback instance.</param>
-            /// <remarks>
-            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-            /// </remarks>
-            /// <seealso cref="CombatMapActions" />
-            public void AddCallbacks(ICombatMapActions instance)
-            {
-                if (instance == null || m_Wrapper.m_CombatMapActionsCallbackInterfaces.Contains(instance)) return;
-                m_Wrapper.m_CombatMapActionsCallbackInterfaces.Add(instance);
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
-            }
-
-            /// <summary>
-            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-            /// </summary>
-            /// <remarks>
-            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-            /// </remarks>
-            /// <seealso cref="CombatMapActions" />
-            private void UnregisterCallbacks(ICombatMapActions instance)
-            {
-                @Newaction.started -= instance.OnNewaction;
-                @Newaction.performed -= instance.OnNewaction;
-                @Newaction.canceled -= instance.OnNewaction;
-            }
-
-            /// <summary>
-            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="CombatMapActions.UnregisterCallbacks(ICombatMapActions)" />.
-            /// </summary>
-            /// <seealso cref="CombatMapActions.UnregisterCallbacks(ICombatMapActions)" />
-            public void RemoveCallbacks(ICombatMapActions instance)
-            {
-                if (m_Wrapper.m_CombatMapActionsCallbackInterfaces.Remove(instance))
-                    UnregisterCallbacks(instance);
-            }
-
-            /// <summary>
-            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-            /// </summary>
-            /// <remarks>
-            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-            /// </remarks>
-            /// <seealso cref="CombatMapActions.AddCallbacks(ICombatMapActions)" />
-            /// <seealso cref="CombatMapActions.RemoveCallbacks(ICombatMapActions)" />
-            /// <seealso cref="CombatMapActions.UnregisterCallbacks(ICombatMapActions)" />
-            public void SetCallbacks(ICombatMapActions instance)
-            {
-                foreach (var item in m_Wrapper.m_CombatMapActionsCallbackInterfaces)
-                    UnregisterCallbacks(item);
-                m_Wrapper.m_CombatMapActionsCallbackInterfaces.Clear();
-                AddCallbacks(instance);
-            }
-        }
-        /// <summary>
-        /// Provides a new <see cref="CombatMapActions" /> instance referencing this action map.
-        /// </summary>
-        public CombatMapActions @CombatMap => new CombatMapActions(this);
+        public PlayerSkillMapActions @PlayerSkillMap => new PlayerSkillMapActions(this);
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerLocomotionMap" which allows adding and removing callbacks.
         /// </summary>
@@ -862,34 +862,47 @@ namespace Obrissom.Player
             void OnScrollCamera(InputAction.CallbackContext context);
         }
         /// <summary>
-        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UIMap" which allows adding and removing callbacks.
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerSkillMap" which allows adding and removing callbacks.
         /// </summary>
-        /// <seealso cref="UIMapActions.AddCallbacks(IUIMapActions)" />
-        /// <seealso cref="UIMapActions.RemoveCallbacks(IUIMapActions)" />
-        public interface IUIMapActions
+        /// <seealso cref="PlayerSkillMapActions.AddCallbacks(IPlayerSkillMapActions)" />
+        /// <seealso cref="PlayerSkillMapActions.RemoveCallbacks(IPlayerSkillMapActions)" />
+        public interface IPlayerSkillMapActions
         {
             /// <summary>
-            /// Method invoked when associated input action "New action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Basic" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnNewaction(InputAction.CallbackContext context);
-        }
-        /// <summary>
-        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "CombatMap" which allows adding and removing callbacks.
-        /// </summary>
-        /// <seealso cref="CombatMapActions.AddCallbacks(ICombatMapActions)" />
-        /// <seealso cref="CombatMapActions.RemoveCallbacks(ICombatMapActions)" />
-        public interface ICombatMapActions
-        {
+            void OnBasic(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "New action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Skill 1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnNewaction(InputAction.CallbackContext context);
+            void OnSkill1(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Skill 2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSkill2(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Skill 3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSkill3(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Skill 4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSkill4(InputAction.CallbackContext context);
         }
     }
 }

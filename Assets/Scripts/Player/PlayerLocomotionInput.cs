@@ -37,7 +37,7 @@ namespace Obrissom.Player
 
         private void OnDisable()
         {
-            //PlayerInput.PlayerLocomotionMap.Disable();
+            PlayerInput.PlayerLocomotionMap.Disable();
             PlayerInput.PlayerLocomotionMap.RemoveCallbacks(this);
         }
 
