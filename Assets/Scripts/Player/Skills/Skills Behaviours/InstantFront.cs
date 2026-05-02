@@ -12,7 +12,6 @@ public class InstantFront : SkillBehaviour
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
         
-        Debug.Log("called");
         Vector3 origin = caster.transform.position + Vector3.up * 0.9f;
         Collider[] hits = Physics.OverlapSphere(caster.transform.position, range);
 
