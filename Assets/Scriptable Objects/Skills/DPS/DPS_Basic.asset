@@ -15,10 +15,14 @@ MonoBehaviour:
   skillName: Scythe Cut
   description: 
   cooldownTime: 0.5
-  physicDamage: 3
-  magicDamage: 0
-  heal: 0
   cost: 0
   damagePerSecond: 0
   damagePerSecondTime: 0
+  damagePerSecondType: 0
+  minPhysicDamage: 2
+  maxPhysicDamage: 5
+  minMagicDamage: 0
+  maxMagicDamage: 0
+  minHeal: 0
+  maxHeal: 0
   behaviour: {fileID: 11400000, guid: c2180b427b2fde84496cd26d307976fd, type: 2}

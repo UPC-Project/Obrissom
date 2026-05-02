@@ -15,10 +15,14 @@ MonoBehaviour:
   skillName: Strong Cut
   description: 
   cooldownTime: 3
-  physicDamage: 10
-  magicDamage: 5
-  heal: 0
-  cost: 0
+  cost: 5
   damagePerSecond: 0
   damagePerSecondTime: 0
+  damagePerSecondType: 0
+  minPhysicDamage: 1
+  maxPhysicDamage: 3
+  minMagicDamage: 6
+  maxMagicDamage: 13
+  minHeal: 0
+  maxHeal: 0
   behaviour: {fileID: 11400000, guid: c2180b427b2fde84496cd26d307976fd, type: 2}

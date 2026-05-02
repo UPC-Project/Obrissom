@@ -12,6 +12,13 @@ namespace Obrissom.Player
         private Skill _activeSkill = null;
         public bool IsUsingSkill => _activeSkill != null;
 
+        private PlayerCombat _playerCombat;
+
+        private void Start()
+        {
+            _playerCombat = GetComponent<PlayerCombat>();
+        }
+
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
@@ -22,8 +29,7 @@ namespace Obrissom.Player
         {
             foreach (SkillKey key in _cooldowns.Keys.ToList())
             {
-                if (_cooldowns[key] > 0f)
-                    _cooldowns[key] -= Time.deltaTime;
+                if (_cooldowns[key] > 0f) _cooldowns[key] -= Time.deltaTime;
             }
         }
 
@@ -42,6 +48,8 @@ namespace Obrissom.Player
             if (!_activeSkills.TryGetValue(key, out Skill skill)) return;
 
             if (_cooldowns.TryGetValue(key, out float remaining) && remaining > 0f) return;
+
+            if (!_playerCombat.TryConsumeResource(skill.cost)) return;
 
             _activeSkill = skill;
             _cooldowns[key] = skill.cooldownTime;

@@ -25,8 +25,8 @@ public class InstantFront : SkillBehaviour
 
             if (angleToTarget <= angle / 2f)
             {
-                int physicDamage = playerCombat.CalculatePhysicalDamage(skillData.physicDamage);
-                int magicDamage = playerCombat.CalculateMagicDamage(skillData.magicDamage);
+                int physicDamage = playerCombat.CalculatePhysicalDamage(skillData.minPhysicDamage,skillData.maxPhysicDamage);
+                int magicDamage = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
 
                 hit.GetComponent<TestEnemy>()?.TakeDamage(physicDamage, DamageType.PhysicDamage);
                 hit.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage);

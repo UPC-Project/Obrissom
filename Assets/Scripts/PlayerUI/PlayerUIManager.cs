@@ -8,6 +8,7 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] private LevelAndXPUI _levelAndXPUI;
     [SerializeField] private PlayerMenu _playerMenu;
     [SerializeField] private SkillCooldownUI _skillCooldownUI;
+    [SerializeField] private HealthAndResourceUI _healthAndResourceUI;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class PlayerUIManager : MonoBehaviour
 
     public LevelAndXPUI GetLevelAndXPUI() => _levelAndXPUI;
     public PlayerMenu GetPlayerMenu() => _playerMenu;
+    public HealthAndResourceUI GetHealthAndResourceUI() => _healthAndResourceUI;
 
     public void RegisterPlayer(PlayerSkills playerSkills)
     {
