@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Item;
 
-namespace Obrissom.Player
+namespace Obrissom.Player.Inventory
 {
     /// <summary>
     /// Filters weapons from the main inventory and exposes them as a quick access list.
     /// Max 3 slots. Read-only for now — equip logic pending combat system.
     /// </summary>
-    public class QuickInventory : MonoBehaviour
+    public class EquipmentInventory : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private int _maxSlots = 3;
@@ -17,39 +17,39 @@ namespace Obrissom.Player
         [Header("Connections")]
         [SerializeField] private Inventory _inventory;
 
-        public event Action OnQuickInventoryChanged;
+        public event Action OnEquipmentInventoryChanged;
 
         // Lista filtrada de armas — máximo _maxSlots
-        private List<InventorySlot> _ringSlots = new List<InventorySlot>();
-        public IReadOnlyList<InventorySlot> RingSlots => _ringSlots;
+        private List<InventorySlot> _equipmentSlots = new List<InventorySlot>();
+        public IReadOnlyList<InventorySlot> EquipmentSlots => _equipmentSlots;
 
         private void Start()
         {
-            _inventory.OnInventoryChanged += RefreshRings;
-            RefreshRings();
+            _inventory.OnInventoryChanged += RefreshEquippable;
+            RefreshEquippable();
         }
 
         private void OnDestroy()
         {
-            _inventory.OnInventoryChanged -= RefreshRings;
+            _inventory.OnInventoryChanged -= RefreshEquippable;
         }
 
         /// <summary>
         /// Scans the main inventory and updates the weapon slot list.
         /// </summary>
-        private void RefreshRings()
+        private void RefreshEquippable()
         {
-            _ringSlots.Clear();
+            _equipmentSlots.Clear();
 
             foreach (var slot in _inventory.Slots)
             {
-                if (_ringSlots.Count >= _maxSlots) break;
+                if (_equipmentSlots.Count >= _maxSlots) break;
 
-                if (!slot.IsEmpty && slot.item.itemType == ItemType.Rings)
-                    _ringSlots.Add(slot);
+                if (!slot.IsEmpty && slot.item.itemType == ItemType.Equippable)
+                    _equipmentSlots.Add(slot);
             }
 
-            OnQuickInventoryChanged?.Invoke();
+            OnEquipmentInventoryChanged?.Invoke();
         }
 
     }

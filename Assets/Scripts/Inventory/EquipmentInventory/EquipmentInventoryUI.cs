@@ -2,38 +2,35 @@
 using UnityEngine.UI;
 using TMPro;
 
-namespace Obrissom.Player
+namespace Obrissom.UI
 {
     /// <summary>
-    /// Renders the quick inventory weapon slots in the HUD.
-    /// Attach to the QuickInventory panel in the Canvas.
+    /// Renders the equipment inventory weapon slots in the HUD.
+    /// Attach to the EquipmentInventory panel in the Canvas.
     /// </summary>
-    public class QuickInventoryUI : MonoBehaviour
+    public class EquipmentInventoryUI : MonoBehaviour
     {
         [Header("Connections")]
-        [SerializeField] private QuickInventory _quickInventory;
+        [SerializeField] private Player.Inventory.EquipmentInventory _equipmentInventory;
         [SerializeField] private Transform _slotContainer;
-        [SerializeField] private GameObject _quickInventoryPanel;
 
 
         private void Start()
         {
-            _quickInventory.OnQuickInventoryChanged += UpdateUI;
+            _equipmentInventory.OnEquipmentInventoryChanged += UpdateUI;
             UpdateUI();
         }
 
         private void OnDestroy()
         {
-            _quickInventory.OnQuickInventoryChanged -= UpdateUI;
+            _equipmentInventory.OnEquipmentInventoryChanged -= UpdateUI;
         }
 
         private void UpdateUI()
         {
-
             if (_slotContainer == null) return;
-            if (_quickInventory == null) return;
+            if (_equipmentInventory == null) return;
 
-            if (!_quickInventoryPanel.activeInHierarchy) return;
 
             for (int i = 0; i < _slotContainer.childCount; i++)
             {
@@ -49,14 +46,14 @@ namespace Obrissom.Player
                 Image itemImage = slot.Find("Item").GetComponent<Image>();
                 TextMeshProUGUI qtyText = slot.Find("QtyText").GetComponent<TextMeshProUGUI>();
 
-                if (i < _quickInventory.RingSlots.Count)
+                if (i < _equipmentInventory.EquipmentSlots.Count)
                 {
-                    InventorySlot ringSlot = _quickInventory.RingSlots[i];
-                    itemImage.sprite = ringSlot.item.icon;
+                    Player.Inventory.InventorySlot equipmentSlot = _equipmentInventory.EquipmentSlots[i];
+                    itemImage.sprite = equipmentSlot.item.icon;
                     itemImage.enabled = true;
                     itemImage.color = Color.white;
-                    qtyText.text = ringSlot.quantity > 1
-                        ? ringSlot.quantity.ToString()
+                    qtyText.text = equipmentSlot.quantity > 1
+                        ? equipmentSlot.quantity.ToString()
                         : "";
                 }
                 else

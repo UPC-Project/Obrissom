@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PlayerMenu : MonoBehaviour
 {
     [Header("Components")]
-    private InventoryManager _inventory;
+    private Obrissom.Player.Inventory.InventoryManager _inventory;
 
     [Header("UI")]
     [SerializeField] private Button _inventoryButton;

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using Obrissom.Player.Inventory;
 
 
 /// <summary>
@@ -44,7 +45,7 @@ public class WorldItem : MonoBehaviour
 
     private Vector3 _startPosition;
     private bool _playerInRange = false;
-    private Inventory _playerInventory;
+    private Inventory _playerInventory = null;
 
 
     private void Start()
@@ -112,7 +113,6 @@ public class WorldItem : MonoBehaviour
     }
 
     // Pickup 
-
     private void TryPickup()
     {
         if (_playerInventory == null) return;

@@ -5,7 +5,6 @@ public class Item : ScriptableObject
 {
     [Header("General Info")]
     public string itemName;
-
     [TextArea]
     [SerializeField] private string _description;
     public Sprite icon;
@@ -22,7 +21,7 @@ public class Item : ScriptableObject
 
     public enum ItemType
     {
-        Rings,
+        Equippable, // TODO: equippable items should have stats
         Consumable,
         QuestItem,
         Misc

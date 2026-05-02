@@ -1,239 +1,203 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.EventSystems; 
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using TMPro;
 
-public class InventoryManager : MonoBehaviour
+namespace Obrissom.Player.Inventory
 {
-    [Header("Connections")]
-    public Inventory inventory;
-    public Transform slotContainer;
-    public GameObject inventoryPanel;
-
-    [Header("Test Items (Press G)")]
-    public Item testItem1;
-    public int amount1 = 1;
-    public Item testItem2;
-    public int amount2 = 1;
-    public Item testItem3;
-    public int amount3 = 1;
-
-    [Header("Drag Visuals")]
-    public Image dragIcon;
-
-    [Header("Quick Inventory Buton")]
-    [SerializeField] private Button _qIB;
-
-    [Header("Quick Inventory")]
-    [SerializeField] private GameObject _quickInventoryPanel;
-
-    [Header("Drop")]
-    [SerializeField] private ItemDropper _itemDropper;
-
-    private int _draggedSlotIndex = -1;  // Index of the slot being dragged
-    public bool isInventoryOpen = false;
-    private bool _isQuickInventoryOpen = false;
-
-
-    /// Initializes the inventory UI and subscribes to inventory changes.
-    /// Also hides the drag icon and closes the inventory at start.
-    void Start()
+    public class InventoryManager : MonoBehaviour
     {
+        [Header("Connections")]
+        public Inventory inventory;
+        public Transform slotContainer;
+        public GameObject inventoryPanel;
+
+        [Header("Test Items (Press G)")]
+        public Item testItem1;
+        public int amount1 = 1;
+        public Item testItem2;
+        public int amount2 = 1;
+        public Item testItem3;
+        public int amount3 = 1;
+
+        [Header("Drag Visuals")]
+        public Image dragIcon;
+
+        [Header("Drop")]
+        [SerializeField] private ItemDropper _itemDropper;
+
+        private int _draggedSlotIndex = -1;  // Index of the slot being dragged
+        public bool isInventoryOpen = false;
 
 
-        inventory.OnInventoryChanged += UpdateUI;
-        _itemDropper = FindFirstObjectByType<ItemDropper>();
-
-        UpdateUI();
-
-        dragIcon.enabled = false;
-
-    }
-
-    void Update()
-    {
-        if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame)
+        /// Initializes the inventory UI and subscribes to inventory changes.
+        /// Also hides the drag icon and closes the inventory at start.
+        void Start()
         {
-            inventory.AddItem(testItem1, amount1);
-            inventory.AddItem(testItem2, amount2);
-            inventory.AddItem(testItem3, amount3);
+            inventory.OnInventoryChanged += UpdateUI;
 
-
-        }
-
-        if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
-        {
-            SetInventoryState(!isInventoryOpen);
-        }
-
-        if (isInventoryOpen)
-        {
-            MoveItem();
-        }
-    }
-
-    /// <summary>
-    /// Opens or closes the inventory UI.
-    /// Also updates cursor visibility and lock state.
-    /// </summary>
-    public void SetInventoryState(bool isOpen)
-    {
-        inventoryPanel?.SetActive(isOpen);
-        isInventoryOpen = isOpen;
-        _qIB.gameObject.SetActive(isOpen);
-        //Cursor.visible = isOpen;
-        //Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
-
-        if (!isOpen)
-            SetQuickInventoryState(false);
-    }
-
-    /// <summary>
-    /// Handles drag and drop logic:
-    /// - Start dragging
-    /// - Move drag icon
-    /// - Drop item into another slot
-    /// </summary>
-    private void MoveItem()
-    {
-        // 1. Start dragging
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            _draggedSlotIndex = GetSlotUnderMouse();
-
-            if (_draggedSlotIndex != -1 && !inventory.Slots[_draggedSlotIndex].IsEmpty)
-            {
-                dragIcon.sprite = inventory.Slots[_draggedSlotIndex].item.icon;
-                dragIcon.enabled = true;
-
-                slotContainer.GetChild(_draggedSlotIndex)
-                    .Find("Item").GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
-            }
-            else
-            {
-                _draggedSlotIndex = -1;
-            }
-
-        }
-
-        //Move drag icon with mouse
-        if (_draggedSlotIndex != -1 && dragIcon.enabled)
-            dragIcon.transform.position = Mouse.current.position.ReadValue();
-
-        // Drop item into another slot
-        if (Mouse.current.leftButton.wasReleasedThisFrame && _draggedSlotIndex != -1)
-        {
-            int destinationIndex = GetSlotUnderMouse();
-
-            if (destinationIndex != -1)
-                inventory.MoveItem(_draggedSlotIndex, destinationIndex);
+            UpdateUI();
 
             dragIcon.enabled = false;
-            _draggedSlotIndex = -1;
-            UpdateUI();
         }
 
-        if (Mouse.current.rightButton.wasPressedThisFrame)
+        void Update()
         {
-            int slotIndex = GetSlotUnderMouse();
-
-            if (slotIndex != -1 && !inventory.Slots[slotIndex].IsEmpty)
+            if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame)
             {
-                // Buscar el ItemDropper en el momento de usarlo
-                if (_itemDropper == null)
-                    _itemDropper = FindFirstObjectByType<ItemDropper>();
+                inventory.AddItem(testItem1, amount1);
+                inventory.AddItem(testItem2, amount2);
+                inventory.AddItem(testItem3, amount3);
+            }
 
-                if (_itemDropper == null)
+            if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
+            {
+                SetInventoryState(!isInventoryOpen);
+            }
+
+            if (isInventoryOpen)
+            {
+                MoveItem();
+            }
+        }
+
+        public void SetItemDropper(ItemDropper itemDropper)
+        {
+            _itemDropper = itemDropper;
+        }
+
+        /// <summary>
+        /// Opens or closes the inventory UI.
+        /// Also updates cursor visibility and lock state.
+        /// </summary>
+        public void SetInventoryState(bool isOpen)
+        {
+            inventoryPanel?.SetActive(isOpen);
+            isInventoryOpen = isOpen;
+            //Cursor.visible = isOpen;
+            //Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        }
+
+        /// <summary>
+        /// Handles drag and drop logic:
+        /// - Start dragging
+        /// - Move drag icon
+        /// - Drop item into another slot
+        /// </summary>
+        private void MoveItem()
+        {
+            // 1. Start dragging
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                _draggedSlotIndex = GetSlotUnderMouse();
+
+                if (_draggedSlotIndex != -1 && !inventory.Slots[_draggedSlotIndex].IsEmpty)
                 {
-                    Debug.LogWarning("[InventoryManager] ItemDropper not found.");
-                    return;
+                    dragIcon.sprite = inventory.Slots[_draggedSlotIndex].item.icon;
+                    dragIcon.enabled = true;
+
+                    slotContainer.GetChild(_draggedSlotIndex)
+                        .Find("Item").GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+                }
+                else
+                {
+                    _draggedSlotIndex = -1;
                 }
 
-                if (inventory.RemoveItemAt(slotIndex, out Item item, out int qty))
-                    _itemDropper.DropItem(item, qty);
             }
+
+            // Move drag icon with mouse
+            if (_draggedSlotIndex != -1 && dragIcon.enabled)
+                dragIcon.transform.position = Mouse.current.position.ReadValue();
+
+            // Drop item into another slot
+            if (Mouse.current.leftButton.wasReleasedThisFrame && _draggedSlotIndex != -1)
+            {
+                int destinationIndex = GetSlotUnderMouse();
+
+                if (destinationIndex != -1)
+                    inventory.MoveItem(_draggedSlotIndex, destinationIndex);
+
+                dragIcon.enabled = false;
+                _draggedSlotIndex = -1;
+                UpdateUI();
+            }
+
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                int slotIndex = GetSlotUnderMouse();
+
+                if (slotIndex != -1 && !inventory.Slots[slotIndex].IsEmpty)
+                {
+                    if (inventory.RemoveItemAt(slotIndex, out Item item, out int qty) && _itemDropper)
+                        _itemDropper.DropItem(item, qty);
+                }
+            }
+
         }
 
-    }
-
-    /// Detects which inventory slot is under the mouse using UI raycast.
-    /// Returns the slot index, or -1 if none is found.
-    private int GetSlotUnderMouse()
-    {
-        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        /// Detects which inventory slot is under the mouse using UI raycast.
+        /// Returns the slot index, or -1 if none is found.
+        private int GetSlotUnderMouse()
         {
-            position = Mouse.current.position.ReadValue()
-        };
+            PointerEventData pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = Mouse.current.position.ReadValue()
+            };
 
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, results);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
 
-        foreach (RaycastResult result in results)
+            foreach (RaycastResult result in results)
+            {
+                Transform hit = result.gameObject.transform;
+                for (int i = 0; i < slotContainer.childCount; i++)
+                {
+                    Transform slotChild = slotContainer.GetChild(i);
+                    if (hit == slotChild || hit.parent == slotChild)
+                        return i;
+                }
+            }
+            return -1;
+        }
+
+
+        //public void DropItemFromSlot() { } TODO
+
+
+        /// <summary>
+        /// Updates the inventory UI:
+        /// - Sets item icons
+        /// - Updates quantity text
+        /// - Clears empty slots
+        /// </summary>
+        void UpdateUI()
         {
-            Transform hit = result.gameObject.transform;
             for (int i = 0; i < slotContainer.childCount; i++)
             {
-                Transform slotChild = slotContainer.GetChild(i);
-                if (hit == slotChild || hit.parent == slotChild)
-                    return i;
+                Transform slotTransform = slotContainer.GetChild(i);
+                Image itemImage = slotTransform.Find("Item").GetComponent<Image>();
+                TextMeshProUGUI qtyText = slotTransform.Find("QtyText").GetComponent<TextMeshProUGUI>();
+
+                if (i < inventory.Slots.Count && !inventory.Slots[i].IsEmpty)
+                {
+                    itemImage.sprite = inventory.Slots[i].item.icon;
+                    itemImage.enabled = true;
+                    itemImage.color = Color.white;
+                    qtyText.text = inventory.Slots[i].quantity > 1
+                        ? inventory.Slots[i].quantity.ToString()
+                        : "";
+                }
+                else
+                {
+                    itemImage.sprite = null;
+                    itemImage.enabled = false;
+                    qtyText.text = "";
+                }
             }
         }
-        return -1;
-    }
 
-
-    //public void DropItemFromSlot() { } TODO
-
-    /// <summary>
-    /// Called by the button inside the inventory panel.
-    /// Only works if the inventory is open.
-    /// </summary>
-    public void ToggleQuickInventory()
-    {
-        if (!isInventoryOpen) return;
-
-        _isQuickInventoryOpen = !_isQuickInventoryOpen;
-        SetQuickInventoryState(_isQuickInventoryOpen);
-    }
-
-    private void SetQuickInventoryState(bool isOpen)
-    {
-        _isQuickInventoryOpen = isOpen;
-        _quickInventoryPanel?.SetActive(isOpen);
-    }
-
-    /// <summary>
-    /// Updates the inventory UI:
-    /// - Sets item icons
-    /// - Updates quantity text
-    /// - Clears empty slots
-    /// </summary>
-    void UpdateUI()
-    {
-
-        for (int i = 0; i < slotContainer.childCount; i++)
-        {
-            Transform slotTransform = slotContainer.GetChild(i);
-            Image itemImage = slotTransform.Find("Item").GetComponent<Image>();
-            TextMeshProUGUI qtyText = slotTransform.Find("QtyText").GetComponent<TextMeshProUGUI>();
-
-            if (i < inventory.Slots.Count && !inventory.Slots[i].IsEmpty)
-            {
-                itemImage.sprite = inventory.Slots[i].item.icon;
-                itemImage.enabled = true;
-                itemImage.color = Color.white;
-                qtyText.text = inventory.Slots[i].quantity > 1
-                    ? inventory.Slots[i].quantity.ToString()
-                    : "";
-            }
-            else
-            {
-                itemImage.sprite = null;
-                itemImage.enabled = false;
-                qtyText.text = "";
-            }
-        }
     }
 }

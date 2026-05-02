@@ -1,17 +1,24 @@
-﻿using UnityEngine;
+﻿using Unity.Netcode;
+using UnityEngine;
 
 /// <summary>
 /// Reusable service to spawn items in the world.
 /// Used by both the player (drop from inventory) and enemies (drop on death).
 /// Attach to the Player and to each enemy that drops items.
 /// </summary>
-public class ItemDropper : MonoBehaviour
+public class ItemDropper : NetworkBehaviour
 {
     [Header("Drop Settings")]
     [SerializeField] private GameObject _worldItemPrefab;
     [SerializeField] private float _dropForce = 3f;
     [SerializeField] private float _dropUpwardForce = 2f;
 
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+        PlayerUIManager.Instance.RegisterPlayerItemDropper(this);
+    }
 
     /// <summary>
     /// Spawns an item in the world near whoever drops it.

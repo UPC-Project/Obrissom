@@ -1,4 +1,5 @@
 using Obrissom.Player;
+using Obrissom.Player.Inventory;
 using UnityEngine;
 
 public class PlayerUIManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class PlayerUIManager : MonoBehaviour
 
     [SerializeField] private LevelAndXPUI _levelAndXPUI;
     [SerializeField] private PlayerMenu _playerMenu;
+    [SerializeField] private InventoryManager _inventoryManager;
 
     private void Awake()
     {
@@ -21,4 +23,9 @@ public class PlayerUIManager : MonoBehaviour
 
     public LevelAndXPUI GetLevelAndXPUI() => _levelAndXPUI;
     public PlayerMenu GetPlayerMenu() => _playerMenu;
+
+    public void RegisterPlayerItemDropper(ItemDropper itemDropper)
+    {
+        _inventoryManager.SetItemDropper(itemDropper);
+    }
 }
