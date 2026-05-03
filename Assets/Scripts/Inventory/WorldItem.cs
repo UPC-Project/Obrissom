@@ -15,6 +15,7 @@ public class WorldItem : MonoBehaviour
     [SerializeField] private Item _item;
     [SerializeField] private int _quantity = 1;
 
+
     public Item item
     {
         get => _item;
