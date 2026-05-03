@@ -41,6 +41,7 @@ namespace Obrissom.Player.Inventory
         void Start()
         {
             inventory.OnInventoryChanged += UpdateUI;
+            //_equipmentInventory = GetComponent<EquipmentInventory>();
             _equipmentInventory.OnEquipmentChanged += UpdateEquipmentUI;
 
             UpdateUI();
@@ -226,6 +227,7 @@ namespace Obrissom.Player.Inventory
             }
             return -1;
         }
+
 
         // TODO: Implement DropItemFromSlot for equipment slots
 
