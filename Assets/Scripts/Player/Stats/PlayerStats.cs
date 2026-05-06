@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace Obrissom.Player
 {
     public class PlayerStats : MonoBehaviour
