@@ -10,15 +10,22 @@ namespace Obrissom.UI
         private Vector3 _origin;
 
         [Header("Animation")]
+        public float displayDuration = 0.5f;
         [SerializeField] private AnimationCurve _opacityCurve;
         [SerializeField] private AnimationCurve _scaleCurve;
         [SerializeField] private AnimationCurve _heightCurve;
-        [SerializeField] private float _displayDuration;
 
         private void Start()
         {
             _origin = transform.position;
         }
+        public void Init(string text)
+        {
+            damageText.text = text;
+            time = 0f;
+            _origin = transform.position;
+        }
+
         private void Update()
         {
             damageText.color = new Color(damageText.color.r, damageText.color.g, damageText.color.b, _opacityCurve.Evaluate(time));
