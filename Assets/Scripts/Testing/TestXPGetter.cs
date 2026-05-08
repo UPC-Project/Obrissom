@@ -9,7 +9,6 @@ public class TestXPGetter : MonoBehaviour
         if (playerXP != null && playerXP.IsOwner)
         {
             playerXP.GainXP(xpAmount);
-            Debug.Log($"Gained {xpAmount} XP");
         }
     }
 }

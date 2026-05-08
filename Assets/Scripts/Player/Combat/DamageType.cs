@@ -1,6 +1,6 @@
-// Where to save this? It'll be accesed by enemies to
+// Where to save this? It'll be accesed by enemies too
 public enum DamageType
 {
-    PhysicalDamage,
+    PhysicDamage,
     MagicDamage,
 }
