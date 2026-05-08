@@ -9,6 +9,10 @@ public class Item : ScriptableObject
     [SerializeField] private string _description;
     public Sprite icon;
 
+    [Header("Database")]
+    [Tooltip("Only ID")]
+    public int itemID; 
+
     [Header("Stacking Properties")]
     public bool isStackable;
     public int maxStackSize = 1;

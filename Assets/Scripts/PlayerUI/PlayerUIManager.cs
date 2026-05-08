@@ -26,6 +26,7 @@ public class PlayerUIManager : MonoBehaviour
 
     public void RegisterPlayerItemDropper(ItemDropper itemDropper)
     {
-        _inventoryManager.SetItemDropper(itemDropper);
+        Obrissom.Player.Inventory.Inventory playerInventory = itemDropper.GetComponent<Obrissom.Player.Inventory.Inventory>();
+        _inventoryManager.BindLocalPlayer(playerInventory, itemDropper);
     }
 }
