@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Obrissom.Player.Inventory;
 
 namespace Obrissom.UI
 {

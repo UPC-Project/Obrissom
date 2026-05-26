@@ -1,4 +1,5 @@
 using Obrissom.Player;
+using Obrissom.Player.Inventory;
 using UnityEngine;
 
 namespace Obrissom.UI
@@ -11,6 +12,7 @@ namespace Obrissom.UI
         [SerializeField] private PlayerMenu _playerMenu;
         [SerializeField] private SkillCooldownUI _skillCooldownUI;
         [SerializeField] private HealthAndResourceUI _healthAndResourceUI;
+        [SerializeField] private InventoryManager _inventoryManager;
 
         private void Awake()
         {
@@ -30,6 +32,12 @@ namespace Obrissom.UI
         public void RegisterPlayer(PlayerSkills playerSkills)
         {
             _skillCooldownUI.SetPlayerSkills(playerSkills);
+        }
+
+        public void RegisterPlayerInventory(ItemDropper itemDropper)
+        {
+            Inventory playerInventory = itemDropper.GetComponent<Inventory>();
+            _inventoryManager.BindLocalPlayer(playerInventory, itemDropper);
         }
     }
 }
