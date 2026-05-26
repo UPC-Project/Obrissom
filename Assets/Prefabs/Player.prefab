@@ -5364,6 +5364,8 @@ GameObject:
   - component: {fileID: 5583513852371124613}
   - component: {fileID: 4676465422324529030}
   - component: {fileID: 7411236701876319284}
+  - component: {fileID: 7624941080802116563}
+  - component: {fileID: 2156122043114571784}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -5683,6 +5685,36 @@ MonoBehaviour:
   _resource: 0
   _basicSkill: {fileID: 11400000, guid: 58d48b97dc295a342b0acc0f359e1ccb, type: 2}
   _Skill1: {fileID: 11400000, guid: 3061d228492ffbd4baa82ed6c9714b47, type: 2}
+--- !u!114 &7624941080802116563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7568587711868824460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 876cd176f78130143b5977fedf5a9b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDropper
+  ShowTopMostFoldoutHeaderGroup: 1
+  _worldItemPrefab: {fileID: 7928161634885913208, guid: a4bb840a049732d40a76af58043a3f2c, type: 3}
+  _dropForce: 3
+  _dropUpwardForce: 2
+--- !u!114 &2156122043114571784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7568587711868824460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7cb19f8eab04b44291e763b6cb8be42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.Inventory.Inventory
+  _inventorySize: 24
+  _slots: []
 --- !u!1 &7703308310641347162
 GameObject:
   m_ObjectHideFlags: 0
