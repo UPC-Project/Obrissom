@@ -22,7 +22,6 @@ public class Item : ScriptableObject
 
     [Header("Equipment")]
     public bool isEquippable;
-    public EquipmentSlotType equipmentSlotType;
 
     // [Header("Stat Modifiers")]
     // TODO: Implement modifier system when player statistics system is available
@@ -33,12 +32,5 @@ public class Item : ScriptableObject
         Consumable,
         QuestItem,
         Misc
-    }
-
-    public enum EquipmentSlotType
-    {
-        Ring,
-        Weapon,
-        Armor
     }
 }

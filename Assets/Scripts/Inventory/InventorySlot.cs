@@ -16,18 +16,16 @@ namespace Obrissom.Player.Inventory
     {
         public Item item;                              
         public int quantity;                            
-        public SlotType slotType;                       
-        public Item.EquipmentSlotType acceptedEquipmentType; 
+        public SlotType slotType;
 
         /// <summary>
         /// Constructor to create a new slot.
         /// </summary>
-        public InventorySlot(Item newItem, int amount, SlotType slotType = SlotType.All, Item.EquipmentSlotType acceptedType = Item.EquipmentSlotType.Ring)
+        public InventorySlot(Item newItem, int amount, SlotType slotType = SlotType.All)
         {
             this.item = newItem;
             this.quantity = amount;
             this.slotType = slotType;
-            this.acceptedEquipmentType = acceptedType;
         }
 
         /// <summary>
@@ -40,7 +38,7 @@ namespace Obrissom.Player.Inventory
             if (slotType == SlotType.All) return true;
 
             // Equipment slots check if the item is equippable and matches the slot type
-            return incomingItem.isEquippable && incomingItem.equipmentSlotType == acceptedEquipmentType;
+            return incomingItem.isEquippable && SlotType.Equipment == slotType;
             //  return incomingItem.isEquippable && slotType == SlotType.Equipment ;
         }
 

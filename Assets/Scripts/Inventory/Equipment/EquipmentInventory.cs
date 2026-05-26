@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Obrissom.Player.Inventory
 {
     /// <summary>
-    /// Manages equipment slots. Each slot only accepts items of a specific EquipmentSlotType.
+    /// Manages equipment slots.
     /// Lives alongside Inventory on the player — not a separate system.
     /// </summary>
     public class EquipmentInventory : MonoBehaviour
@@ -24,9 +24,9 @@ namespace Obrissom.Player.Inventory
 
         private void Awake()
         {
-            _equipmentSlot1 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
-            _equipmentSlot2 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
-            _equipmentSlot3 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
+            _equipmentSlot1 = new InventorySlot(null, 0, SlotType.Equipment);
+            _equipmentSlot2 = new InventorySlot(null, 0, SlotType.Equipment);
+            _equipmentSlot3 = new InventorySlot(null, 0, SlotType.Equipment);
         }
 
         public void SetInventory(Inventory inventory) => _inventory = inventory;
