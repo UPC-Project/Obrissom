@@ -2,8 +2,6 @@
 using TMPro;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
-using Unity.Collections;
-using Obrissom.Player.Inventory;
 
 /// <summary>
 /// This script manages the physical item dropped in the 3D world.
@@ -29,31 +27,28 @@ public class WorldItem : NetworkBehaviour
     [SerializeField] private float _pickupRadius = 2f;   
     [SerializeField] private LayerMask _playerLayer;      
 
-    // --- NETWORK VARIABLES ---
-    // These sync automatically from Server to all Clients.
+    // NETWORK VARIABLES 
     private NetworkVariable<int> _quantity = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<int> _itemID = new NetworkVariable<int>(-1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    // --- LOCAL VARIABLES ---
-    private Item _item;              // The resolved Item data from the database
-    private Vector3 _startPosition;  // Original position for the floating animation
-    private bool _playerInRange;     // Is a player near enough to pick this up?
-    private Camera _camera;          // Cached reference to the main camera
+    // LOCAL VARIABLES
+    [SerializeField] private Item _item;
+    private Vector3 _startPosition;
+    private bool _playerInRange;
+    private Camera _camera;
 
     public override void OnNetworkSpawn()
     {
         _startPosition = transform.position;
-        GetComponent<Collider>().isTrigger = true; // Ensure the collider is a trigger
+        GetComponent<Collider>().isTrigger = true;
         _camera = Camera.main;
 
         if (_labelText == null)
             _labelText = GetComponentInChildren<TextMeshProUGUI>();
 
-        // Subscribe to value changes: if the ID or Quantity changes on the server, update the UI
         _itemID.OnValueChanged += (prev, current) => ResolveItem();
         _quantity.OnValueChanged += (prev, current) => UpdateLabel();
 
-        // Initial attempt to resolve the item data
         ResolveItem();
     }
 

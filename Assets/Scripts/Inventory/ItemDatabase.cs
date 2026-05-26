@@ -21,10 +21,9 @@ namespace Obrissom.Database
             {
                 if (_instance == null)
                 {
-                    // Look for an existing instance in the scene
                     _instance = FindFirstObjectByType<ItemDatabase>();
 
-                    // If not found, create a new GameObject to host the database
+
                     if (_instance == null)
                     {
                         GameObject go = new GameObject("ItemDatabase_AutoSpawned");
@@ -35,13 +34,11 @@ namespace Obrissom.Database
             }
         }
 
-        // Dictionary for high-speed item searching using the ID as key
         private Dictionary<int, Item> _itemDictionary = new Dictionary<int, Item>();
         private bool _isInitialized = false;
 
         private void Awake()
         {
-            // Ensure there is only one instance of the database (Singleton)
             if (_instance != null && _instance != this)
             {
                 Destroy(gameObject);
@@ -49,7 +46,7 @@ namespace Obrissom.Database
             }
 
             _instance = this;
-            DontDestroyOnLoad(gameObject); // Keep the database alive during scene changes
+            DontDestroyOnLoad(gameObject);
 
             InitializeDatabase();
         }
@@ -61,7 +58,6 @@ namespace Obrissom.Database
         {
             if (_isInitialized) return;
 
-            // Load all assets of type Item from the specific folder
             Item[] allItems = Resources.LoadAll<Item>("Items");
 
             foreach (Item item in allItems)
@@ -73,8 +69,7 @@ namespace Obrissom.Database
                 }
                 else
                 {
-                    // Important warning: two items cannot have the same ID
-                    Debug.LogWarning($"Duplicate Item ID detected: {item.itemID}. Please check your Item assets.");
+                    Debug.LogWarning($"Duplicate Item ID detected: {item.itemID}");
                 }
             }
 
@@ -83,7 +78,6 @@ namespace Obrissom.Database
 
         /// <summary>
         /// Returns an Item object based on its numerical ID.
-        /// This is O(1) complexity (instant search).
         /// </summary>
         public Item GetItemByID(int id)
         {

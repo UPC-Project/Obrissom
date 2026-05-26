@@ -26,9 +26,9 @@ namespace Obrissom.Player.Inventory
 
         private void UpdateUI()
         {
-            UpdateSlot(0, _equipmentInventory.RingSlot1);
-            UpdateSlot(1, _equipmentInventory.RingSlot2);
-            UpdateSlot(2, _equipmentInventory.RingSlot3);
+            UpdateSlot(0, _equipmentInventory.EquipmentSlot1);
+            UpdateSlot(1, _equipmentInventory.EquipmentSlot2);
+            UpdateSlot(2, _equipmentInventory.EquipmentSlot3);
         }
 
         private void UpdateSlot(int index, InventorySlot slot)

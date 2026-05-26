@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Obrissom.Player.Inventory
 {
@@ -14,20 +11,17 @@ namespace Obrissom.Player.Inventory
     public class Inventory : MonoBehaviour
     {
         [Header("Inventory Settings")]
-        [SerializeField] private int _inventorySize = 20; // Maximum number of slots
+        [SerializeField] private int _inventorySize = 20;
 
-        // List of slots that hold the items
         [SerializeField] private List<InventorySlot> _slots = new List<InventorySlot>();
 
-        // Public access to slots (Read-only for safety)
         public IReadOnlyList<InventorySlot> Slots => _slots;
 
-        // Event triggered every time an item is added, moved, or removed
         public event Action OnInventoryChanged;
 
         private void Awake()
         {
-            // Initialize the inventory with empty slots
+            // TODO: save/restore inventory information
             for (int i = 0; i < _inventorySize; i++)
             {
                 _slots.Add(new InventorySlot(null, 0));
@@ -56,7 +50,7 @@ namespace Obrissom.Player.Inventory
                         slot.AddQuantity(toAdd);
                         amount -= toAdd;
 
-                        OnInventoryChanged?.Invoke(); // Refresh UI
+                        OnInventoryChanged?.Invoke(); 
 
                         if (amount <= 0) return true; // All items added
                     }
@@ -71,7 +65,7 @@ namespace Obrissom.Player.Inventory
                     slot.item = item;
                     slot.quantity = amount;
 
-                    OnInventoryChanged?.Invoke(); // Refresh UI
+                    OnInventoryChanged?.Invoke(); 
                     return true;
                 }
             }
@@ -103,7 +97,7 @@ namespace Obrissom.Player.Inventory
             source.item = tempItem;
             source.quantity = tempQuantity;
 
-            OnInventoryChanged?.Invoke(); // Refresh UI
+            OnInventoryChanged?.Invoke();
         }
 
         /// <summary>
@@ -138,7 +132,7 @@ namespace Obrissom.Player.Inventory
                 slot.RemoveQuantity(amountToDrop);
             }
 
-            OnInventoryChanged?.Invoke(); // Refresh UI
+            OnInventoryChanged?.Invoke();
             return true;
         }
 

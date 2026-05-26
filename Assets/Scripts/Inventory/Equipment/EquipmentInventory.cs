@@ -14,20 +14,22 @@ namespace Obrissom.Player.Inventory
 
         public event Action OnEquipmentChanged;
 
-        private InventorySlot _ringSlot1;
-        private InventorySlot _ringSlot2;
-        private InventorySlot _ringSlot3;
+        private InventorySlot _equipmentSlot1;
+        private InventorySlot _equipmentSlot2;
+        private InventorySlot _equipmentSlot3;
 
-        public InventorySlot RingSlot1 => _ringSlot1;
-        public InventorySlot RingSlot2 => _ringSlot2;
-        public InventorySlot RingSlot3 => _ringSlot3;
+        public InventorySlot EquipmentSlot1 => _equipmentSlot1;
+        public InventorySlot EquipmentSlot2 => _equipmentSlot2;
+        public InventorySlot EquipmentSlot3 => _equipmentSlot3;
 
         private void Awake()
         {
-            _ringSlot1 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
-            _ringSlot2 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
-            _ringSlot3 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
+            _equipmentSlot1 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
+            _equipmentSlot2 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
+            _equipmentSlot3 = new InventorySlot(null, 0, SlotType.Equipment, Item.EquipmentSlotType.Ring);
         }
+
+        public void SetInventory(Inventory inventory) => _inventory = inventory;
 
         /// <summary>
         /// Equips an item from the main inventory into the specified equipment slot.
@@ -85,9 +87,9 @@ namespace Obrissom.Player.Inventory
         {
             return index switch
             {
-                0 => _ringSlot1,
-                1 => _ringSlot2,
-                2 => _ringSlot3,
+                0 => _equipmentSlot1,
+                1 => _equipmentSlot2,
+                2 => _equipmentSlot3,
                 _ => null
             };
         }
@@ -127,7 +129,7 @@ namespace Obrissom.Player.Inventory
 
         private void RemoveStats(Item item)
         {
-            // TODO
+            // TODO: should be called in unequip
         }
     }
 }

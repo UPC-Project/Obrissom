@@ -23,7 +23,6 @@ public class Item : ScriptableObject
     [Header("Equipment")]
     public bool isEquippable;
     public EquipmentSlotType equipmentSlotType;
-    // TODO: Implement ApplyStats() when player stats system is available
 
     // [Header("Stat Modifiers")]
     // TODO: Implement modifier system when player statistics system is available

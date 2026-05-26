@@ -13,10 +13,11 @@ namespace Obrissom.Player.Inventory
     /// </summary>
     public class InventoryManager : MonoBehaviour
     {
-        [Header("Main Connections")]
-        public Inventory inventory;           // Reference to the active player's inventory data
-        public Transform slotContainer;       // The UI parent of the inventory slots
-        public GameObject inventoryPanel;     // The main UI panel to open/close
+        [Header("Connections")]
+        public Inventory inventory;
+        public Transform slotContainer;
+        public GameObject inventoryPanel; 
+        [SerializeField] private ItemDropper _itemDropper;
 
         [Header("Test Items (Press G)")]
         public Item testItem1;
@@ -25,14 +26,13 @@ namespace Obrissom.Player.Inventory
         public int amount2 = 1;
         public Item testItem3;
         public int amount3 = 1;
+        public Item testItem4;
+        public int amount4 = 1;
 
         [Header("Drag & Drop Visuals")]
-        public Image dragIcon;                // The icon that follows the mouse when dragging
+        public Image dragIcon;
 
-        [Header("World Interaction")]
-        [SerializeField] private ItemDropper _itemDropper; // Reference to the player's dropper component
-
-        [Header("Equipment UI")]
+        [Header("Equipment")]
         [SerializeField] private EquipmentInventory _equipmentInventory;
         [SerializeField] private Transform _equipmentContainer;
 
@@ -52,7 +52,7 @@ namespace Obrissom.Player.Inventory
                 _equipmentInventory.OnEquipmentChanged += UpdateEquipmentUI;
 
             UpdateUI();
-            dragIcon.enabled = false; // Hide drag icon at start
+            dragIcon.enabled = false;
         }
 
         /// <summary>
@@ -68,6 +68,8 @@ namespace Obrissom.Player.Inventory
             inventory = localInventory;
             _itemDropper = localDropper;
 
+            _equipmentInventory.SetInventory(inventory);
+
             if (inventory != null)
             {
                 inventory.OnInventoryChanged += UpdateUI;
@@ -77,19 +79,19 @@ namespace Obrissom.Player.Inventory
 
         void Update()
         {
-            // Debug: Add items for testing
+            // Add items for testing
             if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame && inventory != null)
             {
                 inventory.AddItem(testItem1, amount1);
                 inventory.AddItem(testItem2, amount2);
                 inventory.AddItem(testItem3, amount3);
+                inventory.AddItem(testItem4, amount4);
             }
 
-            // Input: Toggle Inventory UI
+
             if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
                 SetInventoryState(!isInventoryOpen);
 
-            // If UI is open, handle mouse logic
             if (isInventoryOpen)
                 MoveItem();
         }
@@ -105,7 +107,7 @@ namespace Obrissom.Player.Inventory
         /// </summary>
         private void MoveItem()
         {
-            // --- 1. START DRAGGING ---
+            // START DRAGGING 
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 int equipIndex = GetEquipmentSlotUnderMouse();
@@ -132,7 +134,7 @@ namespace Obrissom.Player.Inventory
                         dragIcon.sprite = inventory.Slots[_draggedSlotIndex].item.icon;
                         dragIcon.enabled = true;
 
-                        // Visual feedback: make the original slot transparent while dragging
+                        // make the original slot transparent while dragging
                         slotContainer.GetChild(_draggedSlotIndex)
                             .Find("Item").GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
                     }
@@ -143,11 +145,11 @@ namespace Obrissom.Player.Inventory
                 }
             }
 
-            // --- 2. UPDATE DRAG ICON POSITION ---
+            // UPDATE DRAG ICON POSITION 
             if ((_draggedSlotIndex != -1 || _draggingFromEquipment) && dragIcon.enabled)
                 dragIcon.transform.position = Mouse.current.position.ReadValue();
 
-            // --- 3. DROP ITEM ---
+            // DROP ITEM
             if (Mouse.current.leftButton.wasReleasedThisFrame && (_draggedSlotIndex != -1 || _draggingFromEquipment))
             {
                 if (_draggingFromEquipment) // Handle drop from equipment
@@ -184,7 +186,7 @@ namespace Obrissom.Player.Inventory
                 UpdateEquipmentUI();
             }
 
-            // --- 4. RIGHT CLICK (Drop to World) ---
+            // RIGHT CLICK (Drop to World)
             if (Mouse.current.rightButton.wasPressedThisFrame && inventory != null)
             {
                 int slotIndex = GetSlotUnderMouse();
@@ -202,7 +204,7 @@ namespace Obrissom.Player.Inventory
             }
         }
 
-        // --- HELPER METHODS: Raycast to find UI Slots ---
+        // HELPER METHODS: Raycast to find UI Slots
 
         private int GetSlotUnderMouse()
         {
@@ -242,7 +244,7 @@ namespace Obrissom.Player.Inventory
             return -1;
         }
 
-        // --- UI REFRESH METHODS ---
+        // UI REFRESH METHODS 
 
         private void UpdateUI()
         {
@@ -272,9 +274,9 @@ namespace Obrissom.Player.Inventory
         private void UpdateEquipmentUI()
         {
             if (_equipmentInventory == null) return;
-            UpdateEquipmentSlot(0, _equipmentInventory.RingSlot1);
-            UpdateEquipmentSlot(1, _equipmentInventory.RingSlot2);
-            UpdateEquipmentSlot(2, _equipmentInventory.RingSlot3);
+            UpdateEquipmentSlot(0, _equipmentInventory.EquipmentSlot1);
+            UpdateEquipmentSlot(1, _equipmentInventory.EquipmentSlot2);
+            UpdateEquipmentSlot(2, _equipmentInventory.EquipmentSlot3);
         }
 
         private void UpdateEquipmentSlot(int index, InventorySlot slot)

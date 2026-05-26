@@ -10,18 +10,17 @@ using UnityEngine;
 public class ItemDropper : NetworkBehaviour
 {
     [Header("Drop Settings")]
-    [SerializeField] private GameObject _worldItemPrefab; // The prefab with WorldItem script
-    [SerializeField] private float _dropForce = 3f;        // Forward power of the drop
-    [SerializeField] private float _dropUpwardForce = 2f; // Upward power of the drop
+    [SerializeField] private GameObject _worldItemPrefab;
+    [SerializeField] private float _dropForce = 3f;
+    [SerializeField] private float _dropUpwardForce = 2f;
 
     public override void OnNetworkSpawn()
     {
-        // Only the local player (Owner) connects their dropper to the Global UI
         if (!IsOwner) return;
 
         if (PlayerUIManager.Instance != null)
         {
-            PlayerUIManager.Instance.RegisterPlayerItemDropper(this);
+            PlayerUIManager.Instance.RegisterPlayerInventory(this);
         }
     }
 
