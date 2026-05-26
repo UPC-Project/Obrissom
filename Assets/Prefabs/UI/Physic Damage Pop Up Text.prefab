@@ -60,6 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.UI.DamagePopUpAnimation
   damageText: {fileID: 9006202608115638252}
   time: 0
+  displayDuration: 0.5
   _opacityCurve:
     serializedVersion: 2
     m_Curve:
@@ -150,7 +151,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _displayDuration: 0
 --- !u!114 &9006202608115638252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,8 +173,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 9999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c022bab234317d140b429e779517c125, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: c022bab234317d140b429e779517c125, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3fc346e61588a2e49923fb102001b402, type: 2}
+  m_sharedMaterial: {fileID: 5282326708536991954, guid: 3fc346e61588a2e49923fb102001b402, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -198,8 +198,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.8
-  m_fontSizeBase: 0.8
+  m_fontSize: 1
+  m_fontSizeBase: 1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
