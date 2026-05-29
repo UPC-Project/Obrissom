@@ -11,7 +11,7 @@ namespace Obrissom.Player
         public int currentLevel = 1;
 
         [Header("Components")]
-        private LevelAndXPUI _XpUi;
+        private UI.LevelAndXPUI _XpUi;
         private PlayerSkills _playerSkills;
         private PlayerStats _playerStats;
 
@@ -21,7 +21,7 @@ namespace Obrissom.Player
 
             _playerSkills = GetComponent<PlayerSkills>();
             _playerStats = GetComponent<PlayerStats>();
-            _XpUi = PlayerUIManager.Instance.GetLevelAndXPUI();
+            _XpUi = UI.PlayerUIManager.Instance.GetLevelAndXPUI();
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
             _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
         }

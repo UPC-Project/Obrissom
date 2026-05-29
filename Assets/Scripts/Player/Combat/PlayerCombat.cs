@@ -15,7 +15,7 @@ namespace Obrissom.Player
 
         private PlayerStats _playerStats;
         private PlayerSkills _playerSkills;
-        private HealthAndResourceUI _healthAndResourceUI;
+        private UI.HealthAndResourceUI _healthAndResourceUI;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Obrissom.Player
             _resource = _playerStats.maxResource;
             _health = _playerStats.maxHealth;
 
-            _healthAndResourceUI = PlayerUIManager.Instance.GetHealthAndResourceUI();
+            _healthAndResourceUI = UI.PlayerUIManager.Instance.GetHealthAndResourceUI();
             _healthAndResourceUI.UpdateHealth(_health, _playerStats.maxHealth);
             _healthAndResourceUI.UpdateResource(_resource, _playerStats.maxResource);
         }
@@ -81,7 +81,7 @@ namespace Obrissom.Player
             }
         }
 
-        public int CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
+        public (int,bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
             float damage = (attackDamage + _playerStats.bonusPhysicalAttack) * _playerStats.physicalAttackMultiplier;
@@ -90,10 +90,10 @@ namespace Obrissom.Player
             {
                 damage *= _playerStats.criticalDamage;
             }
-            return Mathf.RoundToInt(damage);
+            return (Mathf.RoundToInt(damage), isCritical);
         }
 
-        public int CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
+        public (int,bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
             float damage = (attackDamage + _playerStats.bonusMagicAttack) * _playerStats.magicAttackMultiplier;
@@ -102,7 +102,7 @@ namespace Obrissom.Player
             {
                 damage *= _playerStats.criticalDamage;
             }
-            return Mathf.RoundToInt(damage);
+            return (Mathf.RoundToInt(damage), isCritical);
         }
 
         private void Die()

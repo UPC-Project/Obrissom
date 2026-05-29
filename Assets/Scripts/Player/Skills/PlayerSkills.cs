@@ -22,7 +22,7 @@ namespace Obrissom.Player
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
-            PlayerUIManager.Instance.RegisterPlayer(this);
+            UI.PlayerUIManager.Instance.RegisterPlayer(this);
         }
 
         private void Update()

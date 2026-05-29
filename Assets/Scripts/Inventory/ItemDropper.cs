@@ -1,5 +1,5 @@
 ﻿using Obrissom.Player.Inventory;
-using Unity.Collections;
+using Obrissom.UI;
 using Unity.Netcode;
 using UnityEngine;
 
