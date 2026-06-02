@@ -7,9 +7,11 @@ namespace Obrissom.Player
     {
         #region Class variables
 
+        [Header("Actual health and resource")]
         [SerializeField, Min(0)] private float _health;
         [SerializeField, Min(0)] private float _resource; // Mana / Stamina / Fury, etc
 
+        [Header("Player Skills")]
         [SerializeField] private Skill _basicSkill;
         [SerializeField] private Skill _Skill1; // Will change -> gained by leveling up
 
