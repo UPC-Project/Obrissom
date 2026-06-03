@@ -46,12 +46,15 @@ public class ChannelMagicProjectile : SkillBehaviour
 
         // OnHit will be called on projectile trigger
         trigger.ClearSubscriptions();
-        trigger.OnHit += (other) =>
+        trigger.OnHit += (col) =>
         {
-            var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
-            other.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage, isCritic, other.transform.position);
-            playerCombat.StopCoroutine(travel);
-            MagicProjectilePool.Instance.Return(trigger);
+            if (col.CompareTag("Enemy"))
+            {
+                var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
+                col.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position);
+            }
+                playerCombat.StopCoroutine(travel);
+                MagicProjectilePool.Instance.Return(trigger);
         };
     }
     IEnumerator SpellTravel(GameObject projectile, Vector3 direction, ProjectileTrigger trigger)
