@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d5cc2813680874cb2207b049e24236, type: 3}
   m_Name: Channel_Projectile
   m_EditorClassIdentifier: Assembly-CSharp::ChannelProjectile
-  castType: 0
-  _projectileName: MagicOrb_Projectile
+  castType: 1
   initialPosition: {x: 0, y: 1.25, z: 1}
   speed: 4
   lifeTime: 1.5
+  slopAngleTol: 45

@@ -31,6 +31,14 @@ namespace Obrissom.Player
             {
                 if (_cooldowns[key] > 0f) _cooldowns[key] -= Time.deltaTime;
             }
+
+            // Rotate player to crosshair if skill is being hold
+            if (_activeSkill != null && _activeSkill.behaviour.castType == CastType.Hold)
+            {
+                Vector3 aimPosition = _playerCombat.GetAimPosition();
+                Vector3 direction = new Vector3(aimPosition.x - transform.position.x, 0f, aimPosition.z - transform.position.z).normalized;
+                if (direction != Vector3.zero) transform.rotation = Quaternion.LookRotation(direction);
+            }
         }
 
         public void UnlockSkill(Skill skill)
@@ -45,14 +53,11 @@ namespace Obrissom.Player
 
         public void OnSkillPressed(SkillKey key)
         {
-            if (!_activeSkills.TryGetValue(key, out Skill skill)) return;
+            if (!CanActivateSkill(key)) return;
 
-            if (_cooldowns.TryGetValue(key, out float remaining) && remaining > 0f) return;
-
-            if (!_playerCombat.TryConsumeResource(skill.cost)) return;
+            _activeSkills.TryGetValue(key, out Skill skill);
 
             _activeSkill = skill;
-            _cooldowns[key] = skill.cooldownTime;
 
             if (skill.behaviour.castType == CastType.Hold)
             {
@@ -60,15 +65,35 @@ namespace Obrissom.Player
             }
             else
             {
+                _cooldowns[key] = skill.cooldownTime;
                 skill.behaviour.Execute(gameObject, skill, Vector3.zero); // pass target vector
             }
+        }
+
+        private bool CanActivateSkill(SkillKey key)
+        {
+            if (_activeSkill != null) return false;
+            if (!_activeSkills.TryGetValue(key, out Skill skill)) return false;
+
+            if (_cooldowns.TryGetValue(key, out float remaining) && remaining > 0f) return false;
+
+            return true;
         }
 
         public void OnSkillReleased(SkillKey key)
         {
             if (_activeSkill != null)
             {
-                _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, Vector3.zero); // pass target vector
+                if (_activeSkill.behaviour.castType == CastType.Hold)
+                {
+                    Vector3 aimPosition = _playerCombat.GetAimPosition();
+                    _cooldowns[key] = _activeSkill.cooldownTime;
+                    _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, aimPosition);
+                }
+                else
+                {
+                    _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, Vector3.zero);
+                }
                 _activeSkill = null;
             }
         }

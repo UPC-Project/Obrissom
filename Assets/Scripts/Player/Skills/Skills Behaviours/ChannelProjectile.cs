@@ -1,4 +1,5 @@
 using Obrissom.Player;
+using Obrissom.UI;
 using System.Collections;
 using UnityEngine;
 
@@ -9,7 +10,20 @@ public class ChannelProjectile : SkillBehaviour
     [SerializeField] float speed = 4;
     [SerializeField] float lifeTime = 1.5f; // should be lower or equal than skill cooldown
     [SerializeField] float slopAngleTol = 45f;
+    [SerializeField] float _groundFollowAngleThreshold = 45f;
 
+    public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
+    {
+        GameObject crosshair = PlayerUIManager.Instance.GetCrosshair();
+        crosshair.SetActive(true);
+    }
+
+    public override void OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
+    {
+        GameObject crosshair = PlayerUIManager.Instance.GetCrosshair();
+        crosshair.SetActive(false);
+        Execute(caster, skillData, targetPosition);
+    }
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
@@ -17,9 +31,13 @@ public class ChannelProjectile : SkillBehaviour
         ProjectileTrigger trigger = MagicProjectilePool.Instance.Get(initialPosition);
         GameObject projectile = trigger.gameObject;
         projectile.transform.position = caster.transform.TransformPoint(initialPosition);
+        Vector3 directionToTarget = (targetPosition - caster.transform.TransformPoint(initialPosition)).normalized;
+        float angleDown = Vector3.Angle(directionToTarget, Vector3.up) - 90f;
+
         projectile.SetActive(true);
 
-        Coroutine travel = playerCombat.StartCoroutine(SpellTravel(projectile, caster.transform.forward, caster,trigger));
+        Coroutine travel = playerCombat.StartCoroutine(SpellTravel(projectile, directionToTarget, trigger));
+
 
         // OnHit will be called on projectile trigger
         trigger.ClearSubscriptions();
@@ -31,36 +49,16 @@ public class ChannelProjectile : SkillBehaviour
             MagicProjectilePool.Instance.Return(trigger);
         };
     }
-
-    IEnumerator SpellTravel(GameObject projectile, Vector3 direction, GameObject caster, ProjectileTrigger trigger)
+    IEnumerator SpellTravel(GameObject projectile, Vector3 direction, ProjectileTrigger trigger)
     {
-        Vector3 initDir = new Vector3(direction.x, 0f, direction.z).normalized;
         float elapsed = 0f;
         while (elapsed < lifeTime)
         {
-            projectile.transform.position += initDir * Time.deltaTime * speed;
-
-            // follows terrain height
-            if (Physics.Raycast(projectile.transform.position, Vector3.down, out RaycastHit hit, 10f))
-            {
-                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-                if (slopeAngle > slopAngleTol) // probably a wall / too high
-                {
-                    MagicProjectilePool.Instance.Return(trigger);
-                    yield break; 
-                }
-
-                float aboveGroundY = hit.point.y + initialPosition.y;
-                projectile.transform.position = new Vector3(
-                    projectile.transform.position.x,
-                    aboveGroundY,
-                    projectile.transform.position.z
-                );
-            }
-
+            projectile.transform.position += direction * Time.deltaTime * speed;
             elapsed += Time.deltaTime;
             yield return null;
         }
         MagicProjectilePool.Instance.Return(trigger);
     }
+
 }

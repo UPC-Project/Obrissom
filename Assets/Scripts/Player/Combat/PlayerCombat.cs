@@ -107,6 +107,15 @@ namespace Obrissom.Player
             return (Mathf.RoundToInt(damage), isCritical);
         }
 
+        public Vector3 GetAimPosition()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f)) return hit.point;
+
+            // fixed distance
+            return ray.origin + ray.direction * 100f;
+        }
+
         private void Die()
         {
             Debug.Log("Player has died.");

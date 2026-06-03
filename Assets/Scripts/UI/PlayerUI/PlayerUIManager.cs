@@ -1,6 +1,7 @@
 using Obrissom.Player;
 using Obrissom.Player.Inventory;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Obrissom.UI
 {
@@ -13,6 +14,7 @@ namespace Obrissom.UI
         [SerializeField] private SkillCooldownUI _skillCooldownUI;
         [SerializeField] private HealthAndResourceUI _healthAndResourceUI;
         [SerializeField] private InventoryManager _inventoryManager;
+        [SerializeField] private GameObject _crosshair;
 
         private void Awake()
         {
@@ -28,6 +30,7 @@ namespace Obrissom.UI
         public LevelAndXPUI GetLevelAndXPUI() => _levelAndXPUI;
         public PlayerMenu GetPlayerMenu() => _playerMenu;
         public HealthAndResourceUI GetHealthAndResourceUI() => _healthAndResourceUI;
+        public GameObject GetCrosshair() => _crosshair;
 
         public void RegisterPlayer(PlayerSkills playerSkills)
         {
