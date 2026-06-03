@@ -2031,8 +2031,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4079939801
-  InScenePlacedSourceGlobalObjectIdHash: 745171078
+  GlobalObjectIdHash: 2988899398
+  InScenePlacedSourceGlobalObjectIdHash: 2680413552
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -2223,6 +2223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerSkills
   ShowTopMostFoldoutHeaderGroup: 1
+  _aimRotationSpeed: 4
 --- !u!114 &7497208692608031675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2240,6 +2241,7 @@ MonoBehaviour:
   _resource: 0
   _basicSkill: {fileID: 11400000, guid: 58d48b97dc295a342b0acc0f359e1ccb, type: 2}
   _Skill1: {fileID: 11400000, guid: 035f57e7448670b48b9cc1e74cf0d1a7, type: 2}
+  _Skill2: {fileID: 11400000, guid: bd7309c4ff79ffa4b90fe37caf71b1c5, type: 2}
 --- !u!114 &4085578164030697558
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,13 +11,16 @@ namespace Obrissom.Player
         [SerializeField, Min(0)] private float _health;
         [SerializeField, Min(0)] private float _resource; // Mana / Stamina / Fury, etc
 
-        [Header("Player Skills")]
+        [Header("Player Skills")] // TODO: delete
         [SerializeField] private Skill _basicSkill;
         [SerializeField] private Skill _Skill1; // TODO: Will change (not hardcoded) -> gained by leveling up
+        [SerializeField] private Skill _Skill2; // TODO: Will change (not hardcoded) -> gained by leveling up
 
         private PlayerStats _playerStats;
         private PlayerSkills _playerSkills;
         private UI.HealthAndResourceUI _healthAndResourceUI;
+
+        private bool _isInvulnerable = false;
 
         #endregion
 
@@ -35,6 +38,7 @@ namespace Obrissom.Player
             // Assign basic skill -> will change, what happen when player choose another button?
             _playerSkills.AssignSkill(SkillKey.LB, _basicSkill);
             _playerSkills.AssignSkill(SkillKey.ONE, _Skill1);
+            _playerSkills.AssignSkill(SkillKey.TWO, _Skill2);
             _resource = _playerStats.maxResource;
             _health = _playerStats.maxHealth;
 
@@ -58,6 +62,8 @@ namespace Obrissom.Player
             }
         }
 
+        public void SetInvulnerable(bool value) => _isInvulnerable = value;
+
         public bool TryConsumeResource(int cost)
         {
             if (_resource < cost) return false;
@@ -68,6 +74,8 @@ namespace Obrissom.Player
 
         public void TakeDamage(float damageAmount, DamageType damageType)
         {
+            if (_isInvulnerable) return;
+
             float reduction = (damageType == DamageType.PhysicDamage) ? _playerStats.physicalDefense : _playerStats.magicDefense;
             reduction = Mathf.Clamp(reduction, 0f, 0.99f);
 

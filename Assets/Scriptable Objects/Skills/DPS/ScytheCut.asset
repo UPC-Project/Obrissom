@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
-  m_Name: DPS_Stronger
+  m_Name: ScytheCut
   m_EditorClassIdentifier: Assembly-CSharp::Skill
-  skillName: Strong Cut
-  description: 
-  cooldownTime: 3
-  cost: 5
+  skillName: Scythe Cut
+  description: Cut infront of you with your scythe causing 2-5 physic damage
+  cooldownTime: 0.5
+  cost: 0
   damagePerSecond: 0
   damagePerSecondTime: 0
   damagePerSecondType: 0
-  minPhysicDamage: 1
-  maxPhysicDamage: 3
-  minMagicDamage: 6
-  maxMagicDamage: 13
+  minPhysicDamage: 2
+  maxPhysicDamage: 5
+  minMagicDamage: 0
+  maxMagicDamage: 0
   minHeal: 0
   maxHeal: 0
   behaviour: {fileID: 11400000, guid: c2180b427b2fde84496cd26d307976fd, type: 2}

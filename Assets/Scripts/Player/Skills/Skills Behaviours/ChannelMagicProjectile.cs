@@ -3,22 +3,30 @@ using Obrissom.UI;
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Skills/Behaviours/Channel_Projectile")]
-public class ChannelProjectile : SkillBehaviour
+[CreateAssetMenu(menuName = "Skills/Behaviours/Channel_Magic_Projectile")]
+public class ChannelMagicProjectile : SkillBehaviour
 {
     [SerializeField] Vector3 initialPosition = new Vector3();
     [SerializeField] float speed = 4;
-    [SerializeField] float lifeTime = 1.5f; // should be lower or equal than skill cooldown
+    [SerializeField] float lifeTime = 1.5f;
+
+    private GameObject _crosshair;
+
+    private GameObject GetCrosshair()
+    {
+        if (_crosshair == null) _crosshair = DPSUIManager.Instance.GetCrosshair();
+        return _crosshair;
+    }
 
     public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject crosshair = PlayerUIManager.Instance.GetCrosshair();
+        GameObject crosshair = GetCrosshair();
         crosshair.SetActive(true);
     }
 
     public override void OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject crosshair = PlayerUIManager.Instance.GetCrosshair();
+        GameObject crosshair = GetCrosshair();
         crosshair.SetActive(false);
         Execute(caster, skillData, targetPosition);
     }
@@ -35,7 +43,6 @@ public class ChannelProjectile : SkillBehaviour
         projectile.SetActive(true);
 
         Coroutine travel = playerCombat.StartCoroutine(SpellTravel(projectile, directionToTarget, trigger));
-
 
         // OnHit will be called on projectile trigger
         trigger.ClearSubscriptions();
