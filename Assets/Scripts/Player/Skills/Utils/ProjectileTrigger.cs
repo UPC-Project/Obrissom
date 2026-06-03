@@ -18,7 +18,7 @@ public class ProjectileTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if(col.CompareTag("Enemy") && !_hasHit)
+        if (col.CompareTag("Enemy") && !_hasHit)
         {
             OnHit?.Invoke(col);
             _hasHit = true;

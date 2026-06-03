@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Behaviours/Channel_Projectile")]
 public class ChannelProjectile : SkillBehaviour
 {
-    [SerializeField] string _projectileName = "MagicOrb_Projectile"; // should be a player child
     [SerializeField] Vector3 initialPosition = new Vector3();
     [SerializeField] float speed = 4;
     [SerializeField] float lifeTime = 1.5f; // should be lower or equal than skill cooldown
@@ -15,25 +14,25 @@ public class ChannelProjectile : SkillBehaviour
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
-        GameObject projectile = caster.transform.Find(_projectileName).gameObject;
+        ProjectileTrigger trigger = MagicProjectilePool.Instance.Get(initialPosition);
+        GameObject projectile = trigger.gameObject;
         projectile.transform.position = caster.transform.TransformPoint(initialPosition);
         projectile.SetActive(true);
 
-        Coroutine travel = playerCombat.StartCoroutine(SpellTravel(projectile, caster.transform.forward, caster));
+        Coroutine travel = playerCombat.StartCoroutine(SpellTravel(projectile, caster.transform.forward, caster,trigger));
 
         // OnHit will be called on projectile trigger
-        var trigger = projectile.GetComponent<ProjectileTrigger>();
         trigger.ClearSubscriptions();
         trigger.OnHit += (other) =>
         {
             var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
             other.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage, isCritic, other.transform.position);
             playerCombat.StopCoroutine(travel);
-            projectile.SetActive(false);
+            MagicProjectilePool.Instance.Return(trigger);
         };
     }
 
-    IEnumerator SpellTravel(GameObject projectile, Vector3 direction, GameObject caster)
+    IEnumerator SpellTravel(GameObject projectile, Vector3 direction, GameObject caster, ProjectileTrigger trigger)
     {
         Vector3 initDir = new Vector3(direction.x, 0f, direction.z).normalized;
         float elapsed = 0f;
@@ -47,7 +46,7 @@ public class ChannelProjectile : SkillBehaviour
                 float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
                 if (slopeAngle > slopAngleTol) // probably a wall / too high
                 {
-                    projectile.SetActive(false);
+                    MagicProjectilePool.Instance.Return(trigger);
                     yield break; 
                 }
 
@@ -62,6 +61,6 @@ public class ChannelProjectile : SkillBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        projectile.SetActive(false);
+        MagicProjectilePool.Instance.Return(trigger);
     }
 }

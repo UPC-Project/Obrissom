@@ -7,7 +7,6 @@ public class InstantFront : SkillBehaviour
     [SerializeField] private float range = 3f; // large range
     [SerializeField] private float angle = 60f; // cone angle
 
-
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();

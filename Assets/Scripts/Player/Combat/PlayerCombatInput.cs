@@ -25,31 +25,31 @@ namespace Obrissom.Player
             _playerInput.PlayerSkillMap.RemoveCallbacks(this);
         }
 
-        public void OnBasic(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        public void OnBasic(InputAction.CallbackContext context)
         {
             if (context.performed) _playerSkills.OnSkillPressed(SkillKey.LB);
             if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.LB);
         }
 
-        public void OnSkill1(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        public void OnSkill1(InputAction.CallbackContext context)
         {
             if (context.performed) _playerSkills.OnSkillPressed(SkillKey.ONE);
             if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.ONE);
         }
 
-        public void OnSkill2(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        public void OnSkill2(InputAction.CallbackContext context)
         {
             if (context.performed) _playerSkills.OnSkillPressed(SkillKey.TWO);
             if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.TWO);
         }
 
-        public void OnSkill3(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        public void OnSkill3(InputAction.CallbackContext context)
         {
             if (context.performed) _playerSkills.OnSkillPressed(SkillKey.THREE);
             if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.THREE);
         }
 
-        public void OnSkill4(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        public void OnSkill4(InputAction.CallbackContext context)
         {
             if (context.performed) _playerSkills.OnSkillPressed(SkillKey.FOUR);
             if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.FOUR);
