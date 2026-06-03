@@ -12,6 +12,8 @@ namespace Obrissom.Player
         private Skill _activeSkill = null;
         public bool IsUsingSkill => _activeSkill != null;
 
+        [SerializeField] private float _aimRotationSpeed = 4f;
+
         private PlayerCombat _playerCombat;
 
         private void Start()
@@ -37,7 +39,16 @@ namespace Obrissom.Player
             {
                 Vector3 aimPosition = _playerCombat.GetAimPosition();
                 Vector3 direction = new Vector3(aimPosition.x - transform.position.x, 0f, aimPosition.z - transform.position.z).normalized;
-                if (direction != Vector3.zero) transform.rotation = Quaternion.LookRotation(direction);
+
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.RotateTowards(
+                        transform.rotation,
+                        targetRotation,
+                        _aimRotationSpeed * 360f * Time.deltaTime
+                    );
+                }
             }
         }
 
@@ -70,6 +81,22 @@ namespace Obrissom.Player
             }
         }
 
+        public void OnSkillReleased(SkillKey key)
+        {
+            if (!CanReleaseSkill(key)) return;
+            if (_activeSkill.behaviour.castType == CastType.Hold)
+            {
+                Vector3 aimPosition = _playerCombat.GetAimPosition();
+                _cooldowns[key] = _activeSkill.cooldownTime;
+                _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, aimPosition);
+            }
+            else
+            {
+                _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, Vector3.zero);
+            }
+            _activeSkill = null;
+        }
+
         private bool CanActivateSkill(SkillKey key)
         {
             if (_activeSkill != null) return false;
@@ -80,22 +107,11 @@ namespace Obrissom.Player
             return true;
         }
 
-        public void OnSkillReleased(SkillKey key)
+        private bool CanReleaseSkill(SkillKey key)
         {
-            if (_activeSkill != null)
-            {
-                if (_activeSkill.behaviour.castType == CastType.Hold)
-                {
-                    Vector3 aimPosition = _playerCombat.GetAimPosition();
-                    _cooldowns[key] = _activeSkill.cooldownTime;
-                    _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, aimPosition);
-                }
-                else
-                {
-                    _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, Vector3.zero);
-                }
-                _activeSkill = null;
-            }
+            if (_activeSkill == null) return false;
+            if (!_activeSkills.TryGetValue(key, out Skill skill)) return false;
+            return skill == _activeSkill;
         }
 
         public float GetCooldownPercent(SkillKey key)

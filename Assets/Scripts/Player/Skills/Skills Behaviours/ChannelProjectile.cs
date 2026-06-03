@@ -9,8 +9,6 @@ public class ChannelProjectile : SkillBehaviour
     [SerializeField] Vector3 initialPosition = new Vector3();
     [SerializeField] float speed = 4;
     [SerializeField] float lifeTime = 1.5f; // should be lower or equal than skill cooldown
-    [SerializeField] float slopAngleTol = 45f;
-    [SerializeField] float _groundFollowAngleThreshold = 45f;
 
     public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
