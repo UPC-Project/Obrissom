@@ -13,7 +13,7 @@ namespace Obrissom.Player
 
         [Header("Player Skills")]
         [SerializeField] private Skill _basicSkill;
-        [SerializeField] private Skill _Skill1; // Will change -> gained by leveling up
+        [SerializeField] private Skill _Skill1; // TODO: Will change (not hardcoded) -> gained by leveling up
 
         private PlayerStats _playerStats;
         private PlayerSkills _playerSkills;
