@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.Netcode;
-using Obrissom.Combat;
 
 namespace Obrissom.Enemy
 {
@@ -48,7 +47,6 @@ namespace Obrissom.Enemy
 
         public override void OnNetworkSpawn()
         {
-            // Only the server runs enemy logic
             if (!IsServer) return;
 
             _currentHealth = _stats.maxHealth;
@@ -95,12 +93,22 @@ namespace Obrissom.Enemy
 
         //Combat 
 
+
+        [Rpc(SendTo.Server, RequireOwnership = false)]
+        public void TakeDamageServerRpc(float rawAmount, DamageType type)
+        {
+            TakeDamage(rawAmount, type);
+        }
+
         /// <summary>
         /// Applies damage to the enemy considering defense stats.
         /// </summary>
+        /// 
         public virtual void TakeDamage(float rawAmount, DamageType type)
         {
+
             if (!IsServer || _isDead) return;
+
 
             float reduction = type == DamageType.PhysicDamage
                 ? _stats.physicalDefense
@@ -109,6 +117,8 @@ namespace Obrissom.Enemy
             float finalDamage = rawAmount * (1f - reduction);
             _currentHealth -= finalDamage;
             _currentHealth = Mathf.Max(_currentHealth, 0f);
+
+            Debug.Log($"[Enemy] Took {finalDamage} damage. Remaining health: {_currentHealth}/{_stats.maxHealth}");
 
             _enemyAnimation.PlayHitAnimation();
 
@@ -124,61 +134,40 @@ namespace Obrissom.Enemy
 
         protected virtual void Die()
         {
-            //_isDead = true;
-            //_agent.isStopped = true;
+            Debug.Log("Enemy died");
 
-            //_enemyAnimation.PlayDeathAnimation();
+            _isDead = true;
+            _agent.isStopped = true;
 
-            //DropLoot();
+            _enemyAnimation.PlayDeathAnimation();
+
+            DropLoot();
 
             // TODO: Grant experience to player when stats system is available.
 
-            Destroy(gameObject, 3f);
+            StartCoroutine(DespawnRoutine());
+
+
+
         }
 
         //Loot
 
         private void DropLoot()
         {
-            if (_stats.lootTable == null || _stats.lootTable.Length == 0) return;
-
-            foreach (var entry in _stats.lootTable)
-            {
-                if (entry.item == null) continue;
-
-                float roll = Random.Range(0f, TotalLootWeight());
-                float cumulative = 0f;
-
-                foreach (var e in _stats.lootTable)
-                {
-                    cumulative += e.weight;
-                    if (roll <= cumulative)
-                    {
-                        _itemDropper.DropItem(e.item, e.quantity);
-                        break;
-                    }
-                }
-            }
+            //TODO
         }
 
-        private float TotalLootWeight()
-        {
-            float total = 0f;
-            foreach (var entry in _stats.lootTable)
-                total += entry.weight;
-            return total;
-        }
+        //private float TotalLootWeight()
+        //{
+            //TODO
+        //}
 
         //Patrol
 
         protected void PatrolToNextPoint()
         {
-            if (_patrolPoints == null || _patrolPoints.Length == 0) return;
-
-            _agent.SetDestination(_patrolPoints[_currentPatrolIndex].position);
-
-            if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
-                _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
+            //TODO
         }
 
         //Abstract 
@@ -187,6 +176,8 @@ namespace Obrissom.Enemy
         /// Attack logic specific to each enemy type. Implemented by concrete classes.
         /// </summary>
         public abstract void PerformAttack();
+
+
 
         //Gizmos
         private void OnDrawGizmosSelected()
@@ -198,6 +189,16 @@ namespace Obrissom.Enemy
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, _stats.attackRange);
+        }
+
+        private System.Collections.IEnumerator DespawnRoutine()
+        {
+            yield return new WaitForSeconds(3f);
+
+            if (NetworkObject != null && NetworkObject.IsSpawned)
+            {
+                NetworkObject.Despawn(true);
+            }
         }
     }
 }
