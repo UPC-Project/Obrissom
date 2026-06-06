@@ -13,6 +13,7 @@ namespace Obrissom.Enemy
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(EnemyAnimation))]
     [RequireComponent(typeof(ItemDropper))]
+    [RequireComponent(typeof(EnemyStateMachine))]
     public abstract class EnemyBase : NetworkBehaviour
     {
         [Header("Stats")]
@@ -22,7 +23,11 @@ namespace Obrissom.Enemy
         [SerializeField] protected LayerMask _playerLayer;
 
         [Header("Patrol")]
-        [SerializeField] protected Transform[] _patrolPoints;
+        [SerializeField] protected GameObject[] _patrolPoints;
+
+        public Transform Target => _target;
+
+        public EnemyStats Stats => _stats;
 
         // Components
         protected NavMeshAgent _agent;
@@ -38,11 +43,19 @@ namespace Obrissom.Enemy
 
         // Lifecycle
 
+
+        private EnemyStateMachine _stateMachine;
+
+
         protected virtual void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
             _enemyAnimation = GetComponent<EnemyAnimation>();
             _itemDropper = GetComponent<ItemDropper>();
+            _stateMachine = GetComponent<EnemyStateMachine>();
+
+
+
         }
 
         public override void OnNetworkSpawn()
@@ -51,6 +64,8 @@ namespace Obrissom.Enemy
 
             _currentHealth = _stats.maxHealth;
             _agent.speed = _stats.moveSpeed;
+
+            _stateMachine.Initialize(this, _agent);
         }
 
         protected virtual void Update()
@@ -58,6 +73,8 @@ namespace Obrissom.Enemy
             if (!IsServer || _isDead) return;
 
             _attackCooldownTimer -= Time.deltaTime;
+            DetectPlayer();
+            _stateMachine.Tick();
         }
 
         //Detection
@@ -85,10 +102,10 @@ namespace Obrissom.Enemy
             _target = closest;
         }
 
-        protected bool IsPlayerInChaseRange() =>
+        public bool IsPlayerInChaseRange() =>
             _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.chaseRange;
 
-        protected bool IsPlayerInAttackRange() =>
+        public bool IsPlayerInAttackRange() =>
             _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.attackRange;
 
         //Combat 
@@ -122,6 +139,9 @@ namespace Obrissom.Enemy
 
             _enemyAnimation.PlayHitAnimation();
 
+            _stateMachine.ChangeState(EnemyState.TakingDamage);
+
+
             if (_currentHealth <= 0f)
                 Die();
         }
@@ -137,6 +157,7 @@ namespace Obrissom.Enemy
             Debug.Log("Enemy died");
 
             _isDead = true;
+            _stateMachine.ChangeState(EnemyState.Dead);
             _agent.isStopped = true;
 
             _enemyAnimation.PlayDeathAnimation();
@@ -160,14 +181,25 @@ namespace Obrissom.Enemy
 
         //private float TotalLootWeight()
         //{
-            //TODO
+        //TODO
         //}
 
         //Patrol
 
-        protected void PatrolToNextPoint()
+        public void SetPatrolPoints(GameObject[] points)
         {
-            //TODO
+            _patrolPoints = points;
+        }
+        public void PatrolToNextPoint()
+        {
+            if (_patrolPoints == null || _patrolPoints.Length == 0) return;
+            if (_patrolPoints[_currentPatrolIndex] == null) return;
+
+
+            _agent.SetDestination(_patrolPoints[_currentPatrolIndex].transform.position);
+
+            if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
+                _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
         }
 
         //Abstract 
