@@ -28,7 +28,7 @@ public class EnemyTester : MonoBehaviour
         if (kb.pKey.wasPressedThisFrame)
         {
             EnemyTest activeEnemy = GetActiveEnemy();
-            activeEnemy.PerformAttack();
+            activeEnemy.ForceAttackServerRpc();
         }
 
     }

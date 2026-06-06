@@ -7,6 +7,13 @@ public class EnemyTest : EnemyBase
 {
     [Header("Test Attack Settings")]
     [SerializeField] private float _hitboxRadius = 1.5f;
+
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    public void ForceAttackServerRpc()
+    {
+        PerformAttack();
+    }
+
     public override void PerformAttack()
     {
         if (_attackCooldownTimer > 0f) return;
