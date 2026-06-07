@@ -5,11 +5,12 @@ namespace Obrissom.Player
 {
     public class PlayerCombat : NetworkBehaviour
     {
-        #region Class variables
-
         [Header("Actual health and resource")]
-        [SerializeField, Min(0)] private float _health;
-        [SerializeField, Min(0)] private float _resource; // Mana / Stamina / Fury, etc
+        public NetworkVariable<float> _health = new NetworkVariable<float>(
+            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+        public NetworkVariable<float> _resource = new NetworkVariable<float>(
+            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
         [Header("Player Skills")] // TODO: delete
         [SerializeField] private Skill _basicSkill;
@@ -28,6 +29,7 @@ namespace Obrissom.Player
         // for example current health, level, bufs, skills available, etc
         // Should be saved in a file. --> Make save system
 
+
         private void Awake()
         {
             _playerStats = GetComponent<PlayerStats>();
@@ -39,26 +41,58 @@ namespace Obrissom.Player
             _playerSkills.AssignSkill(SkillKey.LB, _basicSkill);
             _playerSkills.AssignSkill(SkillKey.ONE, _Skill1);
             _playerSkills.AssignSkill(SkillKey.TWO, _Skill2);
-            _resource = _playerStats.maxResource;
-            _health = _playerStats.maxHealth;
 
-            _healthAndResourceUI = UI.PlayerUIManager.Instance.GetHealthAndResourceUI();
-            _healthAndResourceUI.UpdateHealth(_health, _playerStats.maxHealth);
-            _healthAndResourceUI.UpdateResource(_resource, _playerStats.maxResource);
+            if (IsServer)
+            {
+                _resource.Value = _playerStats.maxResource.Value;
+                _health.Value = _playerStats.maxHealth.Value;
+            }
+
+            if (IsOwner)
+            {
+                _healthAndResourceUI = UI.PlayerUIManager.Instance.GetHealthAndResourceUI();
+                _healthAndResourceUI.UpdateHealth(_health.Value, _playerStats.maxHealth.Value);
+                _healthAndResourceUI.UpdateResource(_resource.Value, _playerStats.maxResource.Value);
+
+                _health.OnValueChanged += OnHealthChanged;
+                _playerStats.maxHealth.OnValueChanged += OnHealthChanged;
+                _resource.OnValueChanged += OnResourceChanged;
+                _playerStats.maxResource.OnValueChanged += OnResourceChanged;
+            }
+
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (IsOwner)
+            {
+                _health.OnValueChanged -= OnHealthChanged;
+                _resource.OnValueChanged -= OnResourceChanged;
+            }
+        }
+        private void OnHealthChanged(float previousValue, float newValue)
+        {
+            _healthAndResourceUI.UpdateHealth(newValue, _playerStats.maxHealth.Value);
+        }
+
+        private void OnResourceChanged(float previousValue, float newValue)
+        {
+            _healthAndResourceUI.UpdateResource(newValue, _playerStats.maxResource.Value);
         }
 
         public void Update()
         {
-            if (_resource < _playerStats.maxResource)
+
+            if (!IsServer) return;
+
+            if (_resource.Value < _playerStats.maxResource.Value)
             {
-                _resource = Mathf.Min(_resource + _playerStats.resourceRegen * Time.deltaTime, _playerStats.maxResource);
-                _healthAndResourceUI.UpdateResource(_resource, _playerStats.maxResource);
+                _resource.Value = Mathf.Min(_resource.Value + _playerStats.resourceRegen * Time.deltaTime, _playerStats.maxResource.Value);
             }
 
-            if (_health < _playerStats.maxHealth)
+            if (_health.Value < _playerStats.maxHealth.Value)
             {
-                _health = Mathf.Min(_health + _playerStats.healthRegen * Time.deltaTime, _playerStats.maxHealth);
-                _healthAndResourceUI.UpdateHealth(_health, _playerStats.maxHealth);
+                _health.Value = Mathf.Min(_health.Value + _playerStats.healthRegen * Time.deltaTime, _playerStats.maxHealth.Value);
             }
         }
 
@@ -66,9 +100,13 @@ namespace Obrissom.Player
 
         public bool TryConsumeResource(int cost)
         {
-            if (_resource < cost) return false;
-            _resource -= cost;
-            _healthAndResourceUI.UpdateResource(_resource, _playerStats.maxResource);
+            if (_resource.Value < cost) return false;
+
+            if (IsServer)
+            {
+                _resource.Value -= cost;
+            }
+
             return true;
         }
 
@@ -76,16 +114,19 @@ namespace Obrissom.Player
         {
             if (_isInvulnerable) return;
 
+            if (!IsServer) return;
+
             float reduction = (damageType == DamageType.PhysicDamage) ? _playerStats.physicalDefense : _playerStats.magicDefense;
             reduction = Mathf.Clamp(reduction, 0f, 0.99f);
 
             float finalDamage = damageAmount * (1 - reduction);
-            _health = Mathf.Max(_health - finalDamage, 0f);
-            _healthAndResourceUI.UpdateHealth(_health, _playerStats.maxHealth);
 
 
-            Debug.Log($"Player took {finalDamage} damage. Remaining health: {_health}");
-            if (_health <= 0)
+            _health.Value = Mathf.Max(Mathf.Round(_health.Value - finalDamage), 0f);
+
+
+            Debug.Log($"Player took {finalDamage} damage. Remaining health: {_health.Value}");
+            if (_health.Value <= 0)
             {
                 Die();
             }
@@ -126,7 +167,7 @@ namespace Obrissom.Player
 
         private void Die()
         {
-            Debug.Log("Player has died.");
+            Debug.Log($"Player {OwnerClientId} has died.");
             // TODO
         }
     }
