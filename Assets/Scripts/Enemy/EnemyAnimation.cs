@@ -3,14 +3,12 @@ using UnityEngine.AI;
 
 namespace Obrissom.Enemy
 {
-
     public class EnemyAnimation : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
 
         private NavMeshAgent _agent;
 
-      
         private static readonly int AnimSpeed = Animator.StringToHash("Speed");
         private static readonly int AnimAttack = Animator.StringToHash("Attack");
         private static readonly int AnimHit = Animator.StringToHash("Hit");

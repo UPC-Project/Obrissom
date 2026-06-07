@@ -1,36 +1,32 @@
-using Obrissom.Enemy;
 using Obrissom.Player;
 using Unity.Netcode;
 using UnityEngine;
 
-public class EnemyTest : EnemyBase
+namespace Obrissom.Enemy
 {
-    [Header("Test Attack Settings")]
-    [SerializeField] private float _hitboxRadius = 1.5f;
-
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    public void ForceAttackServerRpc()
+    public class EnemyTest : EnemyBase
     {
-        PerformAttack();
-    }
+        [Header("Test Attack Settings")]
+        [SerializeField] private float _hitboxRadius = 1.5f;
 
-    public override void PerformAttack()
-    {
-        if (_attackCooldownTimer > 0f) return;
-
-        _attackCooldownTimer = _stats.attackCooldown;
-
-        Collider[] hits = Physics.OverlapSphere(transform.position, _hitboxRadius, _playerLayer);
-
-        foreach (var hit in hits)
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public override void PerformAttackRpc()
         {
-            PlayerCombat playerCombat = hit.GetComponentInParent<PlayerCombat>();
-            if (playerCombat == null) continue;
+            if (_attackCooldownTimer > 0f) return;
 
-            float damage = RollAttackDamage();
-            playerCombat.TakeDamage(damage, _stats.damageType);
+            _attackCooldownTimer = _stats.attackCooldown;
+
+            Collider[] hits = Physics.OverlapSphere(transform.position, _hitboxRadius, _playerLayer);
+
+            foreach (var hit in hits)
+            {
+                PlayerCombat playerCombat = hit.GetComponentInParent<PlayerCombat>();
+                if (playerCombat == null) continue;
+
+                float damage = RollAttackDamage();
+                playerCombat.TakeDamage(damage, _stats.damageType);
+            }
         }
-    }
 
- 
+    }
 }

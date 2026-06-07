@@ -5,7 +5,6 @@ namespace Obrissom.Player
 {
     public class PlayerCombat : NetworkBehaviour
     {
-
         public NetworkVariable<float> _health = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -13,7 +12,7 @@ namespace Obrissom.Player
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
         [SerializeField] private Skill _basicSkill;
-        [SerializeField] private Skill _Skill1;
+        [SerializeField] private Skill _Skill1; // Will change -> gained by leveling up
 
         private PlayerStats _playerStats;
         private PlayerSkills _playerSkills;
@@ -37,19 +36,20 @@ namespace Obrissom.Player
 
             if (IsServer)
             {
-                _resource.Value = _playerStats.maxResource;
-                _health.Value = _playerStats.maxHealth;
+                _resource.Value = _playerStats.maxResource.Value;
+                _health.Value = _playerStats.maxHealth.Value;
             }
 
             if (IsOwner)
             {
                 _healthAndResourceUI = UI.PlayerUIManager.Instance.GetHealthAndResourceUI();
-                _healthAndResourceUI.UpdateHealth(_health.Value, _playerStats.maxHealth);
-                _healthAndResourceUI.UpdateResource(_resource.Value, _playerStats.maxResource);
+                _healthAndResourceUI.UpdateHealth(_health.Value, _playerStats.maxHealth.Value);
+                _healthAndResourceUI.UpdateResource(_resource.Value, _playerStats.maxResource.Value);
 
-                // Nos suscribimos para escuchar cuando el servidor cambie nuestra vida por internet
                 _health.OnValueChanged += OnHealthChanged;
+                _playerStats.maxHealth.OnValueChanged += OnHealthChanged;
                 _resource.OnValueChanged += OnResourceChanged;
+                _playerStats.maxResource.OnValueChanged += OnResourceChanged;
             }
 
         }
@@ -64,12 +64,12 @@ namespace Obrissom.Player
         }
         private void OnHealthChanged(float previousValue, float newValue)
         {
-            _healthAndResourceUI.UpdateHealth(newValue, _playerStats.maxHealth);
+            _healthAndResourceUI.UpdateHealth(newValue, _playerStats.maxHealth.Value);
         }
 
         private void OnResourceChanged(float previousValue, float newValue)
         {
-            _healthAndResourceUI.UpdateResource(newValue, _playerStats.maxResource);
+            _healthAndResourceUI.UpdateResource(newValue, _playerStats.maxResource.Value);
         }
 
         public void Update()
@@ -77,14 +77,14 @@ namespace Obrissom.Player
 
             if (!IsServer) return;
 
-            if (_resource.Value < _playerStats.maxResource)
+            if (_resource.Value < _playerStats.maxResource.Value)
             {
-                _resource.Value = Mathf.Min(_resource.Value + _playerStats.resourceRegen * Time.deltaTime, _playerStats.maxResource);
+                _resource.Value = Mathf.Min(_resource.Value + _playerStats.resourceRegen * Time.deltaTime, _playerStats.maxResource.Value);
             }
 
-            if (_health.Value < _playerStats.maxHealth)
+            if (_health.Value < _playerStats.maxHealth.Value)
             {
-                _health.Value = Mathf.Min(_health.Value + _playerStats.healthRegen * Time.deltaTime, _playerStats.maxHealth);
+                _health.Value = Mathf.Min(_health.Value + _playerStats.healthRegen * Time.deltaTime, _playerStats.maxHealth.Value);
             }
         }
 
@@ -95,7 +95,6 @@ namespace Obrissom.Player
             if (IsServer)
             {
                 _resource.Value -= cost;
-
             }
 
             return true;
@@ -111,10 +110,10 @@ namespace Obrissom.Player
             float finalDamage = damageAmount * (1 - reduction);
 
 
-            _health.Value = Mathf.Max(_health.Value - finalDamage, 0f);
+            _health.Value = Mathf.Max(Mathf.Round(_health.Value - finalDamage), 0f);
 
 
-            Debug.Log($"Player took {finalDamage} damage. Remaining health: {_health}");
+            Debug.Log($"Player took {finalDamage} damage. Remaining health: {_health.Value}");
             if (_health.Value <= 0)
             {
                 Die();
@@ -147,7 +146,7 @@ namespace Obrissom.Player
 
         private void Die()
         {
-            Debug.Log("Player {OwnerClientId} has died.");
+            Debug.Log($"Player {OwnerClientId} has died.");
             // TODO
         }
     }
