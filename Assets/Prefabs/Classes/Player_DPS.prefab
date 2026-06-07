@@ -2031,8 +2031,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4079939801
-  InScenePlacedSourceGlobalObjectIdHash: 745171078
+  GlobalObjectIdHash: 2680413552
+  InScenePlacedSourceGlobalObjectIdHash: 2680413552
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -2196,9 +2196,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74411429e589a94ca5b65d41f098b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerStats
-  maxHealth: 20
+  ShowTopMostFoldoutHeaderGroup: 1
+  maxHealth:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 20
   healthRegen: 1
-  maxResource: 10
+  maxResource:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 20
   resourceRegen: 1
   bonusPhysicalAttack: 0
   physicalAttackMultiplier: 1
@@ -2223,6 +2232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerSkills
   ShowTopMostFoldoutHeaderGroup: 1
+  _aimRotationSpeed: 4
 --- !u!114 &7497208692608031675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2236,8 +2246,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   ShowTopMostFoldoutHeaderGroup: 1
-  _health: 20
-  _resource: 0
+  _health:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  _resource:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
   _basicSkill: {fileID: 11400000, guid: 58d48b97dc295a342b0acc0f359e1ccb, type: 2}
   _Skill1: {fileID: 11400000, guid: 035f57e7448670b48b9cc1e74cf0d1a7, type: 2}
 --- !u!114 &4085578164030697558

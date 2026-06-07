@@ -8,7 +8,7 @@ namespace Obrissom.Player
         public float xp;
         [Tooltip("XP needed for next level")]
         public float xpNeeded; // 
-        public int currentLevel = 1;
+        [Range(1, 5)] public int currentLevel = 1;
 
         [Header("Components")]
         private UI.LevelAndXPUI _XpUi;
