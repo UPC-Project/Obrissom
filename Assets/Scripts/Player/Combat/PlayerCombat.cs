@@ -36,18 +36,20 @@ namespace Obrissom.Player
 
             if (IsServer)
             {
-                _resource.Value = _playerStats.maxResource;
-                _health.Value = _playerStats.maxHealth;
+                _resource.Value = _playerStats.maxResource.Value;
+                _health.Value = _playerStats.maxHealth.Value;
             }
 
             if (IsOwner)
             {
                 _healthAndResourceUI = UI.PlayerUIManager.Instance.GetHealthAndResourceUI();
-                _healthAndResourceUI.UpdateHealth(_health.Value, _playerStats.maxHealth);
-                _healthAndResourceUI.UpdateResource(_resource.Value, _playerStats.maxResource);
+                _healthAndResourceUI.UpdateHealth(_health.Value, _playerStats.maxHealth.Value);
+                _healthAndResourceUI.UpdateResource(_resource.Value, _playerStats.maxResource.Value);
 
                 _health.OnValueChanged += OnHealthChanged;
+                _playerStats.maxHealth.OnValueChanged += OnHealthChanged;
                 _resource.OnValueChanged += OnResourceChanged;
+                _playerStats.maxResource.OnValueChanged += OnResourceChanged;
             }
 
         }
@@ -62,12 +64,12 @@ namespace Obrissom.Player
         }
         private void OnHealthChanged(float previousValue, float newValue)
         {
-            _healthAndResourceUI.UpdateHealth(newValue, _playerStats.maxHealth);
+            _healthAndResourceUI.UpdateHealth(newValue, _playerStats.maxHealth.Value);
         }
 
         private void OnResourceChanged(float previousValue, float newValue)
         {
-            _healthAndResourceUI.UpdateResource(newValue, _playerStats.maxResource);
+            _healthAndResourceUI.UpdateResource(newValue, _playerStats.maxResource.Value);
         }
 
         public void Update()
@@ -75,14 +77,14 @@ namespace Obrissom.Player
 
             if (!IsServer) return;
 
-            if (_resource.Value < _playerStats.maxResource)
+            if (_resource.Value < _playerStats.maxResource.Value)
             {
-                _resource.Value = Mathf.Min(_resource.Value + _playerStats.resourceRegen * Time.deltaTime, _playerStats.maxResource);
+                _resource.Value = Mathf.Min(_resource.Value + _playerStats.resourceRegen * Time.deltaTime, _playerStats.maxResource.Value);
             }
 
-            if (_health.Value < _playerStats.maxHealth)
+            if (_health.Value < _playerStats.maxHealth.Value)
             {
-                _health.Value = Mathf.Min(_health.Value + _playerStats.healthRegen * Time.deltaTime, _playerStats.maxHealth);
+                _health.Value = Mathf.Min(_health.Value + _playerStats.healthRegen * Time.deltaTime, _playerStats.maxHealth.Value);
             }
         }
 
