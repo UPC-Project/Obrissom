@@ -5476,8 +5476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 745171078
-  InScenePlacedSourceGlobalObjectIdHash: 3757385016
+  GlobalObjectIdHash: 130921835
+  InScenePlacedSourceGlobalObjectIdHash: 745171078
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -5641,9 +5641,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74411429e589a94ca5b65d41f098b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerStats
-  maxHealth: 20
-  healthRegen: 1
-  maxResource: 10
+  ShowTopMostFoldoutHeaderGroup: 1
+  maxHealth:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 20
+  healthRegen: 0.1
+  maxResource:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 15
   resourceRegen: 1
   bonusPhysicalAttack: 0
   physicalAttackMultiplier: 1
@@ -5681,8 +5690,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   ShowTopMostFoldoutHeaderGroup: 1
-  _health: 20
-  _resource: 0
+  _health:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  _resource:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
   _basicSkill: {fileID: 11400000, guid: 58d48b97dc295a342b0acc0f359e1ccb, type: 2}
   _Skill1: {fileID: 11400000, guid: 3061d228492ffbd4baa82ed6c9714b47, type: 2}
 --- !u!114 &7624941080802116563

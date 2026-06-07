@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Obrissom.Player
 {
-    public class PlayerStats : MonoBehaviour
+    public class PlayerStats : NetworkBehaviour
     {
         #region Class variables
 
         [Tooltip("Total health"), Min(0)]
-        public float maxHealth = 20f;
+        public NetworkVariable<float> maxHealth = new NetworkVariable<float>(
+            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         [Tooltip("Health regeneration per second"), Min(0)]
         public float healthRegen = 1f;
         [Tooltip("Total resource (mana/stamina/fury)"), Min(0)]
-        public float maxResource = 10f;
+        public NetworkVariable<float> maxResource = new NetworkVariable<float>(
+            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         [Tooltip("Resource regeneration per second"), Min(0)]
         public float resourceRegen = 1f;
         [Tooltip("Damage added to base Attack (only)")]
@@ -45,9 +48,9 @@ namespace Obrissom.Player
         {
             _statApplicatorsAdd = new Dictionary<Stats, Action<float>>()
             {
-                { Stats.BonusHealth,      value => maxHealth += value },
+                { Stats.BonusHealth,      value => maxHealth.Value += value },
                 { Stats.HealthRegen,      value => healthRegen += value },
-                { Stats.BonusResource,    value => maxResource += value },
+                { Stats.BonusResource,    value => maxResource.Value += value },
                 { Stats.ResourceRegen,    value => resourceRegen += value },
                 { Stats.BonusPhysicalAttack,      value => bonusPhysicalAttack += value },
                 { Stats.PhysicalAttackMultiplier, value => physicalAttackMultiplier += value },
@@ -63,9 +66,9 @@ namespace Obrissom.Player
 
             _statApplicatorsRemove = new Dictionary<Stats, Action<float>>()
             {
-                { Stats.BonusHealth,      value => maxHealth -= value },
+                { Stats.BonusHealth,      value => maxHealth.Value -= value },
                 { Stats.HealthRegen,      value => healthRegen -= value },
-                { Stats.BonusResource,    value => maxResource -= value },
+                { Stats.BonusResource,    value => maxResource.Value -= value },
                 { Stats.ResourceRegen,    value => resourceRegen -= value },
                 { Stats.BonusPhysicalAttack,      value => bonusPhysicalAttack -= value },
                 { Stats.PhysicalAttackMultiplier, value => physicalAttackMultiplier -= value },
