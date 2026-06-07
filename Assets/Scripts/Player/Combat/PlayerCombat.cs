@@ -7,10 +7,9 @@ namespace Obrissom.Player
     {
         #region
         [Header("Actual health and resource")]
-        public NetworkVariable<float> _health = new NetworkVariable<float>(
+        [Min(0)] public NetworkVariable<float> _health = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
-        public NetworkVariable<float> _resource = new NetworkVariable<float>(
+        [Min(0)] public NetworkVariable<float> _resource = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
         [Header("Player Skills")] // TODO: delete
