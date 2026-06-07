@@ -5,6 +5,7 @@ namespace Obrissom.Player
 {
     public class PlayerCombat : NetworkBehaviour
     {
+        #region
         [Header("Actual health and resource")]
         public NetworkVariable<float> _health = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -132,7 +133,7 @@ namespace Obrissom.Player
             }
         }
 
-        public (int,bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
+        public (int, bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
             float damage = (attackDamage + _playerStats.bonusPhysicalAttack) * _playerStats.physicalAttackMultiplier;
@@ -144,7 +145,7 @@ namespace Obrissom.Player
             return (Mathf.RoundToInt(damage), isCritical);
         }
 
-        public (int,bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
+        public (int, bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
             float damage = (attackDamage + _playerStats.bonusMagicAttack) * _playerStats.magicAttackMultiplier;
