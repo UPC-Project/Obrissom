@@ -93,37 +93,32 @@ namespace Obrissom.Enemy
 
         //Combat 
 
-
-        [Rpc(SendTo.Server, RequireOwnership = false)]
-        public void TakeDamageServerRpc(float rawAmount, DamageType type)
-        {
-            TakeDamage(rawAmount, type);
-        }
-
         /// <summary>
         /// Applies damage to the enemy considering defense stats.
         /// </summary>
         /// 
-        public virtual void TakeDamage(float rawAmount, DamageType type)
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public virtual void TakeDamagRpc(float rawAmount, DamageType type)
         {
-
             if (!IsServer || _isDead) return;
-
 
             float reduction = type == DamageType.PhysicDamage
                 ? _stats.physicalDefense
                 : _stats.magicDefense;
 
             float finalDamage = rawAmount * (1f - reduction);
-            _currentHealth -= finalDamage;
-            _currentHealth = Mathf.Max(_currentHealth, 0f);
+            _currentHealth = Mathf.Max(Mathf.Round(_currentHealth - finalDamage), 0f);
 
             Debug.Log($"[Enemy] Took {finalDamage} damage. Remaining health: {_currentHealth}/{_stats.maxHealth}");
 
-            _enemyAnimation.PlayHitAnimation();
 
             if (_currentHealth <= 0f)
+            {
                 Die();
+                return;
+            }
+
+            _enemyAnimation.PlayHitAnimation();
         }
 
         /// <summary>
@@ -137,7 +132,7 @@ namespace Obrissom.Enemy
             Debug.Log("Enemy died");
 
             _isDead = true;
-            _agent.isStopped = true;
+            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete if when navmesh is implemented
 
             _enemyAnimation.PlayDeathAnimation();
 
@@ -146,9 +141,6 @@ namespace Obrissom.Enemy
             // TODO: Grant experience to player when stats system is available.
 
             StartCoroutine(DespawnRoutine());
-
-
-
         }
 
         //Loot
@@ -175,9 +167,17 @@ namespace Obrissom.Enemy
         /// <summary>
         /// Attack logic specific to each enemy type. Implemented by concrete classes.
         /// </summary>
-        public abstract void PerformAttack();
+        public abstract void PerformAttackRpc();
 
+        private System.Collections.IEnumerator DespawnRoutine()
+        {
+            yield return new WaitForSeconds(3f); // It'll be death animation time
 
+            if (NetworkObject != null && NetworkObject.IsSpawned)
+            {
+                NetworkObject.Despawn(true);
+            }
+        }
 
         //Gizmos
         private void OnDrawGizmosSelected()
@@ -191,14 +191,5 @@ namespace Obrissom.Enemy
             Gizmos.DrawWireSphere(transform.position, _stats.attackRange);
         }
 
-        private System.Collections.IEnumerator DespawnRoutine()
-        {
-            yield return new WaitForSeconds(3f);
-
-            if (NetworkObject != null && NetworkObject.IsSpawned)
-            {
-                NetworkObject.Despawn(true);
-            }
-        }
     }
 }

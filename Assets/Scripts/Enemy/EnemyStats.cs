@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace Obrissom.Enemy
 {
     /// <summary>
@@ -9,6 +8,8 @@ namespace Obrissom.Enemy
     [CreateAssetMenu(fileName = "New EnemyStats", menuName = "Obrissom/Enemy/EnemyStats")]
     public class EnemyStats : ScriptableObject
     {
+        [Min(0),Tooltip("Used to indicate player enemy name (in quests for example)")] public string Enemyname;
+        
         [Header("Health")]
         [Min(1f)] public float maxHealth = 100f;
 

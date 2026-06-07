@@ -5,7 +5,6 @@ namespace Obrissom.Player
 {
     public class PlayerCombat : NetworkBehaviour
     {
-
         public NetworkVariable<float> _health = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -13,7 +12,7 @@ namespace Obrissom.Player
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
         [SerializeField] private Skill _basicSkill;
-        [SerializeField] private Skill _Skill1;
+        [SerializeField] private Skill _Skill1; // Will change -> gained by leveling up
 
         private PlayerStats _playerStats;
         private PlayerSkills _playerSkills;
@@ -47,7 +46,6 @@ namespace Obrissom.Player
                 _healthAndResourceUI.UpdateHealth(_health.Value, _playerStats.maxHealth);
                 _healthAndResourceUI.UpdateResource(_resource.Value, _playerStats.maxResource);
 
-                // Nos suscribimos para escuchar cuando el servidor cambie nuestra vida por internet
                 _health.OnValueChanged += OnHealthChanged;
                 _resource.OnValueChanged += OnResourceChanged;
             }
@@ -95,7 +93,6 @@ namespace Obrissom.Player
             if (IsServer)
             {
                 _resource.Value -= cost;
-
             }
 
             return true;
@@ -111,10 +108,10 @@ namespace Obrissom.Player
             float finalDamage = damageAmount * (1 - reduction);
 
 
-            _health.Value = Mathf.Max(_health.Value - finalDamage, 0f);
+            _health.Value = Mathf.Max(Mathf.Round(_health.Value - finalDamage), 0f);
 
 
-            Debug.Log($"Player took {finalDamage} damage. Remaining health: {_health}");
+            Debug.Log($"Player took {finalDamage} damage. Remaining health: {_health.Value}");
             if (_health.Value <= 0)
             {
                 Die();
@@ -147,7 +144,7 @@ namespace Obrissom.Player
 
         private void Die()
         {
-            Debug.Log("Player {OwnerClientId} has died.");
+            Debug.Log($"Player {OwnerClientId} has died.");
             // TODO
         }
     }
