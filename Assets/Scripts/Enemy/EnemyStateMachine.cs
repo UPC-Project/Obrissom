@@ -108,7 +108,7 @@ namespace Obrissom.Enemy
 
                 case EnemyState.Attack:
                     FaceTarget(_enemy.Target.position);
-                    _enemy.PerformAttack();
+                    _enemy.PerformAttackRpc();
                     break;
 
                 case EnemyState.TakingDamage:
