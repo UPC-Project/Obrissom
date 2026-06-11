@@ -5,14 +5,15 @@ namespace Obrissom.Player
 {
     public class PlayerCombat : NetworkBehaviour
     {
-        public NetworkVariable<float> _health = new NetworkVariable<float>(
+        [Header("Actual health and resource")]
+        [Min(0)] public NetworkVariable<float> _health = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [Min(0)] public NetworkVariable<float> _resource = new NetworkVariable<float>(
+            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
-        public NetworkVariable<float> _resource = new NetworkVariable<float>(
-            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
+        [Header("Player Skills")]
         [SerializeField] private Skill _basicSkill;
-        [SerializeField] private Skill _Skill1; // Will change -> gained by leveling up
+        [SerializeField] private Skill _Skill1; // TODO: Will change (not hardcoded) -> gained by leveling up
 
         private PlayerStats _playerStats;
         private PlayerSkills _playerSkills;
@@ -142,6 +143,15 @@ namespace Obrissom.Player
                 damage *= _playerStats.criticalDamage;
             }
             return (Mathf.RoundToInt(damage), isCritical);
+        }
+
+        public Vector3 GetAimPosition()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f)) return hit.point;
+
+            // fixed distance
+            return ray.origin + ray.direction * 100f;
         }
 
         private void Die()

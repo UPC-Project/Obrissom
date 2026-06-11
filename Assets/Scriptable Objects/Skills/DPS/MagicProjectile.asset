@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
+  m_Name: MagicProjectile
+  m_EditorClassIdentifier: Assembly-CSharp::Skill
+  skillName: Magic Projectile
+  description: 
+  cooldownTime: 2
+  cost: 0
+  damagePerSecond: 0
+  damagePerSecondTime: 0
+  damagePerSecondType: 0
+  minPhysicDamage: 0
+  maxPhysicDamage: 0
+  minMagicDamage: 10
+  maxMagicDamage: 15
+  minHeal: 0
+  maxHeal: 0
+  behaviour: {fileID: 11400000, guid: 22ab579740cc57c4dadad996563967fb, type: 2}

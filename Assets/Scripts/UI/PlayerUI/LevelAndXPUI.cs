@@ -16,7 +16,7 @@ namespace Obrissom.UI
             {
                 _xpBar.fillAmount = 100f;
                 _xpAmountText.text = $"max level";
-                _xpLevelText.text = $"Lvl 5";
+                _xpLevelText.text = $"Lvl {LevelUpRequirements.MAX_LEVEL}";
             }
             else
             {
