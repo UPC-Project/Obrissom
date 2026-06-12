@@ -34,20 +34,20 @@ namespace Obrissom.Player
                 if (_cooldowns[key] > 0f) _cooldowns[key] -= Time.deltaTime;
             }
 
-            // Rotate player to crosshair if skill is being hold
+            // Hold skill is being hold
             if (_activeSkill != null && _activeSkill.behaviour.castType == CastType.Hold)
             {
                 Vector3 aimPosition = _playerCombat.GetAimPosition();
-                Vector3 direction = new Vector3(aimPosition.x - transform.position.x, 0f, aimPosition.z - transform.position.z).normalized;
 
+                // update Hold skill
+                _activeSkill.behaviour.OnHoldUpdate(gameObject, _activeSkill, aimPosition);
+
+                // Rotate player to crosshair
+                Vector3 direction = new Vector3(aimPosition.x - transform.position.x, 0f, aimPosition.z - transform.position.z).normalized;
                 if (direction != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.RotateTowards(
-                        transform.rotation,
-                        targetRotation,
-                        _aimRotationSpeed * 360f * Time.deltaTime
-                    );
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _aimRotationSpeed * 360f * Time.deltaTime);
                 }
             }
         }

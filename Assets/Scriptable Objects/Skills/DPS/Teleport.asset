@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
-  m_Name: DPS_Basic
+  m_Name: Teleport
   m_EditorClassIdentifier: Assembly-CSharp::Skill
-  skillName: Scythe Cut
+  skillName: Teleport
   description: 
-  cooldownTime: 0.5
-  cost: 0
+  cooldownTime: 1
+  cost: 5
+  castTime: 1
   damagePerSecond: 0
   damagePerSecondTime: 0
   damagePerSecondType: 0
-  minPhysicDamage: 2
-  maxPhysicDamage: 5
+  minPhysicDamage: 0
+  maxPhysicDamage: 0
   minMagicDamage: 0
   maxMagicDamage: 0
   minHeal: 0
   maxHeal: 0
-  behaviour: {fileID: 11400000, guid: c2180b427b2fde84496cd26d307976fd, type: 2}
+  behaviour: {fileID: 11400000, guid: 365d4b3b82a5be1418a15a9a4ae0b741, type: 2}
