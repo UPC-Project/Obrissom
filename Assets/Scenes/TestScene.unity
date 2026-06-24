@@ -12029,7 +12029,9 @@ GameObject:
   - component: {fileID: 1844435286}
   - component: {fileID: 1844435285}
   - component: {fileID: 1844435284}
+  - component: {fileID: 1844435289}
   - component: {fileID: 1844435288}
+  - component: {fileID: 1844435290}
   m_Layer: 0
   m_Name: Test Enemy - Dummy
   m_TagString: Enemy
@@ -12144,6 +12146,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ebe0d0ac156a694c9179bb4b5eb228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestEnemy
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &1844435289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844435283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3427900860
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &1844435290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844435283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a1b2faa4ee4ba47a42de7fc63575a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDamagePopUp
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!43 &1881850686
 Mesh:
   m_ObjectHideFlags: 0
