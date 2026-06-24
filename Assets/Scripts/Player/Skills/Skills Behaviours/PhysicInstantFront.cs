@@ -1,13 +1,20 @@
 using Obrissom.Player;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Skills/Behaviours/Instant_Front")]
-public class InstantFront : SkillBehaviour
+[CreateAssetMenu(menuName = "Skills/Behaviours/Physic_Instant_Front")]
+public class PhysicInstantFront : SkillBehaviour
 {
-    [SerializeField] private float range = 3f; // large range
-    [SerializeField] private float angle = 60f; // cone angle
+    [SerializeField] private float range = 2.5f; // large range
+    [SerializeField] private float angle = 55f; // cone angle
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
+    {
+        DPSCombat dpsCombat = caster.GetComponent<DPSCombat>();
+        dpsCombat.PhysicInstantFrontServerRpc(skillData.minPhysicDamage, skillData.maxPhysicDamage, range, angle);
+    }
+
+    // called on dpsCombat
+    public static void ExecuteOnServer(GameObject caster, int minDamage, int maxDamage, float range, float angle)
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
         
@@ -23,11 +30,9 @@ public class InstantFront : SkillBehaviour
 
             if (angleToTarget <= angle / 2f)
             {
-                var (physicDamage, isCriticPhysic) = playerCombat.CalculatePhysicalDamage(skillData.minPhysicDamage,skillData.maxPhysicDamage);
-                var (magicDamage, isCriticMagic) = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
+                var (physicDamage, isCriticPhysic) = playerCombat.CalculatePhysicalDamage(minDamage, maxDamage);
 
                 if (physicDamage!=0) hit.GetComponent<TestEnemy>()?.TakeDamage(physicDamage, DamageType.PhysicDamage, isCriticPhysic, hit.transform.position);
-                if (magicDamage!=0) hit.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage, isCriticMagic, hit.transform.position);
             }
         }
     }

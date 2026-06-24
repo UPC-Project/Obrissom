@@ -38,7 +38,7 @@ public class ChannelMagicProjectile : SkillBehaviour
         Vector3 directionToTarget = (targetPosition - spawnPosition).normalized;
 
         // needed bc ChannelMagicProjectile inherits from SkillBehaviour, can't inherit NetworkBehaviour
-        dpsCombat.FireMagicProjectileServerRpc(spawnPosition, directionToTarget, skillData.minMagicDamage, skillData.maxMagicDamage, _speed, _lifeTime);
+        dpsCombat.ChannelMagicProjectileServerRpc(spawnPosition, directionToTarget, skillData.minMagicDamage, skillData.maxMagicDamage, _speed, _lifeTime);
     }
 
     // called on dpsCombat

@@ -1,6 +1,7 @@
 using Obrissom.Player;
 using Obrissom.UI;
 using System.Collections;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skills/Behaviours/Teleport")]
@@ -94,7 +95,16 @@ public class Teleport : SkillBehaviour
         yield return new WaitForSeconds(castTime);
 
         caster.GetComponent<CharacterController>().enabled = false;
-        caster.transform.position = destination;
+
+        if (caster.TryGetComponent<NetworkTransform>(out var netTransform))
+        {
+            netTransform.Teleport(destination, caster.transform.rotation, caster.transform.localScale);
+        }
+        else
+        {
+            caster.transform.position = destination;
+        }
+
         caster.GetComponent<CharacterController>().enabled = true;
         Debug.Log("tp casted");
 
@@ -102,4 +112,5 @@ public class Teleport : SkillBehaviour
     }
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition) { }
+
 }
