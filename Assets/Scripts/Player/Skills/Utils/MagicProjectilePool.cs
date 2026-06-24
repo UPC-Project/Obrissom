@@ -29,8 +29,10 @@ public class MagicProjectilePool : NetworkBehaviour
     private ProjectileTrigger CreateNew()
     {
         var obj = Instantiate(prefab, transform);
-        obj.GetComponent<NetworkObject>().Spawn();
         ProjectileTrigger trigger = obj.GetComponent<ProjectileTrigger>();
+        NetworkObject netObj = obj.GetComponent<NetworkObject>();
+        netObj.GetComponent<NetworkObject>().Spawn();
+        bool test = netObj.TrySetParent(gameObject,false);
         trigger.SetActiveClientRpc(false);
         return trigger;
     }
