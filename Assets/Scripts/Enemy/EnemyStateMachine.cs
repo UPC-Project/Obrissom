@@ -1,62 +1,79 @@
-﻿using UnityEngine;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace Obrissom.Enemy
 {
     /// <summary>
     /// Controls enemy state transitions and per-state logic.
-    /// Runs only on the server via EnemyBase.Update().
-    /// Attach to the same GameObject as EnemyBase.
+    /// Transitions are event-driven or polled at a fixed interval — never every frame.
+    /// Runs only on the server via EnemyBase.
     /// </summary>
     public class EnemyStateMachine : MonoBehaviour
     {
         private EnemyBase _enemy;
         private NavMeshAgent _agent;
 
-        public EnemyState CurrentState { get; private set; }
+        public EnemyState CurrentState { get; private set; } = EnemyState.None;
 
         [Header("Timers")]
         [SerializeField] private float _idleDuration = 2f;
         [SerializeField] private float _takingDamageDuration = 0.4f;
 
-        private float _idleTimer;
-        private float _takingDamageTimer;
+        [Header("Polling")]
+        [SerializeField] private float _evalInterval = 0.2f;
 
-        //Init
+        private Coroutine _evalLoopCoroutine;
+
+        // Init
 
         public void Initialize(EnemyBase enemy, NavMeshAgent agent)
         {
-
             _enemy = enemy;
             _agent = agent;
             ChangeState(EnemyState.Idle);
+            _evalLoopCoroutine = StartCoroutine(EvalLoop());
         }
 
-        //Core
+        // Per-frame tick — only smooth visual things (rotation)
 
         public void Tick()
         {
-            EvaluateTransitions();
-            OnStateUpdate();
+            if (CurrentState != EnemyState.Chase && CurrentState != EnemyState.Attack) return;
+            if (_enemy.Target != null)
+                FaceTarget(_enemy.Target.position);
         }
 
-        //Transitions
+        // Eval loop — range checks and destination updates at fixed interval
+
+        private IEnumerator EvalLoop()
+        {
+            var wait = new WaitForSeconds(_evalInterval);
+            while (true)
+            {
+                _enemy.DetectPlayer();
+                EvaluateTransitions();
+                OnStateUpdate();
+                yield return wait;
+            }
+        }
+
+        // Transitions
 
         private void EvaluateTransitions()
         {
             switch (CurrentState)
             {
                 case EnemyState.Idle:
-                    _idleTimer -= Time.deltaTime;
                     if (_enemy.IsPlayerInChaseRange())
                         ChangeState(EnemyState.Chase);
-                    else if (_idleTimer <= 0f)
-                        ChangeState(EnemyState.Move);
                     break;
 
                 case EnemyState.Move:
                     if (_enemy.IsPlayerInChaseRange())
                         ChangeState(EnemyState.Chase);
+                    else
+                        _enemy.CheckPatrolArrival();
                     break;
 
                 case EnemyState.Chase:
@@ -72,61 +89,34 @@ namespace Obrissom.Enemy
                     break;
 
                 case EnemyState.TakingDamage:
-                    _takingDamageTimer -= Time.deltaTime;
-                    if (_takingDamageTimer > 0f) break;
-
-                    if (_enemy.IsPlayerInAttackRange())
-                        ChangeState(EnemyState.Attack);
-                    else if (_enemy.IsPlayerInChaseRange())
-                        ChangeState(EnemyState.Chase);
-                    else
-                        ChangeState(EnemyState.Idle);
-                    break;
-
                 case EnemyState.Dead:
                     break;
             }
         }
 
-        //State update 
+        // State update (interval — not per frame)
 
         private void OnStateUpdate()
         {
             switch (CurrentState)
             {
-                case EnemyState.Idle:
-                    break;
-
-                case EnemyState.Move:
-                    _enemy.PatrolToNextPoint();
-                    break;
-
                 case EnemyState.Chase:
                     _agent.SetDestination(_enemy.Target.position);
-                    FaceTarget(_enemy.Target.position);
                     break;
 
                 case EnemyState.Attack:
-                    FaceTarget(_enemy.Target.position);
                     _enemy.PerformAttackRpc();
-                    break;
-
-                case EnemyState.TakingDamage:
-                    break;
-
-                case EnemyState.Dead:
                     break;
             }
         }
 
-        // State enter-exit
+        // State enter / exit
 
         public void ChangeState(EnemyState newState)
         {
-            Debug.Log($"[StateMachine] {CurrentState} -> {newState}");
-
             if (CurrentState == newState) return;
 
+            Debug.Log($"[StateMachine] {CurrentState} -> {newState}");
             OnStateExit(CurrentState);
             CurrentState = newState;
             OnStateEnter(newState);
@@ -138,12 +128,13 @@ namespace Obrissom.Enemy
             {
                 case EnemyState.Idle:
                     _agent.isStopped = true;
-                    _idleTimer = _idleDuration;
+                    StartCoroutine(IdleTimer());
                     break;
 
                 case EnemyState.Move:
                     _agent.isStopped = false;
                     _agent.speed = _enemy.Stats.moveSpeed;
+                    _enemy.MoveToNextPatrolPoint();
                     break;
 
                 case EnemyState.Chase:
@@ -157,11 +148,13 @@ namespace Obrissom.Enemy
 
                 case EnemyState.TakingDamage:
                     _agent.isStopped = true;
-                    _takingDamageTimer = _takingDamageDuration;
+                    StartCoroutine(TakingDamageExit());
                     break;
 
                 case EnemyState.Dead:
                     _agent.isStopped = true;
+                    if (_evalLoopCoroutine != null)
+                        StopCoroutine(_evalLoopCoroutine);
                     break;
             }
         }
@@ -171,10 +164,33 @@ namespace Obrissom.Enemy
             // TODO
         }
 
+        // Timers as coroutines — no per-frame countdown
+
+        private IEnumerator IdleTimer()
+        {
+            yield return new WaitForSeconds(_idleDuration);
+            if (CurrentState == EnemyState.Idle)
+                ChangeState(EnemyState.Move);
+        }
+
+        private IEnumerator TakingDamageExit()
+        {
+            yield return new WaitForSeconds(_takingDamageDuration);
+            if (CurrentState != EnemyState.TakingDamage) yield break;
+
+            if (_enemy.IsPlayerInAttackRange())
+                ChangeState(EnemyState.Attack);
+            else if (_enemy.IsPlayerInChaseRange())
+                ChangeState(EnemyState.Chase);
+            else
+                ChangeState(EnemyState.Idle);
+        }
+
+        // Helpers
 
         private void FaceTarget(Vector3 targetPosition)
         {
-            Vector3 direction = (targetPosition - _enemy.transform.position);
+            Vector3 direction = targetPosition - _enemy.transform.position;
             direction.y = 0f;
             if (direction == Vector3.zero) return;
             _enemy.transform.rotation = Quaternion.Slerp(

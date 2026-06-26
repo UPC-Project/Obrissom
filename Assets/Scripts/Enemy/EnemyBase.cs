@@ -72,7 +72,6 @@ namespace Obrissom.Enemy
             if (!IsServer || _isDead) return;
 
             _attackCooldownTimer -= Time.deltaTime;
-            DetectPlayer();
             _stateMachine.Tick();
         }
 
@@ -80,8 +79,9 @@ namespace Obrissom.Enemy
 
         /// <summary>
         /// Detects the nearest player within chase range and assigns it as target.
+        /// Called from the state machine eval loop, not every frame.
         /// </summary>
-        protected void DetectPlayer()
+        public void DetectPlayer()
         {
             Collider[] hits = Physics.OverlapSphere(transform.position, _stats.chaseRange, _playerLayer);
 
@@ -181,16 +181,23 @@ namespace Obrissom.Enemy
         {
             _patrolPoints = points;
         }
-        public void PatrolToNextPoint()
+        // Called once when entering Move state
+        public void MoveToNextPatrolPoint()
         {
-            if (_patrolPoints == null || _patrolPoints.Length == 0) return;
+if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_patrolPoints[_currentPatrolIndex] == null) return;
 
-
             _agent.SetDestination(_patrolPoints[_currentPatrolIndex].transform.position);
+        }
 
-            if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
-                _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
+        // Called from the eval loop — advances to next point only on arrival
+        public void CheckPatrolArrival()
+        {
+            if (_patrolPoints == null || _patrolPoints.Length == 0) return;
+            if (_agent.pathPending || _agent.remainingDistance >= 0.5f) return;
+
+            _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
+            MoveToNextPatrolPoint();
         }
 
         //Abstract 
