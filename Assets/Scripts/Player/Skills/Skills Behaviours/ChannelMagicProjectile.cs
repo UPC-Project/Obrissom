@@ -1,3 +1,4 @@
+using Obrissom.Enemy;
 using Obrissom.Player;
 using Obrissom.UI;
 using System.Collections;
@@ -58,10 +59,11 @@ public class ChannelMagicProjectile : SkillBehaviour
         trigger.OnHit += (col) =>
         {
 
-            if (col.CompareTag("Enemy"))
+            if (col.transform.root.CompareTag("Enemy"))
             {
+                EnemyBase enemy = col.transform.root.GetComponent<EnemyBase>();
                 var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(minDamage, maxDamage);
-                col.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position);
+                enemy.TakeDamagRpc(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position);
             }
             playerCombat.StopCoroutine(travel);
             MagicProjectilePool.Instance.Return(trigger);

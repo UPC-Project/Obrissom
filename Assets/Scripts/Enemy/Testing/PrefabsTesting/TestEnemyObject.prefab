@@ -128,9 +128,10 @@ GameObject:
   - component: {fileID: 3121933396603442870}
   - component: {fileID: -3048245245344256436}
   - component: {fileID: 7429884975227316973}
+  - component: {fileID: 7204921535387506599}
   m_Layer: 0
   m_Name: TestEnemyObject
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -199,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2589124594
+  GlobalObjectIdHash: 4058286126
   InScenePlacedSourceGlobalObjectIdHash: 1387506047
   DeferredDespawnTick: 0
   Ownership: 1
@@ -264,6 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.EnemyStateMachine
   _idleDuration: 3
   _takingDamageDuration: 0.5
+  _evalInterval: 0.2
 --- !u!114 &7429884975227316973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,6 +312,19 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &7204921535387506599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2605654337382071770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a1b2faa4ee4ba47a42de7fc63575a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDamagePopUp
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &7412569816099755063
 GameObject:
   m_ObjectHideFlags: 0

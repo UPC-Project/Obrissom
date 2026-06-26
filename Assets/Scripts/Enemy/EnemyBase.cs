@@ -13,6 +13,7 @@ namespace Obrissom.Enemy
     [RequireComponent(typeof(EnemyAnimation))]
     [RequireComponent(typeof(ItemDropper))]
     [RequireComponent(typeof(EnemyStateMachine))]
+    [RequireComponent(typeof(EnemyDamagePopUp))]
     public abstract class EnemyBase : NetworkBehaviour
     {
         [Header("Stats")]
@@ -32,6 +33,7 @@ namespace Obrissom.Enemy
         protected NavMeshAgent _agent;
         protected EnemyAnimation _enemyAnimation;
         protected ItemDropper _itemDropper;
+        protected EnemyDamagePopUp _damagePopUp;
 
         // Runtime state
         protected float _currentHealth;
@@ -52,6 +54,7 @@ namespace Obrissom.Enemy
             _enemyAnimation = GetComponent<EnemyAnimation>();
             _itemDropper = GetComponent<ItemDropper>();
             _stateMachine = GetComponent<EnemyStateMachine>();
+            _damagePopUp = GetComponent<EnemyDamagePopUp>();
 
 
 
@@ -114,7 +117,7 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamagRpc(float rawAmount, DamageType type)
+        public virtual void TakeDamagRpc(float rawAmount, DamageType type, bool isCritic, Vector3 hitPos)
         {
             if (!IsServer || _isDead) return;
 
@@ -122,14 +125,11 @@ namespace Obrissom.Enemy
                 ? _stats.physicalDefense
                 : _stats.magicDefense;
 
-            float finalDamage = rawAmount * (1f - reduction);
-            _currentHealth = Mathf.Max(Mathf.Round(_currentHealth - finalDamage), 0f);
+            float finalDamage = Mathf.Round(rawAmount * (1f - reduction));
+            _currentHealth = Mathf.Max(_currentHealth - finalDamage, 0f);
 
-            Debug.Log($"[Enemy] Took {finalDamage} damage. Remaining health: {_currentHealth}/{_stats.maxHealth}");
-
-
+            _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
-
 
             if (_currentHealth <= 0f)
             {

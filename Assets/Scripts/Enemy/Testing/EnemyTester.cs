@@ -15,13 +15,13 @@ public class EnemyTester : MonoBehaviour
         if (kb.tKey.wasPressedThisFrame)
         {
             EnemyTest activeEnemy = GetActiveEnemy();
-            activeEnemy.TakeDamagRpc(_testDamage, _testDamageType);
+            activeEnemy.TakeDamagRpc(_testDamage, _testDamageType, false, activeEnemy.transform.position);
         }
         // K: kill enemy
         if (kb.kKey.wasPressedThisFrame)
         {
             EnemyTest activeEnemy = GetActiveEnemy();
-            activeEnemy.TakeDamagRpc(99999f, DamageType.PhysicDamage);
+            activeEnemy.TakeDamagRpc(99999f, DamageType.PhysicDamage, false, activeEnemy.transform.position);
         }
 
         // P: PerformAttack
