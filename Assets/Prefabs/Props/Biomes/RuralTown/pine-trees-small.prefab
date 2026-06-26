@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: e7f92d01de70d90498b90a6935c59dbc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 61a5f1d4dc62ba24ea7e6f3d0a523a18, type: 2}
     - target: {fileID: 919132149155446097, guid: e7f92d01de70d90498b90a6935c59dbc, type: 3}
       propertyPath: m_Name
       value: pine-trees-small
@@ -84,7 +88,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.18
-  m_Height: 6.0199842
+  m_Radius: 0.0018
+  m_Height: 0.06
   m_Direction: 1
-  m_Center: {x: -0.00000047683716, y: 1.5, z: 0}
+  m_Center: {x: -0.00000047683716, y: 0.025, z: 0}
