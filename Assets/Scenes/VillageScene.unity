@@ -7208,7 +7208,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 591474864}
-    PlayerPrefab: {fileID: 2163980959575578024, guid: 4cd77291b871f40448da3ab6a8e49cf7, type: 3}
+    PlayerPrefab: {fileID: 3170950436608528497, guid: 346a2ccb99048514fb5774d23a5db2ed, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 286447b23d4ae9c4aa58a1f458667dbc, type: 2}
@@ -19236,43 +19236,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -31.61882
+      value: -31.621475
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 49.38002
+      value: 49.56
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.9496155
+      value: 15.951752
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70454466
+      value: 0.9963761
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7045447
+      value: 0.0010914003
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.060139682
+      value: -0.08505029
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.06013967
+      value: 0.00009316796
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
+      value: 0.126
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -9.758
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -9.758
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21162,7 +21162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   ShowTopMostFoldoutHeaderGroup: 1
   _enemyPrefab: {fileID: 0}
-  _spawnPoint: {fileID: 0}
+  _patrolPoints: []
 --- !u!114 &1672571539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22785,43 +22785,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -47.387344
+      value: -47.39
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 49.38002
+      value: 49.56
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.237854
+      value: 13.24
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70454466
+      value: 0.9963761
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7045447
+      value: 0.0010914003
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.060139682
+      value: -0.08505029
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.06013967
+      value: 0.00009316796
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
+      value: 0.126
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -9.758
       objectReference: {fileID: 0}
     - target: {fileID: 2272713903026326932, guid: ff1ae3b6276366342b4045bb13af8e13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -9.758
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24715,6 +24715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b63e554e670471243ad9211eff600fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MagicProjectilePool
+  ShowTopMostFoldoutHeaderGroup: 1
   prefab: {fileID: 4301610914714267190, guid: f845e29071ae49c46a02590ee10a7b17, type: 3}
   initialSize: 5
 --- !u!1001 &1957981192
