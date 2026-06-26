@@ -1,10 +1,11 @@
+using Unity.Netcode;
 using UnityEngine;
-using Obrissom.UI;
 
-public class TestEnemy : MonoBehaviour
+public class TestEnemy : NetworkBehaviour
 {
-    public void TakeDamage(float damageAmount, DamageType damageType, bool critic, Vector3 hitPos)
+    public void TakeDamage(float damageAmount, DamageType damageType, bool isCritic, Vector3 hitPos)
     {
-        DamagePopUpPool.Instance.CreatePopUp(hitPos, damageAmount.ToString(), damageType, critic);
+        if (!IsServer) return;
+        GetComponent<EnemyDamagePopUp>().ShowPopUpClientRpc(damageAmount.ToString(), damageType, isCritic, hitPos);
     }
 }

@@ -5,18 +5,25 @@ namespace Obrissom.Player
 {
     public class PlayerCombat : NetworkBehaviour
     {
-        public NetworkVariable<float> _health = new NetworkVariable<float>(
+        #region
+        [Header("Actual health and resource")]
+        [Min(0)] public NetworkVariable<float> _health = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [Min(0)] public NetworkVariable<float> _resource = new NetworkVariable<float>(
+            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
-        public NetworkVariable<float> _resource = new NetworkVariable<float>(
-            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
+        [Header("Player Skills")] // TODO: delete
         [SerializeField] private Skill _basicSkill;
-        [SerializeField] private Skill _Skill1; // Will change -> gained by leveling up
+        [SerializeField] private Skill _Skill1; // TODO: Will change (not hardcoded) -> gained by leveling up
+        [SerializeField] private Skill _Skill2; // TODO: Will change (not hardcoded) -> gained by leveling up
 
         private PlayerStats _playerStats;
         private PlayerSkills _playerSkills;
         private UI.HealthAndResourceUI _healthAndResourceUI;
+
+        private bool _isInvulnerable = false;
+
+        #endregion
 
         // TODO: save information:
         // for example current health, level, bufs, skills available, etc
@@ -33,6 +40,7 @@ namespace Obrissom.Player
             // Assign basic skill -> will change, what happen when player choose another button?
             _playerSkills.AssignSkill(SkillKey.LB, _basicSkill);
             _playerSkills.AssignSkill(SkillKey.ONE, _Skill1);
+            _playerSkills.AssignSkill(SkillKey.TWO, _Skill2);
 
             if (IsServer)
             {
@@ -88,6 +96,8 @@ namespace Obrissom.Player
             }
         }
 
+        public void SetInvulnerable(bool value) => _isInvulnerable = value;
+
         public bool TryConsumeResource(int cost)
         {
             if (_resource.Value < cost) return false;
@@ -102,6 +112,8 @@ namespace Obrissom.Player
 
         public void TakeDamage(float damageAmount, DamageType damageType)
         {
+            if (_isInvulnerable) return;
+
             if (!IsServer) return;
 
             float reduction = (damageType == DamageType.PhysicDamage) ? _playerStats.physicalDefense : _playerStats.magicDefense;
@@ -120,7 +132,7 @@ namespace Obrissom.Player
             }
         }
 
-        public (int,bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
+        public (int, bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
             float damage = (attackDamage + _playerStats.bonusPhysicalAttack) * _playerStats.physicalAttackMultiplier;
@@ -132,7 +144,7 @@ namespace Obrissom.Player
             return (Mathf.RoundToInt(damage), isCritical);
         }
 
-        public (int,bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
+        public (int, bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
             float damage = (attackDamage + _playerStats.bonusMagicAttack) * _playerStats.magicAttackMultiplier;
@@ -142,6 +154,15 @@ namespace Obrissom.Player
                 damage *= _playerStats.criticalDamage;
             }
             return (Mathf.RoundToInt(damage), isCritical);
+        }
+
+        public Vector3 GetAimPosition()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f)) return hit.point;
+
+            // fixed distance
+            return ray.origin + ray.direction * 100f;
         }
 
         private void Die()
