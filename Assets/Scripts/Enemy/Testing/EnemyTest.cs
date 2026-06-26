@@ -16,7 +16,7 @@ namespace Obrissom.Enemy
 
             _attackCooldownTimer = _stats.attackCooldown;
 
-            Collider[] hits = Physics.OverlapSphere(transform.position, _hitboxRadius, _playerLayer);
+            Collider[] hits = Physics.OverlapSphere(transform.position, _hitboxRadius, _playerLayer); // TODO: change to Tigger enter/exit
 
             foreach (var hit in hits)
             {
