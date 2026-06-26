@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Obrissom.Enemy;
+using Unity.Netcode;
 
 public class EnemyTester : MonoBehaviour
 {
@@ -10,18 +11,19 @@ public class EnemyTester : MonoBehaviour
     private void Update()
     {
         var kb = Keyboard.current;
+        var netObj = new NetworkObject(); // empty
 
         // T: apply physical damage
         if (kb.tKey.wasPressedThisFrame)
         {
             EnemyTest activeEnemy = GetActiveEnemy();
-            activeEnemy.TakeDamagRpc(_testDamage, _testDamageType, false, activeEnemy.transform.position);
+            activeEnemy.TakeDamagRpc(_testDamage, _testDamageType, false, activeEnemy.transform.position, netObj);
         }
         // K: kill enemy
         if (kb.kKey.wasPressedThisFrame)
         {
             EnemyTest activeEnemy = GetActiveEnemy();
-            activeEnemy.TakeDamagRpc(99999f, DamageType.PhysicDamage, false, activeEnemy.transform.position);
+            activeEnemy.TakeDamagRpc(99999f, DamageType.PhysicDamage, false, activeEnemy.transform.position, netObj);
         }
 
         // P: PerformAttack

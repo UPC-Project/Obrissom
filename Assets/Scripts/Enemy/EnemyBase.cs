@@ -1,6 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
+﻿using Obrissom.Player;
 using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace Obrissom.Enemy
 {
@@ -58,9 +59,6 @@ namespace Obrissom.Enemy
             _itemDropper = GetComponent<ItemDropper>();
             _stateMachine = GetComponent<EnemyStateMachine>();
             _damagePopUp = GetComponent<EnemyDamagePopUp>();
-
-
-
         }
 
         public override void OnNetworkSpawn()
@@ -120,7 +118,7 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamagRpc(float rawAmount, DamageType type, bool isCritic, Vector3 hitPos)
+        public virtual void TakeDamagRpc(float rawAmount, DamageType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
         {
             if (!IsServer || _isDead) return;
 
@@ -136,7 +134,7 @@ namespace Obrissom.Enemy
 
             if (_currentHealth <= 0f)
             {
-                Die();
+                Die(attackerRef);
                 return;
             }
 
@@ -149,7 +147,7 @@ namespace Obrissom.Enemy
         protected float RollAttackDamage() =>
             Random.Range(_stats.minAttackDamage, _stats.maxAttackDamage);
 
-        protected virtual void Die()
+        protected virtual void Die(NetworkObjectReference attackerRef)
         {
             Debug.Log("Enemy died");
 
@@ -161,7 +159,10 @@ namespace Obrissom.Enemy
 
             DropLoot();
 
-            // TODO: Grant experience to player when stats system is available.
+            if (attackerRef.TryGet(out NetworkObject attackerObj))
+            {
+                attackerObj.GetComponent<PlayerXP>()?.GainXP(_stats.experienceReward);
+            }
 
             StartCoroutine(DespawnRoutine());
         }

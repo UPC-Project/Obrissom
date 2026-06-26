@@ -2,6 +2,7 @@ using Obrissom.Enemy;
 using Obrissom.Player;
 using Obrissom.UI;
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skills/Behaviours/Channel_Magic_Projectile")]
@@ -63,7 +64,8 @@ public class ChannelMagicProjectile : SkillBehaviour
             {
                 EnemyBase enemy = col.transform.root.GetComponent<EnemyBase>();
                 var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(minDamage, maxDamage);
-                enemy.TakeDamagRpc(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position);
+                NetworkObject netObj = caster.GetComponent<NetworkObject>();
+                enemy.TakeDamagRpc(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position, netObj);
             }
             playerCombat.StopCoroutine(travel);
             MagicProjectilePool.Instance.Return(trigger);
