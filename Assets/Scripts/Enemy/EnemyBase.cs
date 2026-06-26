@@ -24,6 +24,8 @@ namespace Obrissom.Enemy
 
         [Header("Patrol")]
         [SerializeField] protected GameObject[] _patrolPoints;
+        [SerializeField] private float _waypointPauseDuration = 1f;
+        [SerializeField] private float _wanderRadius = 1.5f;
 
         public Transform Target => _target;
 
@@ -41,11 +43,12 @@ namespace Obrissom.Enemy
         protected bool _isDead;
         protected int _currentPatrolIndex;
         protected Transform _target;
+        private bool _isWaypointPausing;
 
         // Lifecycle
 
 
-        private EnemyStateMachine _stateMachine;
+        protected EnemyStateMachine _stateMachine;
 
 
         protected virtual void Awake()
@@ -184,18 +187,56 @@ namespace Obrissom.Enemy
         // Called once when entering Move state
         public void MoveToNextPatrolPoint()
         {
-if (_patrolPoints == null || _patrolPoints.Length == 0) return;
+            if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_patrolPoints[_currentPatrolIndex] == null) return;
 
-            _agent.SetDestination(_patrolPoints[_currentPatrolIndex].transform.position);
+            Vector3 destination = _patrolPoints[_currentPatrolIndex].transform.position;
+            Vector2 offset = Random.insideUnitCircle * _wanderRadius;
+            destination += new Vector3(offset.x, 0f, offset.y);
+
+            _agent.SetDestination(destination);
         }
 
-        // Called from the eval loop — advances to next point only on arrival
+        // Called from the eval loop — starts waypoint pause on arrival
         public void CheckPatrolArrival()
         {
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
+            if (_isWaypointPausing) return;
             if (_agent.pathPending || _agent.remainingDistance >= 0.5f) return;
 
+            _isWaypointPausing = true;
+            StartCoroutine(WaypointPauseRoutine());
+        }
+
+        private System.Collections.IEnumerator WaypointPauseRoutine()
+        {
+            _agent.isStopped = true;
+
+            int lookCount = Random.Range(1, 3);
+            for (int i = 0; i < lookCount; i++)
+            {
+                if (_stateMachine.CurrentState != EnemyState.Move) break;
+
+                Quaternion startRot = transform.rotation;
+                Quaternion targetRot = startRot * Quaternion.Euler(0f, Random.Range(-100f, 100f), 0f);
+                float elapsed = 0f;
+                float rotateDuration = 0.4f;
+
+                while (elapsed < rotateDuration)
+                {
+                    transform.rotation = Quaternion.Slerp(startRot, targetRot, elapsed / rotateDuration);
+                    elapsed += Time.deltaTime;
+                    yield return null;
+                }
+
+                yield return new WaitForSeconds(Random.Range(0.2f, _waypointPauseDuration));
+            }
+
+            _isWaypointPausing = false;
+
+            if (_stateMachine.CurrentState != EnemyState.Move) yield break;
+
+            _agent.isStopped = false;
             _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
             MoveToNextPatrolPoint();
         }
