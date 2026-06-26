@@ -10426,6 +10426,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3288341725014717640, guid: 4d00fb7ac8f54f3408547bdd8d43cb3f, type: 3}
   m_PrefabInstance: {fileID: 1340939503}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1341180049 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1294462113821670367, guid: bd46744a033e00941a4e88e48f22f311, type: 3}
+  m_PrefabInstance: {fileID: 3030285546786417239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1341180052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341180049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 305622096
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1001 &1397967106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14984,26 +15014,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1840566004910195621, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
-      propertyPath: _enemyPrefab
-      value: 
-      objectReference: {fileID: 2605654337382071770, guid: 8dfd11724e073fa40a4e608be6b83277, type: 3}
-    - target: {fileID: 1840566004910195621, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
-      propertyPath: _patrolPoints.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1840566004910195621, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
-      propertyPath: '_patrolPoints.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2094585141}
-    - target: {fileID: 1840566004910195621, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
-      propertyPath: '_patrolPoints.Array.data[1]'
-      value: 
-      objectReference: {fileID: 991102973}
-    - target: {fileID: 1840566004910195621, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
-      propertyPath: '_patrolPoints.Array.data[2]'
-      value: 
-      objectReference: {fileID: 1914322930}
     - target: {fileID: 2074306123754443465, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -43.8
@@ -15048,17 +15058,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemySpawner
       objectReference: {fileID: 0}
-    - target: {fileID: 3571877737248339658, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5961809657114034352, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1676638540
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032291786912187963, guid: b966458573ca57149ad53f5d1657bff9, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.39
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15531,7 +15533,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1294462113821670367, guid: bd46744a033e00941a4e88e48f22f311, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1341180052}
   m_SourcePrefab: {fileID: 100100000, guid: bd46744a033e00941a4e88e48f22f311, type: 3}
 --- !u!114 &3313494202996123210
 MonoBehaviour:

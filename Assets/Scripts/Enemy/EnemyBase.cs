@@ -15,6 +15,7 @@ namespace Obrissom.Enemy
     [RequireComponent(typeof(ItemDropper))]
     [RequireComponent(typeof(EnemyStateMachine))]
     [RequireComponent(typeof(EnemyDamagePopUp))]
+    [RequireComponent(typeof(EnemyUI))]
     public abstract class EnemyBase : NetworkBehaviour
     {
         [Header("Stats")]
@@ -37,6 +38,7 @@ namespace Obrissom.Enemy
         protected EnemyAnimation _enemyAnimation;
         protected ItemDropper _itemDropper;
         protected EnemyDamagePopUp _damagePopUp;
+        protected EnemyUI _enemyUi;
 
         // Runtime state
         protected float _currentHealth;
@@ -59,6 +61,7 @@ namespace Obrissom.Enemy
             _itemDropper = GetComponent<ItemDropper>();
             _stateMachine = GetComponent<EnemyStateMachine>();
             _damagePopUp = GetComponent<EnemyDamagePopUp>();
+            _enemyUi = GetComponent<EnemyUI>();
         }
 
         public override void OnNetworkSpawn()
@@ -69,6 +72,8 @@ namespace Obrissom.Enemy
             _agent.speed = _stats.moveSpeed;
 
             _stateMachine.Initialize(this, _agent);
+
+            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
         }
 
         protected virtual void Update()
@@ -131,6 +136,8 @@ namespace Obrissom.Enemy
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
+
+            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
 
             if (_currentHealth <= 0f)
             {
