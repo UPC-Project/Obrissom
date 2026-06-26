@@ -11,7 +11,7 @@ public class EnemyTester : MonoBehaviour
     private void Update()
     {
         var kb = Keyboard.current;
-        var netObj = new NetworkObject(); // empty
+        NetworkObjectReference netObj = default;
 
         // T: apply physical damage
         if (kb.tKey.wasPressedThisFrame)

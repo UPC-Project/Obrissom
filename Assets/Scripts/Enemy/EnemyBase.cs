@@ -29,6 +29,8 @@ namespace Obrissom.Enemy
         [SerializeField] private float _waypointPauseDuration = 1f;
         [SerializeField] private float _wanderRadius = 1.5f;
 
+        public event System.Action OnDeath;
+
         public Transform Target => _target;
 
         public EnemyStats Stats => _stats;
@@ -159,6 +161,7 @@ namespace Obrissom.Enemy
             Debug.Log("Enemy died");
 
             _isDead = true;
+            OnDeath?.Invoke();
             if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete if when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
@@ -191,7 +194,10 @@ namespace Obrissom.Enemy
         public void SetPatrolPoints(GameObject[] points)
         {
             _patrolPoints = points;
+            if (_patrolPoints != null && _patrolPoints.Length > 0)
+                _currentPatrolIndex = UnityEngine.Random.Range(0, _patrolPoints.Length);
         }
+
         // Called once when entering Move state
         public void MoveToNextPatrolPoint()
         {
