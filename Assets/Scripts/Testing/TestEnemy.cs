@@ -1,16 +1,11 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class TestEnemy : MonoBehaviour
+public class TestEnemy : NetworkBehaviour
 {
-    public void TakeDamage(float damageAmount, DamageType damageType, bool critic, Vector3 hitPos)
+    public void TakeDamage(float damageAmount, DamageType damageType, bool isCritic, Vector3 hitPos)
     {
-        if (damageType == DamageType.MagicDamage)
-        {
-            MagicDamagePopUpPool.Instance.CreatePopUp(hitPos, damageAmount.ToString(), critic);
-        }
-        else
-        {
-            PhyiscDamagePopUpPool.Instance.CreatePopUp(hitPos, damageAmount.ToString(), critic);
-        }
+        if (!IsServer) return;
+        GetComponent<EnemyDamagePopUp>().ShowPopUpClientRpc(damageAmount.ToString(), damageType, isCritic, hitPos);
     }
 }

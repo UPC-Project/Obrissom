@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Obrissom.Player;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
-using Unity.Netcode;
 
 namespace Obrissom.Enemy
 {
@@ -13,6 +13,9 @@ namespace Obrissom.Enemy
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(EnemyAnimation))]
     [RequireComponent(typeof(ItemDropper))]
+    [RequireComponent(typeof(EnemyStateMachine))]
+    [RequireComponent(typeof(EnemyDamagePopUp))]
+    [RequireComponent(typeof(EnemyUI))]
     public abstract class EnemyBase : NetworkBehaviour
     {
         [Header("Stats")]
@@ -22,12 +25,20 @@ namespace Obrissom.Enemy
         [SerializeField] protected LayerMask _playerLayer;
 
         [Header("Patrol")]
-        [SerializeField] protected Transform[] _patrolPoints;
+        [SerializeField] protected GameObject[] _patrolPoints;
+        [SerializeField] private float _waypointPauseDuration = 1f;
+        [SerializeField] private float _wanderRadius = 1.5f;
+
+        public Transform Target => _target;
+
+        public EnemyStats Stats => _stats;
 
         // Components
         protected NavMeshAgent _agent;
         protected EnemyAnimation _enemyAnimation;
         protected ItemDropper _itemDropper;
+        protected EnemyDamagePopUp _damagePopUp;
+        protected EnemyUI _enemyUi;
 
         // Runtime state
         protected float _currentHealth;
@@ -35,14 +46,22 @@ namespace Obrissom.Enemy
         protected bool _isDead;
         protected int _currentPatrolIndex;
         protected Transform _target;
+        private bool _isWaypointPausing;
 
         // Lifecycle
+
+
+        protected EnemyStateMachine _stateMachine;
+
 
         protected virtual void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
             _enemyAnimation = GetComponent<EnemyAnimation>();
             _itemDropper = GetComponent<ItemDropper>();
+            _stateMachine = GetComponent<EnemyStateMachine>();
+            _damagePopUp = GetComponent<EnemyDamagePopUp>();
+            _enemyUi = GetComponent<EnemyUI>();
         }
 
         public override void OnNetworkSpawn()
@@ -51,6 +70,10 @@ namespace Obrissom.Enemy
 
             _currentHealth = _stats.maxHealth;
             _agent.speed = _stats.moveSpeed;
+
+            _stateMachine.Initialize(this, _agent);
+
+            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
         }
 
         protected virtual void Update()
@@ -58,14 +81,16 @@ namespace Obrissom.Enemy
             if (!IsServer || _isDead) return;
 
             _attackCooldownTimer -= Time.deltaTime;
+            _stateMachine.Tick();
         }
 
         //Detection
 
         /// <summary>
         /// Detects the nearest player within chase range and assigns it as target.
+        /// Called from the state machine eval loop, not every frame.
         /// </summary>
-        protected void DetectPlayer()
+        public void DetectPlayer()
         {
             Collider[] hits = Physics.OverlapSphere(transform.position, _stats.chaseRange, _playerLayer);
 
@@ -85,10 +110,10 @@ namespace Obrissom.Enemy
             _target = closest;
         }
 
-        protected bool IsPlayerInChaseRange() =>
+        public bool IsPlayerInChaseRange() =>
             _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.chaseRange;
 
-        protected bool IsPlayerInAttackRange() =>
+        public bool IsPlayerInAttackRange() =>
             _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.attackRange;
 
         //Combat 
@@ -98,7 +123,7 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamagRpc(float rawAmount, DamageType type)
+        public virtual void TakeDamagRpc(float rawAmount, DamageType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
         {
             if (!IsServer || _isDead) return;
 
@@ -106,15 +131,17 @@ namespace Obrissom.Enemy
                 ? _stats.physicalDefense
                 : _stats.magicDefense;
 
-            float finalDamage = rawAmount * (1f - reduction);
-            _currentHealth = Mathf.Max(Mathf.Round(_currentHealth - finalDamage), 0f);
+            float finalDamage = Mathf.Round(rawAmount * (1f - reduction));
+            _currentHealth = Mathf.Max(_currentHealth - finalDamage, 0f);
 
-            Debug.Log($"[Enemy] Took {finalDamage} damage. Remaining health: {_currentHealth}/{_stats.maxHealth}");
+            _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
+            _stateMachine.ChangeState(EnemyState.TakingDamage);
 
+            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
 
             if (_currentHealth <= 0f)
             {
-                Die();
+                Die(attackerRef);
                 return;
             }
 
@@ -127,18 +154,22 @@ namespace Obrissom.Enemy
         protected float RollAttackDamage() =>
             Random.Range(_stats.minAttackDamage, _stats.maxAttackDamage);
 
-        protected virtual void Die()
+        protected virtual void Die(NetworkObjectReference attackerRef)
         {
             Debug.Log("Enemy died");
 
             _isDead = true;
             if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete if when navmesh is implemented
+            _stateMachine.ChangeState(EnemyState.Dead);
 
             _enemyAnimation.PlayDeathAnimation();
 
             DropLoot();
 
-            // TODO: Grant experience to player when stats system is available.
+            if (attackerRef.TryGet(out NetworkObject attackerObj))
+            {
+                attackerObj.GetComponent<PlayerXP>()?.GainXP(_stats.experienceReward);
+            }
 
             StartCoroutine(DespawnRoutine());
         }
@@ -152,14 +183,70 @@ namespace Obrissom.Enemy
 
         //private float TotalLootWeight()
         //{
-            //TODO
+        //TODO
         //}
 
         //Patrol
 
-        protected void PatrolToNextPoint()
+        public void SetPatrolPoints(GameObject[] points)
         {
-            //TODO
+            _patrolPoints = points;
+        }
+        // Called once when entering Move state
+        public void MoveToNextPatrolPoint()
+        {
+            if (_patrolPoints == null || _patrolPoints.Length == 0) return;
+            if (_patrolPoints[_currentPatrolIndex] == null) return;
+
+            Vector3 destination = _patrolPoints[_currentPatrolIndex].transform.position;
+            Vector2 offset = Random.insideUnitCircle * _wanderRadius;
+            destination += new Vector3(offset.x, 0f, offset.y);
+
+            _agent.SetDestination(destination);
+        }
+
+        // Called from the eval loop — starts waypoint pause on arrival
+        public void CheckPatrolArrival()
+        {
+            if (_patrolPoints == null || _patrolPoints.Length == 0) return;
+            if (_isWaypointPausing) return;
+            if (_agent.pathPending || _agent.remainingDistance >= 0.5f) return;
+
+            _isWaypointPausing = true;
+            StartCoroutine(WaypointPauseRoutine());
+        }
+
+        private System.Collections.IEnumerator WaypointPauseRoutine()
+        {
+            _agent.isStopped = true;
+
+            int lookCount = Random.Range(1, 3);
+            for (int i = 0; i < lookCount; i++)
+            {
+                if (_stateMachine.CurrentState != EnemyState.Move) break;
+
+                Quaternion startRot = transform.rotation;
+                Quaternion targetRot = startRot * Quaternion.Euler(0f, Random.Range(-100f, 100f), 0f);
+                float elapsed = 0f;
+                float rotateDuration = 0.4f;
+
+                while (elapsed < rotateDuration)
+                {
+                    transform.rotation = Quaternion.Slerp(startRot, targetRot, elapsed / rotateDuration);
+                    elapsed += Time.deltaTime;
+                    yield return null;
+                }
+
+                yield return new WaitForSeconds(Random.Range(0.2f, _waypointPauseDuration));
+            }
+
+            _isWaypointPausing = false;
+
+            if (_stateMachine.CurrentState != EnemyState.Move) yield break;
+
+            _agent.isStopped = false;
+            _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
+            MoveToNextPatrolPoint();
         }
 
         //Abstract 

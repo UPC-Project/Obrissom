@@ -125,7 +125,6 @@ namespace Obrissom.Player
             _health.Value = Mathf.Max(Mathf.Round(_health.Value - finalDamage), 0f);
 
 
-            Debug.Log($"Player took {finalDamage} damage. Remaining health: {_health.Value}");
             if (_health.Value <= 0)
             {
                 Die();

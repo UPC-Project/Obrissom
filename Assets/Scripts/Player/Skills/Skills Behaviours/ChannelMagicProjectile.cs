@@ -1,14 +1,16 @@
+using Obrissom.Enemy;
 using Obrissom.Player;
 using Obrissom.UI;
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skills/Behaviours/Channel_Magic_Projectile")]
 public class ChannelMagicProjectile : SkillBehaviour
 {
-    [SerializeField] Vector3 initialPosition = new Vector3();
-    [SerializeField] float speed = 4;
-    [SerializeField] float lifeTime = 1.5f;
+    [SerializeField] Vector3 _initialPosition = new Vector3();
+    [SerializeField] float _speed = 4;
+    [SerializeField] float _lifeTime = 1.5f;
 
     private GameObject _crosshair;
 
@@ -33,31 +35,44 @@ public class ChannelMagicProjectile : SkillBehaviour
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
+        DPSCombat dpsCombat = caster.GetComponent<DPSCombat>();
+        Vector3 spawnPosition = caster.transform.TransformPoint(_initialPosition);
+        Vector3 directionToTarget = (targetPosition - spawnPosition).normalized;
+
+        // needed bc ChannelMagicProjectile inherits from SkillBehaviour, can't inherit NetworkBehaviour
+        dpsCombat.ChannelMagicProjectileServerRpc(spawnPosition, directionToTarget, skillData.minMagicDamage, skillData.maxMagicDamage, _speed, _lifeTime);
+    }
+
+    // called on dpsCombat
+    public static void ExecuteOnServer(GameObject caster, Vector3 spawnPosition, Vector3 directionToTarget, int minDamage, int maxDamage, float speed, float lifeTime)
+    {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
-        ProjectileTrigger trigger = MagicProjectilePool.Instance.Get(initialPosition);
+
+        ProjectileTrigger trigger = MagicProjectilePool.Instance.Get(spawnPosition);
         GameObject projectile = trigger.gameObject;
-        projectile.transform.position = caster.transform.TransformPoint(initialPosition);
-        Vector3 directionToTarget = (targetPosition - caster.transform.TransformPoint(initialPosition)).normalized;
-        float angleDown = Vector3.Angle(directionToTarget, Vector3.up) - 90f;
 
         projectile.SetActive(true);
 
-        Coroutine travel = playerCombat.StartCoroutine(SpellTravel(projectile, directionToTarget, trigger));
+        Coroutine travel = playerCombat.StartCoroutine(SpellTravel(projectile, directionToTarget, trigger, speed, lifeTime));
 
-        // OnHit will be called on projectile trigger
+        // OnHit will be called on ProjectileTrigger
         trigger.ClearSubscriptions();
         trigger.OnHit += (col) =>
         {
-            if (col.CompareTag("Enemy"))
+
+            if (col.transform.root.CompareTag("Enemy"))
             {
-                var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(skillData.minMagicDamage, skillData.maxMagicDamage);
-                col.GetComponent<TestEnemy>()?.TakeDamage(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position);
+                EnemyBase enemy = col.transform.root.GetComponent<EnemyBase>();
+                var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(minDamage, maxDamage);
+                NetworkObject netObj = caster.GetComponent<NetworkObject>();
+                enemy.TakeDamagRpc(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position, netObj);
             }
-                playerCombat.StopCoroutine(travel);
-                MagicProjectilePool.Instance.Return(trigger);
+            playerCombat.StopCoroutine(travel);
+            MagicProjectilePool.Instance.Return(trigger);
         };
     }
-    IEnumerator SpellTravel(GameObject projectile, Vector3 direction, ProjectileTrigger trigger)
+
+    private static IEnumerator SpellTravel(GameObject projectile, Vector3 direction, ProjectileTrigger trigger, float speed, float lifeTime)
     {
         float elapsed = 0f;
         while (elapsed < lifeTime)
