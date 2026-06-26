@@ -1,5 +1,4 @@
 ﻿using Obrissom.UI;
-using UnityEngine;
 
 public class MagicDamagePopUpPool : DamagePopUpPoolBase
 {
