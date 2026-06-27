@@ -13,6 +13,7 @@ namespace Obrissom.Player
         [SerializeField] private GameObject _playerCamera;
         private PlayerLocomotionInput _playerLocomotionInput;
         private PlayerStats _playerStats;
+        public Animator _animator;
 
         [Header("Movement")]
         public float walkAcceleration = 35f;
@@ -40,6 +41,8 @@ namespace Obrissom.Player
 
         private Vector2 _cameraRotation = Vector2.zero;
 
+
+
         #endregion
 
         private void Awake()
@@ -59,6 +62,8 @@ namespace Obrissom.Player
                             Vector3.down,
                             out RaycastHit hit,
                             _groundCheckDistance);
+
+            _animator.SetBool("isGrounded", _isGrounded);
         }
 
         private void Update()
@@ -127,6 +132,7 @@ namespace Obrissom.Player
             horizontal = Vector3.ClampMagnitude(horizontal, speed);
             _newVelocity.x = horizontal.x;
             _newVelocity.z = horizontal.z;
+            _animator.SetFloat("speed", speed);
         }
 
 
