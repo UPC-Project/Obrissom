@@ -104,6 +104,8 @@ namespace Obrissom.Player
 
             if (_cooldowns.TryGetValue(key, out float remaining) && remaining > 0f) return false;
 
+            if (!_playerCombat.TryConsumeResource(_activeSkills[key].cost)) return false;
+
             return true;
         }
 
