@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using static LevelUpRewards;
 
 namespace Obrissom.Player
 {
@@ -11,9 +12,11 @@ namespace Obrissom.Player
         [Range(1, 5)] public int currentLevel = 1;
 
         [Header("Components")]
+        [SerializeField] private LevelUpRewards _levelUpRewards; // Depends on Player Class
         private UI.LevelAndXPUI _XpUi;
         private PlayerSkills _playerSkills;
         private PlayerStats _playerStats;
+
 
         public override void OnNetworkSpawn()
         {
@@ -24,6 +27,9 @@ namespace Obrissom.Player
             _XpUi = UI.PlayerUIManager.Instance.GetLevelAndXPUI();
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
             _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
+
+            // Player intiialize always with basic skill unlocked
+            _playerSkills.UnlockSkill(_levelUpRewards.basicSkill);
         }
 
         public void GainXP(float amount)
@@ -53,23 +59,21 @@ namespace Obrissom.Player
             currentLevel++;
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
 
-            // Apply level up rewards
-            // TODO: change by class
-            LevelUpRewardsType rewards = LevelUpRewards.LevelRewardsDPS[currentLevel];
+            // Depends on player class and level
+            LevelUpRewards.LevelReward rewards = _levelUpRewards.rewards.Find(r => r.level == currentLevel);
             ApplyRewards(rewards);
         }
 
-        private void ApplyRewards(LevelUpRewardsType rewards)
+        private void ApplyRewards(LevelReward rewards)
         {
-            foreach (var stat in rewards.Stats)
+            foreach (var stat in rewards.stats)
             {
-                if (stat.Value.HasValue)
-                    _playerStats.AddStat(stat.Key, stat.Value.Value);
+                _playerStats.AddStat(stat.stat, stat.value);
             }
 
-            foreach (Skill skill in rewards.NewSkills)
+            if (rewards.newSkill != null)
             {
-                _playerSkills.UnlockSkill(skill);
+                _playerSkills.UnlockSkill(rewards.newSkill);
             }
         }
     }

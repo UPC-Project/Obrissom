@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3219722129
+  GlobalObjectIdHash: 4224576634
   InScenePlacedSourceGlobalObjectIdHash: 2680413552
   DeferredDespawnTick: 0
   Ownership: 1
@@ -409,6 +409,7 @@ MonoBehaviour:
   xp: 0
   xpNeeded: 0
   currentLevel: 1
+  _levelUpRewards: {fileID: 11400000, guid: c458902b1a04b564685908b6ed17d003, type: 2}
 --- !u!114 &8390341955805797419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,9 +482,6 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
-  _basicSkill: {fileID: 11400000, guid: 58d48b97dc295a342b0acc0f359e1ccb, type: 2}
-  _Skill1: {fileID: 11400000, guid: 035f57e7448670b48b9cc1e74cf0d1a7, type: 2}
-  _Skill2: {fileID: 11400000, guid: bd7309c4ff79ffa4b90fe37caf71b1c5, type: 2}
 --- !u!114 &7833150504254527750
 MonoBehaviour:
   m_ObjectHideFlags: 0

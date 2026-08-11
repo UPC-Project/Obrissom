@@ -12,13 +12,8 @@ namespace Obrissom.Player
         [Min(0)] public NetworkVariable<float> _resource = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
-        [Header("Player Skills")] // TODO: delete
-        [SerializeField] private Skill _basicSkill;
-        [SerializeField] private Skill _Skill1; // TODO: Will change (not hardcoded) -> gained by leveling up
-        [SerializeField] private Skill _Skill2; // TODO: Will change (not hardcoded) -> gained by leveling up
-
+        // Components
         private PlayerStats _playerStats;
-        private PlayerSkills _playerSkills;
         private UI.HealthAndResourceUI _healthAndResourceUI;
 
         private bool _isInvulnerable = false;
@@ -33,15 +28,10 @@ namespace Obrissom.Player
         private void Awake()
         {
             _playerStats = GetComponent<PlayerStats>();
-            _playerSkills = GetComponent<PlayerSkills>();
         }
+
         public override void OnNetworkSpawn()
         {
-            // Assign basic skill -> will change, what happen when player choose another button?
-            _playerSkills.AssignSkill(SkillKey.LB, _basicSkill);
-            _playerSkills.AssignSkill(SkillKey.ONE, _Skill1);
-            _playerSkills.AssignSkill(SkillKey.TWO, _Skill2);
-
             if (IsServer)
             {
                 _resource.Value = _playerStats.maxResource.Value;
