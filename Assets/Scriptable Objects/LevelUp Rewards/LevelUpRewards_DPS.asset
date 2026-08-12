@@ -20,12 +20,44 @@ MonoBehaviour:
     stats:
     - stat: 0
       value: 10
+    - stat: 2
+      value: 20
   - level: 3
     newSkill: {fileID: 11400000, guid: bd7309c4ff79ffa4b90fe37caf71b1c5, type: 2}
-    stats: []
+    stats:
+    - stat: 0
+      value: 10
+    - stat: 2
+      value: 20
+    - stat: 6
+      value: 1
+    - stat: 12
+      value: 0.1
+    - stat: 13
+      value: 0.25
   - level: 4
     newSkill: {fileID: 0}
-    stats: []
+    stats:
+    - stat: 0
+      value: 5
+    - stat: 2
+      value: 20
+    - stat: 8
+      value: 1
+    - stat: 12
+      value: 0.1
+    - stat: 3
+      value: 1
   - level: 5
     newSkill: {fileID: 0}
-    stats: []
+    stats:
+    - stat: 0
+      value: 5
+    - stat: 2
+      value: 40
+    - stat: 6
+      value: 1
+    - stat: 8
+      value: 2
+    - stat: 9
+      value: 0.2

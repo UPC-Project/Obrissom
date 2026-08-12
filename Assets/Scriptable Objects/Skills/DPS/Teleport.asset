@@ -15,14 +15,14 @@ MonoBehaviour:
   skillName: Teleport
   description: Aim your desired teleport position, once the key is released you will
     be teleported. \nYou are invulnerable while casting this skill (1s).
-  cooldownTime: 1
-  cost: 5
+  cooldownTime: 5
+  cost: 10
   castTime: 1
   minDamagePerSecond: 0
   maxDamagePerSecond: 0
   damagePerSecondTime: 0
   damagePerSecondType: 0
-  minEffectValue: 1
-  maxEffectValue: 1
-  effectType: 2
+  minEffectValue: 0
+  maxEffectValue: 0
+  effectType: 1
   behaviour: {fileID: 11400000, guid: 365d4b3b82a5be1418a15a9a4ae0b741, type: 2}
