@@ -12,6 +12,7 @@ namespace Obrissom.Player
         public bool RunToggledOn { get; private set; }
         public bool JumpPressed { get; private set; }
         public bool CameraPressed { get; private set; }
+
         public PlayerInput PlayerInput { get; private set; }
         public Vector2 MovementInput { get; private set; }
         
@@ -22,6 +23,9 @@ namespace Obrissom.Player
         [SerializeField] private CinemachineThirdPersonFollow _camera;
         public Vector2 LookInput { get; private set; }
         public Vector2 ScrollInput { get; private set; }
+
+        [Header("References")]
+        [SerializeField] private Animator _animator;
         #endregion
 
         private void OnEnable()
@@ -56,6 +60,9 @@ namespace Obrissom.Player
         public void OnMovement(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
             MovementInput = context.ReadValue<Vector2>();
+            Debug.Log($"OnMovement: phase={context.phase}, value={MovementInput}");
+            if (context.performed || context.started) _animator.SetBool("isMoving", true);
+            if (context.canceled) _animator.SetBool("isMoving", false);
         }
 
         public void OnToggleRun(UnityEngine.InputSystem.InputAction.CallbackContext context)
