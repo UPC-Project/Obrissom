@@ -47,10 +47,7 @@ namespace Obrissom.Player
                 xp += amount;
             }
 
-            // Update  UI
             _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
-
-
         }
 
         [ContextMenu("Level Up")]
