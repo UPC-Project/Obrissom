@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class EnemyTester : MonoBehaviour
 {
     [SerializeField] private float _testDamage = 25f;
-    [SerializeField] private DamageType _testDamageType = DamageType.PhysicDamage;
+    [SerializeField] private EffectType _testDamageType = EffectType.PhysicDamage;
 
     private void Update()
     {
@@ -23,7 +23,7 @@ public class EnemyTester : MonoBehaviour
         if (kb.kKey.wasPressedThisFrame)
         {
             EnemyTest activeEnemy = GetActiveEnemy();
-            activeEnemy.TakeDamagRpc(99999f, DamageType.PhysicDamage, false, activeEnemy.transform.position, netObj);
+            activeEnemy.TakeDamagRpc(99999f, EffectType.PhysicDamage, false, activeEnemy.transform.position, netObj);
         }
 
         // P: PerformAttack

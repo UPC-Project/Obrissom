@@ -100,13 +100,13 @@ namespace Obrissom.Player
             return true;
         }
 
-        public void TakeDamage(float damageAmount, DamageType damageType)
+        public void TakeDamage(float damageAmount, EffectType damageType)
         {
             if (_isInvulnerable) return;
 
             if (!IsServer) return;
 
-            float reduction = (damageType == DamageType.PhysicDamage) ? _playerStats.physicalDefense : _playerStats.magicDefense;
+            float reduction = (damageType == EffectType.PhysicDamage) ? _playerStats.physicalDefense : _playerStats.magicDefense;
             reduction = Mathf.Clamp(reduction, 0f, 0.99f);
 
             float finalDamage = damageAmount * (1 - reduction);

@@ -22,5 +22,4 @@ public class LevelUpRewards : ScriptableObject
         public Stats stat;
         public float value;
     }
-
 }

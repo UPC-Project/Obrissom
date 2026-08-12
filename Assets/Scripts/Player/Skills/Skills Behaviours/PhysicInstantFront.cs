@@ -12,7 +12,7 @@ public class PhysicInstantFront : SkillBehaviour
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         DPSCombat dpsCombat = caster.GetComponent<DPSCombat>();
-        dpsCombat.PhysicInstantFrontServerRpc(skillData.minPhysicDamage, skillData.maxPhysicDamage, range, angle);
+        dpsCombat.PhysicInstantFrontServerRpc(skillData.minEffectValue, skillData.maxEffectValue, range, angle);
     }
 
     // called on dpsCombat
@@ -35,7 +35,7 @@ public class PhysicInstantFront : SkillBehaviour
                 EnemyBase enemy = hit.transform.root.GetComponent<EnemyBase>();
                 var (physicDamage, isCriticPhysic) = playerCombat.CalculatePhysicalDamage(minDamage, maxDamage);
                 NetworkObject netObj = caster.GetComponent<NetworkObject>();
-                if (physicDamage != 0) enemy.TakeDamagRpc(physicDamage, DamageType.PhysicDamage, isCriticPhysic, hit.transform.position, netObj);
+                if (physicDamage != 0) enemy.TakeDamagRpc(physicDamage, EffectType.PhysicDamage, isCriticPhysic, hit.transform.position, netObj);
             }
         }
     }

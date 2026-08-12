@@ -1,3 +1,4 @@
+using Obrissom.UI;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -7,7 +8,7 @@ namespace Obrissom.Player
 {
     public class PlayerSkills : NetworkBehaviour
     {
-        [SerializeField] private Dictionary<SkillKey, Skill> _activeSkills = new Dictionary<SkillKey, Skill>();
+        [SerializeField] private readonly Dictionary<SkillKey, Skill> _activeSkills = new Dictionary<SkillKey, Skill>();
         [SerializeField] private static Skill _basicSkill;
 
         private Dictionary<SkillKey, float> _cooldowns = new Dictionary<SkillKey, float>();
@@ -16,8 +17,9 @@ namespace Obrissom.Player
 
         [SerializeField] private float _aimRotationSpeed = 4f;
 
+        // Components
         private PlayerCombat _playerCombat;
-        
+
 
         private void Start()
         {
@@ -61,6 +63,7 @@ namespace Obrissom.Player
             if (key == null) return;
           
             _activeSkills[key.Value] = skill;
+            PlayerUIManager.Instance.GetSkillsUI().OnSkillUnlocked(key.Value, skill);
         }
 
         private SkillKey? GetNextAvailableKey()

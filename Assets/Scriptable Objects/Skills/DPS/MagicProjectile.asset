@@ -17,13 +17,11 @@ MonoBehaviour:
   cooldownTime: 1
   cost: 2
   castTime: 0
-  damagePerSecond: 0
+  minDamagePerSecond: 0
+  maxDamagePerSecond: 0
   damagePerSecondTime: 0
   damagePerSecondType: 0
-  minPhysicDamage: 0
-  maxPhysicDamage: 0
-  minMagicDamage: 10
-  maxMagicDamage: 15
-  minHeal: 0
-  maxHeal: 0
+  minEffectValue: 10
+  maxEffectValue: 15
+  effectType: 1
   behaviour: {fileID: 11400000, guid: 22ab579740cc57c4dadad996563967fb, type: 2}

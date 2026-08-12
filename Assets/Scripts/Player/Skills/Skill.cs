@@ -10,21 +10,15 @@ public class Skill : ScriptableObject
     [Min(0), Tooltip("How long until player executes skill behaviour after skill activation")] public int castTime; // depends on the animation + preference
 
     [Header("Damage Per Second")]
-    [Min(0), Tooltip("If equal 0 then not applied")] public int damagePerSecond;
+    [Min(0), Tooltip("If equal 0 then not applied")] public int minDamagePerSecond;
+    [Min(0), Tooltip("If equal 0 then not applied")] public int maxDamagePerSecond;
     [Min(0), Tooltip("If equal 0 then not applied")] public int damagePerSecondTime;
-    public DamageType damagePerSecondType;
+    public EffectType damagePerSecondType;
 
-    [Header("Physical Damage")]
-    [Min(0)] public int minPhysicDamage;
-    [Min(0)] public int maxPhysicDamage;
-
-    [Header("Magic Damage")]
-    [Min(0)] public int minMagicDamage;
-    [Min(0)] public int maxMagicDamage;
-
-    [Header("Heal")]
-    [Min(0)] public int minHeal;
-    [Min(0)] public int maxHeal;
+    [Header("Physical Damage | Magic Damage | Heal - Value")]
+    [Min(0)] public int minEffectValue;
+    [Min(0)] public int maxEffectValue;
+    public EffectType effectType;
 
     public SkillBehaviour behaviour;
 }

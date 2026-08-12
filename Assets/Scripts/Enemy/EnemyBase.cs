@@ -123,11 +123,11 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamagRpc(float rawAmount, DamageType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
+        public virtual void TakeDamagRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
         {
             if (!IsServer || _isDead) return;
 
-            float reduction = type == DamageType.PhysicDamage
+            float reduction = type == EffectType.PhysicDamage
                 ? _stats.physicalDefense
                 : _stats.magicDefense;
 

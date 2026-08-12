@@ -18,7 +18,7 @@ namespace Obrissom.Enemy
         [Min(0f)] public float chaseRange = 10f;
 
         [Header("Combat")]
-        public DamageType damageType = DamageType.PhysicDamage;
+        public EffectType damageType = EffectType.PhysicDamage;
         [Min(0f)] public float minAttackDamage = 8f;
         [Min(0f)] public float maxAttackDamage = 15f;
         [Min(0f)] public float attackRange = 1.5f;
