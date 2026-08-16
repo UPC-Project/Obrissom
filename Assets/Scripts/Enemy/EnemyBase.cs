@@ -123,7 +123,7 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamagRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
+        public virtual void TakeDamageRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
         {
             if (!IsServer || _isDead) return;
 
@@ -134,6 +134,7 @@ namespace Obrissom.Enemy
             float finalDamage = Mathf.Round(rawAmount * (1f - reduction));
             _currentHealth = Mathf.Max(_currentHealth - finalDamage, 0f);
 
+            Debug.Log($"take damage {finalDamage}");
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
 
@@ -156,8 +157,6 @@ namespace Obrissom.Enemy
 
         protected virtual void Die(NetworkObjectReference attackerRef)
         {
-            Debug.Log("Enemy died");
-
             _isDead = true;
             if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete if when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);

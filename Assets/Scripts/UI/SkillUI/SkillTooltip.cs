@@ -44,9 +44,9 @@ namespace Obrissom.UI
 
             _effectNames = new Dictionary<EffectType, string>
                 {
-                    { EffectType.PhysicDamage, "Physical Damage: " },
-                    { EffectType.MagicDamage, "Magic Damage: " },
-                    { EffectType.Heal, "Heal: "},
+                    { EffectType.PhysicDamage, "Physical Damage" },
+                    { EffectType.MagicDamage, "Magic Damage" },
+                    { EffectType.Heal, "Heal"},
                 };
 
             _effectColors = new Dictionary<EffectType, Color>
@@ -71,7 +71,7 @@ namespace Obrissom.UI
 
         public void ShowTooltip(Skill skill, SkillKey key)
         {
-            _skillName.text = skill.name;
+            _skillName.text = skill.skillName;
             _skillKey.text = "[" + _keyNames[key] + "]";
 
             _skillCost.text = (skill.cost == 0) ? "No cost" : skill.cost.ToString()+ " Mana";
@@ -81,9 +81,9 @@ namespace Obrissom.UI
 
             _skillValue.color = _effectColors[skill.effectType];
 
-            if (skill.minEffectValue != 0) _skillValue.text = _effectNames[skill.effectType] + skill.minEffectValue + " - " + skill.maxEffectValue;
+            if (skill.minEffectValue != 0) _skillValue.text = _effectNames[skill.effectType] + ": " + skill.minEffectValue + " - " + skill.maxEffectValue;
 
-            if (skill.minDamagePerSecond != 0) _skillValue.text += " | per second: " + skill.minEffectValue + " - " + skill.maxDamagePerSecond + " (" + skill.damagePerSecondTime + "s)";
+            if (skill.minDamagePerSecond != 0) _skillValue.text += " |\n"+ _effectNames[skill.damagePerSecondType] + " per second: " + skill.minEffectValue + " - " + skill.maxDamagePerSecond + " (" + skill.damagePerSecondTime + "s)";
 
             gameObject.transform.GetChild(0).gameObject.SetActive(true);
         }

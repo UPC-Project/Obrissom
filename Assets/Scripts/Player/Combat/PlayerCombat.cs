@@ -7,10 +7,10 @@ namespace Obrissom.Player
     {
         #region
         [Header("Actual health and resource")]
-        [Min(0)] public NetworkVariable<float> _health = new NetworkVariable<float>(
-            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [Min(0)] public NetworkVariable<float> _resource = new NetworkVariable<float>(
-            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
+        [Min(0)] public NetworkVariable<float> _health = 
+            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [Min(0)] public NetworkVariable<float> _resource = 
+            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
         // Components
         private PlayerStats _playerStats;
