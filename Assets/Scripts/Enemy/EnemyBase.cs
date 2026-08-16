@@ -134,7 +134,6 @@ namespace Obrissom.Enemy
             float finalDamage = Mathf.Round(rawAmount * (1f - reduction));
             _currentHealth = Mathf.Max(_currentHealth - finalDamage, 0f);
 
-            Debug.Log($"take damage {finalDamage}");
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
 

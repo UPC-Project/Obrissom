@@ -59,7 +59,7 @@ namespace Obrissom.UI
 
         void Update()
         {
-            if (gameObject.activeSelf)
+            if (gameObject.transform.GetChild(0).gameObject.activeSelf)
             {
                 Vector2 movePos;
 
