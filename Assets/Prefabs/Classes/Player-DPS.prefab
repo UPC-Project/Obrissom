@@ -325,15 +325,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 138.79608
+      value: -19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 50.00511
+      value: 0.0000011653992
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 412.566
+      value: -8.727269
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -519,8 +519,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2930922969
-  InScenePlacedSourceGlobalObjectIdHash: 2680413552
+  GlobalObjectIdHash: 692416681
+  InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -611,12 +611,12 @@ MonoBehaviour:
   _characterController: {fileID: 4429090432437743327}
   _playerCamera: {fileID: 8731666165654523343}
   _animator: {fileID: 6905059756194858455}
-  walkAcceleration: 20
-  walkSpeed: 3
+  walkAcceleration: 30
+  walkSpeed: 5
   runAcceleration: 50
-  runSpeed: 7
+  runSpeed: 8
   airAcceleration: 6
-  drag: 15
+  drag: 22
   jumpSpeed: 1
   playerRotationSpeed: 1
   _gravity: 20
@@ -674,6 +674,7 @@ MonoBehaviour:
   xp: 0
   xpNeeded: 0
   currentLevel: 1
+  _levelUpRewards: {fileID: 11400000, guid: c458902b1a04b564685908b6ed17d003, type: 2}
 --- !u!114 &4880662063949846932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,9 +747,6 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
-  _basicSkill: {fileID: 11400000, guid: 58d48b97dc295a342b0acc0f359e1ccb, type: 2}
-  _Skill1: {fileID: 11400000, guid: 035f57e7448670b48b9cc1e74cf0d1a7, type: 2}
-  _Skill2: {fileID: 11400000, guid: bd7309c4ff79ffa4b90fe37caf71b1c5, type: 2}
 --- !u!114 &1811501453391520490
 MonoBehaviour:
   m_ObjectHideFlags: 0

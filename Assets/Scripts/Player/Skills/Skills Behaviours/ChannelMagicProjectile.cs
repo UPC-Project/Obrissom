@@ -40,7 +40,7 @@ public class ChannelMagicProjectile : SkillBehaviour
         Vector3 directionToTarget = (targetPosition - spawnPosition).normalized;
 
         // needed bc ChannelMagicProjectile inherits from SkillBehaviour, can't inherit NetworkBehaviour
-        dpsCombat.ChannelMagicProjectileServerRpc(spawnPosition, directionToTarget, skillData.minMagicDamage, skillData.maxMagicDamage, _speed, _lifeTime);
+        dpsCombat.ChannelMagicProjectileServerRpc(spawnPosition, directionToTarget, skillData.minEffectValue, skillData.maxEffectValue, _speed, _lifeTime);
     }
 
     // called on dpsCombat
@@ -65,7 +65,7 @@ public class ChannelMagicProjectile : SkillBehaviour
                 EnemyBase enemy = col.transform.root.GetComponent<EnemyBase>();
                 var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(minDamage, maxDamage);
                 NetworkObject netObj = caster.GetComponent<NetworkObject>();
-                enemy.TakeDamagRpc(magicDamage, DamageType.MagicDamage, isCritic, col.transform.position, netObj);
+                enemy.TakeDamagRpc(magicDamage, EffectType.MagicDamage, isCritic, col.transform.position, netObj);
             }
             playerCombat.StopCoroutine(travel);
             MagicProjectilePool.Instance.Return(trigger);

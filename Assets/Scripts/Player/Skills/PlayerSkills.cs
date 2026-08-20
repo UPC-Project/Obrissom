@@ -1,3 +1,4 @@
+using Obrissom.UI;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -7,14 +8,18 @@ namespace Obrissom.Player
 {
     public class PlayerSkills : NetworkBehaviour
     {
-        [SerializeField] private Dictionary<SkillKey, Skill> _activeSkills = new Dictionary<SkillKey, Skill>();
+        [SerializeField] private readonly Dictionary<SkillKey, Skill> _activeSkills = new Dictionary<SkillKey, Skill>();
+        [SerializeField] private static Skill _basicSkill;
+
         private Dictionary<SkillKey, float> _cooldowns = new Dictionary<SkillKey, float>();
+
         private Skill _activeSkill = null;
-        public bool IsUsingSkill => _activeSkill != null;
 
         [SerializeField] private float _aimRotationSpeed = 4f;
 
+        // Components
         private PlayerCombat _playerCombat;
+
 
         private void Start()
         {
@@ -22,7 +27,7 @@ namespace Obrissom.Player
         }
 
         public override void OnNetworkSpawn()
-        {
+        { 
             if (!IsOwner) return;
             UI.PlayerUIManager.Instance.RegisterPlayer(this);
         }
@@ -54,12 +59,18 @@ namespace Obrissom.Player
 
         public void UnlockSkill(Skill skill)
         {
-            // TODO
+            SkillKey? key = GetNextAvailableKey();
+            if (key == null) return;
+          
+            _activeSkills[key.Value] = skill;
+            PlayerUIManager.Instance.GetSkillsUI().OnSkillUnlocked(key.Value, skill);
         }
 
-        public void AssignSkill(SkillKey key, Skill skill)
+        private SkillKey? GetNextAvailableKey()
         {
-            _activeSkills[key] = skill;
+            foreach (SkillKey key in System.Enum.GetValues(typeof(SkillKey)))
+                if (!_activeSkills.ContainsKey(key)) return key;
+            return null;
         }
 
         public void OnSkillPressed(SkillKey key)

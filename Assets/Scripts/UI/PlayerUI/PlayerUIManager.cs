@@ -13,6 +13,7 @@ namespace Obrissom.UI
         [SerializeField] private SkillCooldownUI _skillCooldownUI;
         [SerializeField] private HealthAndResourceUI _healthAndResourceUI;
         [SerializeField] private InventoryManager _inventoryManager;
+        [SerializeField] private SkillsUI _skillsUI;
 
         private void Awake()
         {
@@ -28,6 +29,7 @@ namespace Obrissom.UI
         public LevelAndXPUI GetLevelAndXPUI() => _levelAndXPUI;
         public PlayerMenu GetPlayerMenu() => _playerMenu;
         public HealthAndResourceUI GetHealthAndResourceUI() => _healthAndResourceUI;
+        public SkillsUI GetSkillsUI() => _skillsUI;
 
         public void RegisterPlayer(PlayerSkills playerSkills)
         {

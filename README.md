@@ -4,13 +4,25 @@ Obrissom is a 3D multiplayer online RPG made in Unity.<br>
 
 > Life upon the ancient continent of Obrissom was forever changed when an age-old plague was unleashed, corrupting the souls of the many. Yet, all is not lost: take on the form (incarnate) of extravagant beings, alone or alongside allies, to wage the final great battle.
 
-## 🎮 Controls (for now 😉)
+## 🎮 Controls
 
 - **WASD** → Move
 - **Space** → Jump
 - **Left Shift** → Run
 - **Right Mouse Button** → Rotate camera
-- **Scroll Wheel** → Zoom
+- **Scroll Wheel** → Zoom camera
+
+<br>
+
+- **I** → Open Inventory
+
+<br>
+
+- **Skill 0 (basic)** → Mouse left button
+- **Skill 1** → 1
+- **Skill 2** → 2
+- **Skill 3** → 3
+- **Skill 4** → 4
 
 ## 🚧 Built With
 

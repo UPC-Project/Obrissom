@@ -60,7 +60,6 @@ namespace Obrissom.Player
         public void OnMovement(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
             MovementInput = context.ReadValue<Vector2>();
-            Debug.Log($"OnMovement: phase={context.phase}, value={MovementInput}");
             if (context.performed || context.started) _animator.SetBool("isMoving", true);
             if (context.canceled) _animator.SetBool("isMoving", false);
         }

@@ -13,17 +13,16 @@ MonoBehaviour:
   m_Name: Teleport
   m_EditorClassIdentifier: Assembly-CSharp::Skill
   skillName: Teleport
-  description: 
-  cooldownTime: 1
-  cost: 5
+  description: Aim your desired teleport position, once the key is released you will
+    be teleported. \nYou are invulnerable while casting this skill (1s).
+  cooldownTime: 5
+  cost: 10
   castTime: 1
-  damagePerSecond: 0
+  minDamagePerSecond: 0
+  maxDamagePerSecond: 0
   damagePerSecondTime: 0
   damagePerSecondType: 0
-  minPhysicDamage: 0
-  maxPhysicDamage: 0
-  minMagicDamage: 0
-  maxMagicDamage: 0
-  minHeal: 0
-  maxHeal: 0
+  minEffectValue: 0
+  maxEffectValue: 0
+  effectType: 1
   behaviour: {fileID: 11400000, guid: 365d4b3b82a5be1418a15a9a4ae0b741, type: 2}
