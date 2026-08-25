@@ -10,6 +10,7 @@ namespace Obrissom.Player
         private PlayerSkills _playerSkills;
         private PlayerInput _playerInput;
         private NetworkObject _networkObject;
+        public Animator _animator;
 
         private bool IsOwner => _networkObject != null && _networkObject.IsOwner;
 
@@ -34,8 +35,18 @@ namespace Obrissom.Player
         public void OnBasic(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
-            if (context.performed) _playerSkills.OnSkillPressed(SkillKey.LB);
-            if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.LB);
+            if (context.performed) 
+            {
+                _playerSkills.OnSkillPressed(SkillKey.LB);
+                _animator.SetTrigger("melee");
+            }
+
+            if (context.canceled) 
+            {
+                _playerSkills.OnSkillReleased(SkillKey.LB);
+                _animator.ResetTrigger("melee");
+            }
+            
         }
 
         public void OnSkill1(InputAction.CallbackContext context)
