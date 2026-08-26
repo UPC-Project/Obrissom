@@ -35,7 +35,7 @@ Obrissom is a 3D multiplayer online RPG made in Unity.<br>
 - [Fernando García 🎨](https://www.behance.net/fernandogarca27) - Artist
 - [Melina Morales 💻](https://github.com/Paaprikaa) - Lead Developer
 - [Fabian Suarez 💻](https://github.com/FabCrp17) - Developer
-- [Gino Prado 📝🎵](https://github.com/GinoPrado4) - Productor, game designer, and music/sound producer
+- [Gino Prado 📝🎵](https://github.com/GinoPrado4) - Producer, game designer, and music/sound producer
 
 ## 📜 License
 
