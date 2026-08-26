@@ -76,7 +76,7 @@ public class Teleport : SkillBehaviour
         }
     }
 
-    public override void OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
+    public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         GameObject tpIndicator = GetTpIndicator();
         Vector3 destination = tpIndicator.transform.position;
@@ -84,15 +84,26 @@ public class Teleport : SkillBehaviour
 
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
         playerCombat.StartCoroutine(CastTeleport(caster, playerCombat, destination, skillData.castTime));
+        return true;
     }
 
     private IEnumerator CastTeleport(GameObject caster, PlayerCombat playerCombat, Vector3 destination, float castTime)
     {
         playerCombat.SetInvulnerable(true);
         // TODO: trigger casting animation
+        // TODO: in a future don't block camera movement
         Debug.Log("casting tp...");
-
+        PlayerLocomotionInput locomotionInput = caster.GetComponent<PlayerLocomotionInput>();
+        PlayerCombatInput combatInput = caster.GetComponent<PlayerCombatInput>();
+        PlayerController playerController = caster.GetComponent<PlayerController>();
+        locomotionInput.enabled = false;
+        combatInput.enabled = false;
+        playerController.enabled = false;
+        caster.GetComponent<CharacterController>().enabled = false;
         yield return new WaitForSeconds(castTime);
+        locomotionInput.enabled = true;
+        combatInput.enabled = true;
+        playerController.enabled = true;
 
         caster.GetComponent<CharacterController>().enabled = false;
 
@@ -106,9 +117,8 @@ public class Teleport : SkillBehaviour
         }
 
         caster.GetComponent<CharacterController>().enabled = true;
-        Debug.Log("tp casted");
-
         playerCombat.SetInvulnerable(false);
+        Debug.Log("tp casted");
     }
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition) { }
