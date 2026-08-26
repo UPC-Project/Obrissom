@@ -65,7 +65,7 @@ public class ChannelMagicProjectile : SkillBehaviour
                 EnemyBase enemy = col.transform.root.GetComponent<EnemyBase>();
                 var (magicDamage, isCritic) = playerCombat.CalculateMagicDamage(minDamage, maxDamage);
                 NetworkObject netObj = caster.GetComponent<NetworkObject>();
-                enemy.TakeDamagRpc(magicDamage, EffectType.MagicDamage, isCritic, col.transform.position, netObj);
+                enemy.TakeDamageRpc(magicDamage, EffectType.MagicDamage, isCritic, col.transform.position, netObj);
             }
             playerCombat.StopCoroutine(travel);
             MagicProjectilePool.Instance.Return(trigger);

@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class TestEnemy : NetworkBehaviour
+public class EnemyDummy : NetworkBehaviour
 {
     public void TakeDamage(float damageAmount, EffectType damageType, bool isCritic, Vector3 hitPos)
     {
