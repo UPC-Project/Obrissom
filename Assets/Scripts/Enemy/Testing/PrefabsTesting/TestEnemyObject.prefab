@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 7429884975227316973}
   - component: {fileID: 7204921535387506599}
   - component: {fileID: 2126889100660741177}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TestEnemyObject
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2589124594
+  GlobalObjectIdHash: 4058286126
   InScenePlacedSourceGlobalObjectIdHash: 4058286126
   DeferredDespawnTick: 0
   Ownership: 1
@@ -319,7 +319,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f9be8a99733104687042da62bb4617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyUI
-  _HealthBar: {fileID: 1334921167658751869}
+  ShowTopMostFoldoutHeaderGroup: 1
+  _healthBarImage: {fileID: 1334921167658751869}
+  _healthBar: {fileID: 3099778861994576263}
 --- !u!1 &3099778861994576263
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +339,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6086512742938722995
 RectTransform:
   m_ObjectHideFlags: 0
@@ -598,7 +600,7 @@ GameObject:
   - component: {fileID: 4016256174135998554}
   - component: {fileID: 7748886693605283622}
   - component: {fileID: 3074360510366971199}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
