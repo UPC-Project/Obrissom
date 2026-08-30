@@ -26,11 +26,12 @@ public class ChannelMagicProjectile : SkillBehaviour
         crosshair.SetActive(true);
     }
 
-    public override void OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
+    public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         GameObject crosshair = GetCrosshair();
         crosshair.SetActive(false);
         Execute(caster, skillData, targetPosition);
+        return true;
     }
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)

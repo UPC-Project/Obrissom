@@ -12,7 +12,6 @@ namespace Obrissom.Player
         [SerializeField] private static Skill _basicSkill;
 
         private Dictionary<SkillKey, float> _cooldowns = new Dictionary<SkillKey, float>();
-
         private Skill _activeSkill = null;
 
         [SerializeField] private float _aimRotationSpeed = 4f;
@@ -27,7 +26,7 @@ namespace Obrissom.Player
         }
 
         public override void OnNetworkSpawn()
-        { 
+        {
             if (!IsOwner) return;
             UI.PlayerUIManager.Instance.RegisterPlayer(this);
         }
@@ -61,7 +60,7 @@ namespace Obrissom.Player
         {
             SkillKey? key = GetNextAvailableKey();
             if (key == null) return;
-          
+
             _activeSkills[key.Value] = skill;
             PlayerUIManager.Instance.GetSkillsUI().OnSkillUnlocked(key.Value, skill);
         }
@@ -95,15 +94,21 @@ namespace Obrissom.Player
         public void OnSkillReleased(SkillKey key)
         {
             if (!CanReleaseSkill(key)) return;
+            bool skillExecuted = false;
             if (_activeSkill.behaviour.castType == CastType.Hold)
             {
                 Vector3 aimPosition = _playerCombat.GetAimPosition();
-                _cooldowns[key] = _activeSkill.cooldownTime;
-                _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, aimPosition);
+                skillExecuted = _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, aimPosition);
             }
             else
             {
-                _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, Vector3.zero);
+                skillExecuted = _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, Vector3.zero);
+            }
+
+            if (skillExecuted)
+            {
+                _cooldowns[key] = _activeSkill.cooldownTime;
+                _playerCombat.TryConsumeResource(_activeSkills[key].cost);
             }
             _activeSkill = null;
         }
@@ -115,7 +120,7 @@ namespace Obrissom.Player
 
             if (_cooldowns.TryGetValue(key, out float remaining) && remaining > 0f) return false;
 
-            if (!_playerCombat.TryConsumeResource(_activeSkills[key].cost)) return false;
+            if (!_playerCombat.TryConsumeResource(_activeSkills[key].cost, false)) return false;
 
             return true;
         }

@@ -428,7 +428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.1254902, g: 0.50980395, b: 0.1254902, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -841,7 +841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1509,7 +1509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2876,6 +2876,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9033949723384909029}
     m_Modifications:
+    - target: {fileID: 1768748034098164453, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4726727498289102308, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3018,6 +3022,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1768748034098164453, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
       propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1768748034098164453, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4726727498289102308, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
@@ -3977,6 +3985,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9033949723384909029}
     m_Modifications:
+    - target: {fileID: 1768748034098164453, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4726727498289102308, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4117,6 +4129,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9033949723384909029}
     m_Modifications:
+    - target: {fileID: 1768748034098164453, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4726727498289102308, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4257,6 +4273,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9033949723384909029}
     m_Modifications:
+    - target: {fileID: 1768748034098164453, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4726727498289102308, guid: 9a3e41ad58feb874d93429cc0402efc1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

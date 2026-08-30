@@ -26,14 +26,17 @@ namespace Obrissom.Player
 
         [Header("References")]
         [SerializeField] private Animator _animator;
+
+        private void Awake()
+        {
+            PlayerInput = new PlayerInput();
+            PlayerInput.Enable();
+        }
         #endregion
 
         private void OnEnable()
         {
             RunToggledOn = false;
-
-            PlayerInput = new PlayerInput();
-            PlayerInput.Enable();
 
             PlayerInput.PlayerLocomotionMap.Enable();
             PlayerInput.PlayerLocomotionMap.SetCallbacks(this);

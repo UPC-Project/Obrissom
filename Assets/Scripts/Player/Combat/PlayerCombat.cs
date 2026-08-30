@@ -24,7 +24,6 @@ namespace Obrissom.Player
         // for example current health, level, bufs, skills available, etc
         // Should be saved in a file. --> Make save system
 
-
         private void Awake()
         {
             _playerStats = GetComponent<PlayerStats>();
@@ -88,11 +87,11 @@ namespace Obrissom.Player
 
         public void SetInvulnerable(bool value) => _isInvulnerable = value;
 
-        public bool TryConsumeResource(int cost)
+        public bool TryConsumeResource(int cost, bool consume = true)
         {
             if (_resource.Value < cost) return false;
 
-            if (IsServer)
+            if (IsServer && consume)
             {
                 _resource.Value -= cost;
             }
