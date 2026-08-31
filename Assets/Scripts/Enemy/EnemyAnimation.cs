@@ -5,36 +5,30 @@ namespace Obrissom.Enemy
 {
     public class EnemyAnimation : MonoBehaviour
     {
-        [SerializeField] private Animator _animator;
+        [SerializeField] protected Animator _animator;
 
-        private NavMeshAgent _agent;
+        protected NavMeshAgent _agent;
 
-        private static readonly int AnimSpeed = Animator.StringToHash("Speed");
-        private static readonly int AnimAttack = Animator.StringToHash("Attack");
-        private static readonly int AnimHit = Animator.StringToHash("Hit");
-        private static readonly int AnimDead = Animator.StringToHash("Dead");
-
-        private void Awake()
+        protected virtual void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
-            // TODO: Uncomment when animations are ready.
-            // UpdateMovementAnimation();
+            UpdateMovementAnimation();
         }
 
-        public void PlayAttackAnimation(){}
+        public virtual void PlayAttackAnimation() { }
 
-        public void PlayHitAnimation(){}
+        public virtual void PlayHitAnimation() { }
 
-        public void PlayDeathAnimation(){}
+        public virtual void PlayDeathAnimation() { }
 
         private void UpdateMovementAnimation()
         {
             if (_animator == null || _agent == null) return;
-            _animator.SetFloat(AnimSpeed, _agent.velocity.magnitude);
+            _animator.SetFloat("Speed", _agent.velocity.magnitude);
         }
     }
 }
