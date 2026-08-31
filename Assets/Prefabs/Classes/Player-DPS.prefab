@@ -422,6 +422,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2723300803498060743}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8763008768526672257}
   m_SourcePrefab: {fileID: 100100000, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
 --- !u!4 &2831262454944336587 stripped
 Transform:
@@ -790,3 +793,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.Inventory.Inventory
   _inventorySize: 24
   _slots: []
+--- !u!114 &-8763008768526672257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170950436608528497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b8b21ffc2bf3d42b05324a20afb9ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.EnemyHealthBarScanner
+  ShowTopMostFoldoutHeaderGroup: 1
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  _scanRadius: 20
+  _scanInterval: 0.2

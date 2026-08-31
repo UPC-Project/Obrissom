@@ -73,7 +73,7 @@ namespace Obrissom.Enemy
 
             _stateMachine.Initialize(this, _agent);
 
-            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
+            _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
         }
 
         protected virtual void Update()
@@ -137,7 +137,7 @@ namespace Obrissom.Enemy
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
 
-            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
+            _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
             if (_currentHealth <= 0f)
             {

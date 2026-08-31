@@ -1,12 +1,20 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyUI : MonoBehaviour
+public class EnemyUI : NetworkBehaviour
 {
-    [SerializeField] Image _HealthBar;
+    [SerializeField] Image _healthBarImage;
+    [SerializeField] GameObject _healthBar;
 
-    public void UpdateHealthUI(float amount, float maxHealth)
+    [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
+    public void UpdateHealthUIRpc(float amount, float maxHealth)
     {
-        _HealthBar.fillAmount = amount / maxHealth;
+        _healthBarImage.fillAmount = amount / maxHealth;
+    }
+
+    public void SetHealthBarActive(bool isActive)
+    {
+        _healthBar.SetActive(isActive);
     }
 }
