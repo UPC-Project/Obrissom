@@ -21,7 +21,7 @@ namespace Obrissom.Enemy
 
         public virtual void PlayAttackAnimation() { }
 
-        public virtual void PlayHitAnimation() { }
+        public virtual void PlayTakeDamageAnimation() { }
 
         public virtual void PlayDeathAnimation() { }
 

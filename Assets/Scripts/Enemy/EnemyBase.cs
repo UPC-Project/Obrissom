@@ -150,7 +150,7 @@ namespace Obrissom.Enemy
                 return;
             }
 
-            _enemyAnimation.PlayHitAnimation();
+            _enemyAnimation.PlayTakeDamageAnimation();
         }
 
         protected virtual void OnTakeDamage(float rawAmount) { }

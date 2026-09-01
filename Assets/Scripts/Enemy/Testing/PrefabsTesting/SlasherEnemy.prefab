@@ -100,7 +100,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9179454539859763115}
   - component: {fileID: 419584466639107924}
-  - component: {fileID: 1081649103196606764}
   - component: {fileID: 8623179839058761942}
   - component: {fileID: 6675119222346075416}
   - component: {fileID: -3048245245344256436}
@@ -108,6 +107,8 @@ GameObject:
   - component: {fileID: 7204921535387506599}
   - component: {fileID: 2126889100660741177}
   - component: {fileID: -126708325178450285}
+  - component: {fileID: 6243756656093538191}
+  - component: {fileID: -5420203068353484095}
   m_Layer: 8
   m_Name: SlasherEnemy
   m_TagString: Enemy
@@ -155,19 +156,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1081649103196606764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2605654337382071770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62cc0dc0ddf84de4f938ce608e525141, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.EnemyAnimation
-  _animator: {fileID: 0}
 --- !u!114 &8623179839058761942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +311,41 @@ MonoBehaviour:
   _wanderRadius: 1.5
   _slasherConfig: {fileID: 11400000, guid: 1c6f622cc4fe48d49822282c751fdc6f, type: 2}
   _shieldVfx: {fileID: 7726995240287807217}
+--- !u!95 &6243756656093538191
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2605654337382071770}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9438140a441330f499711c1bcacffe1d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-5420203068353484095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2605654337382071770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5b0d998b4f91d47ac1d997e4c5dd15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.SlasherAnimation
+  _animator: {fileID: 6243756656093538191}
 --- !u!1 &3099778861994576263
 GameObject:
   m_ObjectHideFlags: 0
