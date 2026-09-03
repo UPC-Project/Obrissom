@@ -34,6 +34,24 @@ namespace Obrissom.Player
 
         public void GainXP(float amount)
         {
+            if (IsServer && !IsOwner)
+            {
+                GainXPClientRpc(amount);
+            }
+            else
+            {
+                ApplyXPLocally(amount);
+            }
+        }
+
+        [Rpc(SendTo.Owner)]
+        private void GainXPClientRpc(float amount)
+        {
+            ApplyXPLocally(amount);
+        }
+
+        private void ApplyXPLocally(float amount)
+        {
             if (!IsOwner || currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
 
             if (xp + amount >= xpNeeded)

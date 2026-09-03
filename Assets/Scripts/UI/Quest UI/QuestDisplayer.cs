@@ -116,7 +116,7 @@ namespace Obrissom.UI
                 sb.AppendLine($"<color=green>{template.reward.experienceReward} XP</color>");
             }
 
-            if (template.reward.items != null)
+            if (template.reward.items.Count() >0)
             {
                 sb.AppendLine($"\nItems:");
                 foreach (ItemReward reward in template.reward.items)
@@ -136,7 +136,7 @@ namespace Obrissom.UI
             StringBuilder sb = new();
 
             sb.AppendLine($"To accept this quest, you should reach level {template.requiredLevel}");
-            if (template.requiredQuests != null | template.requiredQuests.Count() != 0)
+            if (template.requiredQuests.Count() != 0)
             {
                 sb.AppendLine(" and complete the following quests:");
 

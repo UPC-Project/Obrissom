@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
   questId: T-01
   title: Test Quest Kill
-  offerDescription: Kill a TestEnemy
+  offerDescription: Kill 2 TestEnemy
   completedDescription: Everything working right! Enemy killed registered
   type: 0
   isShared: 1
-  requiredLevel: 1
+  requiredLevel: 2
   requiredQuests: []
   questGiver: T-01
   questReceiver: T-01
@@ -26,7 +26,7 @@ MonoBehaviour:
     type: 0
     enemyTargets:
     - enemy: {fileID: 11400000, guid: 0a89486b3b82fb3478d5d99f2ddc4260, type: 2}
-      amount: 1
+      amount: 2
     itemTargets: []
     targetNPC: 
   reward:

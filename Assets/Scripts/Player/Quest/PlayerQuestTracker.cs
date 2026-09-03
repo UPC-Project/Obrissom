@@ -4,6 +4,7 @@ using Obrissom.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 using PlayerInventory = Obrissom.Player.Inventory.Inventory;
 
 public struct RequirementCheckResult
@@ -15,7 +16,7 @@ public struct RequirementCheckResult
 
 /// Manages active and completed quests.
 /// Tracks objective progress and delegates shared quest updates to QuestManager.
-public class PlayerQuestTracker : MonoBehaviour
+public class PlayerQuestTracker : NetworkBehaviour
 {
     [SerializeField] private PlayerInventory _inventory;
     [SerializeField] private PlayerXP _playerXP;
@@ -35,8 +36,10 @@ public class PlayerQuestTracker : MonoBehaviour
         if (_playerXP == null) _playerXP = GetComponent<PlayerXP>();
     }
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
+
         if (QuestManager.Instance != null)
             QuestManager.Instance.RegisterLocalTracker(this);
 
@@ -49,6 +52,21 @@ public class PlayerQuestTracker : MonoBehaviour
     /// Accepts a quest and creates a QuestInstance.
     /// If the quest is shared, registers it with QuestManager.
     public void AcceptQuest(QuestTemplate template)
+    {
+        if (template == null) return;
+        if (HasActiveQuest(template) || HasCompletedQuest(template)) return;
+
+        if (template.isShared && QuestManager.Instance != null)
+        {
+            QuestManager.Instance.ShareAcceptQuest(template.questId);
+        }
+        else
+        {
+            AcceptQuestLocally(template);
+        }
+    }
+
+    public void AcceptQuestLocally(QuestTemplate template)
     {
         if (template == null) return;
         if (HasActiveQuest(template) || HasCompletedQuest(template)) return;
@@ -72,6 +90,21 @@ public class PlayerQuestTracker : MonoBehaviour
         if (instance == null) return;
         if (!instance.IsObjectiveComplete(_inventory)) return;
 
+        if (template.isShared && QuestManager.Instance != null)
+        {
+            QuestManager.Instance.ShareCompleteQuest(template.questId);
+        }
+        else
+        {
+            CompleteQuestLocally(template);
+        }
+    }
+
+    public void CompleteQuestLocally(QuestTemplate template)
+    {
+        QuestInstance instance = GetQuestInstance(template);
+        if (instance == null) return;
+
         // Deduct collected items from inventory
         DeductCollectItems(template);
 
@@ -93,6 +126,24 @@ public class PlayerQuestTracker : MonoBehaviour
     {
         if (enemyStats == null) return;
 
+        if (IsServer && !IsOwner)
+        {
+            ReportKillClientRpc(enemyStats.enemyName);
+        }
+        else
+        {
+            ApplyKillLocally(enemyStats.enemyName);
+        }
+    }
+
+    [Rpc(SendTo.Owner)]
+    private void ReportKillClientRpc(string enemyName)
+    {
+        ApplyKillLocally(enemyName);
+    }
+
+    private void ApplyKillLocally(string killedEnemyName)
+    {
         bool changed = false;
 
         foreach (QuestInstance quest in _activeQuests)
@@ -104,7 +155,7 @@ public class PlayerQuestTracker : MonoBehaviour
 
             for (int j = 0; j < objective.enemyTargets.Length; j++)
             {
-                if (objective.enemyTargets[j].enemy == enemyStats)
+                if (objective.enemyTargets[j].enemy != null && objective.enemyTargets[j].enemy.enemyName == killedEnemyName)
                 {
                     if (quest.template.isShared && QuestManager.Instance != null)
                     {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using PlayerInventory = Obrissom.Player.Inventory.Inventory;
 
@@ -15,8 +16,7 @@ namespace Obrissom.UI
         [Tooltip("Prefab for a quest entry (must contain a TMP_Text component).")]
         [SerializeField] private GameObject _questEntryPrefab;
 
-        // string = quest id
-        private Dictionary<string, GameObject> _activeQuests = new();
+        private Dictionary<string, GameObject> _activeQuests = new(); // string = quest id
 
         private PlayerQuestTracker _tracker;
         private PlayerInventory _playerInventory;
@@ -63,39 +63,40 @@ namespace Obrissom.UI
         /// Show active quest progress in real time
         private void RefreshUI()
         {
-            //if (_tracker == null || _tracker.ActiveQuests == null || _questEntryPrefab == null) return;
-            if (_tracker == null || _tracker.ActiveQuests == null) return;
-            StringBuilder progress = new();
-            foreach (QuestInstance quest in _tracker.ActiveQuests)
+            if (_tracker == null || _tracker.ActiveQuests == null || _questEntryPrefab == null) return;
+            //Clear existing entries
+            foreach (Transform child in _container)
             {
-                if (quest.template.objective.type == QuestObjectiveType.Kill)
-                {
-                    for (int j = 0; j < quest.template.objective.enemyTargets.Length; j++)
-                    {
-                        int current = quest.GetKillProgress(j);
-                        progress.AppendLine($"\n{quest.template.objective.enemyTargets[0].enemy.name} {current}/{quest.template.objective.enemyTargets[j].amount} - status: {quest.status}");
-                    }
-                }
+                Destroy(child.gameObject);
             }
 
-            Debug.Log(progress.ToString());
+            foreach (QuestInstance quest in _tracker.ActiveQuests)
+            {
+                StringBuilder progress = new();
+                GameObject entry = Instantiate(_questEntryPrefab, _container);
+                TMP_Text entryText = entry.GetComponentInChildren<TMP_Text>();
+                string color = (quest.status == QuestStatus.ReadyToDeliver || quest.status == QuestStatus.Completed) ? "<color=#FFD792>" : "<color=#FFFFFF>";
+                progress.AppendLine(color);
 
+                progress.AppendLine($"{quest.template.name}");
 
+                switch (quest.template.objective.type)
+                {
+                    case QuestObjectiveType.Kill:
+                        if (quest.template.objective.type == QuestObjectiveType.Kill)
+                        {
+                            for (int j = 0; j < quest.template.objective.enemyTargets.Length; j++)
+                            {
+                                int current = quest.GetKillProgress(j);
+                                progress.AppendLine($"{quest.template.objective.enemyTargets[j].enemy.enemyName}: {current}/{quest.template.objective.enemyTargets[j].amount}");
+                            }
+                        }
+                        break;
+                }
+                progress.AppendLine($"</color>");
+                entryText.text = progress.ToString();
+            }
 
-            // TODO
-
-            //// Clear existing entries
-            //foreach (Transform child in _container)
-            //{
-            //    Destroy(child.gameObject);
-            //}
-
-            //foreach (QuestInstance quest in _tracker.ActiveQuests)
-            //{
-            //    GameObject entry = Instantiate(_questEntryPrefab, _container);
-            //    TMP_Text entryText = entry.GetComponentInChildren<TMP_Text>();
-            //    // TODO
-            //}
         }
     }
 }

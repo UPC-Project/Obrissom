@@ -45,6 +45,59 @@ public class QuestManager : NetworkBehaviour
 
     // SHARED QUEST MANAGEMENT
 
+    public void ShareAcceptQuest(string questId)
+    {
+        ShareAcceptQuestServerRpc(questId);
+    }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void ShareAcceptQuestServerRpc(string questId)
+    {
+        RegisterSharedQuestServerRpc(questId);
+        ShareAcceptQuestClientRpc(questId);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void ShareAcceptQuestClientRpc(string questId)
+    {
+        if (_localTracker != null)
+        {
+            QuestTemplate template = FindQuestTemplateById(questId);
+            if (template != null)
+            {
+                _localTracker.AcceptQuestLocally(template);
+            }
+        }
+    }
+
+    public void ShareCompleteQuest(string questId)
+    {
+        ShareCompleteQuestServerRpc(questId);
+    }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void ShareCompleteQuestServerRpc(string questId)
+    {
+        if (_sharedQuests.ContainsKey(questId))
+        {
+            _sharedQuests.Remove(questId);
+        }
+        ShareCompleteQuestClientRpc(questId);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void ShareCompleteQuestClientRpc(string questId)
+    {
+        if (_localTracker != null)
+        {
+            QuestTemplate template = FindQuestTemplateById(questId);
+            if (template != null)
+            {
+                _localTracker.CompleteQuestLocally(template);
+            }
+        }
+    }
+
     /// Registers a player as a participant of a shared quest.
     /// Creates the shared QuestInstance on the server if it doesn't exist.
     public void RegisterSharedQuest(string questId, PlayerQuestTracker tracker)

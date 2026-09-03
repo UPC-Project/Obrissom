@@ -37,7 +37,7 @@ public class NPCInteractable : MonoBehaviour
 
         if (_dialogueLines != null && _dialogueLines.Length > 0)
         {
-            NPCDialogueUI.Instance?.ShowDialogue(_npcName, _dialogueLines);
+            NPCDialogueUI.Instance.ShowDialogue(_npcName, _dialogueLines);
         }
     }
 }
