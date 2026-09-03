@@ -20,6 +20,7 @@ namespace Obrissom.UI
             // TODO: herarchy will be transferred here
             //_inventory.SetInventoryState(!_inventory.isInventoryOpen);
             //_inventoryButton.image.color = _inventory.isInventoryOpen ? Color.grey : Color.white;
+
             Debug.Log("Open/Close Inventory");
         }
 

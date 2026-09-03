@@ -424,6 +424,34 @@ namespace Obrissom.Player
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""PlayerInteractMap"",
+            ""id"": ""30a3d980-caf4-4729-861a-161cc7a436e3"",
+            ""actions"": [
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""32e910d7-1af8-4238-af80-7f9ca12a7dce"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""37da4efd-670d-4363-b2f1-a946fbc80385"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -443,12 +471,16 @@ namespace Obrissom.Player
             m_PlayerSkillMap_Skill2 = m_PlayerSkillMap.FindAction("Skill 2", throwIfNotFound: true);
             m_PlayerSkillMap_Skill3 = m_PlayerSkillMap.FindAction("Skill 3", throwIfNotFound: true);
             m_PlayerSkillMap_Skill4 = m_PlayerSkillMap.FindAction("Skill 4", throwIfNotFound: true);
+            // PlayerInteractMap
+            m_PlayerInteractMap = asset.FindActionMap("PlayerInteractMap", throwIfNotFound: true);
+            m_PlayerInteractMap_Interact = m_PlayerInteractMap.FindAction("Interact", throwIfNotFound: true);
         }
 
         ~@PlayerInput()
         {
             UnityEngine.Debug.Assert(!m_PlayerLocomotionMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerLocomotionMap.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_PlayerSkillMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerSkillMap.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_PlayerInteractMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerInteractMap.Disable() has not been called.");
         }
 
         /// <summary>
@@ -811,6 +843,102 @@ namespace Obrissom.Player
         /// Provides a new <see cref="PlayerSkillMapActions" /> instance referencing this action map.
         /// </summary>
         public PlayerSkillMapActions @PlayerSkillMap => new PlayerSkillMapActions(this);
+
+        // PlayerInteractMap
+        private readonly InputActionMap m_PlayerInteractMap;
+        private List<IPlayerInteractMapActions> m_PlayerInteractMapActionsCallbackInterfaces = new List<IPlayerInteractMapActions>();
+        private readonly InputAction m_PlayerInteractMap_Interact;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "PlayerInteractMap".
+        /// </summary>
+        public struct PlayerInteractMapActions
+        {
+            private @PlayerInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public PlayerInteractMapActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerInteractMap/Interact".
+            /// </summary>
+            public InputAction @Interact => m_Wrapper.m_PlayerInteractMap_Interact;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_PlayerInteractMap; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="PlayerInteractMapActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(PlayerInteractMapActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="PlayerInteractMapActions" />
+            public void AddCallbacks(IPlayerInteractMapActions instance)
+            {
+                if (instance == null || m_Wrapper.m_PlayerInteractMapActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_PlayerInteractMapActionsCallbackInterfaces.Add(instance);
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="PlayerInteractMapActions" />
+            private void UnregisterCallbacks(IPlayerInteractMapActions instance)
+            {
+                @Interact.started -= instance.OnInteract;
+                @Interact.performed -= instance.OnInteract;
+                @Interact.canceled -= instance.OnInteract;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerInteractMapActions.UnregisterCallbacks(IPlayerInteractMapActions)" />.
+            /// </summary>
+            /// <seealso cref="PlayerInteractMapActions.UnregisterCallbacks(IPlayerInteractMapActions)" />
+            public void RemoveCallbacks(IPlayerInteractMapActions instance)
+            {
+                if (m_Wrapper.m_PlayerInteractMapActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="PlayerInteractMapActions.AddCallbacks(IPlayerInteractMapActions)" />
+            /// <seealso cref="PlayerInteractMapActions.RemoveCallbacks(IPlayerInteractMapActions)" />
+            /// <seealso cref="PlayerInteractMapActions.UnregisterCallbacks(IPlayerInteractMapActions)" />
+            public void SetCallbacks(IPlayerInteractMapActions instance)
+            {
+                foreach (var item in m_Wrapper.m_PlayerInteractMapActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_PlayerInteractMapActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="PlayerInteractMapActions" /> instance referencing this action map.
+        /// </summary>
+        public PlayerInteractMapActions @PlayerInteractMap => new PlayerInteractMapActions(this);
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerLocomotionMap" which allows adding and removing callbacks.
         /// </summary>
@@ -903,6 +1031,21 @@ namespace Obrissom.Player
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnSkill4(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerInteractMap" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="PlayerInteractMapActions.AddCallbacks(IPlayerInteractMapActions)" />
+        /// <seealso cref="PlayerInteractMapActions.RemoveCallbacks(IPlayerInteractMapActions)" />
+        public interface IPlayerInteractMapActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnInteract(InputAction.CallbackContext context);
         }
     }
 }

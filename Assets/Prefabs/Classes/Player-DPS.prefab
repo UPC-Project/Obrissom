@@ -325,15 +325,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19
+      value: -22.79063
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0000011653992
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.727269
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -425,6 +425,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: -1
       addedObject: {fileID: -8763008768526672257}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3709254980075874032}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7003193139575031338}
   m_SourcePrefab: {fileID: 100100000, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
 --- !u!4 &2831262454944336587 stripped
 Transform:
@@ -522,7 +528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2930922969
+  GlobalObjectIdHash: 53603067
   InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
@@ -809,5 +815,32 @@ MonoBehaviour:
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 256
-  _scanRadius: 20
   _scanInterval: 0.2
+  _activateRadius: 20
+  _deactivateRadius: 22
+--- !u!114 &3709254980075874032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170950436608528497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeea962bfd553b84b8b6d421e324a552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerQuestTracker
+  _inventory: {fileID: 2723300803498060743}
+  _playerXP: {fileID: 3421570259179240014}
+--- !u!114 &7003193139575031338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170950436608528497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0de13e3e9256d624f85ce25be524f620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerInteraction
