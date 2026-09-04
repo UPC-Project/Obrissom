@@ -159,9 +159,7 @@ public class QuestManager : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     private void SyncKillProgressClientRpc(string questId, int enemyTargetIndex, int currentProgress)
     {
-
         _localTracker.SyncKillProgress(questId, enemyTargetIndex, currentProgress);
-
     }
 
     public void ReportTalkProgress(string questId)

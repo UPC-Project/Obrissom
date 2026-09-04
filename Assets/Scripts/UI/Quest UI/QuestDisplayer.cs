@@ -118,12 +118,12 @@ namespace Obrissom.UI
 
             if (template.reward.items.Count() >0)
             {
-                sb.AppendLine($"\nItems:");
+                sb.AppendLine($"Items:");
                 foreach (ItemReward reward in template.reward.items)
                 {
                     if (reward.item != null)
                     {
-                        sb.AppendLine($"\n{reward.amount}x \"{reward.item.itemName}\"");
+                        sb.AppendLine($"{reward.amount} x \"{reward.item.itemName}\"");
                     }
                 }
             }
@@ -138,11 +138,11 @@ namespace Obrissom.UI
             sb.AppendLine($"To accept this quest, you should reach level {template.requiredLevel}");
             if (template.requiredQuests.Count() != 0)
             {
-                sb.AppendLine(" and complete the following quests:");
+                sb.Append(" and complete the following quests:");
 
                 foreach (QuestTemplate qt in template.requiredQuests)
                 {
-                    sb.AppendLine($"\n{qt.title}");
+                    sb.AppendLine($"{qt.title}");
                 }
             }
 

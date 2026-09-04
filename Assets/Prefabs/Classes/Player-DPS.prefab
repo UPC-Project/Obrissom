@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 818086008532664060}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.40000153, z: -4}
+  m_LocalPosition: {x: 0, y: 0.4000001, z: -3.9999998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 6160443557852477779}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4000001, z: -4}
+  m_LocalPosition: {x: 0, y: 0.4000001, z: -3.9999998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -528,7 +528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 53603067
+  GlobalObjectIdHash: 2585064699
   InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
@@ -830,6 +830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeea962bfd553b84b8b6d421e324a552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerQuestTracker
+  ShowTopMostFoldoutHeaderGroup: 1
   _inventory: {fileID: 2723300803498060743}
   _playerXP: {fileID: 3421570259179240014}
 --- !u!114 &7003193139575031338

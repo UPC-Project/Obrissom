@@ -1,4 +1,4 @@
-﻿using Obrissom.Player.Inventory;
+using Obrissom.Player.Inventory;
 using Obrissom.UI;
 using Unity.Netcode;
 using UnityEngine;
@@ -18,7 +18,8 @@ public class ItemDropper : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if (PlayerUIManager.Instance != null)
+        // Assure only the player binds the inventory
+        if (GetComponent<Obrissom.Player.PlayerXP>() != null && PlayerUIManager.Instance != null)
         {
             PlayerUIManager.Instance.RegisterPlayerInventory(this);
         }
