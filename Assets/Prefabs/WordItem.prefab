@@ -134,12 +134,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldItem
   ShowTopMostFoldoutHeaderGroup: 1
   autoPickup: 0
+  _item: {fileID: 0}
   _bobSpeed: 1.5
   _bobHeight: 0.15
   _rotationSpeed: 90
   _labelTransform: {fileID: 1145398936682133959}
   _labelText: {fileID: 8328903001340950738}
-  _item: {fileID: 0}
 --- !u!54 &7214358050028003331
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -186,7 +186,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.5
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8560413176715879194
 GameObject:

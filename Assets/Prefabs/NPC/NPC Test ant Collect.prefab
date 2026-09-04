@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8716875161386697255
+--- !u!1001 &8806347853968446310
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.33
+      value: 3.7399998
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0006803274
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -48,9 +48,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -1.723
       objectReference: {fileID: 0}
+    - target: {fileID: -4683669308469848369, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8169d227cc13ccf439b6d4bf2f07a409, type: 2}
     - target: {fileID: 919132149155446097, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       propertyPath: m_Name
-      value: 'NPC Test ant '
+      value: NPC Test ant Collect
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -58,59 +62,59 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3116666158208589923}
+      addedObject: {fileID: 7410211823827772554}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7978916824512530052}
+      addedObject: {fileID: 3737896282582622731}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5107335648486900785}
+      addedObject: {fileID: 3960466453349783073}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2406523088176355592}
+      addedObject: {fileID: 5635194592487333655}
   m_SourcePrefab: {fileID: 100100000, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
---- !u!1 &8374977971180306294 stripped
+--- !u!1 &8572328554423725623 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cb580cdccc7ad7744a8542294d93778f, type: 3}
-  m_PrefabInstance: {fileID: 8716875161386697255}
+  m_PrefabInstance: {fileID: 8806347853968446310}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3116666158208589923
+--- !u!114 &7410211823827772554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8374977971180306294}
+  m_GameObject: {fileID: 8572328554423725623}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 171601d26a6ec984da567e5c4e320493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCInteractable
-  _npcId: T-01
-  _npcName: Test Ant
+  _npcId: T-02
+  _npcName: Test Ant Collector
   _dialogueLines:
-  - Everything finished champ!
---- !u!114 &7978916824512530052
+  - Everything finished master!
+--- !u!114 &3737896282582622731
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8374977971180306294}
+  m_GameObject: {fileID: 8572328554423725623}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 603258a8bb5264f4bbc564ce35770e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestGiver
   _offeredQuests:
-  - {fileID: 11400000, guid: af69555f0525b214fbf07a34531a70dd, type: 2}
---- !u!136 &5107335648486900785
+  - {fileID: 11400000, guid: 074c87fbf53e31b4d88ad867c5ceea5e, type: 2}
+--- !u!136 &3960466453349783073
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8374977971180306294}
+  m_GameObject: {fileID: 8572328554423725623}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -127,13 +131,13 @@ CapsuleCollider:
   m_Height: 1.6
   m_Direction: 1
   m_Center: {x: 0, y: 0.62, z: 0}
---- !u!135 &2406523088176355592
+--- !u!135 &5635194592487333655
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8374977971180306294}
+  m_GameObject: {fileID: 8572328554423725623}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

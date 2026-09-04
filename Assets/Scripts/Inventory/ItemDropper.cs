@@ -73,7 +73,7 @@ public class ItemDropper : NetworkBehaviour
         networkObject.Spawn();
 
         // Initialize the item data (ID and Quantity) on the world object
-        WorldItem worldItem = dropped.GetComponent<WorldItem>();
+        DroppedItem worldItem = dropped.GetComponent<DroppedItem>();
         worldItem.InitializeItem(item, quantity);
 
         // Apply physical force

@@ -9,7 +9,7 @@ namespace Obrissom.Player
     {
         private PlayerQuestTracker _playerQuestTracker;
         private List<NPCInteractable> _nearbyNPCs = new List<NPCInteractable>();
-        private List<WorldItem> _nearbyItems = new List<WorldItem>();
+        private List<PickupBase> _nearbyItems = new List<PickupBase>();
         private PlayerInput _playerInput;
         private void Awake()
         {
@@ -33,9 +33,9 @@ namespace Obrissom.Player
         {
             if (!context.performed) return;
 
-            // Clean up destroyed objects (items picked up)
-            _nearbyItems.RemoveAll(item => item == null);
-            _nearbyNPCs.RemoveAll(npc => npc == null);
+            // Clean up destroyed or disabled objects (items picked up/waiting respawn)
+            _nearbyItems.RemoveAll(item => item == null || !item.isActiveAndEnabled || !item.GetComponent<Collider>().enabled);
+            _nearbyNPCs.RemoveAll(npc => npc == null || !npc.isActiveAndEnabled);
 
             if (_nearbyItems.Count > 0)
             {
@@ -57,7 +57,7 @@ namespace Obrissom.Player
                 _nearbyNPCs.Add(npc);
             }
 
-            if (other.TryGetComponent(out WorldItem item) && !_nearbyItems.Contains(item))
+            if (other.TryGetComponent(out PickupBase item) && !_nearbyItems.Contains(item))
             {
                 _nearbyItems.Add(item);
             }
@@ -70,7 +70,7 @@ namespace Obrissom.Player
                 _nearbyNPCs.Remove(npc);
             }
 
-            if (other.TryGetComponent(out WorldItem item))
+            if (other.TryGetComponent(out PickupBase item))
             {
                 _nearbyItems.Remove(item);
             }
