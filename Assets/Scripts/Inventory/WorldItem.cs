@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
@@ -23,10 +23,6 @@ public class WorldItem : NetworkBehaviour
     [SerializeField] private Transform _labelTransform; 
     [SerializeField] private TextMeshProUGUI _labelText; 
 
-    [Header("Detection")]
-    [SerializeField] private float _pickupRadius = 2f;   
-    [SerializeField] private LayerMask _playerLayer;      
-
     // NETWORK VARIABLES 
     private NetworkVariable<int> _quantity = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<int> _itemID = new NetworkVariable<int>(-1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -34,7 +30,6 @@ public class WorldItem : NetworkBehaviour
     // LOCAL VARIABLES
     [SerializeField] private Item _item;
     private Vector3 _startPosition;
-    private bool _playerInRange;
     private Camera _camera;
 
     public override void OnNetworkSpawn()
@@ -86,12 +81,27 @@ public class WorldItem : NetworkBehaviour
         if (_camera == null) _camera = Camera.main;
         if (_labelTransform != null && _camera != null)
             _labelTransform.rotation = _camera.transform.rotation;
+    }
 
-        DetectPlayer();
-
-        // If player is close and presses 'F', request pickup to the server
-        if (_playerInRange && !autoPickup && Keyboard.current[Key.F].wasPressedThisFrame)
+    /// <summary>
+    /// Called by PlayerInteraction when the player presses the interact button.
+    /// </summary>
+    public void Interact()
+    {
+        if (!autoPickup)
+        {
             RequestPickupServerRpc();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!IsSpawned || !autoPickup) return;
+
+        if (other.CompareTag("Player") && other.GetComponent<NetworkObject>().IsOwner)
+        {
+            RequestPickupServerRpc();
+        }
     }
 
     /// <summary>
@@ -116,15 +126,6 @@ public class WorldItem : NetworkBehaviour
             text += " x" + _quantity.Value;
 
         _labelText.text = text;
-    }
-
-    /// <summary>
-    /// Uses physics to check if any player is inside the pickup radius.
-    /// </summary>
-    private void DetectPlayer()
-    {
-        Collider[] hits = Physics.OverlapSphere(transform.position, _pickupRadius, _playerLayer);
-        _playerInRange = hits.Length > 0;
     }
 
     /// <summary>
