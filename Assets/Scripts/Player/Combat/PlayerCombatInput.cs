@@ -38,13 +38,13 @@ namespace Obrissom.Player
             if (context.performed) 
             {
                 _playerSkills.OnSkillPressed(SkillKey.LB);
-                _animator.SetTrigger("melee");
+                _animator.SetTrigger("basic");
             }
 
             if (context.canceled) 
             {
                 _playerSkills.OnSkillReleased(SkillKey.LB);
-                _animator.ResetTrigger("melee");
+                _animator.ResetTrigger("basic");
             }
             
         }
@@ -52,8 +52,17 @@ namespace Obrissom.Player
         public void OnSkill1(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
-            if (context.performed) _playerSkills.OnSkillPressed(SkillKey.ONE);
-            if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.ONE);
+            if (context.performed)
+            {
+                _playerSkills.OnSkillPressed(SkillKey.ONE);
+                _animator.SetTrigger("skill1");
+            }
+
+            if (context.canceled)
+            {
+                _playerSkills.OnSkillReleased(SkillKey.ONE);
+                _animator.ResetTrigger("skill1");
+            }
         }
 
         public void OnSkill2(InputAction.CallbackContext context)
