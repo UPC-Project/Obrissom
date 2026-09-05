@@ -33,6 +33,10 @@ namespace Obrissom.Enemy
 
         public EnemyStats Stats => _stats;
 
+        public virtual bool IsRetreating => false;
+
+        public virtual bool IsInvulnerable => false;
+
         // Components
         protected NavMeshAgent _agent;
         protected EnemyAnimation _enemyAnimation;
@@ -49,8 +53,6 @@ namespace Obrissom.Enemy
         private bool _isWaypointPausing;
 
         // Lifecycle
-
-
         protected EnemyStateMachine _stateMachine;
 
 
@@ -71,6 +73,7 @@ namespace Obrissom.Enemy
             _agent.enabled = true;
             _currentHealth = _stats.maxHealth;
             _agent.speed = _stats.moveSpeed;
+            _agent.enabled = true;
 
             _stateMachine.Initialize(this, _agent);
 
@@ -126,9 +129,9 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamageRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
+        public void TakeDamageRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
         {
-            if (!IsServer || _isDead) return;
+            if (!IsServer || _isDead || IsInvulnerable) return;
 
             float reduction = type == EffectType.PhysicDamage
                 ? _stats.physicalDefense
@@ -139,8 +142,9 @@ namespace Obrissom.Enemy
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
-
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
+
+            OnTakeDamage(rawAmount);
 
             if (_currentHealth <= 0f)
             {
@@ -148,8 +152,10 @@ namespace Obrissom.Enemy
                 return;
             }
 
-            _enemyAnimation.PlayHitAnimation();
+            _enemyAnimation.PlayTakeDamageAnimation();
         }
+
+        protected virtual void OnTakeDamage(float rawAmount) { }
 
         /// <summary>
         /// Returns a random damage value within the configured range.
@@ -269,7 +275,7 @@ namespace Obrissom.Enemy
         }
 
         //Gizmos
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             if (_stats == null) return;
 
