@@ -215,11 +215,10 @@ public class PlayerQuestTracker : NetworkBehaviour
                 {
                     QuestManager.Instance.ReportTalkProgress(quest.template.questId);
                 }
-                else
-                {
-                    quest.SetTalkCompleted();
-                    changed = true;
-                }
+
+                // Siempre aplicarlo localmente para evitar problemas de latencia (tener que hablar 2 veces)
+                quest.SetTalkCompleted();
+                changed = true;
             }
 
             quest.CheckAndUpdateStatus(_inventory);
@@ -236,7 +235,7 @@ public class PlayerQuestTracker : NetworkBehaviour
             if (quest.status == QuestStatus.Completed) continue;
 
             QuestStatus previousStatus = quest.status;
-            
+
             quest.CheckAndUpdateStatus(_inventory);
 
             if (quest.template.objective != null && quest.template.objective.type == QuestObjectiveType.Collect)
@@ -271,7 +270,7 @@ public class PlayerQuestTracker : NetworkBehaviour
     {
         QuestInstance quest = GetQuestInstanceById(questId);
         if (quest == null || quest.template.objective == null || quest.template.objective.itemTargets == null) return;
-        
+
         if (targetIndex >= 0 && targetIndex < quest.template.objective.itemTargets.Length)
         {
             ItemTarget target = quest.template.objective.itemTargets[targetIndex];

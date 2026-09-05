@@ -67,6 +67,10 @@ public class QuestManager : NetworkBehaviour
             {
                 _localTracker.AcceptQuestLocally(template);
             }
+            else
+            {
+                Debug.LogError($"[QuestManager] ShareAcceptQuestClientRpc failed: Could not find QuestTemplate with questId '{questId}'. Make sure the ScriptableObject has a unique questId assigned");
+            }
         }
     }
 

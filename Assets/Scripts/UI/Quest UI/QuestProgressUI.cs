@@ -83,20 +83,20 @@ namespace Obrissom.UI
                 switch (quest.template.objective.type)
                 {
                     case QuestObjectiveType.Kill:
-                        
-                            for (int j = 0; j < quest.template.objective.enemyTargets.Length; j++)
-                            {
-                                int current = quest.GetKillProgress(j);
-                                progress.AppendLine($"{quest.template.objective.enemyTargets[j].enemy.enemyName}: {current}/{quest.template.objective.enemyTargets[j].amount}");
-                            }
+
+                        for (int j = 0; j < quest.template.objective.enemyTargets.Length; j++)
+                        {
+                            int current = quest.GetKillProgress(j);
+                            progress.AppendLine($"{quest.template.objective.enemyTargets[j].enemy.enemyName}: {current}/{quest.template.objective.enemyTargets[j].amount}");
+                        }
                         break;
                     case QuestObjectiveType.Collect:
-                        
-                            for (int j = 0; j < quest.template.objective.itemTargets.Length; j++)
-                            {
-                                int current = quest.GetCollectProgress(j, _playerInventory);
-                                progress.AppendLine($"{quest.template.objective.itemTargets[j].item.itemName}: {current}/{quest.template.objective.itemTargets[j].amount}");
-                            }
+
+                        for (int j = 0; j < quest.template.objective.itemTargets.Length; j++)
+                        {
+                            int current = quest.GetCollectProgress(j, _playerInventory);
+                            progress.AppendLine($"{quest.template.objective.itemTargets[j].item.itemName}: {current}/{quest.template.objective.itemTargets[j].amount}");
+                        }
                         break;
                 }
                 progress.AppendLine($"</color>");
