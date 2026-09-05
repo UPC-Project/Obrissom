@@ -1,3 +1,4 @@
+using Obrissom.UI;
 using Unity.Netcode;
 using UnityEngine;
 using static LevelUpRewards;
@@ -24,7 +25,7 @@ namespace Obrissom.Player
 
             _playerSkills = GetComponent<PlayerSkills>();
             _playerStats = GetComponent<PlayerStats>();
-            _XpUi = UI.PlayerUIManager.Instance.GetLevelAndXPUI();
+            _XpUi = PlayerUIManager.Instance.GetLevelAndXPUI();
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
             _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
 
@@ -73,6 +74,7 @@ namespace Obrissom.Player
         {
             currentLevel++;
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
+            LevelupPopup.Instance.ShowLevelupPopup(currentLevel.ToString());
 
             // Depends on player class and level
             LevelUpRewards.LevelReward rewards = _levelUpRewards.rewards.Find(r => r.level == currentLevel);
