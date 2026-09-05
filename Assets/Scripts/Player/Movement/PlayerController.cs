@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Obrissom.Player
@@ -14,6 +15,7 @@ namespace Obrissom.Player
         private PlayerLocomotionInput _playerLocomotionInput;
         private PlayerStats _playerStats;
         public Animator _animator;
+        private NetworkAnimator _networkAnimator;
 
         [Header("Movement")]
         public float walkAcceleration = 35f;
@@ -49,6 +51,7 @@ namespace Obrissom.Player
         {
             _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
             _playerStats = GetComponent<PlayerStats>();
+            _networkAnimator = GetComponent<NetworkAnimator>();
         }
 
         private void FixedUpdate()
@@ -132,7 +135,8 @@ namespace Obrissom.Player
             horizontal = Vector3.ClampMagnitude(horizontal, speed);
             _newVelocity.x = horizontal.x;
             _newVelocity.z = horizontal.z;
-            _animator.SetFloat("speed", speed);
+            Vector3 horizontalVelocity = new Vector3(_characterController.velocity.x, 0f, _characterController.velocity.z);
+            _animator.SetFloat("speed", horizontalVelocity.magnitude);
         }
 
 
@@ -169,6 +173,7 @@ namespace Obrissom.Player
         public override void OnNetworkSpawn()
         {
             _playerCamera.SetActive(IsOwner);
+            _playerLocomotionInput.enabled = IsOwner;
         }
 
     }
