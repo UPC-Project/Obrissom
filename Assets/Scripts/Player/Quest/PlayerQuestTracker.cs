@@ -43,7 +43,7 @@ public class PlayerQuestTracker : NetworkBehaviour
         if (QuestManager.Instance != null)
         {
             QuestManager.Instance.RegisterLocalTracker(this);
-            QuestManager.Instance.RequestSyncSharedQuestsServerRpc();
+            if (!IsServer) QuestManager.Instance.RequestSyncSharedQuestsServerRpc();
         }
 
         if (QuestProgressUI.Instance != null)
