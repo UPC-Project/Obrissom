@@ -39,8 +39,11 @@ namespace Obrissom.Enemy
 
         public void Tick()
         {
-            if (CurrentState != EnemyState.Chase && CurrentState != EnemyState.Attack) return;
-            if (_enemy.Target != null)
+            bool shouldFace = CurrentState == EnemyState.Chase
+                           || CurrentState == EnemyState.Attack
+                           || _enemy.IsRetreating;
+
+            if (shouldFace && _enemy.Target != null)
                 FaceTarget(_enemy.Target.position);
         }
 
@@ -62,6 +65,7 @@ namespace Obrissom.Enemy
 
         private void EvaluateTransitions()
         {
+            if (_enemy.IsRetreating) return;
             switch (CurrentState)
             {
                 case EnemyState.Idle:
@@ -98,6 +102,7 @@ namespace Obrissom.Enemy
 
         private void OnStateUpdate()
         {
+            if (_enemy.IsRetreating) return;
             switch (CurrentState)
             {
                 case EnemyState.Chase:
@@ -176,6 +181,7 @@ namespace Obrissom.Enemy
         {
             yield return new WaitForSeconds(_takingDamageDuration);
             if (CurrentState != EnemyState.TakingDamage) yield break;
+            if (_enemy.IsRetreating) yield break;
 
             if (_enemy.IsPlayerInAttackRange())
                 ChangeState(EnemyState.Attack);
