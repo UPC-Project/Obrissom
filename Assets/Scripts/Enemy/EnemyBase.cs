@@ -68,12 +68,15 @@ namespace Obrissom.Enemy
         {
             if (!IsServer) return;
 
+            _agent.enabled = true;
             _currentHealth = _stats.maxHealth;
             _agent.speed = _stats.moveSpeed;
 
             _stateMachine.Initialize(this, _agent);
 
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
+
+            
         }
 
         protected virtual void Update()
