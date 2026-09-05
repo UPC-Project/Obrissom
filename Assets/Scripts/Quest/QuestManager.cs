@@ -10,8 +10,8 @@ public class QuestManager : NetworkBehaviour
 
     // Server-only
     private Dictionary<string, QuestInstance> _sharedQuests = new Dictionary<string, QuestInstance>();
-
-    // Server-only
+    //(questId, (itemTargetIndex, (clientId, amount of items)))
+    private Dictionary<string, Dictionary<int, Dictionary<ulong, int>>> _sharedCollectProgress = new Dictionary<string, Dictionary<int, Dictionary<ulong, int>>>();
     private Dictionary<string, List<PlayerQuestTracker>> _participants = new Dictionary<string, List<PlayerQuestTracker>>();
 
     // Client-side
@@ -67,6 +67,10 @@ public class QuestManager : NetworkBehaviour
             {
                 _localTracker.AcceptQuestLocally(template);
             }
+            else
+            {
+                Debug.LogError($"[QuestManager] ShareAcceptQuestClientRpc failed: Could not find QuestTemplate with questId '{questId}'. Make sure the ScriptableObject has a unique questId assigned");
+            }
         }
     }
 
@@ -75,9 +79,174 @@ public class QuestManager : NetworkBehaviour
         ShareCompleteQuestServerRpc(questId);
     }
 
+    /// When a players spawns, automatically syncs with all current shared quest going on
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    private void ShareCompleteQuestServerRpc(string questId)
+    public void RequestSyncSharedQuestsServerRpc(RpcParams rpcParams = default)
     {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        ClientRpcParams clientRpcParams = new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } } };
+
+        foreach (var kvp in _sharedQuests)
+        {
+            string questId = kvp.Key;
+            QuestInstance quest = kvp.Value;
+
+            SyncAcceptQuestTargetedClientRpc(questId, clientRpcParams);
+
+            if (quest.template.objective == null) continue;
+
+            if (quest.template.objective.type == QuestObjectiveType.Kill && quest.template.objective.enemyTargets != null)
+            {
+                for (int i = 0; i < quest.template.objective.enemyTargets.Length; i++)
+                {
+                    int progress = quest.GetKillProgress(i);
+                    if (progress > 0)
+                        SyncKillProgressTargetedClientRpc(questId, i, progress, clientRpcParams);
+                }
+            }
+
+            if (quest.template.objective.type == QuestObjectiveType.Talk && quest.IsTalkCompleted())
+            {
+                SyncTalkProgressTargetedClientRpc(questId, clientRpcParams);
+            }
+
+            if (quest.template.objective.type == QuestObjectiveType.Collect && quest.template.objective.itemTargets != null)
+            {
+                if (_sharedCollectProgress.TryGetValue(questId, out var counts))
+                {
+                    for (int i = 0; i < quest.template.objective.itemTargets.Length; i++)
+                    {
+                        int total = 0;
+                        if (counts.TryGetValue(i, out var clientCounts))
+                        {
+                            foreach (var count in clientCounts.Values)
+                                total += count;
+                        }
+                        if (total > 0)
+                            SyncCollectProgressTargetedClientRpc(questId, i, total, clientRpcParams);
+                    }
+                }
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void SyncAcceptQuestTargetedClientRpc(string questId, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+        {
+            QuestTemplate template = FindQuestTemplateById(questId);
+            if (template != null)
+            {
+                _localTracker.AcceptQuestLocally(template);
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void SyncKillProgressTargetedClientRpc(string questId, int targetIndex, int progress, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+            _localTracker.SyncKillProgress(questId, targetIndex, progress);
+    }
+
+    [ClientRpc]
+    private void SyncTalkProgressTargetedClientRpc(string questId, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+            _localTracker.SyncTalkProgress(questId);
+    }
+
+    [ClientRpc]
+    private void SyncCollectProgressTargetedClientRpc(string questId, int targetIndex, int progress, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+            _localTracker.SyncCollectProgress(questId, targetIndex, progress);
+    }
+
+    // COLLECT PROGRESS
+    // questId -> targetIndex -> clientId -> item count
+    public void ReportCollectProgress(string questId, int itemTargetIndex, int localCount)
+    {
+        ReportCollectProgressServerRpc(questId, itemTargetIndex, localCount);
+    }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void ReportCollectProgressServerRpc(string questId, int itemTargetIndex, int localCount, RpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        if (!_sharedQuests.TryGetValue(questId, out QuestInstance quest)) return;
+
+        if (!_sharedCollectProgress.ContainsKey(questId))
+            _sharedCollectProgress[questId] = new Dictionary<int, Dictionary<ulong, int>>();
+
+        if (!_sharedCollectProgress[questId].ContainsKey(itemTargetIndex))
+            _sharedCollectProgress[questId][itemTargetIndex] = new Dictionary<ulong, int>();
+
+        _sharedCollectProgress[questId][itemTargetIndex][clientId] = localCount;
+
+        // Calculate total
+        int totalCount = 0;
+        foreach (int count in _sharedCollectProgress[questId][itemTargetIndex].Values)
+        {
+            totalCount += count;
+        }
+
+        SyncCollectProgressClientRpc(questId, itemTargetIndex, totalCount);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void SyncCollectProgressClientRpc(string questId, int itemTargetIndex, int totalProgress)
+    {
+        if (_localTracker != null)
+            _localTracker.SyncCollectProgress(questId, itemTargetIndex, totalProgress);
+    }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void ShareCompleteQuestServerRpc(string questId, RpcParams rpcParams = default)
+    {
+        ulong completingClientId = rpcParams.Receive.SenderClientId;
+        QuestTemplate template = FindQuestTemplateById(questId);
+
+        if (template != null && template.objective != null && template.objective.type == QuestObjectiveType.Collect)
+        {
+            for (int i = 0; i < template.objective.itemTargets.Length; i++)
+            {
+                int needed = template.objective.itemTargets[i].amount;
+
+                if (_sharedCollectProgress.TryGetValue(questId, out var questCounts) && 
+                    questCounts.TryGetValue(i, out var targetCounts))
+                {
+                    if (targetCounts.TryGetValue(completingClientId, out int completerHas))
+                    {
+                        int fromCompleter = Mathf.Min(needed, completerHas);
+                        if (fromCompleter > 0)
+                        {
+                            needed -= fromCompleter;
+                            DeductCollectItemClientRpc(questId, i, fromCompleter, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { completingClientId } } });
+                        }
+                    }
+
+                    if (needed > 0)
+                    {
+                        foreach (var kvp in targetCounts)
+                        {
+                            if (kvp.Key == completingClientId) continue;
+
+                            int fromOther = Mathf.Min(needed, kvp.Value);
+                            if (fromOther > 0)
+                            {
+                                needed -= fromOther;
+                                DeductCollectItemClientRpc(questId, i, fromOther, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { kvp.Key } } });
+                            }
+
+                            if (needed <= 0) break;
+                        }
+                    }
+                }
+            }
+        }
+
         if (_sharedQuests.ContainsKey(questId))
         {
             _sharedQuests.Remove(questId);
@@ -159,9 +328,7 @@ public class QuestManager : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     private void SyncKillProgressClientRpc(string questId, int enemyTargetIndex, int currentProgress)
     {
-
         _localTracker.SyncKillProgress(questId, enemyTargetIndex, currentProgress);
-
     }
 
     public void ReportTalkProgress(string questId)
@@ -183,6 +350,15 @@ public class QuestManager : NetworkBehaviour
     private void SyncTalkProgressClientRpc(string questId)
     {
         _localTracker.SyncTalkProgress(questId);
+    }
+
+    [ClientRpc]
+    private void DeductCollectItemClientRpc(string questId, int targetIndex, int amount, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+        {
+            _localTracker.DeductSpecificCollectTarget(questId, targetIndex, amount);
+        }
     }
 
     // HELPERS

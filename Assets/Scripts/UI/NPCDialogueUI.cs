@@ -31,7 +31,6 @@ public class NPCDialogueUI : MonoBehaviour
 
         _npcNameText.text = npcName;
         int randomIndex = Random.Range(0, lines.Length);
-
         _dialogueText.text = lines[randomIndex];
 
         _container.SetActive(true);

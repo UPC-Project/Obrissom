@@ -38,6 +38,9 @@ public class QuestGiver : MonoBehaviour
         // Find the first quest to offer
         if (_offeredQuests != null)
         {
+            QuestTemplate firstLockedQuest = null;
+            RequirementCheckResult firstLockedResult = default;
+
             foreach (QuestTemplate template in _offeredQuests)
             {
                 if (template == null) continue;
@@ -55,15 +58,22 @@ public class QuestGiver : MonoBehaviour
                     });
                     return true;
                 }
-                else
+                else if (firstLockedQuest == null)
                 {
-                    QuestDisplayer.Instance?.ShowQuestLocked(
-                        template,
-                        result.playerLevel,
-                        result.missingQuestNames
-                    );
-                    return true;
+                    firstLockedQuest = template;
+                    firstLockedResult = result;
                 }
+            }
+
+            // If we found no available quests but found a locked one, show the locked one
+            if (firstLockedQuest != null)
+            {
+                QuestDisplayer.Instance?.ShowQuestLocked(
+                    firstLockedQuest,
+                    firstLockedResult.playerLevel,
+                    firstLockedResult.missingQuestNames
+                );
+                return true;
             }
         }
 

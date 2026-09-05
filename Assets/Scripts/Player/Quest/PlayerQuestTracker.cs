@@ -1,11 +1,11 @@
 using Obrissom.Enemy;
 using Obrissom.Player;
+using Obrissom.Player.Inventory;
 using Obrissom.UI;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
-using PlayerInventory = Obrissom.Player.Inventory.Inventory;
+using UnityEngine;
 
 public struct RequirementCheckResult
 {
@@ -18,7 +18,7 @@ public struct RequirementCheckResult
 /// Tracks objective progress and delegates shared quest updates to QuestManager.
 public class PlayerQuestTracker : NetworkBehaviour
 {
-    [SerializeField] private PlayerInventory _inventory;
+    [SerializeField] private Inventory _inventory;
     [SerializeField] private PlayerXP _playerXP;
 
     private List<QuestInstance> _activeQuests = new List<QuestInstance>();
@@ -32,7 +32,7 @@ public class PlayerQuestTracker : NetworkBehaviour
 
     private void Awake()
     {
-        if (_inventory == null) _inventory = GetComponent<PlayerInventory>();
+        if (_inventory == null) _inventory = GetComponent<Inventory>();
         if (_playerXP == null) _playerXP = GetComponent<PlayerXP>();
     }
 
@@ -41,10 +41,28 @@ public class PlayerQuestTracker : NetworkBehaviour
         if (!IsOwner) return;
 
         if (QuestManager.Instance != null)
+        {
             QuestManager.Instance.RegisterLocalTracker(this);
+            QuestManager.Instance.RequestSyncSharedQuestsServerRpc();
+        }
 
         if (QuestProgressUI.Instance != null)
             QuestProgressUI.Instance.Bind(this, _inventory);
+
+        if (_inventory != null)
+        {
+            _inventory.OnInventoryChanged += RefreshCollectProgress;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        if (!IsOwner) return;
+
+        if (_inventory != null)
+        {
+            _inventory.OnInventoryChanged -= RefreshCollectProgress;
+        }
     }
 
     // QUEST LIFECYCLE
@@ -80,6 +98,7 @@ public class PlayerQuestTracker : NetworkBehaviour
             QuestManager.Instance.RegisterSharedQuest(template.questId, this);
         }
 
+        RefreshCollectProgress();
         OnQuestsChanged?.Invoke();
     }
 
@@ -105,8 +124,11 @@ public class PlayerQuestTracker : NetworkBehaviour
         QuestInstance instance = GetQuestInstance(template);
         if (instance == null) return;
 
-        // Deduct collected items from inventory
-        DeductCollectItems(template);
+        // Deduct collected items from inventory (only if not shared, since shared deduction is handled by server RPCs)
+        if (!template.isShared || QuestManager.Instance == null)
+        {
+            DeductCollectItems(template);
+        }
 
         // Apply rewards
         ApplyRewards(template);
@@ -196,11 +218,10 @@ public class PlayerQuestTracker : NetworkBehaviour
                 {
                     QuestManager.Instance.ReportTalkProgress(quest.template.questId);
                 }
-                else
-                {
-                    quest.SetTalkCompleted();
-                    changed = true;
-                }
+
+                // Siempre aplicarlo localmente para evitar problemas de latencia (tener que hablar 2 veces)
+                quest.SetTalkCompleted();
+                changed = true;
             }
 
             quest.CheckAndUpdateStatus(_inventory);
@@ -212,22 +233,56 @@ public class PlayerQuestTracker : NetworkBehaviour
     /// Called when the player's inventory changes. Re-evaluates Collect objectives.
     public void RefreshCollectProgress()
     {
-        bool changed = false;
-
         foreach (QuestInstance quest in _activeQuests)
         {
-            if (quest.status != QuestStatus.InProgress) continue;
+            if (quest.status == QuestStatus.Completed) continue;
 
             QuestStatus previousStatus = quest.status;
+
             quest.CheckAndUpdateStatus(_inventory);
 
-            if (quest.status != previousStatus) changed = true;
+            if (quest.template.objective != null && quest.template.objective.type == QuestObjectiveType.Collect)
+                OnQuestsChanged?.Invoke();
+
+            // Report local count to server if shared
+            if (quest.template.isShared && QuestManager.Instance != null && quest.template.objective != null && quest.template.objective.type == QuestObjectiveType.Collect)
+            {
+                for (int i = 0; i < quest.template.objective.itemTargets.Length; i++)
+                {
+                    int localCount = quest.GetLocalCollectProgress(i, _inventory);
+                    QuestManager.Instance.ReportCollectProgress(quest.template.questId, i, localCount);
+                }
+            }
         }
 
-        if (changed) OnQuestsChanged?.Invoke();
     }
 
     // SHARED QUEST SYNC
+
+    public void SyncCollectProgress(string questId, int itemTargetIndex, int totalProgress)
+    {
+        QuestInstance quest = GetQuestInstanceById(questId);
+        if (quest == null) return;
+
+        quest.SetSharedCollectProgress(itemTargetIndex, totalProgress);
+        quest.CheckAndUpdateStatus(_inventory);
+        OnQuestsChanged?.Invoke();
+    }
+
+    public void DeductSpecificCollectTarget(string questId, int targetIndex, int amount)
+    {
+        QuestInstance quest = GetQuestInstanceById(questId);
+        if (quest == null || quest.template.objective == null || quest.template.objective.itemTargets == null) return;
+
+        if (targetIndex >= 0 && targetIndex < quest.template.objective.itemTargets.Length)
+        {
+            ItemTarget target = quest.template.objective.itemTargets[targetIndex];
+            if (target.item != null)
+            {
+                RemoveItemFromInventory(target.item, amount);
+            }
+        }
+    }
 
     /// Called by QuestManager to sync kill progress from the server.
     public void SyncKillProgress(string questId, int enemyTargetIndex, int currentProgress)
