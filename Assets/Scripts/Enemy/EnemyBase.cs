@@ -53,8 +53,6 @@ namespace Obrissom.Enemy
         private bool _isWaypointPausing;
 
         // Lifecycle
-
-
         protected EnemyStateMachine _stateMachine;
 
 
