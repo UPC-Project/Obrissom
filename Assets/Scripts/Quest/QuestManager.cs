@@ -79,6 +79,91 @@ public class QuestManager : NetworkBehaviour
         ShareCompleteQuestServerRpc(questId);
     }
 
+    /// When a players spawns, automatically syncs with all current shared quest going on
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void RequestSyncSharedQuestsServerRpc(RpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        ClientRpcParams clientRpcParams = new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } } };
+
+        foreach (var kvp in _sharedQuests)
+        {
+            string questId = kvp.Key;
+            QuestInstance quest = kvp.Value;
+
+            SyncAcceptQuestTargetedClientRpc(questId, clientRpcParams);
+
+            if (quest.template.objective == null) continue;
+
+            if (quest.template.objective.type == QuestObjectiveType.Kill && quest.template.objective.enemyTargets != null)
+            {
+                for (int i = 0; i < quest.template.objective.enemyTargets.Length; i++)
+                {
+                    int progress = quest.GetKillProgress(i);
+                    if (progress > 0)
+                        SyncKillProgressTargetedClientRpc(questId, i, progress, clientRpcParams);
+                }
+            }
+
+            if (quest.template.objective.type == QuestObjectiveType.Talk && quest.IsTalkCompleted())
+            {
+                SyncTalkProgressTargetedClientRpc(questId, clientRpcParams);
+            }
+
+            if (quest.template.objective.type == QuestObjectiveType.Collect && quest.template.objective.itemTargets != null)
+            {
+                if (_sharedCollectProgress.TryGetValue(questId, out var counts))
+                {
+                    for (int i = 0; i < quest.template.objective.itemTargets.Length; i++)
+                    {
+                        int total = 0;
+                        if (counts.TryGetValue(i, out var clientCounts))
+                        {
+                            foreach (var count in clientCounts.Values)
+                                total += count;
+                        }
+                        if (total > 0)
+                            SyncCollectProgressTargetedClientRpc(questId, i, total, clientRpcParams);
+                    }
+                }
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void SyncAcceptQuestTargetedClientRpc(string questId, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+        {
+            QuestTemplate template = FindQuestTemplateById(questId);
+            if (template != null)
+            {
+                _localTracker.AcceptQuestLocally(template);
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void SyncKillProgressTargetedClientRpc(string questId, int targetIndex, int progress, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+            _localTracker.SyncKillProgress(questId, targetIndex, progress);
+    }
+
+    [ClientRpc]
+    private void SyncTalkProgressTargetedClientRpc(string questId, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+            _localTracker.SyncTalkProgress(questId);
+    }
+
+    [ClientRpc]
+    private void SyncCollectProgressTargetedClientRpc(string questId, int targetIndex, int progress, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker != null)
+            _localTracker.SyncCollectProgress(questId, targetIndex, progress);
+    }
+
     // COLLECT PROGRESS
     // questId -> targetIndex -> clientId -> item count
     public void ReportCollectProgress(string questId, int itemTargetIndex, int localCount)
@@ -132,7 +217,6 @@ public class QuestManager : NetworkBehaviour
                 if (_sharedCollectProgress.TryGetValue(questId, out var questCounts) && 
                     questCounts.TryGetValue(i, out var targetCounts))
                 {
-                    // Priority 1: completing client
                     if (targetCounts.TryGetValue(completingClientId, out int completerHas))
                     {
                         int fromCompleter = Mathf.Min(needed, completerHas);
@@ -143,7 +227,6 @@ public class QuestManager : NetworkBehaviour
                         }
                     }
 
-                    // Priority 2: other clients
                     if (needed > 0)
                     {
                         foreach (var kvp in targetCounts)
