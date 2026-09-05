@@ -20,6 +20,7 @@ namespace Obrissom.Player
             _playerInput = GetComponent<PlayerLocomotionInput>().PlayerInput;
             _networkObject = GetComponent<NetworkObject>();
         }
+
         private void OnEnable()
         {
             _playerInput.PlayerSkillMap.Enable();
