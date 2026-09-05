@@ -7,10 +7,10 @@ namespace Obrissom.Player
     {
         #region
         [Header("Actual health and resource")]
-        [Min(0)] public NetworkVariable<float> _health = new NetworkVariable<float>(
-            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [Min(0)] public NetworkVariable<float> _resource = new NetworkVariable<float>(
-            0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
+        [Min(0)] public NetworkVariable<float> _health = 
+            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [Min(0)] public NetworkVariable<float> _resource = 
+            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
         // Components
         private PlayerStats _playerStats;
@@ -23,7 +23,6 @@ namespace Obrissom.Player
         // TODO: save information:
         // for example current health, level, bufs, skills available, etc
         // Should be saved in a file. --> Make save system
-
 
         private void Awake()
         {
@@ -88,11 +87,11 @@ namespace Obrissom.Player
 
         public void SetInvulnerable(bool value) => _isInvulnerable = value;
 
-        public bool TryConsumeResource(int cost)
+        public bool TryConsumeResource(int cost, bool consume = true)
         {
             if (_resource.Value < cost) return false;
 
-            if (IsServer)
+            if (IsServer && consume)
             {
                 _resource.Value -= cost;
             }

@@ -1,4 +1,4 @@
-﻿using Obrissom.Player;
+using Obrissom.Player;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -73,7 +73,7 @@ namespace Obrissom.Enemy
 
             _stateMachine.Initialize(this, _agent);
 
-            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
+            _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
         }
 
         protected virtual void Update()
@@ -123,7 +123,7 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamagRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
+        public virtual void TakeDamageRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
         {
             if (!IsServer || _isDead) return;
 
@@ -137,7 +137,7 @@ namespace Obrissom.Enemy
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
 
-            _enemyUi.UpdateHealthUI(_currentHealth, _stats.maxHealth);
+            _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
             if (_currentHealth <= 0f)
             {
@@ -156,10 +156,8 @@ namespace Obrissom.Enemy
 
         protected virtual void Die(NetworkObjectReference attackerRef)
         {
-            Debug.Log("Enemy died");
-
             _isDead = true;
-            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete if when navmesh is implemented
+            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
             _enemyAnimation.PlayDeathAnimation();
@@ -169,6 +167,7 @@ namespace Obrissom.Enemy
             if (attackerRef.TryGet(out NetworkObject attackerObj))
             {
                 attackerObj.GetComponent<PlayerXP>()?.GainXP(_stats.experienceReward);
+                attackerObj.GetComponent<PlayerQuestTracker>()?.ReportKill(_stats);
             }
 
             StartCoroutine(DespawnRoutine());

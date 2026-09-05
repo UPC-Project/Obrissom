@@ -116,7 +116,6 @@ namespace Obrissom.Enemy
         {
             if (CurrentState == newState) return;
 
-            Debug.Log($"[StateMachine] {CurrentState} -> {newState}");
             OnStateExit(CurrentState);
             CurrentState = newState;
             OnStateEnter(newState);

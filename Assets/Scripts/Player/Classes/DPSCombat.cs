@@ -16,9 +16,10 @@ namespace Obrissom.Player
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void PhysicInstantFrontServerRpc(int minDamage, int maxDamage, float range, float angle)
+        public void PhysicInstantFrontServerRpc(int minDamage, int maxDamage, float range, float angle, EffectType effect, int minDamagePerSecond, int maxDamagePerSecond, float damagePerSecondTime, EffectType damagePerSecondType)
         {
-            PhysicInstantFront.ExecuteOnServer(gameObject, minDamage, maxDamage, range, angle);
+            // Manually had to pass all skill data needed, since RPC functions only acept serializable types (maybe could use INetworkSerializable)
+            InstantFront.ExecuteOnServer(gameObject, minDamage, maxDamage, range, angle, effect, minDamagePerSecond, maxDamagePerSecond, damagePerSecondTime, damagePerSecondType);
         }
     }
 }

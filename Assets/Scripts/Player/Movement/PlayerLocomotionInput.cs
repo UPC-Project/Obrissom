@@ -1,11 +1,12 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using Unity.Netcode;
 
 namespace Obrissom.Player
 {
     [DefaultExecutionOrder(-2)]
 
-    public class PlayerLocomotionInput : MonoBehaviour, PlayerInput.IPlayerLocomotionMapActions
+    public class PlayerLocomotionInput : NetworkBehaviour, PlayerInput.IPlayerLocomotionMapActions
     {
         #region Class variables
         [Header("Player Movement")]
@@ -26,14 +27,25 @@ namespace Obrissom.Player
 
         [Header("References")]
         [SerializeField] private Animator _animator;
+
+        private void Awake()
+        {
+            PlayerInput = new PlayerInput();
+            PlayerInput.Enable();
+        }
         #endregion
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsOwner)
+            {
+                enabled = false;
+            }
+        }
 
         private void OnEnable()
         {
             RunToggledOn = false;
-
-            PlayerInput = new PlayerInput();
-            PlayerInput.Enable();
 
             PlayerInput.PlayerLocomotionMap.Enable();
             PlayerInput.PlayerLocomotionMap.SetCallbacks(this);
