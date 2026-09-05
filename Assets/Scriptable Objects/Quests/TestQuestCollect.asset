@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
   questId: T-02
   title: Test Quest Collect
-  offerDescription: Collect 2
-  completedDescription: Everything working right! Enemy killed registered
+  offerDescription: Collect 5 wood items
+  completedDescription: 'Everything working right! Quest completed '
   type: 0
   isShared: 1
   requiredLevel: 1
   requiredQuests: []
-  questGiver: T-01
-  questReceiver: T-01
+  questGiver: T-02
+  questReceiver: T-02
   objective:
     type: 2
     enemyTargets: []
-    itemTargets: []
+    itemTargets:
+    - item: {fileID: 11400000, guid: b4feadf0f9354ce479f9340b531c314d, type: 2}
+      amount: 5
     targetNPC: 
   reward:
     experienceReward: 100
-    items:
-    - item: {fileID: 0}
-      amount: 0
+    items: []

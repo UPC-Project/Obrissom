@@ -1,19 +1,42 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Unity.Netcode;
 
 /// Handles player interaction input and NPC/Item proximity detection.
 namespace Obrissom.Player
 {
-    public class PlayerInteraction : MonoBehaviour, PlayerInput.IPlayerInteractMapActions
+    public class PlayerInteraction : NetworkBehaviour, PlayerInput.IPlayerInteractMapActions
     {
         private PlayerQuestTracker _playerQuestTracker;
         private List<NPCInteractable> _nearbyNPCs = new List<NPCInteractable>();
         private List<PickupBase> _nearbyItems = new List<PickupBase>();
         private PlayerInput _playerInput;
+        public static PlayerInteraction LocalInstance { get; private set; }
+
         private void Awake()
         {
             _playerQuestTracker = GetComponent<PlayerQuestTracker>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsOwner)
+            {
+                enabled = false;
+            }
+            else
+            {
+                LocalInstance = this;
+            }
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (IsOwner && LocalInstance == this)
+            {
+                LocalInstance = null;
+            }
         }
 
         private void OnEnable()
@@ -27,6 +50,14 @@ namespace Obrissom.Player
         {
             _playerInput.PlayerInteractMap.Disable();
             _playerInput.PlayerInteractMap.RemoveCallbacks(this);
+        }
+
+        public void RemoveItem(PickupBase item)
+        {
+            if (_nearbyItems.Contains(item))
+            {
+                _nearbyItems.Remove(item);
+            }
         }
 
         public void OnInteract(InputAction.CallbackContext context)

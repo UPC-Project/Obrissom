@@ -1,4 +1,5 @@
 using UnityEngine;
+using Obrissom.Player.Inventory;
 
 /// Runtime representation of an active quest.
 /// Tracks kill and talk progress. Collect progress is derived from inventory.
@@ -8,6 +9,7 @@ public class QuestInstance
     public QuestStatus status;
 
     private int[] _killProgress;
+    private int[] _sharedCollectProgress;
 
     private bool _talkCompleted;
 
@@ -64,7 +66,39 @@ public class QuestInstance
 
     // COLLECT PROGRESS
 
-    public int GetCollectProgress(int itemTargetIndex, Obrissom.Player.Inventory.Inventory inventory)
+    public void SetSharedCollectProgress(int itemTargetIndex, int value)
+    {
+        if (_sharedCollectProgress == null)
+        {
+            if (template.objective != null && template.objective.itemTargets != null)
+                _sharedCollectProgress = new int[template.objective.itemTargets.Length];
+            else return;
+        }
+
+        if (itemTargetIndex >= 0 && itemTargetIndex < _sharedCollectProgress.Length)
+        {
+            int required = template.objective.itemTargets[itemTargetIndex].amount;
+            _sharedCollectProgress[itemTargetIndex] = Mathf.Min(value, required);
+        }
+    }
+
+    public int GetCollectProgress(int itemTargetIndex, Inventory inventory)
+    {
+        if (template.isShared)
+        {
+            if (_sharedCollectProgress != null && itemTargetIndex >= 0 && itemTargetIndex < _sharedCollectProgress.Length)
+            {
+                return _sharedCollectProgress[itemTargetIndex];
+            }
+            return 0;
+        }
+        else
+        {
+            return GetLocalCollectProgress(itemTargetIndex, inventory);
+        }
+    }
+
+    public int GetLocalCollectProgress(int itemTargetIndex, Inventory inventory)
     {
         QuestObjective obj = template.objective;
         if (obj == null || obj.itemTargets == null || itemTargetIndex < 0 || itemTargetIndex >= obj.itemTargets.Length)
@@ -81,12 +115,12 @@ public class QuestInstance
             }
         }
 
-        return Mathf.Min(count, target.amount);
+        return count; // Notice we don't cap this at target.amount here, so the server knows exactly how many they have for deduction!
     }
 
     // COMPLETION CHECKS
 
-    public bool IsObjectiveComplete(Obrissom.Player.Inventory.Inventory inventory)
+    public bool IsObjectiveComplete(Inventory inventory)
     {
         QuestObjective obj = template.objective;
         if (obj == null) return true;
@@ -121,9 +155,14 @@ public class QuestInstance
 
     public void CheckAndUpdateStatus(Obrissom.Player.Inventory.Inventory inventory)
     {
-        if (status == QuestStatus.InProgress && IsObjectiveComplete(inventory))
+        bool isComplete = IsObjectiveComplete(inventory);
+        if (status == QuestStatus.InProgress && isComplete)
         {
             status = QuestStatus.ReadyToDeliver;
+        }
+        else if (status == QuestStatus.ReadyToDeliver && !isComplete)
+        {
+            status = QuestStatus.InProgress;
         }
     }
 }

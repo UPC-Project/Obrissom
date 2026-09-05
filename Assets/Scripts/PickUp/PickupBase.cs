@@ -10,7 +10,6 @@ public class PickupBase : NetworkBehaviour
     public bool autoPickup = false;
     [SerializeField] protected bool _respawn = false;
     [SerializeField] protected Item _item;
-    public event Action OnItemChanged;
 
     // NETWORK VARIABLES 
     protected NetworkVariable<int> _quantity = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -19,21 +18,16 @@ public class PickupBase : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         _itemID.OnValueChanged += (prev, current) => ResolveItem();
-        OnItemChanged += UpdateItem;
         ResolveItem();
     }
 
-    public override void OnNetworkDespawn()
-    {
-        OnItemChanged -= UpdateItem;
-    }
 
     /// <summary>
     /// Asks the ItemDatabase for the full Item data using the synced ID.
     /// </summary>
     protected virtual void ResolveItem()
     {
-        _itemID.Value = _item.itemID;
+        if (IsServer && _item != null) _itemID.Value = _item.itemID;
     }
 
 
@@ -45,7 +39,6 @@ public class PickupBase : NetworkBehaviour
     {
         if (!autoPickup)
         {
-            OnItemChanged.Invoke();
             RequestPickupServerRpc();
         }
     }
@@ -57,11 +50,22 @@ public class PickupBase : NetworkBehaviour
 
         if (other.CompareTag("Player") && other.GetComponent<NetworkObject>().IsOwner)
         {
-            OnItemChanged.Invoke();
             RequestPickupServerRpc();
         }
     }
-    protected virtual void UpdateItem()  {}
+
+    /// <summary>
+    /// Called on the server after the item is successfully picked up by a player.
+    /// </summary>
+    protected virtual void OnPickedUpServer()
+    {
+        if (!_respawn) GetComponent<NetworkObject>().Despawn();
+    }
+
+    /// <summary>
+    /// Can this item be picked up right now?
+    /// </summary>
+    protected virtual bool CanBePickedUp() { return true; }
 
     /// <summary>
     /// CLIENT -> SERVER: "I want to pick this item up".
@@ -69,7 +73,7 @@ public class PickupBase : NetworkBehaviour
     [Rpc(SendTo.Server)]
     private void RequestPickupServerRpc(RpcParams rpcParams = default)
     {
-        if (_item == null) return;
+        if (_item == null || !CanBePickedUp()) return;
 
         // 1. Get the ID of the client who pressed 'F'
         ulong clientId = rpcParams.Receive.SenderClientId;
@@ -90,8 +94,8 @@ public class PickupBase : NetworkBehaviour
                 // 4. Send the item data to that player's inventory
                 playerDropper.ReceiveItemClientRpc(_itemID.Value, _quantity.Value, targetParams);
 
-                // 5. Despawn the world object (it will disappear for everyone)
-                if (!_respawn) GetComponent<NetworkObject>().Despawn();
+                // 5. Run any server-side logic (e.g., despawn or respawn timer)
+                OnPickedUpServer();
             }
         }
     }

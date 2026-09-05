@@ -35,8 +35,6 @@ public class DroppedItem : PickupBase
         _itemID.OnValueChanged += (prev, current) => ResolveItem();
         _quantity.OnValueChanged += (prev, current) => UpdateLabel();
 
-        OnItemChanged += UpdateItem;
-
         ResolveItem();
     }
 

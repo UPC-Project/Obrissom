@@ -394,6 +394,9 @@ PrefabInstance:
       addedObject: {fileID: 6473085182423485947}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 888400436989536369}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5469141996300260983}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: -1
@@ -528,7 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2585064699
+  GlobalObjectIdHash: 2930922969
   InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
@@ -604,6 +607,38 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
+--- !u!114 &888400436989536369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170950436608528497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
+  m_Animator: {fileID: 6905059756194858455}
+  TransitionStateInfoList: []
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: speed
+      NameHash: 254213878
+      Synchronize: 1
+      ParameterType: 1
+    - name: isMoving
+      NameHash: -27727268
+      Synchronize: 1
+      ParameterType: 4
+    - name: isGrounded
+      NameHash: 1360771445
+      Synchronize: 1
+      ParameterType: 4
+  AnimatorParametersExpanded: 0
 --- !u!114 &5469141996300260983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650,6 +685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: add499a960eec7440919d6afc21e2537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotionInput
+  ShowTopMostFoldoutHeaderGroup: 1
   _cameraZoomSpeed: 0.2
   _cameraZoomMinZoom: 2
   _cameraZoomMaxZoom: 5
@@ -845,3 +881,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de13e3e9256d624f85ce25be524f620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerInteraction
+  ShowTopMostFoldoutHeaderGroup: 1
