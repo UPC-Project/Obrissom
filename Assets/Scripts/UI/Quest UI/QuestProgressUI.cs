@@ -78,7 +78,7 @@ namespace Obrissom.UI
                 string color = (quest.status == QuestStatus.ReadyToDeliver || quest.status == QuestStatus.Completed) ? "<color=#FFD792>" : "<color=#FFFFFF>";
                 progress.AppendLine(color);
 
-                progress.AppendLine($"{quest.template.name}");
+                progress.AppendLine($"{quest.template.title}");
 
                 switch (quest.template.objective.type)
                 {
