@@ -139,6 +139,7 @@ public class PlayerQuestTracker : NetworkBehaviour
         _completedQuests.Add(template);
 
         OnQuestsChanged?.Invoke();
+        QuestCompletePopup.Instance.ShowQuestCompletePopup(template.title);
     }
 
     // PROGRESS REPORTING
