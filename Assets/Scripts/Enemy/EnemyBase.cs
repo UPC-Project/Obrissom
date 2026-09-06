@@ -1,4 +1,4 @@
-﻿using Obrissom.Player;
+using Obrissom.Player;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -53,8 +53,6 @@ namespace Obrissom.Enemy
         private bool _isWaypointPausing;
 
         // Lifecycle
-
-
         protected EnemyStateMachine _stateMachine;
 
 
@@ -164,7 +162,7 @@ namespace Obrissom.Enemy
         protected virtual void Die(NetworkObjectReference attackerRef)
         {
             _isDead = true;
-            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete if when navmesh is implemented
+            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
             _enemyAnimation.PlayDeathAnimation();
@@ -174,6 +172,7 @@ namespace Obrissom.Enemy
             if (attackerRef.TryGet(out NetworkObject attackerObj))
             {
                 attackerObj.GetComponent<PlayerXP>()?.GainXP(_stats.experienceReward);
+                attackerObj.GetComponent<PlayerQuestTracker>()?.ReportKill(_stats);
             }
 
             StartCoroutine(DespawnRoutine());

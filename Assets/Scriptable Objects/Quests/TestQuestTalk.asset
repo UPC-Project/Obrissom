@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f86a526215b5d47ab96d0e06e59cfc, type: 3}
+  m_Name: TestQuestTalk
+  m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
+  questId: T-03
+  title: Test Quest Call
+  offerDescription: Talk with the other ant! she has a quest for you
+  completedDescription: Hello! Thanks for talking to me
+  type: 0
+  isShared: 1
+  requiredLevel: 1
+  requiredQuests:
+  - {fileID: 11400000, guid: af69555f0525b214fbf07a34531a70dd, type: 2}
+  questGiver: T-01
+  questReceiver: T-02
+  objective:
+    type: 1
+    enemyTargets:
+    - enemy: {fileID: 11400000, guid: 0a89486b3b82fb3478d5d99f2ddc4260, type: 2}
+      amount: 1
+    itemTargets: []
+    targetNPC: T-02
+  reward:
+    experienceReward: 10
+    items: []
