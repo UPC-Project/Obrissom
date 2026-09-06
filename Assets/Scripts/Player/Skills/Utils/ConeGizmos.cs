@@ -6,10 +6,11 @@ public class SkillGizmos : MonoBehaviour
     [Header("Cone Settings")]
     [SerializeField] private float range = 2.5f;
     [SerializeField] private float angle = 55f;
+    [SerializeField] private float originOffset = 0.5f;
 
     private void OnDrawGizmos()
     {
-        Vector3 origin = transform.position + Vector3.up * 0.9f;
+        Vector3 origin = transform.position + Vector3.up * 0.9f - transform.forward * originOffset;
 
         Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
         Gizmos.DrawWireSphere(origin, range);

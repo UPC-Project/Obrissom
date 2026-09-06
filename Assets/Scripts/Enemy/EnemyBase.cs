@@ -72,6 +72,7 @@ namespace Obrissom.Enemy
 
             _currentHealth = _stats.maxHealth;
             _agent.speed = _stats.moveSpeed;
+            _agent.enabled = true;
 
             _stateMachine.Initialize(this, _agent);
 

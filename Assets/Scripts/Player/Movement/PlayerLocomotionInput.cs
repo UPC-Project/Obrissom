@@ -1,10 +1,11 @@
 using Unity.Cinemachine;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Obrissom.Player
 {
-    [DefaultExecutionOrder(-2)]
+    [DefaultExecutionOrder(-3)]
 
     public class PlayerLocomotionInput : NetworkBehaviour, PlayerInput.IPlayerLocomotionMapActions
     {
@@ -14,7 +15,18 @@ namespace Obrissom.Player
         public bool JumpPressed { get; private set; }
         public bool CameraPressed { get; private set; }
 
-        public PlayerInput PlayerInput { get; private set; }
+        private PlayerInput _playerInput;
+        public PlayerInput PlayerInput
+        {
+            get
+            {
+                if (_playerInput == null)
+                {
+                    _playerInput = new PlayerInput();
+                }
+                return _playerInput;
+            }
+        }
         public Vector2 MovementInput { get; private set; }
         
         [Header("Player Camera")]
@@ -27,10 +39,11 @@ namespace Obrissom.Player
 
         [Header("References")]
         [SerializeField] private Animator _animator;
+        
 
         private void Awake()
         {
-            PlayerInput = new PlayerInput();
+            _playerInput = new PlayerInput();
             PlayerInput.Enable();
         }
         #endregion

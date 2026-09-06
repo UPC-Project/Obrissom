@@ -325,15 +325,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22
+      value: 189.87471
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 50.0051
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 492.79007
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2969196564
+  GlobalObjectIdHash: 3667689623
   InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
@@ -631,7 +631,21 @@ MonoBehaviour:
   NetworkAnimatorExpanded: 0
   AuthorityMode: 0
   m_Animator: {fileID: 6905059756194858455}
-  TransitionStateInfoList: []
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 1
+    OriginatingState: 2140143823
+    DestinationState: -1871088301
+    TransitionDuration: 0.1
+    TriggerNameHash: -1871088301
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 1
+    OriginatingState: 2140143823
+    DestinationState: 1306736332
+    TransitionDuration: 0.1
+    TriggerNameHash: 1306736332
+    TransitionIndex: 1
   AnimatorParameterEntries:
     ParameterEntries:
     - name: speed
@@ -646,6 +660,14 @@ MonoBehaviour:
       NameHash: 1360771445
       Synchronize: 1
       ParameterType: 4
+    - name: basic
+      NameHash: -1871088301
+      Synchronize: 1
+      ParameterType: 9
+    - name: skill1
+      NameHash: 1306736332
+      Synchronize: 1
+      ParameterType: 9
   AnimatorParametersExpanded: 0
 --- !u!114 &5469141996300260983
 MonoBehaviour:
@@ -711,6 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d76750b0e2cf704aad293fcc6547f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerCombatInput
+  _animator: {fileID: 6905059756194858455}
 --- !u!114 &3421570259179240014
 MonoBehaviour:
   m_ObjectHideFlags: 0

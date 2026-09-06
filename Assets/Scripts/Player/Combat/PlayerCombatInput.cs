@@ -10,6 +10,7 @@ namespace Obrissom.Player
         private PlayerSkills _playerSkills;
         private PlayerInput _playerInput;
         private NetworkObject _networkObject;
+        public Animator _animator;
 
         private bool IsOwner => _networkObject != null && _networkObject.IsOwner;
 
@@ -19,6 +20,7 @@ namespace Obrissom.Player
             _playerInput = GetComponent<PlayerLocomotionInput>().PlayerInput;
             _networkObject = GetComponent<NetworkObject>();
         }
+
         private void OnEnable()
         {
             _playerInput.PlayerSkillMap.Enable();
@@ -34,15 +36,34 @@ namespace Obrissom.Player
         public void OnBasic(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
-            if (context.performed) _playerSkills.OnSkillPressed(SkillKey.LB);
-            if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.LB);
+            if (context.performed) 
+            {
+                _playerSkills.OnSkillPressed(SkillKey.LB);
+                _animator.SetTrigger("basic");
+            }
+
+            if (context.canceled) 
+            {
+                _playerSkills.OnSkillReleased(SkillKey.LB);
+                _animator.ResetTrigger("basic");
+            }
+            
         }
 
         public void OnSkill1(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
-            if (context.performed) _playerSkills.OnSkillPressed(SkillKey.ONE);
-            if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.ONE);
+            if (context.performed)
+            {
+                _playerSkills.OnSkillPressed(SkillKey.ONE);
+                _animator.SetTrigger("skill1");
+            }
+
+            if (context.canceled)
+            {
+                _playerSkills.OnSkillReleased(SkillKey.ONE);
+                _animator.ResetTrigger("skill1");
+            }
         }
 
         public void OnSkill2(InputAction.CallbackContext context)

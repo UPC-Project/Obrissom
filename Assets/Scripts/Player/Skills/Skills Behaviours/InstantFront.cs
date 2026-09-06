@@ -9,21 +9,22 @@ public class InstantFront : SkillBehaviour
 {
     [SerializeField] private float range = 2.5f; // large range
     [SerializeField] private float angle = 55f; // cone angle
+    [SerializeField] private float originOffset = 0.5f; // pulls the cone's apex back into the caster, so it covers enemies close to its sides
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         // (Now it's only used by the dps, but this could be modularized for all the classes)
         // Mediator needed to work online
         DPSCombat dpsCombat = caster.GetComponent<DPSCombat>();
-        dpsCombat.PhysicInstantFrontServerRpc(skillData.minEffectValue, skillData.maxEffectValue, range, angle, skillData.effectType, skillData.minDamagePerSecond, skillData.maxDamagePerSecond, skillData.damagePerSecondTime, skillData.damagePerSecondType);
+        dpsCombat.PhysicInstantFrontServerRpc(skillData.minEffectValue, skillData.maxEffectValue, range, angle, originOffset, skillData.effectType, skillData.minDamagePerSecond, skillData.maxDamagePerSecond, skillData.damagePerSecondTime, skillData.damagePerSecondType);
     }
 
     // called on dpsCombat
-    public static void ExecuteOnServer(GameObject caster, int minDamage, int maxDamage, float range, float angle, EffectType effect, int minDamagePerSecond, int maxDamagePerSecond, float damagePerSecondTime, EffectType damagePerSecondType)
+    public static void ExecuteOnServer(GameObject caster, int minDamage, int maxDamage, float range, float angle, float originOffset, EffectType effect, int minDamagePerSecond, int maxDamagePerSecond, float damagePerSecondTime, EffectType damagePerSecondType)
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
 
-        Vector3 origin = caster.transform.position + Vector3.up * 0.9f;
+        Vector3 origin = caster.transform.position + Vector3.up * 0.9f - caster.transform.forward * originOffset;
         Collider[] hits = Physics.OverlapSphere(caster.transform.position, range);
 
         // Damage will affect every enemy inside the cone
