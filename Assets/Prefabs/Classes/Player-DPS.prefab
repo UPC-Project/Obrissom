@@ -5549,15 +5549,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -29.414171
+      value: 156.37
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000017805911
+      value: 50.00511
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.9302988
+      value: 488.01
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6320,8 +6320,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3170950436608528497}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: de13a7420582ded45a8d7d3f96889aca, type: 3}
-  m_Controller: {fileID: 9100000, guid: 4c7fe8e1a3919c549a79a706afefd1ce, type: 2}
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5275426a9b9bc9a43ab1a3da5fb9c773, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -6397,7 +6397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2585064699
+  GlobalObjectIdHash: 2930922969
   InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6637,8 +6637,8 @@ MonoBehaviour:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
-    m_InternalValue: 20
-  healthRegen: 1
+    m_InternalValue: 100
+  healthRegen: 2
   maxResource:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0
