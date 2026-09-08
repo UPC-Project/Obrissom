@@ -76,8 +76,17 @@ namespace Obrissom.Player
         public void OnSkill3(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
-            if (context.performed) _playerSkills.OnSkillPressed(SkillKey.THREE);
-            if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.THREE);
+            if (context.performed)
+            {
+                _playerSkills.OnSkillPressed(SkillKey.THREE);
+                _animator.SetTrigger("skill2");
+            }
+
+            if (context.canceled)
+            {
+                _playerSkills.OnSkillReleased(SkillKey.THREE);
+                _animator.ResetTrigger("skill2");
+            }
         }
 
         public void OnSkill4(InputAction.CallbackContext context)
