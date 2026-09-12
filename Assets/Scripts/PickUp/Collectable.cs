@@ -1,7 +1,5 @@
 using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
-using Obrissom.Player;
 
 public class Collectable : PickupBase
 {
@@ -11,59 +9,34 @@ public class Collectable : PickupBase
     [SerializeField, Min(1)] protected int _minQuantity;
     [SerializeField, Min(1)] protected int _maxQuantity;
 
-    private NetworkVariable<bool> _isActive = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
     public override void OnNetworkSpawn()
     {
         _respawn = true;
         if (_trigger == null) _trigger = gameObject.GetComponent<Collider>();
-        
-        _isActive.OnValueChanged += OnActiveStateChanged;
         _itemID.OnValueChanged += (prev, current) => ResolveItem();
-        
+        OnItemChanged += UpdateItem;
         ResolveItem();
-        
-        OnActiveStateChanged(true, _isActive.Value);
     }
 
-    public override void OnNetworkDespawn()
+    public override void Interact()
     {
-        _isActive.OnValueChanged -= OnActiveStateChanged;
+        if (!_trigger.enabled) return;
+        base.Interact();
     }
 
-    private void OnActiveStateChanged(bool previous, bool current)
+    protected override void UpdateItem()
     {
-        if (model != null) model.SetActive(current);
-        if (_trigger != null) _trigger.enabled = current;
-
-        if (!current && PlayerInteraction.LocalInstance != null)
-        {
-            PlayerInteraction.LocalInstance.RemoveItem(this);
-        }
-    }
-
-    protected override bool CanBePickedUp()
-    {
-        return _isActive.Value;
-    }
-
-    // This is now called ONLY on the server after a successful pickup
-    protected override void OnPickedUpServer()
-    {
-        // Randomize quantity for the next time it's picked up
         _quantity.Value = Random.Range(_minQuantity, _maxQuantity + 1);
-        
-        // Hide the item for all clients
-        _isActive.Value = false;
-        
-        // Start the respawn timer on the server
+        model.SetActive(false);
+        _trigger.enabled = false;
         StartCoroutine(ReSpawn());
     }
 
     private IEnumerator ReSpawn()
     {
         yield return new WaitForSecondsRealtime(_reSpawnTime);
-        // Show the item for all clients
-        _isActive.Value = true;
+
+        model.SetActive(true);
+        _trigger.enabled = true;
     }
 }
