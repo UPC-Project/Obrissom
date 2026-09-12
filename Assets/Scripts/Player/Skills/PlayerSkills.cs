@@ -113,6 +113,11 @@ namespace Obrissom.Player
             _activeSkill = null;
         }
 
+        public bool isSkillAvailable(SkillKey key)
+        {
+            return _activeSkills.ContainsKey(key);
+        }
+
         private bool CanActivateSkill(SkillKey key)
         {
             if (_activeSkill != null) return false;

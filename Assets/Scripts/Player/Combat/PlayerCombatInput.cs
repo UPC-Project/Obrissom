@@ -35,7 +35,7 @@ namespace Obrissom.Player
 
         public void OnBasic(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (!IsOwner || !_playerSkills.isSkillAvailable(SkillKey.LB)) return;
             if (context.performed) 
             {
                 _playerSkills.OnSkillPressed(SkillKey.LB);
@@ -52,7 +52,7 @@ namespace Obrissom.Player
 
         public void OnSkill1(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (!IsOwner || !_playerSkills.isSkillAvailable(SkillKey.ONE)) return;
             if (context.performed)
             {
                 _playerSkills.OnSkillPressed(SkillKey.ONE);
@@ -68,14 +68,14 @@ namespace Obrissom.Player
 
         public void OnSkill2(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (!IsOwner || !_playerSkills.isSkillAvailable(SkillKey.TWO)) return;
             if (context.performed) _playerSkills.OnSkillPressed(SkillKey.TWO);
             if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.TWO);
         }
 
         public void OnSkill3(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (!IsOwner || !_playerSkills.isSkillAvailable(SkillKey.THREE)) return;
             if (context.performed)
             {
                 _playerSkills.OnSkillPressed(SkillKey.THREE);
@@ -91,7 +91,7 @@ namespace Obrissom.Player
 
         public void OnSkill4(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (!IsOwner || !_playerSkills.isSkillAvailable(SkillKey.FOUR)) return;
             if (context.performed) _playerSkills.OnSkillPressed(SkillKey.FOUR);
             if (context.canceled) _playerSkills.OnSkillReleased(SkillKey.FOUR);
         }
