@@ -1,6 +1,6 @@
 using UnityEngine;
 
-/// Activates the WeaponSkillHitbox on the player's weapon..
+/// Activates the WeaponSkillHitbox on the player's weapon.
 [CreateAssetMenu(menuName = "Skills/Behaviours/Damage_By_Collider")]
 public class DamageByCollider : SkillBehaviour
 {
@@ -9,8 +9,13 @@ public class DamageByCollider : SkillBehaviour
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        WeaponSkillHitbox hitbox = caster.GetComponentInChildren<WeaponSkillHitbox>(true);
-        hitbox.SetupSkill(skillData, hitMultipleEnemies);
+        var hitboxes = caster.GetComponentsInChildren<WeaponSkillHitbox>(true);
+        foreach (var hitbox in hitboxes)
+        {
+            if (hitbox.hitboxType == SkillHitboxType.Weapon)
+            {
+                hitbox.SetupSkill(skillData, hitMultipleEnemies, true, false);
+            }
+        }
     }
 }
-

@@ -4,7 +4,6 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-
 /// <summary>
 /// Projects a cone in front (or more "inside" the model with originOffset) of the player,
 /// every enemy inside the cone receives physical damage.

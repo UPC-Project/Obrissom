@@ -263,6 +263,75 @@ MonoBehaviour:
   IgnoreTag: 
   AimDistance: 200
   NoiseCancellation: 1
+--- !u!1 &4005979873113642632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2319100058293082071}
+  - component: {fileID: 3639213967932796124}
+  - component: {fileID: 6086749871065973941}
+  m_Layer: 0
+  m_Name: SkillZone Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2319100058293082071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005979873113642632}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5455451315628815514}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3639213967932796124
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005979873113642632}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.024039978
+  m_Height: 0.07953099
+  m_Direction: 2
+  m_Center: {x: 0, y: -3.4316922e-10, z: 0.039940957}
+--- !u!114 &6086749871065973941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005979873113642632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dec7adf304f1ac44998c93a69f1fce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponSkillHitbox
+  hitboxType: 1
 --- !u!1 &6160443557852477779
 GameObject:
   m_ObjectHideFlags: 0
@@ -6233,6 +6302,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: 0
       addedObject: {fileID: 8703664667863706539}
+    - targetCorrespondingSourceObject: {fileID: -1480070881545233990, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 2319100058293082071}
     - targetCorrespondingSourceObject: {fileID: 6888806815857526915, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2244337370229784082}
@@ -6403,7 +6475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3610005400
+  GlobalObjectIdHash: 2035447369
   InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6792,6 +6864,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 986911294515606128, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
   m_PrefabInstance: {fileID: 2359907433732042016}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &5455451315628815514 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1480070881545233990, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
+  m_PrefabInstance: {fileID: 2359907433732042016}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5568293458904051695 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1331202741623749937, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
@@ -6832,6 +6909,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dec7adf304f1ac44998c93a69f1fce1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSkillHitbox
+  hitboxType: 0
 --- !u!4 &9176618612865934755 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6888806815857526915, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
