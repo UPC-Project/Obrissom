@@ -18,16 +18,16 @@ public class InstantAndDOTDamage : SkillBehaviour
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        var hitboxes = caster.GetComponentsInChildren<WeaponSkillHitbox>(true);
+        var hitboxes = caster.GetComponentsInChildren<DamageSkillHitbox>(true);
         foreach (var hitbox in hitboxes)
         {
             if (hitbox.hitboxType == SkillHitboxType.Weapon)
             {
-                hitbox.SetupSkill(skillData, _weaponHitMultipleEnemies, _weaponInstantEffect, _weaponDOT);
+                hitbox.SetupCollider(skillData, _weaponHitMultipleEnemies, _weaponInstantEffect, _weaponDOT);
             }
             else if (hitbox.hitboxType == SkillHitboxType.SkillZone)
             {
-                hitbox.SetupSkill(skillData, _skillZoneHitMultipleEnemies, _skillZoneInstantEffect, _skillZoneDOT);
+                hitbox.SetupCollider(skillData, _skillZoneHitMultipleEnemies, _skillZoneInstantEffect, _skillZoneDOT);
 
             }
         }
