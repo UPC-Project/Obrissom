@@ -74,8 +74,6 @@ namespace Obrissom.Player
 
         public void OnSkillPressed(SkillKey key)
         {
-            if (!CanActivateSkill(key)) return;
-
             _activeSkills.TryGetValue(key, out Skill skill);
 
             _activeSkill = skill;
@@ -93,7 +91,6 @@ namespace Obrissom.Player
 
         public void OnSkillReleased(SkillKey key)
         {
-            if (!CanReleaseSkill(key)) return;
             bool skillExecuted = false;
             if (_activeSkill.behaviour.castType == CastType.Hold)
             {
@@ -113,10 +110,17 @@ namespace Obrissom.Player
             _activeSkill = null;
         }
 
-        private bool CanActivateSkill(SkillKey key)
+        public bool IsHoldSkill(SkillKey key)
+        {
+            if (_activeSkills.TryGetValue(key, out Skill skill))
+                return skill.behaviour.castType == CastType.Hold;
+            return false;
+        }
+
+        public bool CanActivateSkill(SkillKey key)
         {
             if (_activeSkill != null) return false;
-            if (!_activeSkills.TryGetValue(key, out Skill skill)) return false;
+            if (!_activeSkills.ContainsKey(key)) return false;
 
             if (_cooldowns.TryGetValue(key, out float remaining) && remaining > 0f) return false;
 
@@ -125,7 +129,7 @@ namespace Obrissom.Player
             return true;
         }
 
-        private bool CanReleaseSkill(SkillKey key)
+        public bool CanReleaseSkill(SkillKey key)
         {
             if (_activeSkill == null) return false;
             if (!_activeSkills.TryGetValue(key, out Skill skill)) return false;

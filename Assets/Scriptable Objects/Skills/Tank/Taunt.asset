@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
-  m_Name: MagicProjectile
+  m_Name: Taunt
   m_EditorClassIdentifier: Assembly-CSharp::Skill
-  skillName: Magic Projectile
-  skillImage: {fileID: 21300000, guid: 381b3d3a7dcaf1040b5e86f476e78ed4, type: 3}
-  description: Channel a magic orb that will cause 10-15 magic damage.
-  cooldownTime: 1
-  cost: 2
+  skillName: Bug Buzz
+  skillImage: {fileID: 21300000, guid: f6fcbc3ff973b5140b4c26bfae6a09b5, type: 3}
+  description: Flaps your wings to provoke nearby enemies, instantly drawing their
+    aggro
+  cooldownTime: 2
+  cost: 5
   castTime: 0
-  minEffectValue: 10
-  maxEffectValue: 15
-  effectType: 1
+  minEffectValue: 0
+  maxEffectValue: 0
+  effectType: 0
   minDamagePerSecond: 0
   maxDamagePerSecond: 0
   damagePerSecondTime: 0
   damagePerSecondType: 0
-  behaviour: {fileID: 11400000, guid: 22ab579740cc57c4dadad996563967fb, type: 2}
+  behaviour: {fileID: 11400000, guid: 6576e6414c55d854caef6c5b2ebbb584, type: 2}

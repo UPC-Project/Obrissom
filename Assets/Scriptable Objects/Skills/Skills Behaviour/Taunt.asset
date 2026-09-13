@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3179c248d8e79c47b4dda3d5a24d13a, type: 3}
-  m_Name: Instant_Front_Small
-  m_EditorClassIdentifier: Assembly-CSharp::PhysicInstantFront
+  m_Script: {fileID: 11500000, guid: 5fde46e5de3318446a2764b06e2525ec, type: 3}
+  m_Name: Taunt
+  m_EditorClassIdentifier: Assembly-CSharp::Taunt
   castType: 0
-  range: 2.5
-  angle: 70
-  originOffset: 0.7
+  _radius: 10
+  _tauntDuration: 5
+  _showCircleTime: 2

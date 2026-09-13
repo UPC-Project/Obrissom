@@ -20,21 +20,22 @@ public class PickupBase : NetworkBehaviour
         ResolveItem();
     }
 
-
     /// <summary>
     /// Asks the ItemDatabase for the full Item data using the synced ID.
     /// </summary>
     protected virtual void ResolveItem()
     {
-        if (IsServer && _item != null) _itemID.Value = _item.itemID;
+        if (IsServer && _item != null)
+        {
+            _itemID.Value = _item.itemID;
+        }
     }
-
 
     /// <summary>
     /// Called by PlayerInteraction when the player presses the interact button.
     /// autoPickup = false
     /// </summary>
-    public void Interact()
+    public virtual void Interact()
     {
         if (!autoPickup)
         {
@@ -53,18 +54,8 @@ public class PickupBase : NetworkBehaviour
         }
     }
 
-    /// <summary>
-    /// Called on the server after the item is successfully picked up by a player.
-    /// </summary>
-    protected virtual void OnPickedUpServer()
-    {
-        if (!_respawn) GetComponent<NetworkObject>().Despawn();
-    }
-
-    /// <summary>
-    /// Can this item be picked up right now?
-    /// </summary>
     protected virtual bool CanBePickedUp() { return true; }
+    protected virtual void OnPickupServer() { }
 
     /// <summary>
     /// CLIENT -> SERVER: "I want to pick this item up".
@@ -73,6 +64,8 @@ public class PickupBase : NetworkBehaviour
     private void RequestPickupServerRpc(RpcParams rpcParams = default)
     {
         if (_item == null || !CanBePickedUp()) return;
+        
+        OnPickupServer();
 
         // 1. Get the ID of the client who pressed 'F'
         ulong clientId = rpcParams.Receive.SenderClientId;
@@ -93,8 +86,8 @@ public class PickupBase : NetworkBehaviour
                 // 4. Send the item data to that player's inventory
                 playerDropper.ReceiveItemClientRpc(_itemID.Value, _quantity.Value, targetParams);
 
-                // 5. Run any server-side logic (e.g., despawn or respawn timer)
-                OnPickedUpServer();
+                // 5. Despawn the world object (it will disappear for everyone)
+                if (!_respawn) GetComponent<NetworkObject>().Despawn();
             }
         }
     }

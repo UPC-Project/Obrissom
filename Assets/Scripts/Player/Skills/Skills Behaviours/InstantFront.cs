@@ -4,6 +4,11 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
+/// <summary>
+/// Projects a cone in front (or more "inside" the model with originOffset) of the player,
+/// every enemy inside the cone receives physical damage.
+/// Handles Damage Over Time.
+/// </summary>
 [CreateAssetMenu(menuName = "Skills/Behaviours/Instant_Front")]
 public class InstantFront : SkillBehaviour
 {
@@ -19,7 +24,7 @@ public class InstantFront : SkillBehaviour
         dpsCombat.PhysicInstantFrontServerRpc(skillData.minEffectValue, skillData.maxEffectValue, range, angle, originOffset, skillData.effectType, skillData.minDamagePerSecond, skillData.maxDamagePerSecond, skillData.damagePerSecondTime, skillData.damagePerSecondType);
     }
 
-    // called on dpsCombat
+    // called on classs Combat
     public static void ExecuteOnServer(GameObject caster, int minDamage, int maxDamage, float range, float angle, float originOffset, EffectType effect, int minDamagePerSecond, int maxDamagePerSecond, float damagePerSecondTime, EffectType damagePerSecondType)
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
