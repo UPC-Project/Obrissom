@@ -55,15 +55,17 @@ namespace Obrissom.Player
         {
             if (!IsOwner || currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
 
-            if (xp + amount >= xpNeeded)
+            xp += amount;
+
+            while (xp >= xpNeeded && currentLevel < LevelUpRequirements.MAX_LEVEL)
             {
-                float rest = (xp + amount) - xpNeeded;
-                xp = rest;
+                xp -= xpNeeded;
                 LevelUp();
             }
-            else
+
+            if (currentLevel >= LevelUpRequirements.MAX_LEVEL)
             {
-                xp += amount;
+                xp = 0;
             }
 
             _XpUi.UpdateXP(xp, xpNeeded, currentLevel);

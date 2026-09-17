@@ -16,7 +16,7 @@ namespace Obrissom.Enemy
         [SerializeField] private GameObject _shieldVfx;
 
         public override bool IsRetreating   => _isRetreating;
-        public override bool IsInvulnerable => _isRetreating || Time.time < _invulnerableUntil;
+        public override bool IsInvulnerable => false;
 
         private SlasherAnimation _slasherAnimation;
 
@@ -71,8 +71,8 @@ namespace Obrissom.Enemy
             _currentHealth = Mathf.Min(_currentHealth + regenAmount, regenCap);
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
-            if ((int)_currentHealth != (int)before)
-                Debug.Log($"[Slasher] Regen: {_currentHealth:F1} / {_stats.maxHealth}");
+            //if ((int)_currentHealth != (int)before)
+            //    Debug.Log($"[Slasher] Regen: {_currentHealth:F1} / {_stats.maxHealth}");
         }
 
         // Enrage
@@ -85,7 +85,7 @@ namespace Obrissom.Enemy
             if (healthFraction <= _slasherConfig.enrageHealthThreshold)
             {
                 _isEnraged = true;
-                Debug.Log("[Slasher] Enraged");
+                //Debug.Log("[Slasher] Enraged");
             }
         }
 
@@ -93,7 +93,7 @@ namespace Obrissom.Enemy
 
         protected override void OnTakeDamage(float rawAmount)
         {
-            Debug.Log($"[Slasher] Hit: {rawAmount} | retreating: {_isRetreating}");
+            //Debug.Log($"[Slasher] Hit: {rawAmount} | retreating: {_isRetreating}");
             if (_isRetreating) return;
             _regenStarted = false;
             _canRegen = false;
@@ -105,7 +105,7 @@ namespace Obrissom.Enemy
             _timeSinceLastDamage = 0f;
             _recentDamageAccumulated += rawAmount;
 
-            Debug.Log($"[Slasher] Burst: {_recentDamageAccumulated:F1} / {_slasherConfig.retreatDamageThreshold}");
+            //Debug.Log($"[Slasher] Burst: {_recentDamageAccumulated:F1} / {_slasherConfig.retreatDamageThreshold}");
 
             if (_damageClearRoutine != null)
                 StopCoroutine(_damageClearRoutine);
@@ -114,7 +114,7 @@ namespace Obrissom.Enemy
             if (_recentDamageAccumulated >= _slasherConfig.retreatDamageThreshold)
             {
                 _recentDamageAccumulated = 0f;
-                Debug.Log("[Slasher] Retreat triggered");
+                //Debug.Log("[Slasher] Retreat triggered");
                 StartCoroutine(RetreatRoutine());
             }
         }
@@ -221,7 +221,7 @@ namespace Obrissom.Enemy
 
             yield return new WaitForSeconds(_slasherConfig.retreatDuration);
 
-            Debug.Log("[Slasher] Retreat done");
+            //Debug.Log("[Slasher] Retreat done");
             _agent.speed = _stats.moveSpeed;
             _isRetreating = false;
             _canRegen = true;
