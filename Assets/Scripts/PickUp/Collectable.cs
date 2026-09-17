@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Collectable : PickupBase
@@ -9,34 +10,41 @@ public class Collectable : PickupBase
     [SerializeField, Min(1)] protected int _minQuantity;
     [SerializeField, Min(1)] protected int _maxQuantity;
 
+    // Syncs visibility and interactability state to late-joining clients
+    private NetworkVariable<bool> _isAvailable = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     public override void OnNetworkSpawn()
     {
         _respawn = true;
         if (_trigger == null) _trigger = gameObject.GetComponent<Collider>();
-        _itemID.OnValueChanged += (prev, current) => ResolveItem();
-        OnItemChanged += UpdateItem;
-        ResolveItem();
+        
+        _isAvailable.OnValueChanged += OnAvailabilityChanged;
+        OnAvailabilityChanged(false, _isAvailable.Value);
+        
+        base.OnNetworkSpawn();
     }
 
-    public override void Interact()
+    private void OnAvailabilityChanged(bool previousValue, bool newValue)
     {
-        if (!_trigger.enabled) return;
-        base.Interact();
+        model.SetActive(newValue);
+        _trigger.enabled = newValue;
     }
 
-    protected override void UpdateItem()
+    protected override bool CanBePickedUp()
+    {
+        return _isAvailable.Value;
+    }
+
+    protected override void OnPickupServer()
     {
         _quantity.Value = Random.Range(_minQuantity, _maxQuantity + 1);
-        model.SetActive(false);
-        _trigger.enabled = false;
-        StartCoroutine(ReSpawn());
+        _isAvailable.Value = false;
+        StartCoroutine(ReSpawnServer());
     }
 
-    private IEnumerator ReSpawn()
+    private IEnumerator ReSpawnServer()
     {
         yield return new WaitForSecondsRealtime(_reSpawnTime);
-
-        model.SetActive(true);
-        _trigger.enabled = true;
+        _isAvailable.Value = true;
     }
 }

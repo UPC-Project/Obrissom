@@ -5,10 +5,8 @@ using System.Collections.Generic;
 using System.Collections;
 using Obrissom.Player;
 
-public enum SkillHitboxType { Weapon, SkillZone }
-
 [RequireComponent(typeof(Collider))]
-public class WeaponSkillHitbox : MonoBehaviour
+public class DamageSkillHitbox : MonoBehaviour
 {
     public SkillHitboxType hitboxType = SkillHitboxType.Weapon;
 
@@ -29,7 +27,7 @@ public class WeaponSkillHitbox : MonoBehaviour
         _netObj = GetComponentInParent<NetworkObject>();
     }
 
-    public void SetupSkill(Skill skill, bool hitMultiple, bool applyInitialDamage, bool applyDOT)
+    public void SetupCollider(Skill skill, bool hitMultiple, bool applyInitialDamage, bool applyDOT)
     {
         _currentSkill = skill;
         _hitMultiple = hitMultiple;
@@ -37,8 +35,6 @@ public class WeaponSkillHitbox : MonoBehaviour
         _isActive = true;
         _applyInitialDamage = applyInitialDamage;
         _applyDOT = applyDOT;
-
-        StopAllCoroutines();
     }
 
     private void OnTriggerEnter(Collider other)

@@ -52,6 +52,11 @@ namespace Obrissom.Enemy
         protected Transform _target;
         private bool _isWaypointPausing;
 
+        // Taunt
+        private Transform _forcedTarget;
+        private float _tauntTimer;
+        public bool IsTaunted => _forcedTarget != null;
+
         // Lifecycle
         protected EnemyStateMachine _stateMachine;
 
@@ -87,6 +92,17 @@ namespace Obrissom.Enemy
             if (!IsServer || _isDead) return;
 
             _attackCooldownTimer -= Time.deltaTime;
+
+            // Taunt timer countdown
+            if (_tauntTimer > 0f)
+            {
+                _tauntTimer -= Time.deltaTime;
+                if (_tauntTimer <= 0f)
+                {
+                    _forcedTarget = null;
+                }
+            }
+
             _stateMachine.Tick();
         }
 
@@ -98,6 +114,12 @@ namespace Obrissom.Enemy
         /// </summary>
         public void DetectPlayer()
         {
+            if (_forcedTarget != null)
+            {
+                _target = _forcedTarget;
+                return;
+            }
+
             Collider[] hits = Physics.OverlapSphere(transform.position, _stats.chaseRange, _playerLayer);
 
             float closestDistance = float.MaxValue;
@@ -158,6 +180,28 @@ namespace Obrissom.Enemy
         protected virtual void OnTakeDamage(float rawAmount) { }
 
         /// <summary>
+        /// Forces this enemy to target the taunter for a duration, ignoring normal detection.
+        /// Called from TauntHitBox via client RPC.
+        /// </summary>
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void ApplyTauntRpc(NetworkObjectReference taunterRef, float duration)
+        {
+            if (_isDead) return;
+
+            if (taunterRef.TryGet(out NetworkObject taunterObj))
+            {
+                _forcedTarget = taunterObj.transform;
+                _tauntTimer = duration;
+
+                if (_stateMachine.CurrentState == EnemyState.Idle || _stateMachine.CurrentState == EnemyState.Move)
+                {
+                    _target = _forcedTarget;
+                    _stateMachine.ChangeState(EnemyState.Chase);
+                }
+            }
+        }
+
+        /// <summary>
         /// Returns a random damage value within the configured range.
         /// </summary>
         protected float RollAttackDamage() =>
@@ -200,6 +244,7 @@ namespace Obrissom.Enemy
         {
             _patrolPoints = points;
         }
+
         // Called once when entering Move state
         public void MoveToNextPatrolPoint()
         {

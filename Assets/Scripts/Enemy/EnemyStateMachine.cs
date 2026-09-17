@@ -83,7 +83,7 @@ namespace Obrissom.Enemy
                 case EnemyState.Chase:
                     if (_enemy.IsPlayerInAttackRange())
                         ChangeState(EnemyState.Attack);
-                    else if (!_enemy.IsPlayerInChaseRange())
+                    else if (!_enemy.IsPlayerInChaseRange() && !_enemy.IsTaunted)
                         ChangeState(EnemyState.Move);
                     break;
 
