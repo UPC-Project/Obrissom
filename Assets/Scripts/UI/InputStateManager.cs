@@ -7,7 +7,8 @@ namespace Obrissom.UI
     public class InputStateManager : MonoBehaviour
     {
         public static InputStateManager Instance { get; private set; }
-
+        public PlayerInput PlayerInput => _playerInput;
+        public event System.Action<PlayerInput> OnPlayerInputRegistered;
         private PlayerInput _playerInput;
         private bool _isOverUI = false;
 
@@ -26,7 +27,8 @@ namespace Obrissom.UI
         public void RegisterPlayerInput(PlayerInput input)
         {
             _playerInput = input;
-            
+            OnPlayerInputRegistered?.Invoke(_playerInput);
+
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             {
                 _isOverUI = true;

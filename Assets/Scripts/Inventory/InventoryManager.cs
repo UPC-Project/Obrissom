@@ -16,7 +16,7 @@ namespace Obrissom.Player.Inventory
         [Header("Connections")]
         public Inventory inventory;
         public Transform slotContainer;
-        public GameObject inventoryPanel; 
+        [SerializeField] private GameObject _inventoryPanel;
         [SerializeField] private ItemDropper _itemDropper;
 
         [Header("Test Items (Press G)")]
@@ -88,17 +88,13 @@ namespace Obrissom.Player.Inventory
                 inventory.AddItem(testItem4, amount4);
             }
 
-
-            if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
-                SetInventoryState(!isInventoryOpen);
-
             if (isInventoryOpen)
                 MoveItem();
         }
 
         public void SetInventoryState(bool isOpen)
         {
-            inventoryPanel?.SetActive(isOpen);
+            _inventoryPanel.SetActive(isOpen);
             isInventoryOpen = isOpen;
         }
 

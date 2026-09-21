@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e7ebd8e9d87da9409fde54eb8162c9f, type: 3}
+  m_Name: Health_Potion
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  title: Health Potion
+  description: Create a potion of health that Instant heals 10
+  items:
+  - item: {fileID: 11400000, guid: b4feadf0f9354ce479f9340b531c314d, type: 2}
+    amount: 4
+  - item: {fileID: 11400000, guid: 8c91cd49f2558e740b9bb7cd72934bbe, type: 2}
+    amount: 2
+  result: {fileID: 11400000, guid: a9227a900fde4c4419decf33a7df81a6, type: 2}

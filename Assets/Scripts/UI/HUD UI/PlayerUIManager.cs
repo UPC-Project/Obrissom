@@ -9,7 +9,7 @@ namespace Obrissom.UI
         public static PlayerUIManager Instance { get; private set; }
 
         [SerializeField] private LevelAndXPUI _levelAndXPUI;
-        [SerializeField] private PlayerMenu _playerMenu;
+        [SerializeField] private MultiMenuController _playerMenu;
         [SerializeField] private SkillCooldownUI _skillCooldownUI;
         [SerializeField] private HealthAndResourceUI _healthAndResourceUI;
         [SerializeField] private InventoryManager _inventoryManager;
@@ -27,7 +27,7 @@ namespace Obrissom.UI
         }
 
         public LevelAndXPUI GetLevelAndXPUI() => _levelAndXPUI;
-        public PlayerMenu GetPlayerMenu() => _playerMenu;
+        public MultiMenuController GetPlayerMenu() => _playerMenu;
         public HealthAndResourceUI GetHealthAndResourceUI() => _healthAndResourceUI;
         public SkillsUI GetSkillsUI() => _skillsUI;
 

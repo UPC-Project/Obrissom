@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5047a4ca74712fe448de02c66df0583b, type: 3}
-  m_Name: potion
+  m_Name: enemy_core
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemName: Potion
-  _description: adawdakfuheagndjcojauwdojansijdoawiyhfidfawoidmsfldlmjnajnfousndowiadinsfubauwfnafpiwamsdmwa
-  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  itemID: 2
+  itemName: Enemy Core
+  _description: a glowing and misterious orb
+  icon: {fileID: 0}
+  itemID: 5
   isStackable: 1
-  maxStackSize: 6
+  maxStackSize: 64
   itemType: 3
   isEquippable: 0
-  equipmentSlotType: 0
