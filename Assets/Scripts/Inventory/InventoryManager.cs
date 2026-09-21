@@ -92,10 +92,10 @@ namespace Obrissom.Player.Inventory
                 MoveItem();
         }
 
-        public void SetInventoryState(bool isOpen)
+        public void SetInventoryState(bool state)
         {
-            _inventoryPanel.SetActive(isOpen);
-            isInventoryOpen = isOpen;
+            _inventoryPanel.SetActive(state);
+            isInventoryOpen = state;
         }
 
         /// <summary>

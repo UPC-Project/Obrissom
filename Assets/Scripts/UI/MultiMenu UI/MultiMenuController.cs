@@ -2,6 +2,7 @@ using Obrissom.Player;
 using Obrissom.Player.Inventory;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,25 +11,39 @@ namespace Obrissom.UI
     // Opens/closes: inventory, stats, crafting, quests, skills
     public class MultiMenuController : MonoBehaviour, PlayerInput.IUIMultiMenuActions
     {
+        #region
         [Header("Panels")]
         [SerializeField] private GameObject _multiMenu;
         [SerializeField] private InventoryManager _inventory;
+        [SerializeField] private CraftingMenu _crafting;
+        [SerializeField] private QuestsMenu _quests;
+        [SerializeField] private StatsMenu _stats;
+        [SerializeField] private SkillsMenu _skills;
 
-        [Header("Buttons")]
+        [Header("Panel Buttons")]
         [SerializeField] private Button _inventoryButton; // I
         [SerializeField] private Button _questsButton; // O
         [SerializeField] private Button _craftingButton; // J
         [SerializeField] private Button _statsButton; // L
-        [SerializeField] private Button _skillsButton; // k
+        [SerializeField] private Button _skillsButton; // K
+
+        [Header("Carousel Buttons")]
+        [SerializeField] private TextMeshProUGUI _prevText;
+        [SerializeField] private TextMeshProUGUI _nextText;
+
         private PlayerInput _playerInput;
-        private Menus? _currentPanel = null;
+        private Menus? _currentMenu = null;
         private Dictionary<Menus, Button> _buttons;
         private Dictionary<Menus, Action> _close;
-
+        private Dictionary<Menus, Action> _toggles;
+        private int _totalMenus;
         enum Menus { Inventory, Quests, Crafting, Stats, Skills }
+        #endregion
 
         private void Awake()
         {
+            _totalMenus = Enum.GetValues(typeof(Menus)).Length;
+
             _buttons = new Dictionary<Menus, Button>()
             {
                 { Menus.Inventory, _inventoryButton },
@@ -40,11 +55,20 @@ namespace Obrissom.UI
 
             _close = new Dictionary<Menus, Action>()
             {
-                { Menus.Inventory, CloseInventory },
-                { Menus.Quests, CloseQuests },
-                { Menus.Crafting, CloseCrafting },
-                { Menus.Stats, CloseStats },
-                { Menus.Skills, CloseSkills },
+                { Menus.Inventory, () => _inventory.SetInventoryState(false)},
+                { Menus.Quests, () => _quests.SetQuestsMenuState(false) },
+                { Menus.Crafting, () => _crafting.SetCraftingMenuState(false) },
+                { Menus.Stats, () => _stats.SetStatsMenuState(false) },
+                { Menus.Skills, () => _skills.SetSkillMenuState(false) },
+            };
+
+            _toggles = new Dictionary<Menus, Action>()
+            {
+                { Menus.Inventory, ToggleInventory},
+                { Menus.Quests, ToggleQuests},
+                { Menus.Crafting,ToggleCrafting },
+                { Menus.Stats, ToggleStats },
+                { Menus.Skills, ToggleSkills },
             };
         }
 
@@ -84,27 +108,6 @@ namespace Obrissom.UI
             InputStateManager.Instance.OnPlayerInputRegistered -= SetupInput;
         }
 
-        #region closePanel
-        private void CloseInventory()
-        {
-            _inventory.SetInventoryState(false);
-        }
-
-        private void CloseQuests()
-        {
-        }
-
-        private void CloseCrafting()
-        {
-        }
-        private void CloseStats()
-        {
-        }
-        private void CloseSkills()
-        {
-        }
-        #endregion
-
         #region keycall
         public void OnOpenInventory(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
@@ -143,57 +146,79 @@ namespace Obrissom.UI
             OpenOrClose(Menus.Inventory);
             _inventory.SetInventoryState(!_inventory.isInventoryOpen);
 
-            Debug.Log($"Open/Close Inventory {_inventory.isInventoryOpen}");
         }
 
         private void ToggleQuests()
         {
             OpenOrClose(Menus.Quests);
-            Debug.Log("Open/Close Quests");
+            _quests.SetQuestsMenuState(!_quests.isQuestsMenuOpen);
         }
 
         private void ToggleCrafting()
         {
             OpenOrClose(Menus.Crafting);
-            Debug.Log("Open/Close Crafting");
+            _crafting.SetCraftingMenuState(!_crafting.isCraftingMenuOpen);
+
         }
 
         private void ToggleStats()
         {
             OpenOrClose(Menus.Stats);
-            Debug.Log("Open/Close Stats");
+            _stats.SetStatsMenuState(!_stats.isStatsMenuOpen);
         }
 
         private void ToggleSkills()
         {
             OpenOrClose(Menus.Skills);
-            Debug.Log("Open/Close Skills");
+            _skills.SetSkillMenuState(!_skills.isSkillMenuOpen);
         }
         #endregion
+
+        public void NextMenu()
+        {
+            int nextIndex = ((int)_currentMenu + 1) % _totalMenus;
+            _toggles[(Menus)nextIndex]();
+            // set texts
+            int newPrev = ((int)_currentMenu - 1 + _totalMenus) % _totalMenus;
+            int newNext = ((int)_currentMenu + 1) % _totalMenus;
+            _prevText.text = "< " + ((Menus)newPrev).ToString();
+            _nextText.text = ((Menus)newNext).ToString() + " >";
+        }
+
+        public void PreviousMenu()
+        {
+            int prevIndex = ((int)_currentMenu - 1 + _totalMenus) % _totalMenus;
+            _toggles[(Menus)prevIndex]();
+            // set texts
+            int newPrev = ((int)_currentMenu - 1 + _totalMenus) % _totalMenus;
+            int newNext = ((int)_currentMenu + 1) % _totalMenus;
+            _prevText.text = "< " + ((Menus)newPrev).ToString();
+            _nextText.text = ((Menus)newNext).ToString() + " >";
+        }
 
         private void OpenOrClose(Menus menu)
         {
             if (!_multiMenu.activeSelf)
             {
                 _multiMenu.SetActive(true);
-                _currentPanel = menu;
+                _currentMenu = menu;
                 _buttons[menu].image.color = Color.grey;
             }
-            else if (_currentPanel != menu)
+            else if (_currentMenu != menu)
             {
-                if (_currentPanel is Menus panel && _buttons.ContainsKey(panel))
+                if (_currentMenu is Menus panel && _buttons.ContainsKey(panel))
                 {
                     _buttons[panel].image.color = Color.white;
                     _close[panel]();
                 }
                 _buttons[menu].image.color = Color.grey;
-                _currentPanel = menu;
+                _currentMenu = menu;
             }
             else
             {
                 _buttons[menu].image.color = Color.white;
                 _multiMenu.SetActive(false);
-                _currentPanel = null;
+                _currentMenu = null;
             }
         }
 
