@@ -116,7 +116,7 @@ namespace Obrissom.Player.Inventory
                         _draggingFromEquipment = true;
                         _draggedEquipmentSlotIndex = equipIndex;
                         _draggedSlotIndex = 0; // Temp index to allow dragging
-                        dragIcon.sprite = equipSlot.item.icon;
+                        dragIcon.sprite = equipSlot.item.image;
                         dragIcon.enabled = true;
                     }
                 }
@@ -127,7 +127,7 @@ namespace Obrissom.Player.Inventory
 
                     if (_draggedSlotIndex != -1 && !inventory.Slots[_draggedSlotIndex].IsEmpty)
                     {
-                        dragIcon.sprite = inventory.Slots[_draggedSlotIndex].item.icon;
+                        dragIcon.sprite = inventory.Slots[_draggedSlotIndex].item.image;
                         dragIcon.enabled = true;
 
                         // make the original slot transparent while dragging
@@ -253,7 +253,7 @@ namespace Obrissom.Player.Inventory
 
                 if (i < inventory.Slots.Count && !inventory.Slots[i].IsEmpty)
                 {
-                    itemImage.sprite = inventory.Slots[i].item.icon;
+                    itemImage.sprite = inventory.Slots[i].item.image;
                     itemImage.enabled = true;
                     itemImage.color = Color.white;
                     qtyText.text = inventory.Slots[i].quantity > 1 ? inventory.Slots[i].quantity.ToString() : "";
@@ -284,7 +284,7 @@ namespace Obrissom.Player.Inventory
 
             if (!slot.IsEmpty)
             {
-                itemImage.sprite = slot.item.icon;
+                itemImage.sprite = slot.item.image;
                 itemImage.enabled = true;
                 itemImage.color = Color.white;
             }

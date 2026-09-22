@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public class RecipeItemsType
+public class IngredientsType
 {
     public Item item;
     public int amount;

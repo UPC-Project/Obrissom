@@ -40,7 +40,7 @@ namespace Obrissom.Player.Inventory
 
             if (!slot.IsEmpty)
             {
-                itemImage.sprite = slot.item.icon;
+                itemImage.sprite = slot.item.image;
                 itemImage.enabled = true;
                 itemImage.color = Color.white;
             }

@@ -5,7 +5,6 @@ namespace Obrissom.Database
 {
     /// <summary>
     /// Central database that stores all game items.
-    /// It uses a Singleton pattern to be accessible from any script.
     /// </summary>
     public class ItemDatabase : MonoBehaviour
     {
@@ -69,7 +68,7 @@ namespace Obrissom.Database
                 }
                 else
                 {
-                    Debug.LogWarning($"Duplicate Item ID detected: {item.itemID}");
+                    Debug.LogWarning($"Duplicate Item ID detected: {item.itemID}  ({item.itemName})");
                 }
             }
 

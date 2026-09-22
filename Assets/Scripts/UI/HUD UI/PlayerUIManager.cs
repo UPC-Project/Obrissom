@@ -13,6 +13,7 @@ namespace Obrissom.UI
         [SerializeField] private SkillCooldownUI _skillCooldownUI;
         [SerializeField] private HealthAndResourceUI _healthAndResourceUI;
         [SerializeField] private InventoryManager _inventoryManager;
+        [SerializeField] private CraftingMenu _craftingMenu;
         [SerializeField] private SkillsUI _skillsUI;
 
         private void Awake()
@@ -40,6 +41,7 @@ namespace Obrissom.UI
         {
             Inventory playerInventory = itemDropper.GetComponent<Inventory>();
             _inventoryManager.BindLocalPlayer(playerInventory, itemDropper);
+            _craftingMenu.BindInventory(playerInventory);
         }
     }
 }
