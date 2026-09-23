@@ -1,7 +1,7 @@
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using Obrissom.UI;
 
 namespace Obrissom.Player
 {
@@ -28,18 +28,18 @@ namespace Obrissom.Player
             }
         }
         public Vector2 MovementInput { get; private set; }
-        
+
         [Header("Player Camera")]
         [SerializeField] private float _cameraZoomSpeed;
-        [SerializeField, Range(2,4)] private int _cameraZoomMinZoom = 3;
-        [SerializeField, Range(4,7)] private int _cameraZoomMaxZoom = 5;
+        [SerializeField, Range(2, 4)] private int _cameraZoomMinZoom = 3;
+        [SerializeField, Range(4, 7)] private int _cameraZoomMaxZoom = 5;
         [SerializeField] private CinemachineThirdPersonFollow _camera;
         public Vector2 LookInput { get; private set; }
         public Vector2 ScrollInput { get; private set; }
 
         [Header("References")]
         [SerializeField] private Animator _animator;
-        
+
 
         private void Awake()
         {
@@ -53,6 +53,10 @@ namespace Obrissom.Player
             if (!IsOwner)
             {
                 enabled = false;
+            }
+            else
+            {
+                InputStateManager.Instance.RegisterPlayerInput(PlayerInput);
             }
         }
 

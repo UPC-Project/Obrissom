@@ -137,6 +137,48 @@ namespace Obrissom.Player.Inventory
         }
 
         /// <summary>
+        /// Returns the total quantity of a specific item across all slots.
+        /// </summary>
+        public int GetItemCount(Item item)
+        {
+            int count = 0;
+            foreach (var slot in _slots)
+            {
+                if (!slot.IsEmpty && slot.item == item)
+                    count += slot.quantity;
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// Removes a specific amount of an item from the inventory across all slots.
+        /// Returns true if the full amount was successfully removed.
+        /// </summary>
+        public bool RemoveItem(Item item, int amount)
+        {
+            if (GetItemCount(item) < amount) return false;
+
+            for (int i = 0; i < _slots.Count && amount > 0; i++)
+            {
+                var slot = _slots[i];
+                if (slot.IsEmpty || slot.item != item) continue;
+
+                int toRemove = Mathf.Min(amount, slot.quantity);
+                slot.RemoveQuantity(toRemove);
+                amount -= toRemove;
+
+                if (slot.quantity <= 0)
+                {
+                    slot.item = null;
+                    slot.quantity = 0;
+                }
+            }
+
+            OnInventoryChanged?.Invoke();
+            return true;
+        }
+
+        /// <summary>
         /// Force the UI to refresh without changing data.
         /// </summary>
         public void TriggerInventoryChanged()

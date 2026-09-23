@@ -280,7 +280,7 @@ public class PlayerQuestTracker : NetworkBehaviour
             ItemTarget target = quest.template.objective.itemTargets[targetIndex];
             if (target.item != null)
             {
-                RemoveItemFromInventory(target.item, amount);
+                _inventory.RemoveItem(target.item, amount);
             }
         }
     }
@@ -418,24 +418,7 @@ public class PlayerQuestTracker : NetworkBehaviour
         foreach (ItemTarget target in template.objective.itemTargets)
         {
             if (target.item == null) continue;
-            RemoveItemFromInventory(target.item, target.amount);
-        }
-
-    }
-
-    /// Removes a specific amount of an item from the inventory across all slots.
-    private void RemoveItemFromInventory(Item item, int amountToRemove)
-    {
-        if (_inventory == null || amountToRemove <= 0) return;
-
-        for (int i = 0; i < _inventory.Slots.Count && amountToRemove > 0; i++)
-        {
-            var slot = _inventory.Slots[i];
-            if (slot.IsEmpty || slot.item != item) continue;
-
-            int removeFromSlot = Mathf.Min(amountToRemove, slot.quantity);
-            _inventory.RemoveItemAt(i, out _, out _, removeFromSlot);
-            amountToRemove -= removeFromSlot;
+            _inventory.RemoveItem(target.item, target.amount);
         }
     }
 }
