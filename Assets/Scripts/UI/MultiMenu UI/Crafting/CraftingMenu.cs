@@ -3,18 +3,15 @@ using Obrissom.Database;
 using Obrissom.Player.Inventory;
 using UnityEngine;
 
-public class CraftingMenu : MonoBehaviour
+public class CraftingMenu : MenuPanel
 {
-    public bool isCraftingMenuOpen = false;
-
-    [SerializeField] private GameObject _craftingMenu;
     [SerializeField] private GameObject _recipePanelPrefab;
     [SerializeField] private Transform _recipeListContainer;
 
     private Inventory _playerInventory;
     private List<RecipePanel> _recipePanels = new List<RecipePanel>();
 
-    private void Awake()
+    private void Start()
     {
         /// Instantiates a RecipePanel for each recipe in the database.
         var allRecipes = RecipeDatabase.Instance.GetAllRecipes();
@@ -26,6 +23,12 @@ public class CraftingMenu : MonoBehaviour
             panel.Initialize(recipe, OnCraftClicked);
             _recipePanels.Add(panel);
         }
+    }
+
+    public override void SetMenuState(bool state)
+    {
+        base.SetMenuState(state);
+        if (state) RefreshAllPanels();
     }
 
     /// <summary>
@@ -64,13 +67,4 @@ public class CraftingMenu : MonoBehaviour
         foreach (var panel in _recipePanels)
             panel.Refresh(_playerInventory);
     }
-
-    public void SetCraftingMenuState(bool state)
-    {
-        _craftingMenu.SetActive(state);
-        isCraftingMenuOpen = state;
-
-        if (state) RefreshAllPanels();
-    }
 }
-

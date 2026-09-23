@@ -1,12 +1,4 @@
-using UnityEngine;
-
-public class SkillsMenu : MonoBehaviour
+public class SkillsMenu : MenuPanel
 {
-    public bool isSkillMenuOpen = false;
-    [SerializeField] private GameObject _skillMenu;
-    public void SetSkillMenuState(bool state)
-    {
-        _skillMenu.SetActive(state);
-        isSkillMenuOpen = state;
-    }
 }
+
