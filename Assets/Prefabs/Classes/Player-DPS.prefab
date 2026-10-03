@@ -344,6 +344,7 @@ GameObject:
   - component: {fileID: 108010938594861949}
   - component: {fileID: 7952295512968090262}
   - component: {fileID: 3728229119219785696}
+  - component: {fileID: 8893566566265168807}
   m_Layer: 0
   m_Name: Main Camera (2)
   m_TagString: MainCamera
@@ -493,6 +494,14 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!81 &8893566566265168807
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6160443557852477779}
+  m_Enabled: 1
 --- !u!1 &7747071104229527073
 GameObject:
   m_ObjectHideFlags: 0
@@ -6478,7 +6487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1787775565
+  GlobalObjectIdHash: 2930922969
   InScenePlacedSourceGlobalObjectIdHash: 2930922969
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6590,7 +6599,7 @@ MonoBehaviour:
     OriginatingState: 2140143823
     DestinationState: -1544726560
     TransitionDuration: 0.100000024
-    TriggerNameHash: -722835594
+    TriggerNameHash: -1544726560
     TransitionIndex: 2
   AnimatorParameterEntries:
     ParameterEntries:
@@ -6614,8 +6623,8 @@ MonoBehaviour:
       NameHash: 1306736332
       Synchronize: 1
       ParameterType: 9
-    - name: skill2
-      NameHash: -722835594
+    - name: skill3
+      NameHash: -1544726560
       Synchronize: 1
       ParameterType: 9
   AnimatorParametersExpanded: 0

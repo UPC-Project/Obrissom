@@ -41,9 +41,16 @@ namespace Obrissom.Audio
         }
 
         /// <summary>
-        /// Plays a 2D sound (UI, menus, local feedback).
+        /// Plays a 2D sound (UI, menus, local feedback). Same volume regardless of where the listener is.
         /// </summary>
-        public void PlaySound(AudioID id)
+        public void PlaySound(AudioID id) => Play(id, false, Vector3.zero);
+
+        /// <summary>
+        /// Plays a 3D sound at a world position. Unity attenuates it based on distance to the local AudioListener.
+        /// </summary>
+        public void PlaySound(AudioID id, Vector3 position) => Play(id, true, position);
+
+        private void Play(AudioID id, bool is3D, Vector3 position)
         {
             if (!TryGetSound(id, out SoundData data, out AudioMixerGroup output)) return;
 
@@ -59,10 +66,25 @@ namespace Obrissom.Audio
             source.volume = data.volume;
             source.pitch = data.GetRandomPitch();
             source.outputAudioMixerGroup = output;
+
+            if (is3D)
+            {
+                source.transform.position = position;
+                source.spatialBlend = 1f;
+                source.rolloffMode = AudioRolloffMode.Linear;
+                source.minDistance = data.minDistance;
+                source.maxDistance = data.maxDistance;
+                source.dopplerLevel = 0f;
+            }
+            else
+            {
+                source.spatialBlend = 0f;
+            }
+
             source.Play();
 
             if (_logPlays)
-                Debug.Log($"[AudioManager] {id}: {clip.name} @ pitch {source.pitch:F2}");
+                Debug.Log($"[AudioManager] {id}: {clip.name} @ pitch {source.pitch:F2}" + (is3D ? $" at {position}" : " (2D)"));
 
             // Temporary until pooling: the source lives just long enough to finish the clip
             Destroy(source.gameObject, clip.length / source.pitch + 0.1f);
