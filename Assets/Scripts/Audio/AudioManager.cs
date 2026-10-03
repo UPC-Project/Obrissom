@@ -18,8 +18,19 @@ namespace Obrissom.Audio
         private readonly Dictionary<AudioID, (SoundData data, AudioMixerGroup output)> _sounds =
             new Dictionary<AudioID, (SoundData, AudioMixerGroup)>();
 
+        [Header("Pool")]
+        [Tooltip("AudioSources created at startup.")]
+        [Min(1)] [SerializeField] private int _initialPoolSize = 16;
+
+        [Tooltip("Max sounds playing at the same time. Extra requests are skipped.")]
+        [Min(1)] [SerializeField] private int _maxPoolSize = 32;
+
+        [Header("Debug")]
         [Tooltip("Logs the clip and pitch chosen on every play.")]
         [SerializeField] private bool _logPlays;
+
+        // A source is free again as soon as it stops playing, no explicit release needed
+        private readonly List<AudioSource> _pool = new List<AudioSource>();
 
         private void Awake()
         {
@@ -33,6 +44,9 @@ namespace Obrissom.Audio
             DontDestroyOnLoad(gameObject);
 
             BuildSoundIndex();
+
+            for (int i = 0; i < _initialPoolSize; i++)
+                CreateSource();
         }
 
         private void OnDestroy()
@@ -61,7 +75,13 @@ namespace Obrissom.Audio
                 return;
             }
 
-            AudioSource source = CreateSource();
+            AudioSource source = GetFreeSource();
+            if (source == null)
+            {
+                Debug.LogWarning($"[AudioManager] All {_maxPoolSize} AudioSources are busy. {id} skipped.");
+                return;
+            }
+
             source.clip = clip;
             source.volume = data.volume;
             source.pitch = data.GetRandomPitch();
@@ -85,18 +105,26 @@ namespace Obrissom.Audio
 
             if (_logPlays)
                 Debug.Log($"[AudioManager] {id}: {clip.name} @ pitch {source.pitch:F2}" + (is3D ? $" at {position}" : " (2D)"));
+        }
 
-            // Temporary until pooling: the source lives just long enough to finish the clip
-            Destroy(source.gameObject, clip.length / source.pitch + 0.1f);
+        private AudioSource GetFreeSource()
+        {
+            foreach (AudioSource source in _pool)
+            {
+                if (!source.isPlaying) return source;
+            }
+
+            return _pool.Count < _maxPoolSize ? CreateSource() : null;
         }
 
         private AudioSource CreateSource()
         {
-            var go = new GameObject("AudioSource");
+            var go = new GameObject($"AudioSource {_pool.Count}");
             go.transform.SetParent(transform);
 
             AudioSource source = go.AddComponent<AudioSource>();
             source.playOnAwake = false;
+            _pool.Add(source);
             return source;
         }
 
