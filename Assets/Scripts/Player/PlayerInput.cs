@@ -452,6 +452,114 @@ namespace Obrissom.Player
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UIMultiMenu"",
+            ""id"": ""00323173-2c08-4229-ad29-5d47b1871ade"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""4ebc21c0-81ca-418c-9905-da2df6937051"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenQuests"",
+                    ""type"": ""Button"",
+                    ""id"": ""da4358d8-b37e-4a78-b8c9-e6a660e061f6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenCrafting"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a0d147c-717c-4ef2-af24-9abb037550c1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenStats"",
+                    ""type"": ""Button"",
+                    ""id"": ""60bb3fe9-fcf7-4451-8720-19ee9b7bd210"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenSkills"",
+                    ""type"": ""Button"",
+                    ""id"": ""e020fde0-178c-46b2-b49f-2c2860bfd7dd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""112abb28-c0b4-4b12-8800-5eb4c66ceca2"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0bb956b6-6e49-4daf-91cb-b31ef772a465"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenQuests"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""755515d9-3f09-46e2-aa35-82fbee9c4adb"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenCrafting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77be7f8f-8c1a-4d70-ba6f-8ee1dfab735f"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenStats"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f01d4776-88bc-448c-9530-271a9ab225cd"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenSkills"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -474,6 +582,13 @@ namespace Obrissom.Player
             // PlayerInteractMap
             m_PlayerInteractMap = asset.FindActionMap("PlayerInteractMap", throwIfNotFound: true);
             m_PlayerInteractMap_Interact = m_PlayerInteractMap.FindAction("Interact", throwIfNotFound: true);
+            // UIMultiMenu
+            m_UIMultiMenu = asset.FindActionMap("UIMultiMenu", throwIfNotFound: true);
+            m_UIMultiMenu_OpenInventory = m_UIMultiMenu.FindAction("OpenInventory", throwIfNotFound: true);
+            m_UIMultiMenu_OpenQuests = m_UIMultiMenu.FindAction("OpenQuests", throwIfNotFound: true);
+            m_UIMultiMenu_OpenCrafting = m_UIMultiMenu.FindAction("OpenCrafting", throwIfNotFound: true);
+            m_UIMultiMenu_OpenStats = m_UIMultiMenu.FindAction("OpenStats", throwIfNotFound: true);
+            m_UIMultiMenu_OpenSkills = m_UIMultiMenu.FindAction("OpenSkills", throwIfNotFound: true);
         }
 
         ~@PlayerInput()
@@ -481,6 +596,7 @@ namespace Obrissom.Player
             UnityEngine.Debug.Assert(!m_PlayerLocomotionMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerLocomotionMap.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_PlayerSkillMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerSkillMap.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_PlayerInteractMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerInteractMap.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_UIMultiMenu.enabled, "This will cause a leak and performance issues, PlayerInput.UIMultiMenu.Disable() has not been called.");
         }
 
         /// <summary>
@@ -939,6 +1055,146 @@ namespace Obrissom.Player
         /// Provides a new <see cref="PlayerInteractMapActions" /> instance referencing this action map.
         /// </summary>
         public PlayerInteractMapActions @PlayerInteractMap => new PlayerInteractMapActions(this);
+
+        // UIMultiMenu
+        private readonly InputActionMap m_UIMultiMenu;
+        private List<IUIMultiMenuActions> m_UIMultiMenuActionsCallbackInterfaces = new List<IUIMultiMenuActions>();
+        private readonly InputAction m_UIMultiMenu_OpenInventory;
+        private readonly InputAction m_UIMultiMenu_OpenQuests;
+        private readonly InputAction m_UIMultiMenu_OpenCrafting;
+        private readonly InputAction m_UIMultiMenu_OpenStats;
+        private readonly InputAction m_UIMultiMenu_OpenSkills;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "UIMultiMenu".
+        /// </summary>
+        public struct UIMultiMenuActions
+        {
+            private @PlayerInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public UIMultiMenuActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "UIMultiMenu/OpenInventory".
+            /// </summary>
+            public InputAction @OpenInventory => m_Wrapper.m_UIMultiMenu_OpenInventory;
+            /// <summary>
+            /// Provides access to the underlying input action "UIMultiMenu/OpenQuests".
+            /// </summary>
+            public InputAction @OpenQuests => m_Wrapper.m_UIMultiMenu_OpenQuests;
+            /// <summary>
+            /// Provides access to the underlying input action "UIMultiMenu/OpenCrafting".
+            /// </summary>
+            public InputAction @OpenCrafting => m_Wrapper.m_UIMultiMenu_OpenCrafting;
+            /// <summary>
+            /// Provides access to the underlying input action "UIMultiMenu/OpenStats".
+            /// </summary>
+            public InputAction @OpenStats => m_Wrapper.m_UIMultiMenu_OpenStats;
+            /// <summary>
+            /// Provides access to the underlying input action "UIMultiMenu/OpenSkills".
+            /// </summary>
+            public InputAction @OpenSkills => m_Wrapper.m_UIMultiMenu_OpenSkills;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_UIMultiMenu; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="UIMultiMenuActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(UIMultiMenuActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="UIMultiMenuActions" />
+            public void AddCallbacks(IUIMultiMenuActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIMultiMenuActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIMultiMenuActionsCallbackInterfaces.Add(instance);
+                @OpenInventory.started += instance.OnOpenInventory;
+                @OpenInventory.performed += instance.OnOpenInventory;
+                @OpenInventory.canceled += instance.OnOpenInventory;
+                @OpenQuests.started += instance.OnOpenQuests;
+                @OpenQuests.performed += instance.OnOpenQuests;
+                @OpenQuests.canceled += instance.OnOpenQuests;
+                @OpenCrafting.started += instance.OnOpenCrafting;
+                @OpenCrafting.performed += instance.OnOpenCrafting;
+                @OpenCrafting.canceled += instance.OnOpenCrafting;
+                @OpenStats.started += instance.OnOpenStats;
+                @OpenStats.performed += instance.OnOpenStats;
+                @OpenStats.canceled += instance.OnOpenStats;
+                @OpenSkills.started += instance.OnOpenSkills;
+                @OpenSkills.performed += instance.OnOpenSkills;
+                @OpenSkills.canceled += instance.OnOpenSkills;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="UIMultiMenuActions" />
+            private void UnregisterCallbacks(IUIMultiMenuActions instance)
+            {
+                @OpenInventory.started -= instance.OnOpenInventory;
+                @OpenInventory.performed -= instance.OnOpenInventory;
+                @OpenInventory.canceled -= instance.OnOpenInventory;
+                @OpenQuests.started -= instance.OnOpenQuests;
+                @OpenQuests.performed -= instance.OnOpenQuests;
+                @OpenQuests.canceled -= instance.OnOpenQuests;
+                @OpenCrafting.started -= instance.OnOpenCrafting;
+                @OpenCrafting.performed -= instance.OnOpenCrafting;
+                @OpenCrafting.canceled -= instance.OnOpenCrafting;
+                @OpenStats.started -= instance.OnOpenStats;
+                @OpenStats.performed -= instance.OnOpenStats;
+                @OpenStats.canceled -= instance.OnOpenStats;
+                @OpenSkills.started -= instance.OnOpenSkills;
+                @OpenSkills.performed -= instance.OnOpenSkills;
+                @OpenSkills.canceled -= instance.OnOpenSkills;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIMultiMenuActions.UnregisterCallbacks(IUIMultiMenuActions)" />.
+            /// </summary>
+            /// <seealso cref="UIMultiMenuActions.UnregisterCallbacks(IUIMultiMenuActions)" />
+            public void RemoveCallbacks(IUIMultiMenuActions instance)
+            {
+                if (m_Wrapper.m_UIMultiMenuActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="UIMultiMenuActions.AddCallbacks(IUIMultiMenuActions)" />
+            /// <seealso cref="UIMultiMenuActions.RemoveCallbacks(IUIMultiMenuActions)" />
+            /// <seealso cref="UIMultiMenuActions.UnregisterCallbacks(IUIMultiMenuActions)" />
+            public void SetCallbacks(IUIMultiMenuActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIMultiMenuActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIMultiMenuActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="UIMultiMenuActions" /> instance referencing this action map.
+        /// </summary>
+        public UIMultiMenuActions @UIMultiMenu => new UIMultiMenuActions(this);
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerLocomotionMap" which allows adding and removing callbacks.
         /// </summary>
@@ -1046,6 +1302,49 @@ namespace Obrissom.Player
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteract(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UIMultiMenu" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="UIMultiMenuActions.AddCallbacks(IUIMultiMenuActions)" />
+        /// <seealso cref="UIMultiMenuActions.RemoveCallbacks(IUIMultiMenuActions)" />
+        public interface IUIMultiMenuActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "OpenInventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenInventory(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "OpenQuests" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenQuests(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "OpenCrafting" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenCrafting(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "OpenStats" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenStats(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "OpenSkills" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenSkills(InputAction.CallbackContext context);
         }
     }
 }

@@ -5,12 +5,10 @@ public class Item : ScriptableObject
 {
     [Header("General Info")]
     public string itemName;
-    [TextArea]
-    [SerializeField] private string _description;
-    public Sprite icon;
+    [TextArea] public string description;
+    public Sprite image;
 
-    [Header("Database")]
-    [Tooltip("Only ID")]
+    [Tooltip("Must be unique")]
     public int itemID; 
 
     [Header("Stacking Properties")]

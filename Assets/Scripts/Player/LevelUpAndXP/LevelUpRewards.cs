@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LevelUpRewards", menuName = "Game Logic/LevelUpRewards")]
+[CreateAssetMenu(fileName = "New LevelUpRewards", menuName = "Level Up Reward")]
 public class LevelUpRewards : ScriptableObject
 {
     public PlayerClass playerClass;

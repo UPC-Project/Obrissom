@@ -105,17 +105,7 @@ public class QuestInstance
             return 0;
 
         ItemTarget target = obj.itemTargets[itemTargetIndex];
-        int count = 0;
-
-        foreach (var slot in inventory.Slots)
-        {
-            if (!slot.IsEmpty && slot.item == target.item)
-            {
-                count += slot.quantity;
-            }
-        }
-
-        return count; // Notice we don't cap this at target.amount here, so the server knows exactly how many they have for deduction!
+        return inventory.GetItemCount(target.item);
     }
 
     // COMPLETION CHECKS
