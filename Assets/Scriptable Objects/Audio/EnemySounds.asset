@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc7101d1de71cfc45b5018109f788d25, type: 3}
+  m_Name: EnemySounds
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.SoundLibrary
+  _output: {fileID: 0}
+  _sounds:
+  - id: 200
+    clips:
+    - {fileID: 8300000, guid: 9af9cd6ec846d3540bf8df84021aa088, type: 3}
+    volume: 1
+    pitchMin: 0.9
+    pitchMax: 1.1
+    minDistance: 1
+    maxDistance: 25
+  - id: 202
+    clips:
+    - {fileID: 8300000, guid: f6e54c571710b8e4ebb6f2497e46b24b, type: 3}
+    volume: 1
+    pitchMin: 0.9
+    pitchMax: 1.1
+    minDistance: 1
+    maxDistance: 25
