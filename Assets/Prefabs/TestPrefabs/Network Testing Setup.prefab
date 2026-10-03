@@ -473,6 +473,7 @@ GameObject:
   - component: {fileID: 1085747158751350417}
   - component: {fileID: 641851525969475129}
   - component: {fileID: 7975066934911114589}
+  - component: {fileID: 3255979763759671846}
   m_Layer: 0
   m_Name: Start Host
   m_TagString: Untagged
@@ -594,6 +595,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3255979763759671846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6981266020801403488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &7429826722229374916
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,6 +621,7 @@ GameObject:
   - component: {fileID: 4570557998815730574}
   - component: {fileID: 6138908280824646090}
   - component: {fileID: 823630177722126976}
+  - component: {fileID: 7210631463334964404}
   m_Layer: 0
   m_Name: Start Client
   m_TagString: Untagged
@@ -727,6 +743,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7210631463334964404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7429826722229374916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &7633968124739927209
 GameObject:
   m_ObjectHideFlags: 0

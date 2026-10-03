@@ -483,6 +483,7 @@ GameObject:
   - component: {fileID: 5279846575040411755}
   - component: {fileID: 895674410439069124}
   - component: {fileID: 1964110415171028199}
+  - component: {fileID: 1603375872472608084}
   m_Layer: 5
   m_Name: Button Craft
   m_TagString: Untagged
@@ -592,6 +593,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1603375872472608084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435127344740102263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &6490395111642556457
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,6 +732,7 @@ GameObject:
   - component: {fileID: 1413954028754633739}
   - component: {fileID: 9169113930346096091}
   - component: {fileID: 8976798967742967528}
+  - component: {fileID: 2194120958223822315}
   m_Layer: 5
   m_Name: Result
   m_TagString: Untagged
@@ -853,6 +869,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2194120958223822315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8203115461731218524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &8264535111978093991
 GameObject:
   m_ObjectHideFlags: 0
