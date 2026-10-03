@@ -1,3 +1,4 @@
+using Obrissom.Audio;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Skill", menuName = "Skills/Skill")]
@@ -20,6 +21,10 @@ public class Skill : ScriptableObject
     [Min(0), Tooltip("If equal 0 then not applied")] public int maxDamagePerSecond;
     [Min(0), Tooltip("If equal 0 then not applied, int type because is effect per second")] public int damagePerSecondTime;
     public EffectType damagePerSecondType;
+
+    [Header("Audio")]
+    [Tooltip("Played for everyone when the skill is cast. None = silent.")]
+    public AudioID castSound;
 
 
     public SkillBehaviour behaviour;

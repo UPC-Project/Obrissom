@@ -32,6 +32,9 @@ namespace Obrissom.Audio
         // A source is free again as soon as it stops playing, no explicit release needed
         private readonly List<AudioSource> _pool = new List<AudioSource>();
 
+        // Missing sounds are warned once, not on every play
+        private readonly HashSet<AudioID> _warnedIds = new HashSet<AudioID>();
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -135,13 +138,15 @@ namespace Obrissom.Audio
 
             if (!_sounds.TryGetValue(id, out var entry))
             {
-                Debug.LogWarning($"[AudioManager] No sound registered for {id}.");
+                if (_warnedIds.Add(id))
+                    Debug.LogWarning($"[AudioManager] No sound registered for {id}.");
                 return false;
             }
 
             if (!entry.data.HasClips)
             {
-                Debug.LogWarning($"[AudioManager] Sound {id} has no clips assigned.");
+                if (_warnedIds.Add(id))
+                    Debug.LogWarning($"[AudioManager] Sound {id} has no clips assigned.");
                 return false;
             }
 

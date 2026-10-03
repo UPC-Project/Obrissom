@@ -29,5 +29,26 @@ namespace Obrissom.Audio
         UICancel        = 402,
         InventoryOpen   = 403,
         InventoryClose  = 404,
+        UIHover         = 405,
+
+        // Skills 500–599
+        ScytheCutCast       = 500,
+        MagicProjectileCast = 501,
+        TeleportCast        = 502,
+        InfuseScytheCast    = 503,
+        DestructionRingCast = 504,
+        SwordCutCast        = 510,
+        BugBuzzCast         = 511,
+        HitPhysical         = 550,
+        HitMagic            = 551,
+
+        // Items 600–699
+        ItemPickup = 600,
+        Equip      = 601,
+        Unequip    = 602,
+
+        // Progress 700–799
+        LevelUp       = 700,
+        QuestAccepted = 701,
     }
 }

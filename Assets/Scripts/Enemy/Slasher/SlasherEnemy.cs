@@ -1,4 +1,5 @@
 using System.Collections;
+using Obrissom.Audio;
 using Obrissom.Player;
 using Unity.Netcode;
 using UnityEngine;
@@ -238,6 +239,8 @@ namespace Obrissom.Enemy
 
         private void PerformSweep()
         {
+            PlaySoundForEveryone(AudioID.SlasherAttack, transform.position);
+
             Collider[] hits = Physics.OverlapSphere(transform.position, _stats.attackRange, _playerLayer);
 
             foreach (var hit in hits)
@@ -256,6 +259,14 @@ namespace Obrissom.Enemy
             Vector3 directionToTarget = (targetPosition - transform.position).normalized;
             float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
             return angleToTarget <= _slasherConfig.sweepAngle / 2f;
+        }
+
+        // Death
+
+        protected override void Die(NetworkObjectReference attackerRef)
+        {
+            PlaySoundForEveryone(AudioID.SlasherDeath, transform.position);
+            base.Die(attackerRef);
         }
 
         // Shield VFX
