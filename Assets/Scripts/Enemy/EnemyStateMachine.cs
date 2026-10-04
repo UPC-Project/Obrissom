@@ -51,6 +51,9 @@ namespace Obrissom.Enemy
 
         private IEnumerator EvalLoop()
         {
+            // Random phase so enemies spawned on the same frame don't all think on the same frame
+            yield return new WaitForSeconds(Random.Range(0f, _evalInterval));
+
             var wait = new WaitForSeconds(_evalInterval);
             while (true)
             {

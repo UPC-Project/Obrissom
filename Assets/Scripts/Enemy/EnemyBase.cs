@@ -60,6 +60,9 @@ namespace Obrissom.Enemy
         private float _tauntTimer;
         public bool IsTaunted => _forcedTarget != null;
 
+        // Synced so every client (late joiners included) plays the death animation, not only the server
+        private readonly NetworkVariable<bool> _isDeadSynced = new NetworkVariable<bool>(false);
+
         // Lifecycle
         protected EnemyStateMachine _stateMachine;
 
@@ -77,6 +80,9 @@ namespace Obrissom.Enemy
 
         public override void OnNetworkSpawn()
         {
+            _isDeadSynced.OnValueChanged += OnDeadSyncedChanged;
+            if (_isDeadSynced.Value) _enemyAnimation.PlayDeathAnimation();
+
             if (!IsServer) return;
 
             _agent.enabled = true;
@@ -87,8 +93,16 @@ namespace Obrissom.Enemy
             _stateMachine.Initialize(this, _agent);
 
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
+        }
 
-            
+        public override void OnNetworkDespawn()
+        {
+            _isDeadSynced.OnValueChanged -= OnDeadSyncedChanged;
+        }
+
+        private void OnDeadSyncedChanged(bool previous, bool current)
+        {
+            if (current) _enemyAnimation.PlayDeathAnimation();
         }
 
         protected virtual void Update()
@@ -179,10 +193,19 @@ namespace Obrissom.Enemy
                 return;
             }
 
-            _enemyAnimation.PlayTakeDamageAnimation();
+            PlayTakeDamageAnimationRpc();
         }
 
         protected virtual void OnTakeDamage(float rawAmount) { }
+
+        [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
+        private void PlayTakeDamageAnimationRpc() => _enemyAnimation.PlayTakeDamageAnimation();
+
+        /// <summary>
+        /// Server only. Plays the attack animation on every client (host included).
+        /// </summary>
+        [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
+        protected void PlayAttackAnimationRpc() => _enemyAnimation.PlayAttackAnimation();
 
         /// <summary>
         /// Server only. Plays a 3D sound on every client. Silent if the prefab has no NetworkSoundEmitter.
@@ -226,7 +249,7 @@ namespace Obrissom.Enemy
             if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
-            _enemyAnimation.PlayDeathAnimation();
+            _isDeadSynced.Value = true; // Plays the death animation on server and clients
 
             DropLoot();
 
