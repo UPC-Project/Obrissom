@@ -69,12 +69,25 @@ namespace Obrissom.Enemy
         [Tooltip("Random ± fraction applied to every cooldown so Picozapatos never attack in sync. 0.2 = ±20%.")]
         [Range(0f, 0.9f)] public float cooldownVariance = 0.2f;
 
-        [Header("Roaming")]
+        [Header("Solo Roaming (when no herd is assigned)")]
         [Tooltip("Radius around the spawn point where random destinations are picked.")]
         [Min(0f)] public float roamRadius = 10f;
 
-        [Tooltip("Random pause (seconds) after reaching a roaming destination.")]
+        [Tooltip("Random pause (seconds) after reaching a roaming destination. Herds use their own pause.")]
         public Vector2 roamPause = new Vector2(1.5f, 4f);
+
+        [Header("Group Movement")]
+        [Tooltip("Minimum distance between a roaming destination and the other members (their destinations and positions).")]
+        [Min(0f)] public float herdSpacing = 2.5f;
+
+        [Tooltip("While standing still, Picozapatos closer than this step away from each other.")]
+        [Min(0f)] public float separationRadius = 1.8f;
+
+        [Tooltip("How far (meters) a standing Picozapato steps away when someone is too close.")]
+        [Min(0f)] public float separationStrength = 1.2f;
+
+        [Tooltip("Random ± fraction applied to each Picozapato's speed. 0.12 = ±12%.")]
+        [Range(0f, 0.5f)] public float speedVariance = 0.12f;
 
         [Header("NavMesh Agent")]
         [Min(0f)] public float acceleration = 10f;

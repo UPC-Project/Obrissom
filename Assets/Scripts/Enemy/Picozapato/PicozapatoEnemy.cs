@@ -17,12 +17,16 @@ namespace Obrissom.Enemy
     /// Area attack: Startup (hand into the ground) - target position locked, circle telegraph  - impact (damage) - recovery.
     /// </summary>
     [RequireComponent(typeof(PicozapatoAnimation))]
-    public class PicozapatoEnemy : EnemyBase
+    public class PicozapatoEnemy : EnemyBase, IHerdMember
     {
         private const int MaxOverlapHits = 32;
 
         [Header("Picozapato")]
         [SerializeField] private PicozapatoConfig _config;
+
+        [Tooltip("Optional, for Picozapatos placed in a scene. Spawners assign the herd at runtime. " +
+                 "Without one, it roams alone around its spawn point.")]
+        [SerializeField] private EnemyHerd _herd;
 
         private static readonly Collider[] s_overlapHits = new Collider[MaxOverlapHits];
         private static readonly HashSet<ulong> s_hitPlayers = new HashSet<ulong>();
@@ -45,16 +49,23 @@ namespace Obrissom.Enemy
         private float _areaReadyTime;
         private byte _attackSequence;
 
+        // Server — individual variation, rolled once on spawn
+        private float _speedMultiplier = 1f;
+
         // Server — roaming
-        private Vector3 _home;
-        private float _roamResumeTime;
+        private bool _ownsHerd;
         private bool _isRoamPausing;
+        private float _roamResumeTime;
 
         private bool IsAttacking => _currentAttack != PicozapatoAttackKind.None;
 
         protected override bool IsStaggerImmune => _currentAttack == PicozapatoAttackKind.Area;
 
         public override bool CanFaceTarget => !_isRooted && _currentAttack != PicozapatoAttackKind.Basic;
+
+        // IHerdMember
+
+        public float HerdSpacing => _config.herdSpacing;
 
         // Lifecycle
 
@@ -67,6 +78,9 @@ namespace Obrissom.Enemy
 
         public override void OnNetworkSpawn()
         {
+            // Before base: the state machine starts inside base.OnNetworkSpawn and already reads the speed variation
+            if (IsServer) RollIndividualVariation();
+
             base.OnNetworkSpawn();
 
             _attackSnapshot.OnValueChanged += OnAttackSnapshotChanged;
@@ -74,19 +88,45 @@ namespace Obrissom.Enemy
 
             if (!IsServer) return;
 
-            _home = transform.position;
-
-            // A group spawned together must not open with a synchronized volley
-            _areaReadyTime = Time.time + Random.Range(0f, _config.areaCooldown);
-
             ConfigureAgent();
+            EnemySteering.Register(this);
+
+            if (_herd != null)
+            {
+                EnemyHerd sceneHerd = _herd;
+                _herd = null;
+                sceneHerd.AddMember(this);
+            }
         }
 
         public override void OnNetworkDespawn()
         {
             _attackSnapshot.OnValueChanged -= OnAttackSnapshotChanged;
             DestroyIndicator();
+
+            if (IsServer) LeaveGroupSystems();
+
             base.OnNetworkDespawn();
+        }
+
+        private void RollIndividualVariation()
+        {
+            _speedMultiplier = 1f + Random.Range(-_config.speedVariance, _config.speedVariance);
+
+            // A group spawned together must not open with a synchronized volley
+            _areaReadyTime = Time.time + Random.Range(0f, _config.areaCooldown);
+        }
+
+        private void LeaveGroupSystems()
+        {
+            EnemySteering.Unregister(this);
+
+            if (_herd != null)
+            {
+                EnemyHerd herd = _herd;
+                _herd = null;
+                herd.RemoveMember(this);
+            }
         }
 
         public override void OnDestroy()
@@ -104,54 +144,102 @@ namespace Obrissom.Enemy
             _agent.avoidancePriority = Random.Range(_config.avoidancePriorityRange.x, _config.avoidancePriorityRange.y + 1);
         }
 
-        // Roaming — random points around the spawn (or the patrol points if any), with pauses
+        public override float GetMoveSpeed(EnemyState state) => base.GetMoveSpeed(state) * _speedMultiplier;
+
+        public override void OnStateChanged(EnemyState previous, EnemyState current)
+        {
+            // Leaving roaming (combat, death...): free the destination so another member can use that spot
+            if (previous == EnemyState.Move && _herd != null) _herd.ReleaseDestination(this);
+        }
+
+        // Roaming — each member wanders on its own inside the herd area (a solo Picozapato is a herd of one)
+
+        public void SetHerd(EnemyHerd herd)
+        {
+            if (_herd == herd) return;
+
+            EnemyHerd previous = _herd;
+            _herd = herd;
+            _ownsHerd = false;
+
+            if (previous != null) previous.RemoveMember(this); // Auto-created herds destroy themselves when empty
+        }
+
+        public override void SetPatrolPoints(GameObject[] points)
+        {
+            base.SetPatrolPoints(points);
+            if (_ownsHerd && _herd != null) _herd.SetWaypoints(points);
+        }
 
         public override void OnMoveStateEnter()
         {
-            _isRoamPausing = false;
-            PickRoamDestination();
+            EnsureHerd();
+
+            // Short random wait before the first leg so members spawned together don't all leave at once
+            _isRoamPausing = true;
+            _roamResumeTime = Time.time + Random.Range(0f, _herd.PauseAtDestination.x);
         }
 
         public override void OnMoveStateTick()
         {
-            if (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance + 0.1f) return;
+            EnsureHerd();
 
-            if (!_isRoamPausing)
+            if (_isRoamPausing)
             {
-                _isRoamPausing = true;
-                _roamResumeTime = Time.time + Random.Range(_config.roamPause.x, _config.roamPause.y);
+                if (Time.time >= _roamResumeTime) StartRoamLeg();
+                else KeepPersonalSpace();
                 return;
             }
 
-            if (Time.time < _roamResumeTime) return;
+            bool arrived = !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance + 0.1f;
+            if (!arrived) return;
 
+            Vector2 pause = _herd.PauseAtDestination;
+            _isRoamPausing = true;
+            _roamResumeTime = Time.time + Random.Range(pause.x, pause.y);
+        }
+
+        private void EnsureHerd()
+        {
+            if (_herd != null) return;
+
+            var herdObject = new GameObject($"{name} Herd");
+            herdObject.transform.position = transform.position;
+            var herd = herdObject.AddComponent<EnemyHerd>();
+            herd.Configure(_config.roamRadius, _config.roamPause, _patrolPoints, destroyWhenEmpty: true);
+            herd.AddMember(this);
+            _ownsHerd = true;
+        }
+
+        private void StartRoamLeg()
+        {
             _isRoamPausing = false;
-            PickRoamDestination();
-        }
+            _agent.speed = GetMoveSpeed(EnemyState.Move);
 
-        private void PickRoamDestination()
-        {
-            for (int attempt = 0; attempt < 8; attempt++)
+            // The herd picks a spot away from the other members' destinations and positions
+            if (_herd.TryGetDestination(this, out Vector3 destination))
             {
-                if (NavMesh.SamplePosition(GetRoamCandidate(), out NavMeshHit hit, 3f, NavMesh.AllAreas))
-                {
-                    _agent.SetDestination(hit.position);
-                    return;
-                }
+                _agent.SetDestination(destination);
+            }
+            else
+            {
+                // No valid spot this time: wait a bit and try again
+                _isRoamPausing = true;
+                _roamResumeTime = Time.time + 1f;
             }
         }
 
-        private Vector3 GetRoamCandidate()
+        // While standing still, step aside if another enemy is too close. While walking, NavMesh avoidance handles it.
+        private void KeepPersonalSpace()
         {
-            Vector2 random = Random.insideUnitCircle;
+            if (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance + 0.1f) return;
 
-            if (_patrolPoints != null && _patrolPoints.Length > 0)
-            {
-                GameObject point = _patrolPoints[Random.Range(0, _patrolPoints.Length)];
-                if (point != null) return point.transform.position + new Vector3(random.x, 0f, random.y) * 1.5f;
-            }
+            Vector3 push = EnemySteering.ComputeSeparation(this, _config.separationRadius);
+            if (push.sqrMagnitude < 0.01f) return;
 
-            return _home + new Vector3(random.x, 0f, random.y) * _config.roamRadius;
+            Vector3 target = transform.position + push.normalized * _config.separationStrength;
+            if (NavMesh.SamplePosition(target, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+                _agent.SetDestination(hit.position);
         }
 
         // Chase — stop just inside attack range instead of walking into the player
@@ -328,6 +416,7 @@ namespace Obrissom.Enemy
 
             PlaySoundForEveryone(_config.deathSound, transform.position);
             base.Die(attackerRef);
+            LeaveGroupSystems();
         }
 
         // Replication — server side
@@ -463,8 +552,12 @@ namespace Obrissom.Enemy
             base.OnDrawGizmosSelected();
             if (_config == null) return;
 
-            Gizmos.color = new Color(0.3f, 0.8f, 0.3f, 0.6f);
-            Gizmos.DrawWireSphere(Application.isPlaying ? _home : transform.position, _config.roamRadius);
+            // In play mode the herd draws its own area and slots
+            if (!Application.isPlaying && _herd == null)
+            {
+                Gizmos.color = new Color(0.3f, 0.8f, 0.3f, 0.6f);
+                Gizmos.DrawWireSphere(transform.position, _config.roamRadius);
+            }
 
             Gizmos.color = new Color(1f, 0.5f, 0f);
             Gizmos.DrawWireSphere(transform.position, _config.areaMaxRange);
