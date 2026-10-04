@@ -1895,22 +1895,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 8314128814656048071}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72fb6723916493c49bca647efa5128c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.SlasherEnemy
+  m_Script: {fileID: 11500000, guid: 7f3c53f36a424dbca389824597d3fdb2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.PicozapatoEnemy
   ShowTopMostFoldoutHeaderGroup: 1
-  _stats: {fileID: 11400000, guid: 824674f49519256408748801b7d92669, type: 2}
+  _stats: {fileID: 11400000, guid: 582f622011a842e386a58a05cedef722, type: 2}
   _playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  _patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _patrolPoints: []
   _waypointPauseDuration: 1
   _wanderRadius: 1.5
-  _slasherConfig: {fileID: 11400000, guid: 1c6f622cc4fe48d49822282c751fdc6f, type: 2}
-  _shieldVfx: {fileID: 3282808798795107164}
+  _config: {fileID: 11400000, guid: 58f6f52fd5d84917ace205bb01014894, type: 2}
 --- !u!114 &8150975047930492555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1920,10 +1916,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8314128814656048071}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb5b0d998b4f91d47ac1d997e4c5dd15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.SlasherAnimation
+  m_Script: {fileID: 11500000, guid: deeeffcd3efd4a5aa86bece6d0aba326, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.PicozapatoAnimation
   _animator: {fileID: 4976512145657518164}
+  _speedSmoothing: 10
+  _basicAttackTrigger: Attack
+  _takeDamageTrigger: TakeDamage
+  _deadBool: Dead
 --- !u!95 &4976512145657518164
 Animator:
   serializedVersion: 7

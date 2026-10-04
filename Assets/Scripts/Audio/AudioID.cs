@@ -19,6 +19,9 @@ namespace Obrissom.Audio
         SlasherHurt   = 201,
         SlasherDeath  = 202,
 
+        PicozapatoBasicAttack = 210,
+        PicozapatoDeath       = 211,
+
         // Environment 300–399
         DoorOpen    = 300,
         ChestOpen   = 301,
