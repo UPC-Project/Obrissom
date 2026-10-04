@@ -12,3 +12,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1c759def9bf4171820e094473515e82, type: 3}
   m_Name: PicozapatoConfig
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.PicozapatoConfig
+  basicAttackAngle: 110
+  basicWindupDuration: 0.35
+  basicRecoveryDuration: 0.45
+  areaMinRange: 1.5
+  areaMaxRange: 9
+  areaRadius: 2.2
+  areaDamageType: 0
+  areaMinDamage: 12
+  areaMaxDamage: 18
+  areaStartupDuration: 0.45
+  areaTelegraphDuration: 1.1
+  areaRecoveryDuration: 0.8
+  areaCooldown: 15
+  areaVerticalTolerance: 1.5
+  areaIndicatorPrefab: {fileID: 0}
+  fallbackIndicatorMaterial: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  indicatorColor: {r: 1, g: 0.55, b: 0.1, a: 0.8}
+  indicatorWarningColor: {r: 1, g: 0.1, b: 0.05, a: 1}
+  indicatorImpactDuration: 0.35
+  cooldownVariance: 0.2
+  roamRadius: 10
+  roamPause: {x: 1.5, y: 4}
+  herdSpacing: 2.5
+  separationRadius: 1.8
+  separationStrength: 1.2
+  speedVariance: 0.12
+  engagedRangeMultiplier: 1.6
+  retargetInterval: 1
+  targetCrowdPenalty: 3
+  targetSwitchHysteresis: 2
+  preferredRange: {x: 4.5, y: 7.5}
+  minAngleBetweenEngagers: 35
+  maxEngagedPerTarget: 4
+  outerRingExtraDistance: 3.5
+  repathThreshold: 0.4
+  maxSimultaneousAttacksPerTarget: 2
+  minTimeBetweenAttacksOnTarget: 0.6
+  engageReactionDelay: {x: 0.4, y: 1.2}
+  acceleration: 10
+  angularSpeed: 360
+  stoppingDistance: 0.3
+  avoidancePriorityRange: {x: 35, y: 65}
+  obstacleAvoidance: 2
+  basicAttackSound: 210
+  areaWindupSound: 212
+  areaImpactSound: 213
+  deathSound: 211

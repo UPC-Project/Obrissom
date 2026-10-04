@@ -20,6 +20,7 @@ namespace Obrissom.Enemy
     public class PicozapatoEnemy : EnemyBase, IHerdMember
     {
         private const int MaxOverlapHits = 32;
+        private const float WalkingSpeedSqr = 0.5f * 0.5f;
 
         [Header("Picozapato")]
         [SerializeField] private PicozapatoConfig _config;
@@ -51,21 +52,51 @@ namespace Obrissom.Enemy
 
         // Server — individual variation, rolled once on spawn
         private float _speedMultiplier = 1f;
+        private float _preferredRange;
+
+        // Server — targeting & group combat
+        private Transform _engagedTarget;
+        private float _canAttackAfter;
+        private float _nextRetargetTime;
+        private Transform _alertTarget;
+        private float _alertActiveTime;
 
         // Server — roaming
         private bool _ownsHerd;
         private bool _isRoamPausing;
         private float _roamResumeTime;
 
+        // Server — combat positioning
+        private Vector3 _lastDestination;
+        private bool _hasDestination;
+
         private bool IsAttacking => _currentAttack != PicozapatoAttackKind.None;
+        private float EngagedRange => _stats.chaseRange * _config.engagedRangeMultiplier;
 
         protected override bool IsStaggerImmune => _currentAttack == PicozapatoAttackKind.Area;
 
-        public override bool CanFaceTarget => !_isRooted && _currentAttack != PicozapatoAttackKind.Basic;
+        // Rotation is locked while the hand is in the ground and during the basic attack windup, so both are dodgeable.
+        // While walking in combat the agent faces where it goes (no sideways walking); it turns to the player once stopped.
+        public override bool CanFaceTarget =>
+            !_isRooted
+            && _currentAttack != PicozapatoAttackKind.Basic
+            && !IsWalking;
+
+        private bool IsWalking => _agent.enabled && !_agent.isStopped && _agent.velocity.sqrMagnitude > WalkingSpeedSqr;
 
         // IHerdMember
 
         public float HerdSpacing => _config.herdSpacing;
+
+        public bool IsEngaged =>
+            _stateMachine.CurrentState is EnemyState.Chase or EnemyState.Attack or EnemyState.TakingDamage;
+
+        public void OnHerdAlert(Transform target, float delay)
+        {
+            if (_isDead || _target != null) return;
+            _alertTarget = target;
+            _alertActiveTime = Time.time + delay;
+        }
 
         // Lifecycle
 
@@ -112,6 +143,7 @@ namespace Obrissom.Enemy
         private void RollIndividualVariation()
         {
             _speedMultiplier = 1f + Random.Range(-_config.speedVariance, _config.speedVariance);
+            _preferredRange = Random.Range(_config.preferredRange.x, _config.preferredRange.y);
 
             // A group spawned together must not open with a synchronized volley
             _areaReadyTime = Time.time + Random.Range(0f, _config.areaCooldown);
@@ -120,6 +152,8 @@ namespace Obrissom.Enemy
         private void LeaveGroupSystems()
         {
             EnemySteering.Unregister(this);
+            EnemyCombatCoordinator.RemoveEverywhere(this);
+            _engagedTarget = null;
 
             if (_herd != null)
             {
@@ -150,6 +184,14 @@ namespace Obrissom.Enemy
         {
             // Leaving roaming (combat, death...): free the destination so another member can use that spot
             if (previous == EnemyState.Move && _herd != null) _herd.ReleaseDestination(this);
+
+            // Just spotted a player: the rest of the herd reacts with staggered delays
+            bool justSpotted = current == EnemyState.Chase
+                               && (previous is EnemyState.Idle or EnemyState.Move or EnemyState.None);
+            if (justSpotted && _herd != null) _herd.RaiseAlert(this, _target);
+
+            _hasDestination = false;
+            SyncEngagement();
         }
 
         // Roaming — each member wanders on its own inside the herd area (a solo Picozapato is a herd of one)
@@ -242,38 +284,155 @@ namespace Obrissom.Enemy
                 _agent.SetDestination(hit.position);
         }
 
-        // Chase — stop just inside attack range instead of walking into the player
+        // Detection & targeting
+
+        public override void DetectPlayer()
+        {
+            if (ForcedTarget != null)
+            {
+                _target = ForcedTarget;
+                return;
+            }
+
+            bool currentValid = IsValidTarget(_target) && FlatDistance(_target.position) <= EngagedRange;
+            if (currentValid && Time.time < _nextRetargetTime) return;
+            _nextRetargetTime = Time.time + _config.retargetInterval * Random.Range(0.8f, 1.2f);
+
+            // Score = distance + penalty per enemy already fighting that player. Hysteresis avoids flip-flopping.
+            Transform best = currentValid ? _target : null;
+            float bestScore = currentValid ? ScoreTarget(_target) - _config.targetSwitchHysteresis : float.MaxValue;
+
+            int count = Physics.OverlapSphereNonAlloc(transform.position, _stats.chaseRange, s_overlapHits, _playerLayer);
+            for (int i = 0; i < count; i++)
+            {
+                PlayerCombat player = s_overlapHits[i].GetComponentInParent<PlayerCombat>();
+                if (player == null || player.transform == best || !IsAlive(player)) continue;
+
+                float score = ScoreTarget(player.transform);
+                if (score < bestScore)
+                {
+                    bestScore = score;
+                    best = player.transform;
+                }
+            }
+
+            // Nobody in sight: follow the herd alert once this member's reaction delay is over
+            if (best == null && _alertTarget != null && Time.time >= _alertActiveTime)
+            {
+                if (IsValidTarget(_alertTarget) && FlatDistance(_alertTarget.position) <= EngagedRange)
+                    best = _alertTarget;
+                _alertTarget = null;
+            }
+
+            _target = best;
+        }
+
+        public override bool IsPlayerInChaseRange() =>
+            _target != null && FlatDistance(_target.position) <= EngagedRange;
+
+        private float ScoreTarget(Transform target) =>
+            FlatDistance(target.position) + _config.targetCrowdPenalty * EnemyCombatCoordinator.GetEngagedCount(target, this);
+
+        private void SyncEngagement()
+        {
+            // The engaged player left the game: purge the stale registration
+            if (!ReferenceEquals(_engagedTarget, null) && _engagedTarget == null)
+            {
+                EnemyCombatCoordinator.RemoveEverywhere(this);
+                _engagedTarget = null;
+            }
+
+            Transform desired = IsEngaged && !_isDead ? _target : null;
+            if (desired == _engagedTarget) return;
+
+            if (_engagedTarget != null) EnemyCombatCoordinator.Disengage(_engagedTarget, this);
+            _engagedTarget = desired;
+            if (desired == null) return;
+
+            EnemyCombatCoordinator.Engage(desired, this);
+            _canAttackAfter = Time.time + Random.Range(_config.engageReactionDelay.x, _config.engageReactionDelay.y);
+        }
+
+        // Chase — position around the target
 
         public override void OnChaseStateTick()
         {
             if (_target == null) return;
+            SyncEngagement();
 
-            Vector3 fromTarget = transform.position - _target.position;
+            Vector3 targetPosition = _target.position;
+            Vector3 fromTarget = transform.position - targetPosition;
             fromTarget.y = 0f;
-            Vector3 destination = fromTarget.sqrMagnitude > 0.01f
-                ? _target.position + fromTarget.normalized * (_stats.attackRange * 0.7f)
-                : _target.position;
+            float distance = fromTarget.magnitude;
 
-            _agent.SetDestination(destination);
+            // Approach in a straight line from our side; only step aside if another engager is at the same angle.
+            // No orbiting: there is no strafe animation, so walking around the player reads as sliding.
+            float bearing = distance > 0.01f
+                ? Mathf.Atan2(fromTarget.z, fromTarget.x) * Mathf.Rad2Deg
+                : Random.Range(0f, 360f);
+            bearing = EnemySteering.SpreadBearing(_target, this, bearing, _config.minAngleBetweenEngagers,
+                                                  EnemyCombatCoordinator.GetEngagers(_target));
+
+            // Latecomers wait in an outer ring; the others hold their ground if the player comes closer (no kiting)
+            int rank = EnemyCombatCoordinator.GetEngageRank(_target, this);
+            float radius = rank >= _config.maxEngagedPerTarget
+                ? _preferredRange + _config.outerRingExtraDistance
+                : Mathf.Min(distance, _preferredRange);
+            radius = Mathf.Max(radius, _stats.attackRange * 0.75f);
+
+            float radians = bearing * Mathf.Deg2Rad;
+            Vector3 destination = targetPosition
+                                  + new Vector3(Mathf.Cos(radians), 0f, Mathf.Sin(radians)) * radius
+                                  + EnemySteering.ComputeSeparation(this, _config.separationRadius) * _config.separationStrength;
+            SetCombatDestination(destination);
+        }
+
+        private void SetCombatDestination(Vector3 destination)
+        {
+            if (!NavMesh.SamplePosition(destination, out NavMeshHit hit, 2f, NavMesh.AllAreas)) return;
+
+            float threshold = _config.repathThreshold;
+            if (_hasDestination && (hit.position - _lastDestination).sqrMagnitude < threshold * threshold) return;
+
+            _agent.SetDestination(hit.position);
+            _lastDestination = hit.position;
+            _hasDestination = true;
         }
 
         // Combat — decision
 
-   
+        /// <summary>
+        /// True while an attack is reserved or running (the attack is committed), or if one can start right now.
+        /// Starting requires range, cooldown, the engage reaction delay and a free attack slot on the target.
+        /// </summary>
         public override bool IsPlayerInAttackRange()
         {
             if (IsAttacking || _pendingAttack != PicozapatoAttackKind.None) return true;
-            if (_target == null) return false;
+            if (_target == null || Time.time < _canAttackAfter) return false;
 
             float distance = FlatDistance(_target.position);
+            PicozapatoAttackKind kind = PicozapatoAttackKind.None;
+            float slotDuration = 0f;
 
             if (distance <= _stats.attackRange && Time.time >= _basicReadyTime)
-                _pendingAttack = PicozapatoAttackKind.Basic;
+            {
+                kind = PicozapatoAttackKind.Basic;
+                slotDuration = _config.basicWindupDuration;
+            }
             else if (distance >= _config.areaMinRange && distance <= _config.areaMaxRange && Time.time >= _areaReadyTime)
-                _pendingAttack = PicozapatoAttackKind.Area;
+            {
+                kind = PicozapatoAttackKind.Area;
+                slotDuration = _config.areaStartupDuration + _config.areaTelegraphDuration;
+            }
 
-            if (_pendingAttack == PicozapatoAttackKind.None) return false;
+            if (kind == PicozapatoAttackKind.None) return false;
 
+            // The slot is held until the hit lands. +1s margin, it's only a safety net if the release is lost.
+            if (!EnemyCombatCoordinator.TryAcquireAttackSlot(_target, this, _config.maxSimultaneousAttacksPerTarget,
+                                                             _config.minTimeBetweenAttacksOnTarget, slotDuration + 1f))
+                return false;
+
+            _pendingAttack = kind;
             _attackTarget = _target;
             return true;
         }
@@ -304,8 +463,10 @@ namespace Obrissom.Enemy
             {
                 PlaySoundForEveryone(_config.basicAttackSound, transform.position);
                 ResolveBasicHit();
-                yield return new WaitForSeconds(_config.basicRecoveryDuration);
             }
+            ReleaseAttackSlot(); // The threat is over, recovery doesn't block other attackers
+
+            if (!interrupted) yield return new WaitForSeconds(_config.basicRecoveryDuration);
 
             _basicReadyTime = Time.time + _config.GetRandomizedCooldown(_stats.attackCooldown);
             FinishAttack();
@@ -344,6 +505,7 @@ namespace Obrissom.Enemy
             if (!IsValidTarget(_attackTarget))
             {
                 // Target gone during startup: abort with a short cooldown
+                ReleaseAttackSlot();
                 ClearSnapshot();
                 _areaReadyTime = Time.time + _config.areaCooldown * 0.25f;
                 FinishAttack();
@@ -359,6 +521,7 @@ namespace Obrissom.Enemy
 
             ResolveAreaHit(center);
             PublishSnapshot(PicozapatoAttackPhase.Impact, center);
+            ReleaseAttackSlot();
 
             yield return new WaitForSeconds(_config.areaRecoveryDuration);
 
@@ -398,6 +561,11 @@ namespace Obrissom.Enemy
             if (_currentAttack == PicozapatoAttackKind.Basic) _wasStaggered = true;
         }
 
+        private void ReleaseAttackSlot()
+        {
+            if (_attackTarget != null) EnemyCombatCoordinator.ReleaseAttackSlot(_attackTarget, this);
+        }
+
         private void FinishAttack()
         {
             _currentAttack = PicozapatoAttackKind.None;
@@ -410,6 +578,7 @@ namespace Obrissom.Enemy
         {
             // Killing it mid-cast cancels the attack and removes the circle
             if (_attackRoutine != null) StopCoroutine(_attackRoutine);
+            ReleaseAttackSlot();
             FinishAttack();
             _pendingAttack = PicozapatoAttackKind.None;
             if (_attackSnapshot.Value.Kind != PicozapatoAttackKind.None) ClearSnapshot();
@@ -543,7 +712,9 @@ namespace Obrissom.Enemy
             target != null
             && target.gameObject.activeInHierarchy
             && target.TryGetComponent(out PlayerCombat player)
-            && player._health.Value > 0f;
+            && IsAlive(player);
+
+        private static bool IsAlive(PlayerCombat player) => player._health.Value > 0f;
 
         // Gizmos
 

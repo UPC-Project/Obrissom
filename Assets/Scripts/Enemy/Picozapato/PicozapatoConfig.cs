@@ -89,6 +89,45 @@ namespace Obrissom.Enemy
         [Tooltip("Random ± fraction applied to each Picozapato's speed. 0.12 = ±12%.")]
         [Range(0f, 0.5f)] public float speedVariance = 0.12f;
 
+        [Header("Targeting")]
+        [Tooltip("Once engaged (or alerted by the herd), keeps chasing up to chaseRange × this.")]
+        [Min(1f)] public float engagedRangeMultiplier = 1.6f;
+
+        [Tooltip("Seconds between target re-evaluations.")]
+        [Min(0.2f)] public float retargetInterval = 1f;
+
+        [Tooltip("Extra virtual meters added per enemy already fighting a player. Spreads a group across players.")]
+        [Min(0f)] public float targetCrowdPenalty = 3f;
+
+        [Tooltip("A new target must be this many virtual meters better than the current one to switch.")]
+        [Min(0f)] public float targetSwitchHysteresis = 2f;
+
+        [Header("Engagement Positioning")]
+        [Tooltip("Each Picozapato picks its own preferred fighting distance in this range. Keep it inside the area attack range.")]
+        public Vector2 preferredRange = new Vector2(4.5f, 7.5f);
+
+        [Tooltip("Minimum angle (degrees) between Picozapatos around the same player.")]
+        [Range(0f, 180f)] public float minAngleBetweenEngagers = 35f;
+
+        [Tooltip("Picozapatos beyond this count around the same player wait further away.")]
+        [Min(1)] public int maxEngagedPerTarget = 4;
+
+        [Tooltip("Extra distance for the ones waiting in the outer ring.")]
+        [Min(0f)] public float outerRingExtraDistance = 3.5f;
+
+        [Tooltip("The NavMesh destination is only updated when it moves more than this. Saves path requests.")]
+        [Min(0f)] public float repathThreshold = 0.4f;
+
+        [Header("Attack Coordination (per player)")]
+        [Tooltip("Max attacks in progress at the same time against one player, counting every enemy type that uses the coordinator.")]
+        [Min(1)] public int maxSimultaneousAttacksPerTarget = 2;
+
+        [Tooltip("Minimum seconds between two attacks starting against the same player.")]
+        [Min(0f)] public float minTimeBetweenAttacksOnTarget = 0.6f;
+
+        [Tooltip("Random delay (seconds) between engaging a player and the first attack.")]
+        public Vector2 engageReactionDelay = new Vector2(0.4f, 1.2f);
+
         [Header("NavMesh Agent")]
         [Min(0f)] public float acceleration = 10f;
         [Min(0f)] public float angularSpeed = 360f;
@@ -115,6 +154,12 @@ namespace Obrissom.Enemy
             roamPause.y = Mathf.Max(roamPause.y, roamPause.x);
             avoidancePriorityRange.x = Mathf.Clamp(avoidancePriorityRange.x, 0, 99);
             avoidancePriorityRange.y = Mathf.Clamp(avoidancePriorityRange.y, avoidancePriorityRange.x, 99);
+            preferredRange.y = Mathf.Max(preferredRange.y, preferredRange.x);
+            engageReactionDelay.y = Mathf.Max(engageReactionDelay.y, engageReactionDelay.x);
+
+            if (preferredRange.x < areaMinRange || preferredRange.y > areaMaxRange)
+                Debug.LogWarning($"[PicozapatoConfig] {name}: preferredRange should be inside the area attack range " +
+                                 $"({areaMinRange}–{areaMaxRange}) or some Picozapatos will never cast it.", this);
         }
     }
 }

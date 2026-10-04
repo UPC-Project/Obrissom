@@ -27,6 +27,16 @@ namespace Obrissom.Enemy
         [Tooltip("Random pause (seconds) when a member reaches its destination.")]
         [SerializeField] private Vector2 _pauseAtDestination = new Vector2(2f, 5f);
 
+        [Header("Alert")]
+        [Tooltip("Members within this distance of the one that spotted a player are alerted.")]
+        [SerializeField, Min(0f)] private float _alertRadius = 18f;
+
+        [Tooltip("Random reaction delay (seconds) for alerted members.")]
+        [SerializeField] private Vector2 _alertDelay = new Vector2(0.15f, 0.6f);
+
+        [Tooltip("Extra reaction delay per meter of distance to the member that spotted the player.")]
+        [SerializeField, Min(0f)] private float _alertDelayPerMeter = 0.04f;
+
         public Vector2 PauseAtDestination => _pauseAtDestination;
 
         private readonly List<IHerdMember> _members = new List<IHerdMember>();
@@ -68,6 +78,28 @@ namespace Obrissom.Enemy
 
             _claimedDestinations.Remove(member);
             if (_members.Count == 0 && _destroyWhenEmpty) Destroy(gameObject);
+        }
+
+        // Alert
+
+        /// <summary>A member spotted a target: wake up nearby free members with staggered delays.</summary>
+        public void RaiseAlert(IHerdMember source, Transform target)
+        {
+            if (target == null) return;
+
+            Vector3 sourcePosition = source.transform.position;
+            float sqrRadius = _alertRadius * _alertRadius;
+
+            foreach (IHerdMember member in _members)
+            {
+                if (member == source || member.IsEngaged) continue;
+
+                float sqrDistance = (member.transform.position - sourcePosition).sqrMagnitude;
+                if (sqrDistance > sqrRadius) continue;
+
+                float delay = Random.Range(_alertDelay.x, _alertDelay.y) + Mathf.Sqrt(sqrDistance) * _alertDelayPerMeter;
+                member.OnHerdAlert(target, delay);
+            }
         }
 
         // Destinations

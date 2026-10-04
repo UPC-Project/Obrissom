@@ -61,5 +61,42 @@ namespace Obrissom.Enemy
 
             return push;
         }
+
+        /// <summary>
+        /// Nudges a desired bearing (degrees around the target) away from the bearings of the other engagers,
+        /// so enemies fighting the same player naturally surround it instead of stacking on one side.
+        /// </summary>
+        public static float SpreadBearing(Transform target, EnemyBase self, float desiredBearing,
+                                          float minSeparation, IReadOnlyList<EnemyBase> engagers)
+        {
+            int others = 0;
+            for (int i = 0; i < engagers.Count; i++)
+                if (engagers[i] != null && engagers[i] != self && !engagers[i].IsDead) others++;
+            if (others == 0) return desiredBearing;
+
+            // With many engagers the ideal spacing shrinks so they still fit around the circle
+            float separation = Mathf.Min(minSeparation, 360f / (others + 1) * 0.9f);
+            Vector3 targetPosition = target.position;
+            float push = 0f;
+
+            for (int i = 0; i < engagers.Count; i++)
+            {
+                EnemyBase other = engagers[i];
+                if (other == null || other == self || other.IsDead) continue;
+
+                Vector3 offset = other.transform.position - targetPosition;
+                float otherBearing = Mathf.Atan2(offset.z, offset.x) * Mathf.Rad2Deg;
+                float delta = Mathf.DeltaAngle(otherBearing, desiredBearing);
+                float absDelta = Mathf.Abs(delta);
+                if (absDelta >= separation) continue;
+
+                float side = absDelta > 0.01f
+                    ? Mathf.Sign(delta)
+                    : (self.GetInstanceID() > other.GetInstanceID() ? 1f : -1f);
+                push += side * (separation - absDelta) * 0.5f;
+            }
+
+            return desiredBearing + Mathf.Clamp(push, -separation, separation);
+        }
     }
 }
