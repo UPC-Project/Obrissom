@@ -3,8 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Skill", menuName = "Skills/Skill")]
 public class Skill : ScriptableObject
 {
-    [Tooltip("name will be shown to the player")] public string skillName;
-    [Tooltip("Description will be shown to the player")] public string description;
+    [Tooltip("Name will be shown to the player")] public string skillName;
+    [Tooltip("Image shown on HUD")] public Sprite skillImage;
+    [Tooltip("Description will be shown to the player"), TextArea] public string description;
     [Min(0), Tooltip("How long until player can activates skill again")] public float cooldownTime;
     [Min(0), Tooltip("mana/stamina/fury cost")] public int cost; // mana/fury
     [Min(0), Tooltip("How long until player executes skill behaviour after skill activation")] public int castTime; // depends on the animation + preference

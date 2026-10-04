@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: MagicProjectile
   m_EditorClassIdentifier: Assembly-CSharp::Skill
   skillName: Magic Projectile
-  description: Channel a magic orb that will cause 10-15 magic damage
+  skillImage: {fileID: 21300000, guid: 381b3d3a7dcaf1040b5e86f476e78ed4, type: 3}
+  description: Channel a magic orb that will cause 10-15 magic damage.
   cooldownTime: 1
   cost: 2
   castTime: 0
+  minEffectValue: 10
+  maxEffectValue: 15
+  effectType: 1
   minDamagePerSecond: 0
   maxDamagePerSecond: 0
   damagePerSecondTime: 0
   damagePerSecondType: 0
-  minEffectValue: 10
-  maxEffectValue: 15
-  effectType: 1
   behaviour: {fileID: 11400000, guid: 22ab579740cc57c4dadad996563967fb, type: 2}

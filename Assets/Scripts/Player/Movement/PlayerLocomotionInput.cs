@@ -1,11 +1,13 @@
 using Unity.Cinemachine;
+using Unity.Netcode;
 using UnityEngine;
+using Obrissom.UI;
 
 namespace Obrissom.Player
 {
-    [DefaultExecutionOrder(-2)]
+    [DefaultExecutionOrder(-3)]
 
-    public class PlayerLocomotionInput : MonoBehaviour, PlayerInput.IPlayerLocomotionMapActions
+    public class PlayerLocomotionInput : NetworkBehaviour, PlayerInput.IPlayerLocomotionMapActions
     {
         #region Class variables
         [Header("Player Movement")]
@@ -13,13 +15,24 @@ namespace Obrissom.Player
         public bool JumpPressed { get; private set; }
         public bool CameraPressed { get; private set; }
 
-        public PlayerInput PlayerInput { get; private set; }
+        private PlayerInput _playerInput;
+        public PlayerInput PlayerInput
+        {
+            get
+            {
+                if (_playerInput == null)
+                {
+                    _playerInput = new PlayerInput();
+                }
+                return _playerInput;
+            }
+        }
         public Vector2 MovementInput { get; private set; }
-        
+
         [Header("Player Camera")]
         [SerializeField] private float _cameraZoomSpeed;
-        [SerializeField, Range(2,4)] private int _cameraZoomMinZoom = 3;
-        [SerializeField, Range(4,7)] private int _cameraZoomMaxZoom = 5;
+        [SerializeField, Range(2, 4)] private int _cameraZoomMinZoom = 3;
+        [SerializeField, Range(4, 7)] private int _cameraZoomMaxZoom = 5;
         [SerializeField] private CinemachineThirdPersonFollow _camera;
         public Vector2 LookInput { get; private set; }
         public Vector2 ScrollInput { get; private set; }
@@ -27,12 +40,25 @@ namespace Obrissom.Player
         [Header("References")]
         [SerializeField] private Animator _animator;
 
+
         private void Awake()
         {
-            PlayerInput = new PlayerInput();
+            _playerInput = new PlayerInput();
             PlayerInput.Enable();
         }
         #endregion
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsOwner)
+            {
+                enabled = false;
+            }
+            else
+            {
+                InputStateManager.Instance.RegisterPlayerInput(PlayerInput);
+            }
+        }
 
         private void OnEnable()
         {

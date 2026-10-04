@@ -1,4 +1,4 @@
-﻿using Obrissom.Player;
+using Obrissom.Player;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -33,6 +33,10 @@ namespace Obrissom.Enemy
 
         public EnemyStats Stats => _stats;
 
+        public virtual bool IsRetreating => false;
+
+        public virtual bool IsInvulnerable => false;
+
         // Components
         protected NavMeshAgent _agent;
         protected EnemyAnimation _enemyAnimation;
@@ -48,9 +52,12 @@ namespace Obrissom.Enemy
         protected Transform _target;
         private bool _isWaypointPausing;
 
+        // Taunt
+        private Transform _forcedTarget;
+        private float _tauntTimer;
+        public bool IsTaunted => _forcedTarget != null;
+
         // Lifecycle
-
-
         protected EnemyStateMachine _stateMachine;
 
 
@@ -68,12 +75,16 @@ namespace Obrissom.Enemy
         {
             if (!IsServer) return;
 
+            _agent.enabled = true;
             _currentHealth = _stats.maxHealth;
             _agent.speed = _stats.moveSpeed;
+            _agent.enabled = true;
 
             _stateMachine.Initialize(this, _agent);
 
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
+
+            
         }
 
         protected virtual void Update()
@@ -81,6 +92,17 @@ namespace Obrissom.Enemy
             if (!IsServer || _isDead) return;
 
             _attackCooldownTimer -= Time.deltaTime;
+
+            // Taunt timer countdown
+            if (_tauntTimer > 0f)
+            {
+                _tauntTimer -= Time.deltaTime;
+                if (_tauntTimer <= 0f)
+                {
+                    _forcedTarget = null;
+                }
+            }
+
             _stateMachine.Tick();
         }
 
@@ -92,6 +114,12 @@ namespace Obrissom.Enemy
         /// </summary>
         public void DetectPlayer()
         {
+            if (_forcedTarget != null)
+            {
+                _target = _forcedTarget;
+                return;
+            }
+
             Collider[] hits = Physics.OverlapSphere(transform.position, _stats.chaseRange, _playerLayer);
 
             float closestDistance = float.MaxValue;
@@ -123,9 +151,9 @@ namespace Obrissom.Enemy
         /// </summary>
         /// 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public virtual void TakeDamageRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
+        public void TakeDamageRpc(float rawAmount, EffectType type, bool isCritic, Vector3 hitPos, NetworkObjectReference attackerRef)
         {
-            if (!IsServer || _isDead) return;
+            if (!IsServer || _isDead || IsInvulnerable) return;
 
             float reduction = type == EffectType.PhysicDamage
                 ? _stats.physicalDefense
@@ -136,8 +164,9 @@ namespace Obrissom.Enemy
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
-
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
+
+            OnTakeDamage(rawAmount);
 
             if (_currentHealth <= 0f)
             {
@@ -145,7 +174,31 @@ namespace Obrissom.Enemy
                 return;
             }
 
-            _enemyAnimation.PlayHitAnimation();
+            _enemyAnimation.PlayTakeDamageAnimation();
+        }
+
+        protected virtual void OnTakeDamage(float rawAmount) { }
+
+        /// <summary>
+        /// Forces this enemy to target the taunter for a duration, ignoring normal detection.
+        /// Called from TauntHitBox via client RPC.
+        /// </summary>
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void ApplyTauntRpc(NetworkObjectReference taunterRef, float duration)
+        {
+            if (_isDead) return;
+
+            if (taunterRef.TryGet(out NetworkObject taunterObj))
+            {
+                _forcedTarget = taunterObj.transform;
+                _tauntTimer = duration;
+
+                if (_stateMachine.CurrentState == EnemyState.Idle || _stateMachine.CurrentState == EnemyState.Move)
+                {
+                    _target = _forcedTarget;
+                    _stateMachine.ChangeState(EnemyState.Chase);
+                }
+            }
         }
 
         /// <summary>
@@ -157,7 +210,7 @@ namespace Obrissom.Enemy
         protected virtual void Die(NetworkObjectReference attackerRef)
         {
             _isDead = true;
-            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete if when navmesh is implemented
+            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
             _enemyAnimation.PlayDeathAnimation();
@@ -167,6 +220,7 @@ namespace Obrissom.Enemy
             if (attackerRef.TryGet(out NetworkObject attackerObj))
             {
                 attackerObj.GetComponent<PlayerXP>()?.GainXP(_stats.experienceReward);
+                attackerObj.GetComponent<PlayerQuestTracker>()?.ReportKill(_stats);
             }
 
             StartCoroutine(DespawnRoutine());
@@ -190,6 +244,7 @@ namespace Obrissom.Enemy
         {
             _patrolPoints = points;
         }
+
         // Called once when entering Move state
         public void MoveToNextPatrolPoint()
         {
@@ -265,7 +320,7 @@ namespace Obrissom.Enemy
         }
 
         //Gizmos
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             if (_stats == null) return;
 

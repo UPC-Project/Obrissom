@@ -1,3 +1,4 @@
+using Obrissom.UI;
 using Unity.Netcode;
 using UnityEngine;
 using static LevelUpRewards;
@@ -24,7 +25,7 @@ namespace Obrissom.Player
 
             _playerSkills = GetComponent<PlayerSkills>();
             _playerStats = GetComponent<PlayerStats>();
-            _XpUi = UI.PlayerUIManager.Instance.GetLevelAndXPUI();
+            _XpUi = PlayerUIManager.Instance.GetLevelAndXPUI();
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
             _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
 
@@ -34,17 +35,37 @@ namespace Obrissom.Player
 
         public void GainXP(float amount)
         {
-            if (!IsOwner || currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
-
-            if (xp + amount >= xpNeeded)
+            if (IsServer && !IsOwner)
             {
-                float rest = (xp + amount) - xpNeeded;
-                xp = rest;
-                LevelUp();
+                GainXPClientRpc(amount);
             }
             else
             {
-                xp += amount;
+                ApplyXPLocally(amount);
+            }
+        }
+
+        [Rpc(SendTo.Owner)]
+        private void GainXPClientRpc(float amount)
+        {
+            ApplyXPLocally(amount);
+        }
+
+        private void ApplyXPLocally(float amount)
+        {
+            if (!IsOwner || currentLevel >= LevelUpRequirements.MAX_LEVEL) return;
+
+            xp += amount;
+
+            while (xp >= xpNeeded && currentLevel < LevelUpRequirements.MAX_LEVEL)
+            {
+                xp -= xpNeeded;
+                LevelUp();
+            }
+
+            if (currentLevel >= LevelUpRequirements.MAX_LEVEL)
+            {
+                xp = 0;
             }
 
             _XpUi.UpdateXP(xp, xpNeeded, currentLevel);
@@ -55,6 +76,7 @@ namespace Obrissom.Player
         {
             currentLevel++;
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
+            LevelupPopup.Instance.ShowLevelupPopup(currentLevel.ToString());
 
             // Depends on player class and level
             LevelUpRewards.LevelReward rewards = _levelUpRewards.rewards.Find(r => r.level == currentLevel);

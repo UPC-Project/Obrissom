@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 5522180605291885150}
   - component: {fileID: 7983465264339706487}
   - component: {fileID: 5514842982242273332}
-  - component: {fileID: 995904561248748283}
   - component: {fileID: 769809390551882246}
   - component: {fileID: 8690559903737183298}
   - component: {fileID: 7214358050028003331}
+  - component: {fileID: 5892116300327439188}
   m_Layer: 0
   m_Name: WordItem
   m_TagString: Untagged
@@ -95,27 +95,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &995904561248748283
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7928161634885913208}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &769809390551882246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2921911533
+  GlobalObjectIdHash: 2667940720
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -155,15 +134,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldItem
   ShowTopMostFoldoutHeaderGroup: 1
   autoPickup: 0
+  _item: {fileID: 0}
   _bobSpeed: 1.5
   _bobHeight: 0.15
   _rotationSpeed: 90
   _labelTransform: {fileID: 1145398936682133959}
   _labelText: {fileID: 8328903001340950738}
-  _pickupRadius: 2
-  _playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!54 &7214358050028003331
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -191,6 +167,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &5892116300327439188
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7928161634885913208}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 4
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8560413176715879194
 GameObject:
   m_ObjectHideFlags: 0

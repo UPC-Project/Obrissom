@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
+  m_Name: SwordCut
+  m_EditorClassIdentifier: Assembly-CSharp::Skill
+  skillName: Sword Cut
+  skillImage: {fileID: 21300000, guid: f6fcbc3ff973b5140b4c26bfae6a09b5, type: 3}
+  description: Cut your enemies with your sword
+  cooldownTime: 0.5
+  cost: 0
+  castTime: 0
+  minEffectValue: 3
+  maxEffectValue: 5
+  effectType: 0
+  minDamagePerSecond: 0
+  maxDamagePerSecond: 0
+  damagePerSecondTime: 0
+  damagePerSecondType: 0
+  behaviour: {fileID: 11400000, guid: 5f5c143b945c96e43a53a2fae8036ad5, type: 2}

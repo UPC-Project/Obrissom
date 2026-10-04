@@ -9,6 +9,9 @@ public class ProjectileTrigger : NetworkBehaviour
 
     [SerializeField] private Renderer _renderer;
     [SerializeField] private Collider _collider;
+    [SerializeField] private ParticleSystem _fire;
+    [SerializeField] private ParticleSystem _smoke;
+    [SerializeField] private ParticleSystem _sparks;
     public override void OnNetworkSpawn()
     {
         _renderer = GetComponent<Renderer>();
@@ -33,9 +36,27 @@ public class ProjectileTrigger : NetworkBehaviour
     [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
     public void SetActiveClientRpc(bool visible)
     {
-        //gameObject.SetActive(active);
         if (_renderer != null) _renderer.enabled = visible;
         if (_collider != null) _collider.enabled = visible;
+
+
+        if (_fire != null)
+        {
+            var emission = _fire.emission;
+            emission.enabled = visible; 
+        }
+
+        if (_smoke != null)
+        {
+            var emission = _smoke.emission;
+            emission.enabled = visible;
+        }
+
+        if (_sparks != null)
+        {
+            var emission = _sparks.emission;
+            emission.enabled = visible;
+        }
     }
 
 }

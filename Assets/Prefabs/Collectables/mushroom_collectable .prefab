@@ -1,0 +1,171 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7581171800055269324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6300463000109352029}
+  - component: {fileID: 7363221132868878133}
+  - component: {fileID: 1289419199477887459}
+  - component: {fileID: 4185106451594287492}
+  m_Layer: 0
+  m_Name: 'mushroom_collectable '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6300463000109352029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581171800055269324}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5, y: 6.745121, z: -9.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2638507989581749453}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &7363221132868878133
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581171800055269324}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1289419199477887459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581171800055269324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3523262993
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &4185106451594287492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581171800055269324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26e7398a70904cc40ba4c3fb6931d97f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Collectable
+  ShowTopMostFoldoutHeaderGroup: 1
+  autoPickup: 0
+  _respawn: 1
+  _item: {fileID: 11400000, guid: b4feadf0f9354ce479f9340b531c314d, type: 2}
+  _reSpawnTime: 5
+  model: {fileID: 3446957567568021111}
+  _trigger: {fileID: 7363221132868878133}
+  _minQuantity: 1
+  _maxQuantity: 1
+--- !u!1001 &4997811668245780049
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6300463000109352029}
+    m_Modifications:
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9786342
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.20560938
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -23.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678011324037271590, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+      propertyPath: m_Name
+      value: 'mushroom_group_00 '
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+--- !u!4 &2638507989581749453 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7045343071409228444, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+  m_PrefabInstance: {fileID: 4997811668245780049}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3446957567568021111 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7678011324037271590, guid: f6b2e1f7282b13044bd677b9e7307951, type: 3}
+  m_PrefabInstance: {fileID: 4997811668245780049}
+  m_PrefabAsset: {fileID: 0}
