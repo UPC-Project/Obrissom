@@ -1,3 +1,4 @@
+using Obrissom.Audio;
 using Obrissom.UI;
 using Unity.Netcode;
 using UnityEngine;
@@ -77,6 +78,7 @@ namespace Obrissom.Player
             currentLevel++;
             xpNeeded = LevelUpRequirements.LevelRequirements[currentLevel];
             LevelupPopup.Instance.ShowLevelupPopup(currentLevel.ToString());
+            AudioManager.Instance?.PlaySound(AudioID.LevelUp);
 
             // Depends on player class and level
             LevelUpRewards.LevelReward rewards = _levelUpRewards.rewards.Find(r => r.level == currentLevel);

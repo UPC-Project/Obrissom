@@ -1,3 +1,4 @@
+using Obrissom.Audio;
 using Obrissom.Player;
 using Unity.Netcode;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Obrissom.Enemy
     [RequireComponent(typeof(EnemyStateMachine))]
     [RequireComponent(typeof(EnemyDamagePopUp))]
     [RequireComponent(typeof(EnemyUI))]
+    [RequireComponent(typeof(NetworkSoundEmitter))]
     public abstract class EnemyBase : NetworkBehaviour
     {
         [Header("Stats")]
@@ -43,6 +45,7 @@ namespace Obrissom.Enemy
         protected ItemDropper _itemDropper;
         protected EnemyDamagePopUp _damagePopUp;
         protected EnemyUI _enemyUi;
+        private NetworkSoundEmitter _soundEmitter;
 
         // Runtime state
         protected float _currentHealth;
@@ -69,6 +72,7 @@ namespace Obrissom.Enemy
             _stateMachine = GetComponent<EnemyStateMachine>();
             _damagePopUp = GetComponent<EnemyDamagePopUp>();
             _enemyUi = GetComponent<EnemyUI>();
+            _soundEmitter = GetComponent<NetworkSoundEmitter>();
         }
 
         public override void OnNetworkSpawn()
@@ -163,6 +167,7 @@ namespace Obrissom.Enemy
             _currentHealth = Mathf.Max(_currentHealth - finalDamage, 0f);
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
+            PlaySoundForEveryone(type == EffectType.PhysicDamage ? AudioID.HitPhysical : AudioID.HitMagic, hitPos);
             _stateMachine.ChangeState(EnemyState.TakingDamage);
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
@@ -178,6 +183,14 @@ namespace Obrissom.Enemy
         }
 
         protected virtual void OnTakeDamage(float rawAmount) { }
+
+        /// <summary>
+        /// Server only. Plays a 3D sound on every client. Silent if the prefab has no NetworkSoundEmitter.
+        /// </summary>
+        protected void PlaySoundForEveryone(AudioID id, Vector3 position)
+        {
+            if (_soundEmitter != null) _soundEmitter.PlayForEveryone(id, position);
+        }
 
         /// <summary>
         /// Forces this enemy to target the taunter for a duration, ignoring normal detection.

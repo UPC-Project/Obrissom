@@ -1,3 +1,4 @@
+using Obrissom.Audio;
 using Obrissom.Enemy;
 using Obrissom.Player;
 using Obrissom.Player.Inventory;
@@ -73,6 +74,9 @@ public class PlayerQuestTracker : NetworkBehaviour
     {
         if (template == null) return;
         if (HasActiveQuest(template) || HasCompletedQuest(template)) return;
+
+        // Here and not in AcceptQuestLocally, which also runs when syncing quests on late join
+        AudioManager.Instance?.PlaySound(AudioID.QuestAccepted);
 
         if (template.isShared && QuestManager.Instance != null)
         {

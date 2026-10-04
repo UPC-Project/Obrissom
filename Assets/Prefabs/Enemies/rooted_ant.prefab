@@ -500,7 +500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 68c0c94a6b9e83b4ebddfb9baefd3179, type: 3}
       propertyPath: m_Name
-      value: slasher_rooted_ant
+      value: rooted_ant
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 68c0c94a6b9e83b4ebddfb9baefd3179, type: 3}
       propertyPath: m_Layer
@@ -554,6 +554,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 68c0c94a6b9e83b4ebddfb9baefd3179, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2563494428184958398}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 68c0c94a6b9e83b4ebddfb9baefd3179, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3810169532748808744}
   m_SourcePrefab: {fileID: 100100000, guid: 68c0c94a6b9e83b4ebddfb9baefd3179, type: 3}
 --- !u!1 &5942410286739821830 stripped
 GameObject:
@@ -795,6 +798,19 @@ CapsuleCollider:
   m_Height: 1.48
   m_Direction: 1
   m_Center: {x: 0, y: 0.72, z: 0}
+--- !u!114 &3810169532748808744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5942410286739821830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385e26956483fa54991af2b71e6706b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.NetworkSoundEmitter
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!4 &6430152938394570684 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 68c0c94a6b9e83b4ebddfb9baefd3179, type: 3}
