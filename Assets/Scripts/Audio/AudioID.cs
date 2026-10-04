@@ -21,6 +21,8 @@ namespace Obrissom.Audio
 
         PicozapatoBasicAttack = 210,
         PicozapatoDeath       = 211,
+        PicozapatoAreaWindup  = 212,
+        PicozapatoAreaImpact  = 213,
 
         // Environment 300–399
         DoorOpen    = 300,

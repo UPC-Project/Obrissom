@@ -49,6 +49,22 @@ namespace Obrissom.Enemy
         [Tooltip("Players further than this above/below the circle are not hit (e.g. jumping, ledges).")]
         [Min(0f)] public float areaVerticalTolerance = 1.5f;
 
+        [Header("Area Indicator (visual only)")]
+        [Tooltip("Optional prefab. If empty, a simple ring indicator is generated at runtime.")]
+        public PicozapatoAreaIndicator areaIndicatorPrefab;
+
+        [Tooltip("Used by the generated indicator. If empty, Sprites/Default is used.")]
+        public Material fallbackIndicatorMaterial;
+
+        [Tooltip("Layers used to align the indicator with the ground slope.")]
+        public LayerMask groundMask = ~0;
+
+        public Color indicatorColor = new Color(1f, 0.55f, 0.1f, 0.8f);
+        public Color indicatorWarningColor = new Color(1f, 0.1f, 0.05f, 1f);
+
+        [Tooltip("How long the indicator flashes after the hit.")]
+        [Min(0f)] public float indicatorImpactDuration = 0.35f;
+
         [Header("Shared Timing")]
         [Tooltip("Random ± fraction applied to every cooldown so Picozapatos never attack in sync. 0.2 = ±20%.")]
         [Range(0f, 0.9f)] public float cooldownVariance = 0.2f;
@@ -72,6 +88,8 @@ namespace Obrissom.Enemy
 
         [Header("Audio")]
         public AudioID basicAttackSound = AudioID.PicozapatoBasicAttack;
+        public AudioID areaWindupSound = AudioID.PicozapatoAreaWindup;
+        public AudioID areaImpactSound = AudioID.PicozapatoAreaImpact;
         public AudioID deathSound = AudioID.PicozapatoDeath;
 
         public float GetRandomizedCooldown(float baseCooldown) =>

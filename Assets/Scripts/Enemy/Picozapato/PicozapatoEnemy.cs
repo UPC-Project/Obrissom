@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Obrissom.Audio;
 using Obrissom.Player;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Obrissom.Enemy
     /// Picozapato: plunges its rooted hand into the ground and drops a telegraphed circle on a player.
     /// Punishes players that get too close with a quick basic attack.
     /// All decisions and damage run on the server through the shared EnemyStateMachine.
+    /// Clients render the area attack from a single replicated snapshot (animations, ground indicator, sounds).
     ///
     /// Area attack: Startup (hand into the ground) - target position locked, circle telegraph  - impact (damage) - recovery.
     /// </summary>
@@ -25,6 +27,13 @@ namespace Obrissom.Enemy
         private static readonly Collider[] s_overlapHits = new Collider[MaxOverlapHits];
         private static readonly HashSet<ulong> s_hitPlayers = new HashSet<ulong>();
 
+        // Replicated — area attack state for clients
+        private readonly NetworkVariable<PicozapatoAttackSnapshot> _attackSnapshot =
+            new NetworkVariable<PicozapatoAttackSnapshot>();
+
+        private PicozapatoAnimation _picozapatoAnimation;
+        private PicozapatoAreaIndicator _indicator;
+
         // Server — combat
         private PicozapatoAttackKind _pendingAttack;
         private PicozapatoAttackKind _currentAttack;
@@ -34,10 +43,7 @@ namespace Obrissom.Enemy
         private bool _wasStaggered;
         private float _basicReadyTime;
         private float _areaReadyTime;
-
-        // Server — area debug (gizmos until the client indicator exists)
-        private Vector3 _areaCenter;
-        private float _areaTelegraphStartTime;
+        private byte _attackSequence;
 
         // Server — roaming
         private Vector3 _home;
@@ -46,10 +52,8 @@ namespace Obrissom.Enemy
 
         private bool IsAttacking => _currentAttack != PicozapatoAttackKind.None;
 
-        // The rooted cast always resolves once started: killing the Picozapato is the counterplay, not stunlocking it
         protected override bool IsStaggerImmune => _currentAttack == PicozapatoAttackKind.Area;
 
-        // Rotation is locked while the hand is in the ground and during the basic attack windup, so both are dodgeable
         public override bool CanFaceTarget => !_isRooted && _currentAttack != PicozapatoAttackKind.Basic;
 
         // Lifecycle
@@ -57,12 +61,17 @@ namespace Obrissom.Enemy
         protected override void Awake()
         {
             base.Awake();
+            _picozapatoAnimation = GetComponent<PicozapatoAnimation>();
             if (_config == null) Debug.LogError($"[Picozapato] {name} has no PicozapatoConfig assigned.", this);
         }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+
+            _attackSnapshot.OnValueChanged += OnAttackSnapshotChanged;
+            PresentSnapshot(_attackSnapshot.Value, isLive: false); // Late joiners: render an attack already in progress
+
             if (!IsServer) return;
 
             _home = transform.position;
@@ -71,6 +80,19 @@ namespace Obrissom.Enemy
             _areaReadyTime = Time.time + Random.Range(0f, _config.areaCooldown);
 
             ConfigureAgent();
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            _attackSnapshot.OnValueChanged -= OnAttackSnapshotChanged;
+            DestroyIndicator();
+            base.OnNetworkDespawn();
+        }
+
+        public override void OnDestroy()
+        {
+            DestroyIndicator();
+            base.OnDestroy();
         }
 
         private void ConfigureAgent()
@@ -149,10 +171,7 @@ namespace Obrissom.Enemy
 
         // Combat — decision
 
-        /// <summary>
-        /// True while an attack is reserved or running (the attack is committed), or if one can start right now.
-        /// The basic attack has priority in its range, the area attack covers mid range.
-        /// </summary>
+   
         public override bool IsPlayerInAttackRange()
         {
             if (IsAttacking || _pendingAttack != PicozapatoAttackKind.None) return true;
@@ -171,10 +190,7 @@ namespace Obrissom.Enemy
             return true;
         }
 
-        /// <summary>
-        /// Called by the state machine every eval tick while in Attack. Starts the reserved attack.
-        /// Server only. Not an RPC on Picozapato: attacks are decided by the server AI, clients can't trigger them.
-        /// </summary>
+ 
         public override void PerformAttackRpc()
         {
             if (!IsServer || _isDead || IsAttacking || _pendingAttack == PicozapatoAttackKind.None) return;
@@ -233,26 +249,28 @@ namespace Obrissom.Enemy
 
         private IEnumerator AreaAttackRoutine()
         {
-            PlayAttackAnimationRpc();
+            PublishSnapshot(PicozapatoAttackPhase.Windup, transform.position);
 
             yield return new WaitForSeconds(_config.areaStartupDuration);
 
             if (!IsValidTarget(_attackTarget))
             {
                 // Target gone during startup: abort with a short cooldown
+                ClearSnapshot();
                 _areaReadyTime = Time.time + _config.areaCooldown * 0.25f;
                 FinishAttack();
                 yield break;
             }
 
             // Locked here: the circle never follows the player, so it is always dodgeable
-            _areaCenter = GetGroundPoint(_attackTarget.position);
-            _areaTelegraphStartTime = Time.time;
+            Vector3 center = GetGroundPoint(_attackTarget.position);
             _isRooted = true;
+            PublishSnapshot(PicozapatoAttackPhase.Telegraph, center);
 
             yield return new WaitForSeconds(_config.areaTelegraphDuration);
 
-            ResolveAreaHit(_areaCenter);
+            ResolveAreaHit(center);
+            PublishSnapshot(PicozapatoAttackPhase.Impact, center);
 
             yield return new WaitForSeconds(_config.areaRecoveryDuration);
 
@@ -302,13 +320,125 @@ namespace Obrissom.Enemy
 
         protected override void Die(NetworkObjectReference attackerRef)
         {
-            // Killing it mid-cast cancels the attack
+            // Killing it mid-cast cancels the attack and removes the circle
             if (_attackRoutine != null) StopCoroutine(_attackRoutine);
             FinishAttack();
             _pendingAttack = PicozapatoAttackKind.None;
+            if (_attackSnapshot.Value.Kind != PicozapatoAttackKind.None) ClearSnapshot();
 
             PlaySoundForEveryone(_config.deathSound, transform.position);
             base.Die(attackerRef);
+        }
+
+        // Replication — server side
+
+        private void PublishSnapshot(PicozapatoAttackPhase phase, Vector3 center)
+        {
+            if (phase == PicozapatoAttackPhase.Windup) _attackSequence++;
+
+            _attackSnapshot.Value = new PicozapatoAttackSnapshot
+            {
+                Sequence = _attackSequence,
+                Kind = PicozapatoAttackKind.Area,
+                Phase = phase,
+                Center = center,
+                PhaseStartTime = NetworkManager.ServerTime.Time
+            };
+        }
+
+        private void ClearSnapshot()
+        {
+            _attackSnapshot.Value = new PicozapatoAttackSnapshot
+            {
+                Sequence = _attackSequence,
+                Kind = PicozapatoAttackKind.None,
+                PhaseStartTime = NetworkManager.ServerTime.Time
+            };
+        }
+
+        // Replication — presentation (host and clients)
+
+        private void OnAttackSnapshotChanged(PicozapatoAttackSnapshot previous, PicozapatoAttackSnapshot current) =>
+            PresentSnapshot(current, isLive: true);
+
+        private void PresentSnapshot(PicozapatoAttackSnapshot snapshot, bool isLive)
+        {
+            if (!IsClient) return; // Dedicated server: nothing to render
+
+            if (snapshot.Kind != PicozapatoAttackKind.Area)
+            {
+                HideIndicator();
+                _picozapatoAnimation.SetRooted(false);
+                return;
+            }
+
+            double elapsed = NetworkManager.ServerTime.Time - snapshot.PhaseStartTime;
+
+            switch (snapshot.Phase)
+            {
+                case PicozapatoAttackPhase.Windup:
+                    if (!isLive) break;
+                    _picozapatoAnimation.PlayAreaWindup();
+                    PlayLocalSound(_config.areaWindupSound, transform.position);
+                    break;
+
+                case PicozapatoAttackPhase.Telegraph:
+                    _picozapatoAnimation.SetRooted(true);
+                    if (elapsed >= _config.areaTelegraphDuration) break;
+
+
+                    GetIndicator().ShowTelegraph(snapshot.Center, _config.areaRadius, snapshot.PhaseStartTime,
+                                                 _config.areaTelegraphDuration, _config.indicatorColor,
+                                                 _config.indicatorWarningColor, IndicatorGroundMask);
+                    break;
+
+                case PicozapatoAttackPhase.Impact:
+                    _picozapatoAnimation.SetRooted(false);
+                    float remaining = _config.indicatorImpactDuration - (float)elapsed;
+                    if (remaining <= 0f)
+                    {
+                        HideIndicator();
+                        break;
+                    }
+
+                    GetIndicator().PlayImpact(snapshot.Center, _config.areaRadius, remaining,
+                                              _config.indicatorWarningColor, IndicatorGroundMask);
+                    if (!isLive) break;
+                    _picozapatoAnimation.PlayAreaImpact();
+                    PlayLocalSound(_config.areaImpactSound, snapshot.Center);
+                    break;
+            }
+        }
+
+        // Players are never ground, even if the configured mask includes their layer
+        private int IndicatorGroundMask => _config.groundMask & ~_playerLayer;
+
+        private PicozapatoAreaIndicator GetIndicator()
+        {
+            if (_indicator == null)
+            {
+                _indicator = _config.areaIndicatorPrefab != null
+                    ? Instantiate(_config.areaIndicatorPrefab)
+                    : PicozapatoAreaIndicator.CreateFallback(_config.fallbackIndicatorMaterial);
+            }
+            return _indicator;
+        }
+
+        private void HideIndicator()
+        {
+            if (_indicator != null) _indicator.Hide();
+        }
+
+        private void DestroyIndicator()
+        {
+            if (_indicator != null) Destroy(_indicator.gameObject);
+            _indicator = null;
+        }
+
+        // Sounds
+        private static void PlayLocalSound(AudioID id, Vector3 position)
+        {
+            if (id != AudioID.None && AudioManager.Instance != null) AudioManager.Instance.PlaySound(id, position);
         }
 
         // Helpers
@@ -327,22 +457,6 @@ namespace Obrissom.Enemy
             && player._health.Value > 0f;
 
         // Gizmos
-
-        private void OnDrawGizmos()
-        {
-            if (!Application.isPlaying || !_isRooted || _currentAttack != PicozapatoAttackKind.Area || _config == null) return;
-
-            float progress = Mathf.Clamp01((Time.time - _areaTelegraphStartTime) / _config.areaTelegraphDuration);
-            Matrix4x4 previous = Gizmos.matrix;
-            Gizmos.matrix = Matrix4x4.TRS(_areaCenter, Quaternion.identity, new Vector3(1f, 0.02f, 1f));
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(Vector3.zero, _config.areaRadius);
-            Gizmos.color = new Color(1f, 0.5f, 0f, 0.5f);
-            Gizmos.DrawSphere(Vector3.zero, _config.areaRadius * progress);
-
-            Gizmos.matrix = previous;
-        }
 
         protected override void OnDrawGizmosSelected()
         {
