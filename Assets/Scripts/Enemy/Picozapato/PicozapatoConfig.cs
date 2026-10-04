@@ -22,6 +22,33 @@ namespace Obrissom.Enemy
         [Tooltip("Time after the hit before Picozapato can act again.")]
         [Min(0f)] public float basicRecoveryDuration = 0.45f;
 
+        [Header("Area Attack")]
+        [Tooltip("Picozapato only casts the area attack if the target is at least this far. The basic attack always has priority " +
+                 "in its range; keep this at or below EnemyStats.attackRange so there is no distance where it can't attack.")]
+        [Min(0f)] public float areaMinRange = 1.5f;
+
+        [Tooltip("Maximum distance to the target to cast the area attack.")]
+        [Min(0f)] public float areaMaxRange = 9f;
+
+        [Min(0.1f)] public float areaRadius = 2.2f;
+        public EffectType areaDamageType = EffectType.PhysicDamage;
+        [Min(0f)] public float areaMinDamage = 12f;
+        [Min(0f)] public float areaMaxDamage = 18f;
+
+        [Tooltip("Hand plunging into the ground, before the circle appears. The target position is picked at the end of it.")]
+        [Min(0f)] public float areaStartupDuration = 0.45f;
+
+        [Tooltip("Circle visible on the ground before it hits: the dodge window. Keep it above radius / player speed + ~0.3s reaction.")]
+        [Min(0.1f)] public float areaTelegraphDuration = 1.1f;
+
+        [Tooltip("Pulling the hand out after the hit. Picozapato is vulnerable and doesn't move.")]
+        [Min(0f)] public float areaRecoveryDuration = 0.8f;
+
+        [Min(0f)] public float areaCooldown = 5f;
+
+        [Tooltip("Players further than this above/below the circle are not hit (e.g. jumping, ledges).")]
+        [Min(0f)] public float areaVerticalTolerance = 1.5f;
+
         [Header("Shared Timing")]
         [Tooltip("Random ± fraction applied to every cooldown so Picozapatos never attack in sync. 0.2 = ±20%.")]
         [Range(0f, 0.9f)] public float cooldownVariance = 0.2f;
@@ -52,6 +79,8 @@ namespace Obrissom.Enemy
 
         private void OnValidate()
         {
+            areaMaxRange = Mathf.Max(areaMaxRange, areaMinRange);
+            areaMaxDamage = Mathf.Max(areaMaxDamage, areaMinDamage);
             roamPause.y = Mathf.Max(roamPause.y, roamPause.x);
             avoidancePriorityRange.x = Mathf.Clamp(avoidancePriorityRange.x, 0, 99);
             avoidancePriorityRange.y = Mathf.Clamp(avoidancePriorityRange.y, avoidancePriorityRange.x, 99);
