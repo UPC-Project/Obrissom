@@ -1,3 +1,4 @@
+using Obrissom.Audio;
 using Obrissom.Player.Inventory;
 using Obrissom.UI;
 using Unity.Netcode;
@@ -102,6 +103,7 @@ public class ItemDropper : NetworkBehaviour
         {
             // Add the item to the local data to trigger UI refresh
             myInventory.AddItem(item, quantity);
+            AudioManager.Instance?.PlaySound(AudioID.ItemPickup);
         }
     }
 

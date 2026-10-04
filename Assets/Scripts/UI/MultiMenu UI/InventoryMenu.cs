@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using Obrissom.Audio;
 using Obrissom.Player.Inventory;
 using TMPro;
 
@@ -131,15 +132,18 @@ public class InventoryMenu : MenuPanel
                 else
                 {
                     int destinationIndex = GetSlotUnderMouse();
-                    if (destinationIndex != -1)
-                        _equipmentInventory.Unequip(_draggedEquipmentSlotIndex);
+                    if (destinationIndex != -1 && _equipmentInventory.Unequip(_draggedEquipmentSlotIndex))
+                        AudioManager.Instance?.PlaySound(AudioID.Unequip);
                 }
             }
             else if (_inventory != null) // Handle drop from inventory
             {
                 int equipIndex = GetEquipmentSlotUnderMouse();
                 if (equipIndex != -1)
-                    _equipmentInventory.Equip(_draggedSlotIndex, equipIndex);
+                {
+                    if (_equipmentInventory.Equip(_draggedSlotIndex, equipIndex))
+                        AudioManager.Instance?.PlaySound(AudioID.Equip);
+                }
                 else
                 {
                     int destinationIndex = GetSlotUnderMouse();

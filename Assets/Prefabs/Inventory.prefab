@@ -7943,6 +7943,7 @@ GameObject:
   - component: {fileID: 3547065503560870584}
   - component: {fileID: 3442013234660412016}
   - component: {fileID: 1751882976726615442}
+  - component: {fileID: 1157644552670720428}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -8052,6 +8053,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1157644552670720428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8948612270925403721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &8987962023473447028
 GameObject:
   m_ObjectHideFlags: 0

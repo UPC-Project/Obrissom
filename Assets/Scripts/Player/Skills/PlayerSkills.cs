@@ -1,3 +1,4 @@
+using Obrissom.Audio;
 using Obrissom.UI;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,13 @@ namespace Obrissom.Player
 
         // Components
         private PlayerCombat _playerCombat;
+        private NetworkSoundEmitter _soundEmitter;
 
 
         private void Start()
         {
             _playerCombat = GetComponent<PlayerCombat>();
+            _soundEmitter = GetComponent<NetworkSoundEmitter>();
         }
 
         public override void OnNetworkSpawn()
@@ -86,6 +89,7 @@ namespace Obrissom.Player
             {
                 _cooldowns[key] = skill.cooldownTime;
                 skill.behaviour.Execute(gameObject, skill, Vector3.zero); // pass target vector
+                PlayCastSound(skill);
             }
         }
 
@@ -106,8 +110,18 @@ namespace Obrissom.Player
             {
                 _cooldowns[key] = _activeSkill.cooldownTime;
                 _playerCombat.TryConsumeResource(_activeSkills[key].cost);
+
+                // Instant skills already played their sound on press
+                if (_activeSkill.behaviour.castType == CastType.Hold)
+                    PlayCastSound(_activeSkill);
             }
             _activeSkill = null;
+        }
+
+        private void PlayCastSound(Skill skill)
+        {
+            if (skill.castSound == AudioID.None || _soundEmitter == null) return;
+            _soundEmitter.PlayFromOwner(skill.castSound);
         }
 
         public bool IsHoldSkill(SkillKey key)

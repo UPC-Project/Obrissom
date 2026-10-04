@@ -1261,6 +1261,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f067020bc37588145bc3774895f1ca85, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7792474416618476550}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f067020bc37588145bc3774895f1ca85, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4600696809298961876}
   m_SourcePrefab: {fileID: 100100000, guid: f067020bc37588145bc3774895f1ca85, type: 3}
 --- !u!4 &6098574603582575624 stripped
 Transform:
@@ -1507,3 +1510,16 @@ CapsuleCollider:
   m_Height: 2.1843724
   m_Direction: 1
   m_Center: {x: 0, y: 1.0721862, z: 0}
+--- !u!114 &4600696809298961876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6911246309893754546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385e26956483fa54991af2b71e6706b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.NetworkSoundEmitter
+  ShowTopMostFoldoutHeaderGroup: 1
