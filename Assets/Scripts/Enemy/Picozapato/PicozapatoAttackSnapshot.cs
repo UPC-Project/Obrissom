@@ -6,24 +6,19 @@ namespace Obrissom.Enemy
 {
     public enum PicozapatoAttackPhase : byte
     {
-        Windup,     // Animation started
-        Telegraph,  // Area only: circle on the ground, target position locked
-        Impact      // Damage resolved on the server
+        Windup,
+        Telegraph,
+        Impact
     }
 
- 
+    /// <summary>Area attack state synced to clients.</summary>
     public struct PicozapatoAttackSnapshot : INetworkSerializable, IEquatable<PicozapatoAttackSnapshot>
     {
-        /// <summary>Increments every attack, so two identical consecutive attacks are still distinct.</summary>
-        public byte Sequence;
+        public byte Sequence; // +1 every attack
         public PicozapatoAttackKind Kind;
         public PicozapatoAttackPhase Phase;
-
-        /// <summary>Area center on the ground. Only meaningful for Telegraph / Impact.</summary>
         public Vector3 Center;
-
-        /// <summary>Server time (NetworkManager.ServerTime) when the phase started. Clients derive progress from it.</summary>
-        public double PhaseStartTime;
+        public double PhaseStartTime; // Server time
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {

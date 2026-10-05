@@ -4,9 +4,7 @@ using UnityEngine;
 namespace Obrissom.Enemy
 {
     /// <summary>
-    /// Server-only steering helpers shared by group-aware enemies.
-    /// NavMeshAgent handles pathfinding and local avoidance; these helpers decide WHERE each agent should go
-    /// so a group spreads out instead of queuing on the same point.
+    /// Server only. Helps a group spread out.
     /// </summary>
     public static class EnemySteering
     {
@@ -22,10 +20,7 @@ namespace Obrissom.Enemy
 
         public static void Unregister(EnemyBase enemy) => s_agents.Remove(enemy);
 
-        /// <summary>
-        /// Push away from registered enemies closer than radius. Stronger the closer they are, zero at radius.
-        /// Linear scan: cheap for dozens of enemies at the AI eval rate. Swap for a spatial hash if counts reach hundreds.
-        /// </summary>
+        // Push away from close enemies. Linear scan, fine for dozens of enemies
         public static Vector3 ComputeSeparation(EnemyBase self, float radius)
         {
             if (radius <= 0f) return Vector3.zero;
@@ -46,7 +41,7 @@ namespace Obrissom.Enemy
 
                 if (sqrDistance < 0.0001f)
                 {
-                    // Exactly overlapping: stable, opposite directions per pair so they split instead of jittering
+                    // Same position: push each one to an opposite side
                     int a = self.GetInstanceID();
                     int b = other.GetInstanceID();
                     int hash = (Mathf.Min(a, b) * 73856093) ^ (Mathf.Max(a, b) * 19349663);
@@ -62,10 +57,7 @@ namespace Obrissom.Enemy
             return push;
         }
 
-        /// <summary>
-        /// Nudges a desired bearing (degrees around the target) away from the bearings of the other engagers,
-        /// so enemies fighting the same player naturally surround it instead of stacking on one side.
-        /// </summary>
+        // Moves the angle around the target away from other enemies
         public static float SpreadBearing(Transform target, EnemyBase self, float desiredBearing,
                                           float minSeparation, IReadOnlyList<EnemyBase> engagers)
         {
@@ -74,7 +66,7 @@ namespace Obrissom.Enemy
                 if (engagers[i] != null && engagers[i] != self && !engagers[i].IsDead) others++;
             if (others == 0) return desiredBearing;
 
-            // With many engagers the ideal spacing shrinks so they still fit around the circle
+            // Smaller spacing when there are many
             float separation = Mathf.Min(minSeparation, 360f / (others + 1) * 0.9f);
             Vector3 targetPosition = target.position;
             float push = 0f;

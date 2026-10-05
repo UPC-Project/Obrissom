@@ -12,13 +12,13 @@ public class EnemySpawner : NetworkBehaviour
     [Header("Patrol")]
     [SerializeField] private GameObject[] _patrolPoints;
 
-    [Header("Herd (enemies that support group movement)")]
-    [Tooltip("Optional. Spawned enemies join this herd. If empty and Spawn As Herd is on, one is created at the spawner.")]
+    [Header("Herd")]
+    [Tooltip("Optional. If empty, one is created here.")]
     [SerializeField] private EnemyHerd _herd;
     [SerializeField] private bool _spawnAsHerd = true;
-    [Tooltip("Roam radius of the herd created at runtime. Ignored when patrol points are set.")]
+    [Tooltip("Not used with patrol points.")]
     [SerializeField] private float _herdRoamRadius = 15f;
-    [Tooltip("Random pause (seconds) of each member of the herd created at runtime when it reaches a destination.")]
+    [Tooltip("Random pause at each destination, in seconds.")]
     [SerializeField] private Vector2 _herdPause = new Vector2(2f, 5f);
 
     public override void OnNetworkSpawn()

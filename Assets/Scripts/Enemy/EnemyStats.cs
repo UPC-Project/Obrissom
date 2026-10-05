@@ -16,7 +16,7 @@ namespace Obrissom.Enemy
         [Header("Movement")]
         [Min(0f)] public float moveSpeed = 3.5f;
         [Min(0f)] public float chaseRange = 10f;
-        [Tooltip("Speed multiplier applied over moveSpeed while chasing a player.")]
+        [Tooltip("moveSpeed multiplier while chasing.")]
         [Min(0f)] public float chaseSpeedMultiplier = 1.5f;
 
         [Header("Combat")]

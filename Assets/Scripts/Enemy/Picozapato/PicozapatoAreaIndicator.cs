@@ -4,12 +4,8 @@ using UnityEngine;
 namespace Obrissom.Enemy
 {
     /// <summary>
-    /// Client-only ground telegraph for the Picozapato area attack.
-    /// An outer ring marks the danger zone and an inner fill grows until it reaches the edge: that's the hit.
-    /// Progress is computed from server time, so every client (and late joiners) sees the same remaining time.
-    ///
-    /// Custom prefab convention (same as the DPS magic ring): visuals authored with a diameter of 1 unit, facing +Z.
-    /// Leave the parts empty to use the generated ring.
+    /// Ground circle for the area attack (clients only). The fill grows until it reaches the edge, then it hits.
+    /// Custom prefabs: 1 unit diameter, facing +Z. Leave parts empty to use the generated ring.
     /// </summary>
     public class PicozapatoAreaIndicator : MonoBehaviour
     {
@@ -22,12 +18,11 @@ namespace Obrissom.Enemy
 
         [SerializeField] private Transform _outerRing;
         [SerializeField] private Transform _fill;
-        [Tooltip("Renderers tinted from base to warning color as the hit approaches.")]
         [SerializeField] private Renderer[] _tintedRenderers;
         [SerializeField] private string _colorProperty = "_BaseColor";
         [SerializeField] private float _groundOffset = 0.05f;
 
-        [Tooltip("Progress (0–1) after which the indicator starts flashing the warning color.")]
+        [Tooltip("Progress (0-1) where it starts flashing.")]
         [SerializeField, Range(0f, 1f)] private float _warningThreshold = 0.75f;
         [SerializeField] private float _warningPulseFrequency = 12f;
 
@@ -46,7 +41,6 @@ namespace Obrissom.Enemy
         private MaterialPropertyBlock _propertyBlock;
         private int _colorId;
 
-        /// <summary>Creates the default indicator (two LineRenderer rings) when no prefab is configured.</summary>
         public static PicozapatoAreaIndicator CreateFallback(Material material)
         {
             var root = new GameObject("PicozapatoAreaIndicator");
@@ -58,9 +52,9 @@ namespace Obrissom.Enemy
                 {
                     Shader shader = Shader.Find("Sprites/Default");
                     if (shader != null) s_generatedMaterial = new Material(shader);
-                    else Debug.LogWarning("[PicozapatoAreaIndicator] No material for the generated indicator. Assign fallbackIndicatorMaterial in PicozapatoConfig.");
+                    else Debug.LogWarning("[PicozapatoAreaIndicator] No material found. Set fallbackIndicatorMaterial in PicozapatoConfig.");
                 }
-                material = s_generatedMaterial; // Shared by every generated indicator
+                material = s_generatedMaterial;
             }
 
             indicator._outerLine = CreateRing(root.transform, "Outer", material, FallbackOuterWidth);
@@ -96,7 +90,7 @@ namespace Obrissom.Enemy
 
         public void PlayImpact(Vector3 center, float radius, float duration, Color warningColor, LayerMask groundMask)
         {
-            // Late joiners may receive the impact without having seen the telegraph
+            // Late joiners may not have seen the telegraph
             if (_mode == Mode.Hidden)
             {
                 _diameter = radius * 2f;
@@ -159,9 +153,7 @@ namespace Obrissom.Enemy
 
         private void PlaceOnGround(Vector3 center, LayerMask groundMask)
         {
-            // The center already comes snapped to the NavMesh; this only refines height and slope.
-            // Starting just above it keeps the ray inside anyone standing there (rays ignore colliders they start in),
-            // so it can't land on top of a player or enemy.
+            // Start low so the ray can't land on top of someone standing there
             Vector3 normal = Vector3.up;
             if (Physics.Raycast(center + Vector3.up * GroundProbeHeight, Vector3.down, out RaycastHit hit,
                                 GroundProbeHeight * 2f, groundMask, QueryTriggerInteraction.Ignore))
@@ -214,12 +206,11 @@ namespace Obrissom.Enemy
             return line;
         }
 
-        /// <summary>Generated rings rebuild their points (keeps line width constant), custom visuals are scaled.</summary>
+        // Generated rings rebuild their points, custom visuals are scaled
         private static void SetDiameter(Transform part, LineRenderer line, float diameter)
         {
             if (line != null)
             {
-                // Ring in local XY: the root's +Z faces the ground normal
                 float radius = diameter * 0.5f;
                 for (int i = 0; i < FallbackSegments; i++)
                 {

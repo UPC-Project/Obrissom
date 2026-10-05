@@ -5,29 +5,25 @@ using UnityEngine.AI;
 namespace Obrissom.Enemy
 {
     /// <summary>
-    /// Picozapato-specific configuration. Assign one asset per variant.
-    /// General stats live in EnemyStats: health, moveSpeed, chaseRange (detection),
-    /// and the basic attack (attackRange, attackCooldown, min/maxAttackDamage, damageType).
+    /// Picozapato settings. Health, speed, detection and the basic attack come from EnemyStats.
     /// </summary>
     [CreateAssetMenu(fileName = "New PicozapatoConfig", menuName = "Obrissom/Enemy/PicozapatoConfig")]
     public class PicozapatoConfig : ScriptableObject
     {
-        [Header("Basic Attack (range, cooldown and damage come from EnemyStats)")]
-        [Tooltip("Full angle of the frontal hit in degrees.")]
+        [Header("Basic Attack (range, cooldown and damage in EnemyStats)")]
+        [Tooltip("Full angle of the hit, in degrees.")]
         [Range(0f, 360f)] public float basicAttackAngle = 110f;
 
-        [Tooltip("Time between starting the attack animation and the hit. The player's reaction window.")]
+        [Tooltip("Time before the hit.")]
         [Min(0f)] public float basicWindupDuration = 0.35f;
 
-        [Tooltip("Time after the hit before Picozapato can act again.")]
+        [Tooltip("Time after the hit.")]
         [Min(0f)] public float basicRecoveryDuration = 0.45f;
 
         [Header("Area Attack")]
-        [Tooltip("Picozapato only casts the area attack if the target is at least this far. The basic attack always has priority " +
-                 "in its range; keep this at or below EnemyStats.attackRange so there is no distance where it can't attack.")]
+        [Tooltip("Keep it at or below EnemyStats.attackRange.")]
         [Min(0f)] public float areaMinRange = 1.5f;
 
-        [Tooltip("Maximum distance to the target to cast the area attack.")]
         [Min(0f)] public float areaMaxRange = 9f;
 
         [Min(0.1f)] public float areaRadius = 2.2f;
@@ -35,97 +31,113 @@ namespace Obrissom.Enemy
         [Min(0f)] public float areaMinDamage = 12f;
         [Min(0f)] public float areaMaxDamage = 18f;
 
-        [Tooltip("Hand plunging into the ground, before the circle appears. The target position is picked at the end of it.")]
+        [Tooltip("Time before the circle appears.")]
         [Min(0f)] public float areaStartupDuration = 0.45f;
 
-        [Tooltip("Circle visible on the ground before it hits: the dodge window. Keep it above radius / player speed + ~0.3s reaction.")]
+        [Tooltip("Time the circle stays before it hits. This is the dodge window.")]
         [Min(0.1f)] public float areaTelegraphDuration = 1.1f;
 
-        [Tooltip("Pulling the hand out after the hit. Picozapato is vulnerable and doesn't move.")]
+        [Tooltip("Time after the hit.")]
         [Min(0f)] public float areaRecoveryDuration = 0.8f;
 
         [Min(0f)] public float areaCooldown = 5f;
 
-        [Tooltip("Players further than this above/below the circle are not hit (e.g. jumping, ledges).")]
+        [Tooltip("Max height difference to be hit.")]
         [Min(0f)] public float areaVerticalTolerance = 1.5f;
 
-        [Header("Area Indicator (visual only)")]
-        [Tooltip("Optional prefab. If empty, a simple ring indicator is generated at runtime.")]
+        [Header("Area Indicator")]
+        [Tooltip("Optional. If empty, a simple ring is created.")]
         public PicozapatoAreaIndicator areaIndicatorPrefab;
 
-        [Tooltip("Used by the generated indicator. If empty, Sprites/Default is used.")]
+        [Tooltip("Material for the simple ring. If empty, Sprites/Default is used.")]
         public Material fallbackIndicatorMaterial;
 
-        [Tooltip("Layers used to align the indicator with the ground slope.")]
+        [Tooltip("Ground layers for the indicator.")]
         public LayerMask groundMask = ~0;
 
         public Color indicatorColor = new Color(1f, 0.55f, 0.1f, 0.8f);
         public Color indicatorWarningColor = new Color(1f, 0.1f, 0.05f, 1f);
 
-        [Tooltip("How long the indicator flashes after the hit.")]
         [Min(0f)] public float indicatorImpactDuration = 0.35f;
 
-        [Header("Shared Timing")]
-        [Tooltip("Random ± fraction applied to every cooldown so Picozapatos never attack in sync. 0.2 = ±20%.")]
+        [Header("Interruption")]
+        [Tooltip("A hit during the windup cancels the basic attack.")]
+        public bool basicInterruptible = false;
+
+        [Tooltip("A hit before the roots land cancels the area attack.")]
+        public bool areaInterruptible = true;
+
+        [Tooltip("Smaller hits don't interrupt. 0 = any hit.")]
+        [Min(0f)] public float minDamageToInterrupt = 0f;
+
+        [Tooltip("Part of the cooldown used after an interrupt.")]
+        [Range(0f, 1f)] public float interruptedCooldownFactor = 0.5f;
+
+        [Header("Timing")]
+        [Tooltip("Random ± change on every cooldown. 0.2 = ±20%.")]
         [Range(0f, 0.9f)] public float cooldownVariance = 0.2f;
 
-        [Header("Solo Roaming (when no herd is assigned)")]
-        [Tooltip("Radius around the spawn point where random destinations are picked.")]
+        [Header("Solo Roaming (no herd)")]
         [Min(0f)] public float roamRadius = 10f;
 
-        [Tooltip("Random pause (seconds) after reaching a roaming destination. Herds use their own pause.")]
+        [Tooltip("Random pause at each destination, in seconds.")]
         public Vector2 roamPause = new Vector2(1.5f, 4f);
 
         [Header("Group Movement")]
-        [Tooltip("Minimum distance between a roaming destination and the other members (their destinations and positions).")]
+        [Tooltip("Min distance between roaming destinations.")]
         [Min(0f)] public float herdSpacing = 2.5f;
 
-        [Tooltip("While standing still, Picozapatos closer than this step away from each other.")]
+        [Tooltip("Enemies closer than this step away.")]
         [Min(0f)] public float separationRadius = 1.8f;
 
-        [Tooltip("How far (meters) a standing Picozapato steps away when someone is too close.")]
+        [Tooltip("How far to step away.")]
         [Min(0f)] public float separationStrength = 1.2f;
 
-        [Tooltip("Random ± fraction applied to each Picozapato's speed. 0.12 = ±12%.")]
+        [Tooltip("Random ± change on speed. 0.12 = ±12%.")]
         [Range(0f, 0.5f)] public float speedVariance = 0.12f;
 
         [Header("Targeting")]
-        [Tooltip("Once engaged (or alerted by the herd), keeps chasing up to chaseRange × this.")]
+        [Tooltip("Once in combat, chase up to chaseRange × this.")]
         [Min(1f)] public float engagedRangeMultiplier = 1.6f;
 
-        [Tooltip("Seconds between target re-evaluations.")]
+        [Tooltip("Seconds between target checks.")]
         [Min(0.2f)] public float retargetInterval = 1f;
 
-        [Tooltip("Extra virtual meters added per enemy already fighting a player. Spreads a group across players.")]
+        [Tooltip("Extra meters per enemy already on a player. Spreads the group.")]
         [Min(0f)] public float targetCrowdPenalty = 3f;
 
-        [Tooltip("A new target must be this many virtual meters better than the current one to switch.")]
+        [Tooltip("How much better a new target must be to switch.")]
         [Min(0f)] public float targetSwitchHysteresis = 2f;
 
-        [Header("Engagement Positioning")]
-        [Tooltip("Each Picozapato picks its own preferred fighting distance in this range. Keep it inside the area attack range.")]
+        [Header("Combat Position")]
+        [Tooltip("Each one picks its distance in this range. Keep it inside the area range.")]
         public Vector2 preferredRange = new Vector2(4.5f, 7.5f);
 
-        [Tooltip("Minimum angle (degrees) between Picozapatos around the same player.")]
+        [Tooltip("Min angle between enemies around a player.")]
         [Range(0f, 180f)] public float minAngleBetweenEngagers = 35f;
 
-        [Tooltip("Picozapatos beyond this count around the same player wait further away.")]
+        [Tooltip("Move in to peck while the area attack is on cooldown.")]
+        public bool closeInWhileAreaOnCooldown = true;
+
+        [Tooltip("Only move in if the area attack needs more than this, in seconds.")]
+        [Min(0f)] public float closeInMinAreaCooldownLeft = 2f;
+
+        [Tooltip("Extra enemies wait further away.")]
         [Min(1)] public int maxEngagedPerTarget = 4;
 
-        [Tooltip("Extra distance for the ones waiting in the outer ring.")]
         [Min(0f)] public float outerRingExtraDistance = 3.5f;
 
-        [Tooltip("The NavMesh destination is only updated when it moves more than this. Saves path requests.")]
+        [Tooltip("Min destination change before a new path.")]
         [Min(0f)] public float repathThreshold = 0.4f;
 
-        [Header("Attack Coordination (per player)")]
-        [Tooltip("Max attacks in progress at the same time against one player, counting every enemy type that uses the coordinator.")]
+        [Header("Attack Limits (per player)")]
+        [Tooltip("Max attacks at the same time on one player.")]
         [Min(1)] public int maxSimultaneousAttacksPerTarget = 2;
 
-        [Tooltip("Minimum seconds between two attacks starting against the same player.")]
+        [Tooltip("Min seconds between attacks on one player.")]
         [Min(0f)] public float minTimeBetweenAttacksOnTarget = 0.6f;
 
-        [Tooltip("Random delay (seconds) between engaging a player and the first attack.")]
+        [Tooltip("Random wait before the first attack, in seconds.")]
         public Vector2 engageReactionDelay = new Vector2(0.4f, 1.2f);
 
         [Header("NavMesh Agent")]
@@ -133,7 +145,7 @@ namespace Obrissom.Enemy
         [Min(0f)] public float angularSpeed = 360f;
         [Min(0f)] public float stoppingDistance = 0.3f;
 
-        [Tooltip("Randomized per Picozapato so local avoidance never deadlocks two equal agents.")]
+        [Tooltip("Random per enemy, avoids agents blocking each other.")]
         public Vector2Int avoidancePriorityRange = new Vector2Int(35, 65);
 
         public ObstacleAvoidanceType obstacleAvoidance = ObstacleAvoidanceType.MedQualityObstacleAvoidance;
@@ -158,8 +170,7 @@ namespace Obrissom.Enemy
             engageReactionDelay.y = Mathf.Max(engageReactionDelay.y, engageReactionDelay.x);
 
             if (preferredRange.x < areaMinRange || preferredRange.y > areaMaxRange)
-                Debug.LogWarning($"[PicozapatoConfig] {name}: preferredRange should be inside the area attack range " +
-                                 $"({areaMinRange}–{areaMaxRange}) or some Picozapatos will never cast it.", this);
+                Debug.LogWarning($"[PicozapatoConfig] {name}: preferredRange should be inside the area range.", this);
         }
     }
 }

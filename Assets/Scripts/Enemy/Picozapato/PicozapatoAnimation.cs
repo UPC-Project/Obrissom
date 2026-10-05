@@ -3,9 +3,7 @@ using UnityEngine;
 namespace Obrissom.Enemy
 {
     /// <summary>
-    /// Picozapato animator bridge. Parameters missing in the controller are skipped instead of logging warnings,
-    /// so new clips can be added to the controller progressively.
-    /// The area attack falls back to the basic attack trigger until a dedicated clip exists.
+    /// Picozapato animations. Missing animator parameters are ignored.
     /// </summary>
     public class PicozapatoAnimation : EnemyAnimation
     {
@@ -13,10 +11,19 @@ namespace Obrissom.Enemy
         [SerializeField] private string _basicAttackTrigger = "Attack";
         [SerializeField] private string _areaWindupTrigger = "AreaWindup";
         [SerializeField] private string _areaImpactTrigger = "AreaImpact";
-        [Tooltip("Optional bool, true while the hand is in the ground (telegraph).")]
         [SerializeField] private string _rootedBool = "Rooted";
         [SerializeField] private string _takeDamageTrigger = "TakeDamage";
         [SerializeField] private string _deadBool = "Dead";
+
+        [Header("Cancel")]
+        [Tooltip("Layer with the attack animations. Empty = base layer.")]
+        [SerializeField] private string _attackLayerName = "Attack";
+        [Tooltip("State to go back to when an attack is cancelled.")]
+        [SerializeField] private string _attackLayerIdleState = "none";
+        [SerializeField, Min(0f)] private float _cancelBlendDuration = 0.1f;
+
+        private int _attackLayerIndex = -1;
+        private int _attackLayerIdleHash;
 
         private int _basicAttackHash;
         private int _areaWindupHash;
@@ -37,7 +44,31 @@ namespace Obrissom.Enemy
             _takeDamageHash = ResolveParameter(_takeDamageTrigger);
             _deadHash = ResolveParameter(_deadBool);
 
+            // No area clip yet: use the basic attack
             if (_areaWindupHash == 0) _areaWindupHash = _basicAttackHash;
+
+            _attackLayerIndex = string.IsNullOrEmpty(_attackLayerName) ? 0 : _animator.GetLayerIndex(_attackLayerName);
+            _attackLayerIdleHash = Animator.StringToHash(_attackLayerIdleState);
+            if (_attackLayerIndex >= 0 && !_animator.HasState(_attackLayerIndex, _attackLayerIdleHash))
+                _attackLayerIndex = -1;
+        }
+
+        public void CancelAttack()
+        {
+            if (_animator == null) return;
+
+            ResetTrigger(_basicAttackHash);
+            ResetTrigger(_areaWindupHash);
+            ResetTrigger(_areaImpactHash);
+            SetRooted(false);
+
+            if (_attackLayerIndex >= 0)
+                _animator.CrossFadeInFixedTime(_attackLayerIdleHash, _cancelBlendDuration, _attackLayerIndex);
+        }
+
+        private void ResetTrigger(int hash)
+        {
+            if (hash != 0) _animator.ResetTrigger(hash);
         }
 
         public override void PlayAttackAnimation() => SetTrigger(_basicAttackHash);
@@ -64,7 +95,7 @@ namespace Obrissom.Enemy
             if (_animator != null && hash != 0) _animator.SetTrigger(hash);
         }
 
-        // Returns 0 if the controller doesn't have the parameter
+        // 0 if the parameter doesn't exist
         private int ResolveParameter(string parameterName)
         {
             if (string.IsNullOrEmpty(parameterName)) return 0;

@@ -8,7 +8,6 @@ namespace Obrissom.Enemy
     /// Controls enemy state transitions and per-state logic.
     /// Transitions are event-driven or polled at a fixed interval — never every frame.
     /// Runs only on the server via EnemyBase.
-    /// Per-state behaviour is delegated to EnemyBase hooks so enemy types can customise it.
     /// </summary>
     public class EnemyStateMachine : MonoBehaviour
     {
@@ -52,7 +51,7 @@ namespace Obrissom.Enemy
 
         private IEnumerator EvalLoop()
         {
-            // Random phase so enemies spawned on the same frame don't all think on the same frame
+            // Random start so enemies don't all update on the same frame
             yield return new WaitForSeconds(Random.Range(0f, _evalInterval));
 
             var wait = new WaitForSeconds(_evalInterval);

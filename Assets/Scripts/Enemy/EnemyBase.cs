@@ -41,14 +41,9 @@ namespace Obrissom.Enemy
 
         public bool IsDead => _isDead;
 
-        /// <summary>
-        /// When true, hits still deal damage but don't interrupt the enemy (no TakingDamage state, no hit animation).
-        /// </summary>
+        // Hits still deal damage but don't stagger
         protected virtual bool IsStaggerImmune => false;
 
-        /// <summary>
-        /// Whether the state machine may rotate this enemy towards its target this frame.
-        /// </summary>
         public virtual bool CanFaceTarget => true;
 
         // Components
@@ -73,7 +68,7 @@ namespace Obrissom.Enemy
         public bool IsTaunted => _forcedTarget != null;
         protected Transform ForcedTarget => _forcedTarget;
 
-        // Synced so every client (late joiners included) plays the death animation, not only the server
+        // Synced so all clients play the death animation
         private readonly NetworkVariable<bool> _isDeadSynced = new NetworkVariable<bool>(false);
 
         // Lifecycle
@@ -215,9 +210,7 @@ namespace Obrissom.Enemy
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
         private void PlayTakeDamageAnimationRpc() => _enemyAnimation.PlayTakeDamageAnimation();
 
-        /// <summary>
-        /// Server only. Plays the attack animation on every client (host included).
-        /// </summary>
+        // Server only
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
         protected void PlayAttackAnimationRpc() => _enemyAnimation.PlayAttackAnimation();
 
@@ -263,7 +256,7 @@ namespace Obrissom.Enemy
             if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
-            _isDeadSynced.Value = true; // Plays the death animation on server and clients
+            _isDeadSynced.Value = true;
 
             DropLoot();
 
@@ -352,25 +345,20 @@ namespace Obrissom.Enemy
             MoveToNextPatrolPoint();
         }
 
-        //State machine hooks — defaults keep the generic patrol/chase behaviour
+        //State machine hooks
 
-        /// <summary>Called once when entering the Move state.</summary>
         public virtual void OnMoveStateEnter() => MoveToNextPatrolPoint();
 
-        /// <summary>Called from the eval loop while in the Move state.</summary>
         public virtual void OnMoveStateTick() => CheckPatrolArrival();
 
-        /// <summary>Called from the eval loop while in the Chase state.</summary>
         public virtual void OnChaseStateTick()
         {
             if (_target != null) _agent.SetDestination(_target.position);
         }
 
-        /// <summary>NavMeshAgent speed the state machine applies when entering a state.</summary>
         public virtual float GetMoveSpeed(EnemyState state) =>
             state == EnemyState.Chase ? _stats.moveSpeed * _stats.chaseSpeedMultiplier : _stats.moveSpeed;
 
-        /// <summary>Called after every state transition (server only).</summary>
         public virtual void OnStateChanged(EnemyState previous, EnemyState current) { }
 
         //Abstract

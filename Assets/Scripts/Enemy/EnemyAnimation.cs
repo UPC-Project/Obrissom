@@ -7,7 +7,7 @@ namespace Obrissom.Enemy
     {
         private static readonly int SpeedHash = Animator.StringToHash("Speed");
 
-        // Larger jumps in a single frame are treated as teleports (spawn, warp), not movement
+        // Bigger jumps are teleports, not movement
         private const float TeleportDistance = 5f;
 
         [SerializeField] protected Animator _animator;
@@ -50,7 +50,7 @@ namespace Obrissom.Enemy
             }
             else
             {
-                // Clients: the NavMeshAgent only runs on the server, derive speed from the synced transform
+                // Clients have no agent, use the synced position
                 Vector3 delta = transform.position - _lastPosition;
                 delta.y = 0f;
                 float distance = delta.magnitude;

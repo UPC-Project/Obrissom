@@ -4,10 +4,7 @@ using UnityEngine;
 namespace Obrissom.Enemy
 {
     /// <summary>
-    /// Server-only bookkeeping of which enemies are fighting which player.
-    /// Used to spread enemies across players, decide who waits in the outer ring,
-    /// and limit how many attacks can be in progress against the same player at once.
-    /// Generic: any EnemyBase can use it, limits are passed by the caller (per enemy type config).
+    /// Server only. Tracks which enemies fight each player and limits attacks at the same time.
     /// </summary>
     public static class EnemyCombatCoordinator
     {
@@ -40,7 +37,6 @@ namespace Obrissom.Enemy
             if (!entry.Engagers.Contains(enemy)) entry.Engagers.Add(enemy);
         }
 
-        /// <summary>Stops fighting the target and frees any attack slot held against it.</summary>
         public static void Disengage(Transform target, EnemyBase enemy)
         {
             if (target == null || !s_entries.TryGetValue(target, out TargetEntry entry)) return;
@@ -51,7 +47,6 @@ namespace Obrissom.Enemy
             if (entry.Engagers.Count == 0 && entry.AttackSlots.Count == 0) s_entries.Remove(target);
         }
 
-        /// <summary>Number of living enemies fighting the target, optionally not counting one of them.</summary>
         public static int GetEngagedCount(Transform target, EnemyBase exclude = null)
         {
             if (target == null || !s_entries.TryGetValue(target, out TargetEntry entry)) return 0;
@@ -62,7 +57,7 @@ namespace Obrissom.Enemy
             return count;
         }
 
-        /// <summary>Order of arrival in the fight (0 = first). -1 if not engaged.</summary>
+        // Arrival order (0 = first), -1 if not engaged
         public static int GetEngageRank(Transform target, EnemyBase enemy)
         {
             if (target == null || !s_entries.TryGetValue(target, out TargetEntry entry)) return -1;
@@ -79,11 +74,7 @@ namespace Obrissom.Enemy
 
         // Attack slots
 
-        /// <summary>
-        /// Asks permission to start an attack against the target.
-        /// Fails if too many attacks are already in progress or the last one started too recently.
-        /// Slots expire after maxHoldTime so a lost Release can never block a player forever.
-        /// </summary>
+        // Slots expire after maxHoldTime, so a lost release never blocks a player
         public static bool TryAcquireAttackSlot(Transform target, EnemyBase enemy, int maxSimultaneous,
                                                 float minTimeBetweenAttacks, float maxHoldTime)
         {
@@ -109,7 +100,7 @@ namespace Obrissom.Enemy
             RemoveSlotsOf(entry, enemy);
         }
 
-        /// <summary>Removes the enemy from every target. Call on death / despawn.</summary>
+        // Call on death or despawn
         public static void RemoveEverywhere(EnemyBase enemy)
         {
             s_staleTargets.Clear();
