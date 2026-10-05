@@ -39,6 +39,13 @@ namespace Obrissom.Enemy
 
         public virtual bool IsInvulnerable => false;
 
+        public bool IsDead => _isDead;
+
+        // Hits still deal damage but don't stagger
+        protected virtual bool IsStaggerImmune => false;
+
+        public virtual bool CanFaceTarget => true;
+
         // Components
         protected NavMeshAgent _agent;
         protected EnemyAnimation _enemyAnimation;
@@ -59,6 +66,10 @@ namespace Obrissom.Enemy
         private Transform _forcedTarget;
         private float _tauntTimer;
         public bool IsTaunted => _forcedTarget != null;
+        protected Transform ForcedTarget => _forcedTarget;
+
+        // Synced so all clients play the death animation
+        private readonly NetworkVariable<bool> _isDeadSynced = new NetworkVariable<bool>(false);
 
         // Lifecycle
         protected EnemyStateMachine _stateMachine;
@@ -77,6 +88,9 @@ namespace Obrissom.Enemy
 
         public override void OnNetworkSpawn()
         {
+            _isDeadSynced.OnValueChanged += OnDeadSyncedChanged;
+            if (_isDeadSynced.Value) _enemyAnimation.PlayDeathAnimation();
+
             if (!IsServer) return;
 
             _agent.enabled = true;
@@ -87,8 +101,16 @@ namespace Obrissom.Enemy
             _stateMachine.Initialize(this, _agent);
 
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
+        }
 
-            
+        public override void OnNetworkDespawn()
+        {
+            _isDeadSynced.OnValueChanged -= OnDeadSyncedChanged;
+        }
+
+        private void OnDeadSyncedChanged(bool previous, bool current)
+        {
+            if (current) _enemyAnimation.PlayDeathAnimation();
         }
 
         protected virtual void Update()
@@ -116,7 +138,7 @@ namespace Obrissom.Enemy
         /// Detects the nearest player within chase range and assigns it as target.
         /// Called from the state machine eval loop, not every frame.
         /// </summary>
-        public void DetectPlayer()
+        public virtual void DetectPlayer()
         {
             if (_forcedTarget != null)
             {
@@ -142,10 +164,10 @@ namespace Obrissom.Enemy
             _target = closest;
         }
 
-        public bool IsPlayerInChaseRange() =>
+        public virtual bool IsPlayerInChaseRange() =>
             _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.chaseRange;
 
-        public bool IsPlayerInAttackRange() =>
+        public virtual bool IsPlayerInAttackRange() =>
             _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.attackRange;
 
         //Combat 
@@ -168,7 +190,8 @@ namespace Obrissom.Enemy
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             PlaySoundForEveryone(type == EffectType.PhysicDamage ? AudioID.HitPhysical : AudioID.HitMagic, hitPos);
-            _stateMachine.ChangeState(EnemyState.TakingDamage);
+            bool staggered = !IsStaggerImmune;
+            if (staggered) _stateMachine.ChangeState(EnemyState.TakingDamage);
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
             OnTakeDamage(rawAmount);
@@ -179,10 +202,17 @@ namespace Obrissom.Enemy
                 return;
             }
 
-            _enemyAnimation.PlayTakeDamageAnimation();
+            if (staggered) PlayTakeDamageAnimationRpc();
         }
 
         protected virtual void OnTakeDamage(float rawAmount) { }
+
+        [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
+        private void PlayTakeDamageAnimationRpc() => _enemyAnimation.PlayTakeDamageAnimation();
+
+        // Server only
+        [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
+        protected void PlayAttackAnimationRpc() => _enemyAnimation.PlayAttackAnimation();
 
         /// <summary>
         /// Server only. Plays a 3D sound on every client. Silent if the prefab has no NetworkSoundEmitter.
@@ -226,7 +256,7 @@ namespace Obrissom.Enemy
             if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
-            _enemyAnimation.PlayDeathAnimation();
+            _isDeadSynced.Value = true;
 
             DropLoot();
 
@@ -253,7 +283,7 @@ namespace Obrissom.Enemy
 
         //Patrol
 
-        public void SetPatrolPoints(GameObject[] points)
+        public virtual void SetPatrolPoints(GameObject[] points)
         {
             _patrolPoints = points;
         }
@@ -315,7 +345,23 @@ namespace Obrissom.Enemy
             MoveToNextPatrolPoint();
         }
 
-        //Abstract 
+        //State machine hooks
+
+        public virtual void OnMoveStateEnter() => MoveToNextPatrolPoint();
+
+        public virtual void OnMoveStateTick() => CheckPatrolArrival();
+
+        public virtual void OnChaseStateTick()
+        {
+            if (_target != null) _agent.SetDestination(_target.position);
+        }
+
+        public virtual float GetMoveSpeed(EnemyState state) =>
+            state == EnemyState.Chase ? _stats.moveSpeed * _stats.chaseSpeedMultiplier : _stats.moveSpeed;
+
+        public virtual void OnStateChanged(EnemyState previous, EnemyState current) { }
+
+        //Abstract
 
         /// <summary>
         /// Attack logic specific to each enemy type. Implemented by concrete classes.

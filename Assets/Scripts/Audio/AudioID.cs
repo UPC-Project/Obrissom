@@ -19,6 +19,11 @@ namespace Obrissom.Audio
         SlasherHurt   = 201,
         SlasherDeath  = 202,
 
+        ShoebillBasicAttack = 210,
+        ShoebillDeath       = 211,
+        ShoebillAreaWindup  = 212,
+        ShoebillAreaImpact  = 213,
+
         // Environment 300–399
         DoorOpen    = 300,
         ChestOpen   = 301,

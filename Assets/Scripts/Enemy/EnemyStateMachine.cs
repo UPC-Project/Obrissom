@@ -43,7 +43,7 @@ namespace Obrissom.Enemy
                            || CurrentState == EnemyState.Attack
                            || _enemy.IsRetreating;
 
-            if (shouldFace && _enemy.Target != null)
+            if (shouldFace && _enemy.CanFaceTarget && _enemy.Target != null)
                 FaceTarget(_enemy.Target.position);
         }
 
@@ -51,6 +51,9 @@ namespace Obrissom.Enemy
 
         private IEnumerator EvalLoop()
         {
+            // Random start so enemies don't all update on the same frame
+            yield return new WaitForSeconds(Random.Range(0f, _evalInterval));
+
             var wait = new WaitForSeconds(_evalInterval);
             while (true)
             {
@@ -77,7 +80,7 @@ namespace Obrissom.Enemy
                     if (_enemy.IsPlayerInChaseRange())
                         ChangeState(EnemyState.Chase);
                     else
-                        _enemy.CheckPatrolArrival();
+                        _enemy.OnMoveStateTick();
                     break;
 
                 case EnemyState.Chase:
@@ -106,7 +109,7 @@ namespace Obrissom.Enemy
             switch (CurrentState)
             {
                 case EnemyState.Chase:
-                    _agent.SetDestination(_enemy.Target.position);
+                    _enemy.OnChaseStateTick();
                     break;
 
                 case EnemyState.Attack:
@@ -121,9 +124,11 @@ namespace Obrissom.Enemy
         {
             if (CurrentState == newState) return;
 
-            OnStateExit(CurrentState);
+            EnemyState previous = CurrentState;
+            OnStateExit(previous);
             CurrentState = newState;
             OnStateEnter(newState);
+            _enemy.OnStateChanged(previous, newState);
         }
 
         private void OnStateEnter(EnemyState state)
@@ -137,13 +142,13 @@ namespace Obrissom.Enemy
 
                 case EnemyState.Move:
                     _agent.isStopped = false;
-                    _agent.speed = _enemy.Stats.moveSpeed;
-                    _enemy.MoveToNextPatrolPoint();
+                    _agent.speed = _enemy.GetMoveSpeed(EnemyState.Move);
+                    _enemy.OnMoveStateEnter();
                     break;
 
                 case EnemyState.Chase:
                     _agent.isStopped = false;
-                    _agent.speed = _enemy.Stats.moveSpeed * 1.5f;
+                    _agent.speed = _enemy.GetMoveSpeed(EnemyState.Chase);
                     break;
 
                 case EnemyState.Attack:

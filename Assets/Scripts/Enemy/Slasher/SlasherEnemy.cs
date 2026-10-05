@@ -158,7 +158,7 @@ namespace Obrissom.Enemy
                 if (_isDead || _isRetreating) break;
 
                 PerformSweep();
-                _enemyAnimation.PlayAttackAnimation();
+                PlayAttackAnimationRpc();
 
                 yield return new WaitForSeconds(_slasherConfig.activeFramesDuration);
 
