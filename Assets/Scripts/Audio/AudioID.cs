@@ -19,10 +19,10 @@ namespace Obrissom.Audio
         SlasherHurt   = 201,
         SlasherDeath  = 202,
 
-        PicozapatoBasicAttack = 210,
-        PicozapatoDeath       = 211,
-        PicozapatoAreaWindup  = 212,
-        PicozapatoAreaImpact  = 213,
+        ShoebillBasicAttack = 210,
+        ShoebillDeath       = 211,
+        ShoebillAreaWindup  = 212,
+        ShoebillAreaImpact  = 213,
 
         // Environment 300–399
         DoorOpen    = 300,

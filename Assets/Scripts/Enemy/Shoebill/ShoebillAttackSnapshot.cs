@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Obrissom.Enemy
 {
-    public enum PicozapatoAttackPhase : byte
+    public enum ShoebillAttackPhase : byte
     {
         Windup,
         Telegraph,
@@ -12,11 +12,11 @@ namespace Obrissom.Enemy
     }
 
     /// <summary>Area attack state synced to clients.</summary>
-    public struct PicozapatoAttackSnapshot : INetworkSerializable, IEquatable<PicozapatoAttackSnapshot>
+    public struct ShoebillAttackSnapshot : INetworkSerializable, IEquatable<ShoebillAttackSnapshot>
     {
         public byte Sequence; // +1 every attack
-        public PicozapatoAttackKind Kind;
-        public PicozapatoAttackPhase Phase;
+        public ShoebillAttackKind Kind;
+        public ShoebillAttackPhase Phase;
         public Vector3 Center;
         public double PhaseStartTime; // Server time
 
@@ -29,14 +29,14 @@ namespace Obrissom.Enemy
             serializer.SerializeValue(ref PhaseStartTime);
         }
 
-        public bool Equals(PicozapatoAttackSnapshot other) =>
+        public bool Equals(ShoebillAttackSnapshot other) =>
             Sequence == other.Sequence
             && Kind == other.Kind
             && Phase == other.Phase
             && Center == other.Center
             && PhaseStartTime.Equals(other.PhaseStartTime);
 
-        public override bool Equals(object obj) => obj is PicozapatoAttackSnapshot other && Equals(other);
+        public override bool Equals(object obj) => obj is ShoebillAttackSnapshot other && Equals(other);
 
         public override int GetHashCode() => HashCode.Combine(Sequence, Kind, Phase, Center, PhaseStartTime);
     }

@@ -5,10 +5,10 @@ using UnityEngine.AI;
 namespace Obrissom.Enemy
 {
     /// <summary>
-    /// Picozapato settings. Health, speed, detection and the basic attack come from EnemyStats.
+    /// Shoebill settings. Health, speed, detection and the basic attack come from EnemyStats.
     /// </summary>
-    [CreateAssetMenu(fileName = "New PicozapatoConfig", menuName = "Obrissom/Enemy/PicozapatoConfig")]
-    public class PicozapatoConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "New ShoebillConfig", menuName = "Obrissom/Enemy/ShoebillConfig")]
+    public class ShoebillConfig : ScriptableObject
     {
         [Header("Basic Attack (range, cooldown and damage in EnemyStats)")]
         [Tooltip("Full angle of the hit, in degrees.")]
@@ -47,7 +47,7 @@ namespace Obrissom.Enemy
 
         [Header("Area Indicator")]
         [Tooltip("Optional. If empty, a simple ring is created.")]
-        public PicozapatoAreaIndicator areaIndicatorPrefab;
+        public ShoebillAreaIndicator areaIndicatorPrefab;
 
         [Tooltip("Material for the simple ring. If empty, Sprites/Default is used.")]
         public Material fallbackIndicatorMaterial;
@@ -151,10 +151,10 @@ namespace Obrissom.Enemy
         public ObstacleAvoidanceType obstacleAvoidance = ObstacleAvoidanceType.MedQualityObstacleAvoidance;
 
         [Header("Audio")]
-        public AudioID basicAttackSound = AudioID.PicozapatoBasicAttack;
-        public AudioID areaWindupSound = AudioID.PicozapatoAreaWindup;
-        public AudioID areaImpactSound = AudioID.PicozapatoAreaImpact;
-        public AudioID deathSound = AudioID.PicozapatoDeath;
+        public AudioID basicAttackSound = AudioID.ShoebillBasicAttack;
+        public AudioID areaWindupSound = AudioID.ShoebillAreaWindup;
+        public AudioID areaImpactSound = AudioID.ShoebillAreaImpact;
+        public AudioID deathSound = AudioID.ShoebillDeath;
 
         public float GetRandomizedCooldown(float baseCooldown) =>
             baseCooldown * (1f + Random.Range(-cooldownVariance, cooldownVariance));
@@ -170,7 +170,7 @@ namespace Obrissom.Enemy
             engageReactionDelay.y = Mathf.Max(engageReactionDelay.y, engageReactionDelay.x);
 
             if (preferredRange.x < areaMinRange || preferredRange.y > areaMaxRange)
-                Debug.LogWarning($"[PicozapatoConfig] {name}: preferredRange should be inside the area range.", this);
+                Debug.LogWarning($"[ShoebillConfig] {name}: preferredRange should be inside the area range.", this);
         }
     }
 }

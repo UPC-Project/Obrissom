@@ -3,9 +3,9 @@ using UnityEngine;
 namespace Obrissom.Enemy
 {
     /// <summary>
-    /// Picozapato animations. Missing animator parameters are ignored.
+    /// Shoebill animations. Missing animator parameters are ignored.
     /// </summary>
-    public class PicozapatoAnimation : EnemyAnimation
+    public class ShoebillAnimation : EnemyAnimation
     {
         [Header("Parameters")]
         [SerializeField] private string _basicAttackTrigger = "Attack";

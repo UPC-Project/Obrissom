@@ -12,14 +12,14 @@ namespace Obrissom.Enemy
     /// Mid range enemy that attacks with a root circle on the ground and pecks players that get close.
     /// The server runs the AI. Clients only show the area attack using the synced snapshot.
     /// </summary>
-    [RequireComponent(typeof(PicozapatoAnimation))]
-    public class PicozapatoEnemy : EnemyBase, IHerdMember
+    [RequireComponent(typeof(ShoebillAnimation))]
+    public class ShoebillEnemy : EnemyBase, IHerdMember
     {
         private const int MaxOverlapHits = 32;
         private const float WalkingSpeedSqr = 0.5f * 0.5f;
 
-        [Header("Picozapato")]
-        [SerializeField] private PicozapatoConfig _config;
+        [Header("Shoebill")]
+        [SerializeField] private ShoebillConfig _config;
 
         [Tooltip("Optional. Without a herd it roams alone around its spawn point.")]
         [SerializeField] private EnemyHerd _herd;
@@ -27,15 +27,15 @@ namespace Obrissom.Enemy
         private static readonly Collider[] s_overlapHits = new Collider[MaxOverlapHits];
         private static readonly HashSet<ulong> s_hitPlayers = new HashSet<ulong>();
 
-        private readonly NetworkVariable<PicozapatoAttackSnapshot> _attackSnapshot =
-            new NetworkVariable<PicozapatoAttackSnapshot>();
+        private readonly NetworkVariable<ShoebillAttackSnapshot> _attackSnapshot =
+            new NetworkVariable<ShoebillAttackSnapshot>();
 
-        private PicozapatoAnimation _picozapatoAnimation;
-        private PicozapatoAreaIndicator _indicator;
+        private ShoebillAnimation _shoebillAnimation;
+        private ShoebillAreaIndicator _indicator;
 
         // Combat
-        private PicozapatoAttackKind _pendingAttack;
-        private PicozapatoAttackKind _currentAttack;
+        private ShoebillAttackKind _pendingAttack;
+        private ShoebillAttackKind _currentAttack;
         private Transform _attackTarget;
         private Coroutine _attackRoutine;
         private bool _isRooted;
@@ -64,16 +64,16 @@ namespace Obrissom.Enemy
         private Vector3 _lastDestination;
         private bool _hasDestination;
 
-        private bool IsAttacking => _currentAttack != PicozapatoAttackKind.None;
+        private bool IsAttacking => _currentAttack != ShoebillAttackKind.None;
         private float EngagedRange => _stats.chaseRange * _config.engagedRangeMultiplier;
 
         protected override bool IsStaggerImmune =>
-            _currentAttack == PicozapatoAttackKind.Area && !_config.areaInterruptible;
+            _currentAttack == ShoebillAttackKind.Area && !_config.areaInterruptible;
 
         // Don't turn while rooted, during the peck windup, or while walking (no strafe animation)
         public override bool CanFaceTarget =>
             !_isRooted
-            && _currentAttack != PicozapatoAttackKind.Basic
+            && _currentAttack != ShoebillAttackKind.Basic
             && !IsWalking;
 
         private bool IsWalking => _agent.enabled && !_agent.isStopped && _agent.velocity.sqrMagnitude > WalkingSpeedSqr;
@@ -97,8 +97,8 @@ namespace Obrissom.Enemy
         protected override void Awake()
         {
             base.Awake();
-            _picozapatoAnimation = GetComponent<PicozapatoAnimation>();
-            if (_config == null) Debug.LogError($"[Picozapato] {name} has no PicozapatoConfig assigned.", this);
+            _shoebillAnimation = GetComponent<ShoebillAnimation>();
+            if (_config == null) Debug.LogError($"[Shoebill] {name} has no ShoebillConfig assigned.", this);
         }
 
         public override void OnNetworkSpawn()
@@ -403,25 +403,25 @@ namespace Obrissom.Enemy
         /// <summary>True while attacking, or if an attack can start now.</summary>
         public override bool IsPlayerInAttackRange()
         {
-            if (IsAttacking || _pendingAttack != PicozapatoAttackKind.None) return true;
+            if (IsAttacking || _pendingAttack != ShoebillAttackKind.None) return true;
             if (_target == null || Time.time < _canAttackAfter) return false;
 
             float distance = FlatDistance(_target.position);
-            PicozapatoAttackKind kind = PicozapatoAttackKind.None;
+            ShoebillAttackKind kind = ShoebillAttackKind.None;
             float slotDuration = 0f;
 
             if (distance <= _stats.attackRange && Time.time >= _basicReadyTime)
             {
-                kind = PicozapatoAttackKind.Basic;
+                kind = ShoebillAttackKind.Basic;
                 slotDuration = _config.basicWindupDuration;
             }
             else if (distance >= _config.areaMinRange && distance <= _config.areaMaxRange && Time.time >= _areaReadyTime)
             {
-                kind = PicozapatoAttackKind.Area;
+                kind = ShoebillAttackKind.Area;
                 slotDuration = _config.areaStartupDuration + _config.areaTelegraphDuration;
             }
 
-            if (kind == PicozapatoAttackKind.None) return false;
+            if (kind == ShoebillAttackKind.None) return false;
 
             if (!EnemyCombatCoordinator.TryAcquireAttackSlot(_target, this, _config.maxSimultaneousAttacksPerTarget,
                                                              _config.minTimeBetweenAttacksOnTarget, slotDuration + 1f))
@@ -435,11 +435,11 @@ namespace Obrissom.Enemy
         // Server only, not an RPC here
         public override void PerformAttackRpc()
         {
-            if (!IsServer || _isDead || IsAttacking || _pendingAttack == PicozapatoAttackKind.None) return;
+            if (!IsServer || _isDead || IsAttacking || _pendingAttack == ShoebillAttackKind.None) return;
 
             _currentAttack = _pendingAttack;
-            _pendingAttack = PicozapatoAttackKind.None;
-            _attackRoutine = StartCoroutine(_currentAttack == PicozapatoAttackKind.Basic
+            _pendingAttack = ShoebillAttackKind.None;
+            _attackRoutine = StartCoroutine(_currentAttack == ShoebillAttackKind.Basic
                 ? BasicAttackRoutine()
                 : AreaAttackRoutine());
         }
@@ -494,7 +494,7 @@ namespace Obrissom.Enemy
         private IEnumerator AreaAttackRoutine()
         {
             _canBeInterrupted = _config.areaInterruptible;
-            PublishSnapshot(PicozapatoAttackPhase.Windup, transform.position);
+            PublishSnapshot(ShoebillAttackPhase.Windup, transform.position);
 
             yield return new WaitForSeconds(_config.areaStartupDuration);
 
@@ -510,13 +510,13 @@ namespace Obrissom.Enemy
             // The circle doesn't follow the player
             Vector3 center = GetGroundPoint(_attackTarget.position);
             _isRooted = true;
-            PublishSnapshot(PicozapatoAttackPhase.Telegraph, center);
+            PublishSnapshot(ShoebillAttackPhase.Telegraph, center);
 
             yield return new WaitForSeconds(_config.areaTelegraphDuration);
 
             _canBeInterrupted = false;
             ResolveAreaHit(center);
-            PublishSnapshot(PicozapatoAttackPhase.Impact, center);
+            PublishSnapshot(ShoebillAttackPhase.Impact, center);
             ReleaseAttackSlot();
 
             yield return new WaitForSeconds(_config.areaRecoveryDuration);
@@ -559,13 +559,13 @@ namespace Obrissom.Enemy
 
         private void InterruptAttack()
         {
-            PicozapatoAttackKind interrupted = _currentAttack;
+            ShoebillAttackKind interrupted = _currentAttack;
 
             if (_attackRoutine != null) StopCoroutine(_attackRoutine);
             ReleaseAttackSlot();
             FinishAttack();
 
-            if (interrupted == PicozapatoAttackKind.Area)
+            if (interrupted == ShoebillAttackKind.Area)
             {
                 _areaReadyTime = Time.time + _config.areaCooldown * _config.interruptedCooldownFactor;
                 ClearSnapshot();
@@ -578,7 +578,7 @@ namespace Obrissom.Enemy
         }
 
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
-        private void CancelAttackAnimationRpc() => _picozapatoAnimation.CancelAttack();
+        private void CancelAttackAnimationRpc() => _shoebillAnimation.CancelAttack();
 
         private void ReleaseAttackSlot()
         {
@@ -587,7 +587,7 @@ namespace Obrissom.Enemy
 
         private void FinishAttack()
         {
-            _currentAttack = PicozapatoAttackKind.None;
+            _currentAttack = ShoebillAttackKind.None;
             _attackRoutine = null;
             _attackTarget = null;
             _isRooted = false;
@@ -599,8 +599,8 @@ namespace Obrissom.Enemy
             if (_attackRoutine != null) StopCoroutine(_attackRoutine);
             ReleaseAttackSlot();
             FinishAttack();
-            _pendingAttack = PicozapatoAttackKind.None;
-            if (_attackSnapshot.Value.Kind != PicozapatoAttackKind.None) ClearSnapshot();
+            _pendingAttack = ShoebillAttackKind.None;
+            if (_attackSnapshot.Value.Kind != ShoebillAttackKind.None) ClearSnapshot();
 
             PlaySoundForEveryone(_config.deathSound, transform.position);
             base.Die(attackerRef);
@@ -609,14 +609,14 @@ namespace Obrissom.Enemy
 
         // Snapshot (server)
 
-        private void PublishSnapshot(PicozapatoAttackPhase phase, Vector3 center)
+        private void PublishSnapshot(ShoebillAttackPhase phase, Vector3 center)
         {
-            if (phase == PicozapatoAttackPhase.Windup) _attackSequence++;
+            if (phase == ShoebillAttackPhase.Windup) _attackSequence++;
 
-            _attackSnapshot.Value = new PicozapatoAttackSnapshot
+            _attackSnapshot.Value = new ShoebillAttackSnapshot
             {
                 Sequence = _attackSequence,
-                Kind = PicozapatoAttackKind.Area,
+                Kind = ShoebillAttackKind.Area,
                 Phase = phase,
                 Center = center,
                 PhaseStartTime = NetworkManager.ServerTime.Time
@@ -625,36 +625,36 @@ namespace Obrissom.Enemy
 
         private void ClearSnapshot()
         {
-            _attackSnapshot.Value = new PicozapatoAttackSnapshot
+            _attackSnapshot.Value = new ShoebillAttackSnapshot
             {
                 Sequence = _attackSequence,
-                Kind = PicozapatoAttackKind.None,
+                Kind = ShoebillAttackKind.None,
                 PhaseStartTime = NetworkManager.ServerTime.Time
             };
         }
 
         // Snapshot (clients and host)
 
-        private void OnAttackSnapshotChanged(PicozapatoAttackSnapshot previous, PicozapatoAttackSnapshot current)
+        private void OnAttackSnapshotChanged(ShoebillAttackSnapshot previous, ShoebillAttackSnapshot current)
         {
             // Cleared before impact: the attack was cancelled
-            bool cancelledBeforeImpact = previous.Kind == PicozapatoAttackKind.Area
-                                         && previous.Phase != PicozapatoAttackPhase.Impact
-                                         && current.Kind == PicozapatoAttackKind.None;
-            if (cancelledBeforeImpact && IsClient) _picozapatoAnimation.CancelAttack();
+            bool cancelledBeforeImpact = previous.Kind == ShoebillAttackKind.Area
+                                         && previous.Phase != ShoebillAttackPhase.Impact
+                                         && current.Kind == ShoebillAttackKind.None;
+            if (cancelledBeforeImpact && IsClient) _shoebillAnimation.CancelAttack();
 
             PresentSnapshot(current, isLive: true);
         }
 
         // isLive is false on spawn: skip old sounds and animations
-        private void PresentSnapshot(PicozapatoAttackSnapshot snapshot, bool isLive)
+        private void PresentSnapshot(ShoebillAttackSnapshot snapshot, bool isLive)
         {
             if (!IsClient) return;
 
-            if (snapshot.Kind != PicozapatoAttackKind.Area)
+            if (snapshot.Kind != ShoebillAttackKind.Area)
             {
                 HideIndicator();
-                _picozapatoAnimation.SetRooted(false);
+                _shoebillAnimation.SetRooted(false);
                 return;
             }
 
@@ -662,14 +662,14 @@ namespace Obrissom.Enemy
 
             switch (snapshot.Phase)
             {
-                case PicozapatoAttackPhase.Windup:
+                case ShoebillAttackPhase.Windup:
                     if (!isLive) break;
-                    _picozapatoAnimation.PlayAreaWindup();
+                    _shoebillAnimation.PlayAreaWindup();
                     PlayLocalSound(_config.areaWindupSound, transform.position);
                     break;
 
-                case PicozapatoAttackPhase.Telegraph:
-                    _picozapatoAnimation.SetRooted(true);
+                case ShoebillAttackPhase.Telegraph:
+                    _shoebillAnimation.SetRooted(true);
                     if (elapsed >= _config.areaTelegraphDuration) break;
 
                     GetIndicator().ShowTelegraph(snapshot.Center, _config.areaRadius, snapshot.PhaseStartTime,
@@ -677,8 +677,8 @@ namespace Obrissom.Enemy
                                                  _config.indicatorWarningColor, IndicatorGroundMask);
                     break;
 
-                case PicozapatoAttackPhase.Impact:
-                    _picozapatoAnimation.SetRooted(false);
+                case ShoebillAttackPhase.Impact:
+                    _shoebillAnimation.SetRooted(false);
                     float remaining = _config.indicatorImpactDuration - (float)elapsed;
                     if (remaining <= 0f)
                     {
@@ -689,7 +689,7 @@ namespace Obrissom.Enemy
                     GetIndicator().PlayImpact(snapshot.Center, _config.areaRadius, remaining,
                                               _config.indicatorWarningColor, IndicatorGroundMask);
                     if (!isLive) break;
-                    _picozapatoAnimation.PlayAreaImpact();
+                    _shoebillAnimation.PlayAreaImpact();
                     PlayLocalSound(_config.areaImpactSound, snapshot.Center);
                     break;
             }
@@ -698,13 +698,13 @@ namespace Obrissom.Enemy
         // Players are never ground
         private int IndicatorGroundMask => _config.groundMask & ~_playerLayer;
 
-        private PicozapatoAreaIndicator GetIndicator()
+        private ShoebillAreaIndicator GetIndicator()
         {
             if (_indicator == null)
             {
                 _indicator = _config.areaIndicatorPrefab != null
                     ? Instantiate(_config.areaIndicatorPrefab)
-                    : PicozapatoAreaIndicator.CreateFallback(_config.fallbackIndicatorMaterial);
+                    : ShoebillAreaIndicator.CreateFallback(_config.fallbackIndicatorMaterial);
             }
             return _indicator;
         }

@@ -7,7 +7,7 @@ namespace Obrissom.Enemy
     /// Ground circle for the area attack (clients only). The fill grows until it reaches the edge, then it hits.
     /// Custom prefabs: 1 unit diameter, facing +Z. Leave parts empty to use the generated ring.
     /// </summary>
-    public class PicozapatoAreaIndicator : MonoBehaviour
+    public class ShoebillAreaIndicator : MonoBehaviour
     {
         private const int FallbackSegments = 48;
         private const float FallbackOuterWidth = 0.08f;
@@ -41,10 +41,10 @@ namespace Obrissom.Enemy
         private MaterialPropertyBlock _propertyBlock;
         private int _colorId;
 
-        public static PicozapatoAreaIndicator CreateFallback(Material material)
+        public static ShoebillAreaIndicator CreateFallback(Material material)
         {
-            var root = new GameObject("PicozapatoAreaIndicator");
-            var indicator = root.AddComponent<PicozapatoAreaIndicator>();
+            var root = new GameObject("ShoebillAreaIndicator");
+            var indicator = root.AddComponent<ShoebillAreaIndicator>();
 
             if (material == null)
             {
@@ -52,7 +52,7 @@ namespace Obrissom.Enemy
                 {
                     Shader shader = Shader.Find("Sprites/Default");
                     if (shader != null) s_generatedMaterial = new Material(shader);
-                    else Debug.LogWarning("[PicozapatoAreaIndicator] No material found. Set fallbackIndicatorMaterial in PicozapatoConfig.");
+                    else Debug.LogWarning("[ShoebillAreaIndicator] No material found. Set fallbackIndicatorMaterial in ShoebillConfig.");
                 }
                 material = s_generatedMaterial;
             }

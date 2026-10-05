@@ -1,6 +1,6 @@
 namespace Obrissom.Enemy
 {
-    public enum PicozapatoAttackKind : byte
+    public enum ShoebillAttackKind : byte
     {
         None,
         Basic,
