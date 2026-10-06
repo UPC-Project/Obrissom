@@ -244,6 +244,54 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Debuff system
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void ApplyDebuffRpc(DebuffType debuff, float duration)
+        {
+            if (_isDead) return;
+            StartCoroutine(DebuffRoutine(debuff, duration));
+        }
+
+        private System.Collections.IEnumerator DebuffRoutine(DebuffType debuff, float duration)
+        {
+            ApplyDebuffEffect(debuff);
+            yield return new WaitForSeconds(duration);
+            RemoveDebuffEffect(debuff);
+        }
+
+        // Here add animation trigger por each debuff
+        protected virtual void ApplyDebuffEffect(DebuffType debuff)
+        {
+            switch (debuff)
+            {
+                case DebuffType.Stun:
+                    _stateMachine.ChangeState(EnemyState.Stunned);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Removes the effect of a debuff and restores normal behaviour.
+        /// </summary>
+        protected virtual void RemoveDebuffEffect(DebuffType debuff)
+        {
+            if (_isDead) return;
+
+            switch (debuff)
+            {
+                case DebuffType.Stun:
+                    if (_stateMachine.CurrentState != EnemyState.Stunned) break;
+                    if (IsPlayerInAttackRange())
+                        _stateMachine.ChangeState(EnemyState.Attack);
+                    else if (IsPlayerInChaseRange())
+                        _stateMachine.ChangeState(EnemyState.Chase);
+                    else
+                        _stateMachine.ChangeState(EnemyState.Idle);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Returns a random damage value within the configured range.
         /// </summary>
@@ -269,7 +317,7 @@ namespace Obrissom.Enemy
             StartCoroutine(DespawnRoutine());
         }
 
-        //Loot
+        // Loot
 
         private void DropLoot()
         {
@@ -281,7 +329,7 @@ namespace Obrissom.Enemy
         //TODO
         //}
 
-        //Patrol
+        // Patrol
 
         public virtual void SetPatrolPoints(GameObject[] points)
         {
@@ -293,6 +341,7 @@ namespace Obrissom.Enemy
         {
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_patrolPoints[_currentPatrolIndex] == null) return;
+            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
 
             Vector3 destination = _patrolPoints[_currentPatrolIndex].transform.position;
             Vector2 offset = Random.insideUnitCircle * _wanderRadius;
@@ -306,6 +355,7 @@ namespace Obrissom.Enemy
         {
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_isWaypointPausing) return;
+            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
             if (_agent.pathPending || _agent.remainingDistance >= 0.5f) return;
 
             _isWaypointPausing = true;
@@ -314,7 +364,7 @@ namespace Obrissom.Enemy
 
         private System.Collections.IEnumerator WaypointPauseRoutine()
         {
-            _agent.isStopped = true;
+            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = true;
 
             int lookCount = Random.Range(1, 3);
             for (int i = 0; i < lookCount; i++)
@@ -340,7 +390,7 @@ namespace Obrissom.Enemy
 
             if (_stateMachine.CurrentState != EnemyState.Move) yield break;
 
-            _agent.isStopped = false;
+            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = false;
             _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
             MoveToNextPatrolPoint();
         }
@@ -353,7 +403,10 @@ namespace Obrissom.Enemy
 
         public virtual void OnChaseStateTick()
         {
-            if (_target != null) _agent.SetDestination(_target.position);
+            if (_target != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh) 
+            {
+                _agent.SetDestination(_target.position);
+            }
         }
 
         public virtual float GetMoveSpeed(EnemyState state) =>

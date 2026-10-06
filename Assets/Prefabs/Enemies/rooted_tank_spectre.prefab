@@ -1309,7 +1309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 170519823
+  GlobalObjectIdHash: 3223101667
   InScenePlacedSourceGlobalObjectIdHash: 170519823
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1465,6 +1465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.SlasherAnimation
   _animator: {fileID: 5481478458542881896}
+  _speedSmoothing: 10
 --- !u!95 &5481478458542881896
 Animator:
   serializedVersion: 7

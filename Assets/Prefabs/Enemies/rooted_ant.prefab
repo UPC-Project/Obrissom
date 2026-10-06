@@ -753,6 +753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.SlasherAnimation
   _animator: {fileID: 3415145989652665826}
+  _speedSmoothing: 10
 --- !u!95 &3415145989652665826
 Animator:
   serializedVersion: 7
@@ -794,7 +795,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.29
+  m_Radius: 0.5
   m_Height: 1.48
   m_Direction: 1
   m_Center: {x: 0, y: 0.72, z: 0}
