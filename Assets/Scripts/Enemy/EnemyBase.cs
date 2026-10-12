@@ -70,9 +70,13 @@ namespace Obrissom.Enemy
 
         // Synced so all clients play the death animation
         private readonly NetworkVariable<bool> _isDeadSynced = new NetworkVariable<bool>(false);
+        private readonly NetworkVariable<bool> _isStunnedSynced = new NetworkVariable<bool>(false);
 
         // Lifecycle
         protected EnemyStateMachine _stateMachine;
+
+        [Header("Debuff effects")]
+        [SerializeField] private ParticleSystem _stunEffect;
 
 
         protected virtual void Awake()
@@ -91,6 +95,8 @@ namespace Obrissom.Enemy
             _isDeadSynced.OnValueChanged += OnDeadSyncedChanged;
             if (_isDeadSynced.Value) _enemyAnimation.PlayDeathAnimation();
 
+            _isStunnedSynced.OnValueChanged += OnStunnedSyncedChanged;
+
             if (!IsServer) return;
 
             _agent.enabled = true;
@@ -106,11 +112,26 @@ namespace Obrissom.Enemy
         public override void OnNetworkDespawn()
         {
             _isDeadSynced.OnValueChanged -= OnDeadSyncedChanged;
+            _isStunnedSynced.OnValueChanged -= OnStunnedSyncedChanged;
         }
 
         private void OnDeadSyncedChanged(bool previous, bool current)
         {
             if (current) _enemyAnimation.PlayDeathAnimation();
+        }
+
+        private void OnStunnedSyncedChanged(bool previous, bool current)
+        {
+            if (current)
+            {
+                _stunEffect?.Play();
+                _enemyAnimation?.SetStunned(true);
+            }
+            else
+            {
+                _stunEffect?.Stop();
+                _enemyAnimation?.SetStunned(false);
+            }
         }
 
         protected virtual void Update()
@@ -190,7 +211,7 @@ namespace Obrissom.Enemy
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             PlaySoundForEveryone(type == EffectType.PhysicDamage ? AudioID.HitPhysical : AudioID.HitMagic, hitPos);
-            bool staggered = !IsStaggerImmune;
+            bool staggered = !IsStaggerImmune && _stateMachine.CurrentState != EnemyState.Stunned;
             if (staggered) _stateMachine.ChangeState(EnemyState.TakingDamage);
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
@@ -213,6 +234,8 @@ namespace Obrissom.Enemy
         // Server only
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
         protected void PlayAttackAnimationRpc() => _enemyAnimation.PlayAttackAnimation();
+
+        public virtual void CancelAttack() => _enemyAnimation?.CancelAttack();
 
         /// <summary>
         /// Server only. Plays a 3D sound on every client. Silent if the prefab has no NetworkSoundEmitter.
@@ -266,7 +289,9 @@ namespace Obrissom.Enemy
             switch (debuff)
             {
                 case DebuffType.Stun:
+                    CancelAttack();
                     _stateMachine.ChangeState(EnemyState.Stunned);
+                    _isStunnedSynced.Value = true;
                     break;
             }
         }
@@ -282,6 +307,7 @@ namespace Obrissom.Enemy
             {
                 case DebuffType.Stun:
                     if (_stateMachine.CurrentState != EnemyState.Stunned) break;
+                    _isStunnedSynced.Value = false;
                     if (IsPlayerInAttackRange())
                         _stateMachine.ChangeState(EnemyState.Attack);
                     else if (IsPlayerInChaseRange())
@@ -305,6 +331,7 @@ namespace Obrissom.Enemy
             _stateMachine.ChangeState(EnemyState.Dead);
 
             _isDeadSynced.Value = true;
+            _isStunnedSynced.Value = false;
 
             DropLoot();
 

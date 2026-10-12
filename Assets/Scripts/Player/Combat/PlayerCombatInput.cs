@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Obrissom.UI;
 
 namespace Obrissom.Player
 {
@@ -97,7 +98,7 @@ namespace Obrissom.Player
 
             if (context.performed && _playerSkills.CanActivateSkill(SkillKey.THREE))
             {
-                if (Obrissom.UI.InputStateManager.Instance != null && Obrissom.UI.InputStateManager.Instance.IsPointerOverUI) return;
+                if (InputStateManager.Instance != null && InputStateManager.Instance.IsPointerOverUI) return;
                 _playerSkills.OnSkillPressed(SkillKey.THREE);
                 if (!isHold) _animator.SetTrigger("skill3");
             }
@@ -117,7 +118,7 @@ namespace Obrissom.Player
 
             if (context.performed && _playerSkills.CanActivateSkill(SkillKey.FOUR))
             {
-                if (Obrissom.UI.InputStateManager.Instance != null && Obrissom.UI.InputStateManager.Instance.IsPointerOverUI) return;
+                if (InputStateManager.Instance != null && InputStateManager.Instance.IsPointerOverUI) return;
                 _playerSkills.OnSkillPressed(SkillKey.FOUR);
             }
 

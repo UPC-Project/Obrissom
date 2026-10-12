@@ -174,8 +174,26 @@ namespace Obrissom.Enemy
 
         public override float GetMoveSpeed(EnemyState state) => base.GetMoveSpeed(state) * _speedMultiplier;
 
+        public override void CancelAttack()
+        {
+            base.CancelAttack();
+            if (_attackRoutine != null)
+            {
+                StopCoroutine(_attackRoutine);
+                _attackRoutine = null;
+            }
+            ReleaseAttackSlot();
+            FinishAttack();
+            CancelAttackAnimationRpc();
+        }
+
         public override void OnStateChanged(EnemyState previous, EnemyState current)
         {
+            if (current == EnemyState.Stunned)
+            {
+                CancelAttack();
+            }
+
             if (previous == EnemyState.Move && _herd != null) _herd.ReleaseDestination(this);
 
             bool justSpotted = current == EnemyState.Chase

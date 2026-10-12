@@ -53,8 +53,9 @@ namespace Obrissom.Enemy
                 _attackLayerIndex = -1;
         }
 
-        public void CancelAttack()
+        public override void CancelAttack()
         {
+            base.CancelAttack();
             if (_animator == null) return;
 
             ResetTrigger(_basicAttackHash);
@@ -71,18 +72,34 @@ namespace Obrissom.Enemy
             if (hash != 0) _animator.ResetTrigger(hash);
         }
 
-        public override void PlayAttackAnimation() => SetTrigger(_basicAttackHash);
+        public override void PlayAttackAnimation()
+        {
+            if (_isStunned) return;
+            SetTrigger(_basicAttackHash);
+        }
 
-        public void PlayAreaWindup() => SetTrigger(_areaWindupHash);
+        public void PlayAreaWindup()
+        {
+            if (_isStunned) return;
+            SetTrigger(_areaWindupHash);
+        }
 
-        public void PlayAreaImpact() => SetTrigger(_areaImpactHash);
+        public void PlayAreaImpact()
+        {
+            if (_isStunned) return;
+            SetTrigger(_areaImpactHash);
+        }
 
         public void SetRooted(bool rooted)
         {
             if (_animator != null && _rootedHash != 0) _animator.SetBool(_rootedHash, rooted);
         }
 
-        public override void PlayTakeDamageAnimation() => SetTrigger(_takeDamageHash);
+        public override void PlayTakeDamageAnimation()
+        {
+            if (_isStunned) return;
+            SetTrigger(_takeDamageHash);
+        }
 
         public override void PlayDeathAnimation()
         {

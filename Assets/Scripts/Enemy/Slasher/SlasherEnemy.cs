@@ -16,7 +16,7 @@ namespace Obrissom.Enemy
         [SerializeField] private SlasherConfig _slasherConfig;
         [SerializeField] private GameObject _shieldVfx;
 
-        public override bool IsRetreating   => _isRetreating;
+        public override bool IsRetreating => _isRetreating;
         public override bool IsInvulnerable => false;
 
         private SlasherAnimation _slasherAnimation;
@@ -29,8 +29,8 @@ namespace Obrissom.Enemy
         private float _invulnerableUntil;
         private float _timeSinceLastDamage;
         private float _regenBaseHealth;
-        private bool  _regenStarted;
-        private bool  _canRegen;
+        private bool _regenStarted;
+        private bool _canRegen;
 
         private Coroutine _damageClearRoutine;
 
@@ -126,36 +126,59 @@ namespace Obrissom.Enemy
             _recentDamageAccumulated = 0f;
         }
 
+        private Coroutine _comboRoutine;
+        private Coroutine _lungeRoutine;
+
         // Attack
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public override void PerformAttackRpc()
         {
-            if (_attackCooldownTimer > 0f || _isComboActive || _isRetreating) return;
+            if (_attackCooldownTimer > 0f || _isComboActive || _isRetreating || _stateMachine.CurrentState == EnemyState.Stunned) return;
 
             _attackCooldownTimer = _stats.attackCooldown;
-            StartCoroutine(ComboRoutine());
+            _comboRoutine = StartCoroutine(ComboRoutine());
+        }
+
+        public override void CancelAttack()
+        {
+            base.CancelAttack();
+            if (_comboRoutine != null)
+            {
+                StopCoroutine(_comboRoutine);
+                _comboRoutine = null;
+            }
+            if (_lungeRoutine != null)
+            {
+                StopCoroutine(_lungeRoutine);
+                _lungeRoutine = null;
+            }
+            _isComboActive = false;
         }
 
         private IEnumerator ComboRoutine()
         {
             _isComboActive = true;
 
-            int hits     = _isEnraged ? _slasherConfig.enragedComboHits : _slasherConfig.comboHits;
+            int hits = _isEnraged ? _slasherConfig.enragedComboHits : _slasherConfig.comboHits;
             float windup = _isEnraged
                 ? _slasherConfig.windupDuration * _slasherConfig.enrageWindupMultiplier
                 : _slasherConfig.windupDuration;
 
             if (ShouldLunge())
-                yield return StartCoroutine(LungeRoutine());
+            {
+                _lungeRoutine = StartCoroutine(LungeRoutine());
+                yield return _lungeRoutine;
+                _lungeRoutine = null;
+            }
 
             for (int i = 0; i < hits; i++)
             {
-                if (_isDead || _isRetreating) break;
+                if (_isDead || _isRetreating || _stateMachine.CurrentState == EnemyState.Stunned) break;
 
                 yield return new WaitForSeconds(windup);
 
-                if (_isDead || _isRetreating) break;
+                if (_isDead || _isRetreating || _stateMachine.CurrentState == EnemyState.Stunned) break;
 
                 PerformSweep();
                 PlayAttackAnimationRpc();
@@ -170,6 +193,7 @@ namespace Obrissom.Enemy
             yield return new WaitForSeconds(_slasherConfig.recoveryDuration);
 
             _isComboActive = false;
+            _comboRoutine = null;
         }
 
         // Lunge
@@ -185,14 +209,20 @@ namespace Obrissom.Enemy
         {
             if (_target == null) yield break;
 
-            _agent.isStopped = false;
-            _agent.speed = _slasherConfig.lungeSpeed;
-            _agent.SetDestination(_target.position);
+            if (CanUseAgent())
+            {
+                _agent.isStopped = false;
+                _agent.speed = _slasherConfig.lungeSpeed;
+                _agent.SetDestination(_target.position);
+            }
 
             yield return new WaitForSeconds(_slasherConfig.lungeDuration);
 
-            _agent.isStopped = true;
-            _agent.speed = _stats.moveSpeed;
+            if (CanUseAgent())
+            {
+                _agent.isStopped = true;
+                _agent.speed = _stats.moveSpeed;
+            }
         }
 
         // Retreat
@@ -213,26 +243,33 @@ namespace Obrissom.Enemy
                 yield break;
             }
 
-            Vector3 retreatDir         = (transform.position - _target.position).normalized;
+            Vector3 retreatDir = (transform.position - _target.position).normalized;
             Vector3 retreatDestination = transform.position + retreatDir * _slasherConfig.retreatDistance;
 
-            _agent.isStopped = false;
-            _agent.speed = _slasherConfig.retreatSpeed;
-            _agent.SetDestination(retreatDestination);
+            bool canUseAgent = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
+            if (canUseAgent)
+            {
+                _agent.isStopped = false;
+                _agent.speed = _slasherConfig.retreatSpeed;
+                _agent.SetDestination(retreatDestination);
+            }
 
             yield return new WaitForSeconds(_slasherConfig.retreatDuration);
 
-            //Debug.Log("[Slasher] Retreat done");
-            _agent.speed = _stats.moveSpeed;
+            canUseAgent = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
+            if (canUseAgent)
+            {
+                _agent.speed = _stats.moveSpeed;
+            }
             _isRetreating = false;
             _canRegen = true;
             _timeSinceLastDamage = _slasherConfig.regenDelay;
             _invulnerableUntil = Time.time + _slasherConfig.postRetreatInvulnerabilityDuration;
             SetShieldVfxRpc(false);
 
-            if (IsPlayerInAttackRange())     _stateMachine.ChangeState(EnemyState.Attack);
+            if (IsPlayerInAttackRange()) _stateMachine.ChangeState(EnemyState.Attack);
             else if (IsPlayerInChaseRange()) _stateMachine.ChangeState(EnemyState.Chase);
-            else                             _stateMachine.ChangeState(EnemyState.Idle);
+            else _stateMachine.ChangeState(EnemyState.Idle);
         }
 
         // Sweep
@@ -254,6 +291,10 @@ namespace Obrissom.Enemy
             }
         }
 
+        private bool CanUseAgent()
+        {
+            return _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
+        }
         private bool IsWithinSweepAngle(Vector3 targetPosition)
         {
             Vector3 directionToTarget = (targetPosition - transform.position).normalized;
@@ -285,12 +326,12 @@ namespace Obrissom.Enemy
 
             if (_slasherConfig == null || _stats == null) return;
 
-            float halfAngle  = _slasherConfig.sweepAngle / 2f;
-            Quaternion left  = Quaternion.Euler(0f, -halfAngle, 0f);
-            Quaternion right = Quaternion.Euler(0f,  halfAngle, 0f);
+            float halfAngle = _slasherConfig.sweepAngle / 2f;
+            Quaternion left = Quaternion.Euler(0f, -halfAngle, 0f);
+            Quaternion right = Quaternion.Euler(0f, halfAngle, 0f);
 
             Gizmos.color = Color.magenta;
-            Gizmos.DrawRay(transform.position, left  * transform.forward * _stats.attackRange);
+            Gizmos.DrawRay(transform.position, left * transform.forward * _stats.attackRange);
             Gizmos.DrawRay(transform.position, right * transform.forward * _stats.attackRange);
         }
     }

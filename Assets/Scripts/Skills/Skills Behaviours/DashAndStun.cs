@@ -114,6 +114,10 @@ public class DashAndStun : SkillBehaviour
                     draggedEnemies.Add(enemy);
                     NavMeshAgentToggle(enemy, false);
                     enemy.ApplyDebuffRpc(DebuffType.Stun, _stunDuration);
+                    if (enemy.TryGetComponent<EnemyAnimation>(out var enemyAnim))
+                    {
+                        enemyAnim.SetStunned(true);
+                    }
                 }
             }
 
