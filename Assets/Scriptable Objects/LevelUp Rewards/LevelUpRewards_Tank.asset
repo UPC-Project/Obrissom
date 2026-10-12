@@ -26,9 +26,15 @@ MonoBehaviour:
       value: 1
   - level: 3
     newSkill: {fileID: 11400000, guid: 9391efeeeab1a4c47bab373d68b3fb76, type: 2}
-    stats: []
+    stats:
+    - stat: 0
+      value: 15
+    - stat: 1
+      value: 0.5
+    - stat: 12
+      value: 0.1
   - level: 4
-    newSkill: {fileID: 0}
+    newSkill: {fileID: 11400000, guid: 8ae19cb21b3e0d24cac9920029f312de, type: 2}
     stats: []
   - level: 5
     newSkill: {fileID: 0}

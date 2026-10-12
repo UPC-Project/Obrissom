@@ -73,17 +73,19 @@ public class DamageSkillHitbox : MonoBehaviour
 
     private IEnumerator ApplyDamageOverTime(Skill skill, Collider hit, EnemyBase enemy)
     {
+        Vector3 hitpos = hit.transform.position;
         float elapsed = 0f;
         while (elapsed < skill.damagePerSecondTime)
         {
             yield return new WaitForSeconds(1f);
             elapsed += 1f;
+            if (!enemy.IsSpawned || enemy.IsDead) yield break;
 
             var (damage, isCritic) = skill.damagePerSecondType == EffectType.PhysicDamage
                 ? _playerCombat.CalculatePhysicalDamage(skill.minDamagePerSecond, skill.maxDamagePerSecond)
                 : _playerCombat.CalculateMagicDamage(skill.minDamagePerSecond, skill.maxDamagePerSecond);
 
-            enemy.TakeDamageRpc(damage, skill.damagePerSecondType, isCritic, hit.transform.position, _netObj);
+            enemy.TakeDamageRpc(damage, skill.damagePerSecondType, isCritic, hitpos, _netObj);
         }
         _isActive = false;
     }
