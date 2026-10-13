@@ -24,6 +24,11 @@ public class Teleport : SkillBehaviour
         tpIndicator.SetActive(true);
     }
     
+    public override void OnCancel(GameObject caster, Skill skillData)
+    {
+        GetTpIndicator().SetActive(false);
+    }
+    
     // Changes tp circle indicator position relative to camera direction.
     // Updates each frame (called on PlayerSkills).
     public override void OnHoldUpdate(GameObject caster, Skill skillData, Vector3 targetPosition)

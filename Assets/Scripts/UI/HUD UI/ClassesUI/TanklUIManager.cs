@@ -7,6 +7,7 @@ namespace Obrissom.UI
         public static TankUIManager Instance { get; private set; }
 
         [SerializeField] private GameObject _tauntCircle;
+        [SerializeField] private GameObject _dashArea;
 
         private void Awake()
         {
@@ -20,5 +21,6 @@ namespace Obrissom.UI
         }
 
         public GameObject GetTauntCircle() => _tauntCircle;
+        public GameObject GetDashArea() => _dashArea;
     }
 }

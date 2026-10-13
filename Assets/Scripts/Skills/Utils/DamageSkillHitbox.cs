@@ -17,7 +17,7 @@ public class DamageSkillHitbox : MonoBehaviour
     private HashSet<EnemyBase> _hitEnemies = new HashSet<EnemyBase>();
     private bool _hitMultiple;
     private bool _isActive;
-    
+
     private bool _applyInitialDamage = false;
     private bool _applyDOT = false;
 
@@ -49,7 +49,6 @@ public class DamageSkillHitbox : MonoBehaviour
         // Base Damage
         if (_applyInitialDamage)
         {
-
             var (damage, isCritic) = _currentSkill.effectType == EffectType.PhysicDamage
                 ? _playerCombat.CalculatePhysicalDamage(_currentSkill.minEffectValue, _currentSkill.maxEffectValue)
                 : _playerCombat.CalculateMagicDamage(_currentSkill.minEffectValue, _currentSkill.maxEffectValue);
@@ -60,30 +59,27 @@ public class DamageSkillHitbox : MonoBehaviour
 
         // Damage Over Time
         if (_applyDOT)
-        {
-            if (_currentSkill.minDamagePerSecond != 0)
-                _playerCombat.StartCoroutine(ApplyDamageOverTime(_currentSkill, other, enemy));
-        }
+            _playerCombat.StartCoroutine(ApplyDamageOverTime(_currentSkill, other, enemy));
 
         if (!_hitMultiple)
-        {
             _isActive = false;
-        }
     }
 
     private IEnumerator ApplyDamageOverTime(Skill skill, Collider hit, EnemyBase enemy)
     {
+        Vector3 hitpos = hit.transform.position;
         float elapsed = 0f;
         while (elapsed < skill.damagePerSecondTime)
         {
             yield return new WaitForSeconds(1f);
             elapsed += 1f;
+            if (!enemy.IsSpawned || enemy.IsDead) yield break;
 
             var (damage, isCritic) = skill.damagePerSecondType == EffectType.PhysicDamage
                 ? _playerCombat.CalculatePhysicalDamage(skill.minDamagePerSecond, skill.maxDamagePerSecond)
                 : _playerCombat.CalculateMagicDamage(skill.minDamagePerSecond, skill.maxDamagePerSecond);
 
-            enemy.TakeDamageRpc(damage, skill.damagePerSecondType, isCritic, hit.transform.position, _netObj);
+            enemy.TakeDamageRpc(damage, skill.damagePerSecondType, isCritic, hitpos, _netObj);
         }
         _isActive = false;
     }

@@ -32,6 +32,24 @@ namespace Obrissom.Player
         {
             if (!IsOwner) return;
             UI.PlayerUIManager.Instance.RegisterPlayer(this);
+            if (InputStateManager.Instance != null)
+                InputStateManager.Instance.OnPointerClickOnUI += CancelActiveSkill;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (!IsOwner) return;
+            if (InputStateManager.Instance != null)
+                InputStateManager.Instance.OnPointerClickOnUI -= CancelActiveSkill;
+        }
+
+        public void CancelActiveSkill()
+        {
+            if (_activeSkill != null && _activeSkill.behaviour.castType == CastType.Hold)
+            {
+                _activeSkill.behaviour.OnCancel(gameObject, _activeSkill);
+                _activeSkill = null;
+            }
         }
 
         private void Update()

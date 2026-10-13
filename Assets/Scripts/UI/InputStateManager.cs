@@ -36,6 +36,9 @@ namespace Obrissom.UI
             }
         }
 
+        public bool IsPointerOverUI => _isOverUI;
+        public event System.Action OnPointerClickOnUI;
+
         private void Update()
         {
             if (_playerInput == null) return;
@@ -53,12 +56,15 @@ namespace Obrissom.UI
                     UnblockUIConflictingInputs();
                 }
             }
+
+            if (_isOverUI && UnityEngine.InputSystem.Mouse.current != null && UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                OnPointerClickOnUI?.Invoke();
+            }
         }
 
         private void BlockUIConflictingInputs()
         {
-            _playerInput.PlayerSkillMap.Disable();
-            
             // Player can still move, jump and sprint, only camera input deactivated
             _playerInput.PlayerLocomotionMap.CameraControls.Disable();
             _playerInput.PlayerLocomotionMap.CameraLook.Disable();
@@ -67,8 +73,6 @@ namespace Obrissom.UI
 
         private void UnblockUIConflictingInputs()
         {
-            _playerInput.PlayerSkillMap.Enable();
-            
             _playerInput.PlayerLocomotionMap.CameraControls.Enable();
             _playerInput.PlayerLocomotionMap.CameraLook.Enable();
             _playerInput.PlayerLocomotionMap.ScrollCamera.Enable();

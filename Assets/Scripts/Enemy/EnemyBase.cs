@@ -70,9 +70,13 @@ namespace Obrissom.Enemy
 
         // Synced so all clients play the death animation
         private readonly NetworkVariable<bool> _isDeadSynced = new NetworkVariable<bool>(false);
+        private readonly NetworkVariable<bool> _isStunnedSynced = new NetworkVariable<bool>(false);
 
         // Lifecycle
         protected EnemyStateMachine _stateMachine;
+
+        [Header("Debuff effects")]
+        [SerializeField] private ParticleSystem _stunEffect;
 
 
         protected virtual void Awake()
@@ -91,6 +95,8 @@ namespace Obrissom.Enemy
             _isDeadSynced.OnValueChanged += OnDeadSyncedChanged;
             if (_isDeadSynced.Value) _enemyAnimation.PlayDeathAnimation();
 
+            _isStunnedSynced.OnValueChanged += OnStunnedSyncedChanged;
+
             if (!IsServer) return;
 
             _agent.enabled = true;
@@ -106,11 +112,26 @@ namespace Obrissom.Enemy
         public override void OnNetworkDespawn()
         {
             _isDeadSynced.OnValueChanged -= OnDeadSyncedChanged;
+            _isStunnedSynced.OnValueChanged -= OnStunnedSyncedChanged;
         }
 
         private void OnDeadSyncedChanged(bool previous, bool current)
         {
             if (current) _enemyAnimation.PlayDeathAnimation();
+        }
+
+        private void OnStunnedSyncedChanged(bool previous, bool current)
+        {
+            if (current)
+            {
+                _stunEffect?.Play();
+                _enemyAnimation?.SetStunned(true);
+            }
+            else
+            {
+                _stunEffect?.Stop();
+                _enemyAnimation?.SetStunned(false);
+            }
         }
 
         protected virtual void Update()
@@ -190,7 +211,7 @@ namespace Obrissom.Enemy
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             PlaySoundForEveryone(type == EffectType.PhysicDamage ? AudioID.HitPhysical : AudioID.HitMagic, hitPos);
-            bool staggered = !IsStaggerImmune;
+            bool staggered = !IsStaggerImmune && _stateMachine.CurrentState != EnemyState.Stunned;
             if (staggered) _stateMachine.ChangeState(EnemyState.TakingDamage);
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
@@ -213,6 +234,8 @@ namespace Obrissom.Enemy
         // Server only
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
         protected void PlayAttackAnimationRpc() => _enemyAnimation.PlayAttackAnimation();
+
+        public virtual void CancelAttack() => _enemyAnimation?.CancelAttack();
 
         /// <summary>
         /// Server only. Plays a 3D sound on every client. Silent if the prefab has no NetworkSoundEmitter.
@@ -244,6 +267,57 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Debuff system
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void ApplyDebuffRpc(DebuffType debuff, float duration)
+        {
+            if (_isDead) return;
+            StartCoroutine(DebuffRoutine(debuff, duration));
+        }
+
+        private System.Collections.IEnumerator DebuffRoutine(DebuffType debuff, float duration)
+        {
+            ApplyDebuffEffect(debuff);
+            yield return new WaitForSeconds(duration);
+            RemoveDebuffEffect(debuff);
+        }
+
+        // Here add animation trigger por each debuff
+        protected virtual void ApplyDebuffEffect(DebuffType debuff)
+        {
+            switch (debuff)
+            {
+                case DebuffType.Stun:
+                    CancelAttack();
+                    _stateMachine.ChangeState(EnemyState.Stunned);
+                    _isStunnedSynced.Value = true;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Removes the effect of a debuff and restores normal behaviour.
+        /// </summary>
+        protected virtual void RemoveDebuffEffect(DebuffType debuff)
+        {
+            if (_isDead) return;
+
+            switch (debuff)
+            {
+                case DebuffType.Stun:
+                    if (_stateMachine.CurrentState != EnemyState.Stunned) break;
+                    _isStunnedSynced.Value = false;
+                    if (IsPlayerInAttackRange())
+                        _stateMachine.ChangeState(EnemyState.Attack);
+                    else if (IsPlayerInChaseRange())
+                        _stateMachine.ChangeState(EnemyState.Chase);
+                    else
+                        _stateMachine.ChangeState(EnemyState.Idle);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Returns a random damage value within the configured range.
         /// </summary>
@@ -257,6 +331,7 @@ namespace Obrissom.Enemy
             _stateMachine.ChangeState(EnemyState.Dead);
 
             _isDeadSynced.Value = true;
+            _isStunnedSynced.Value = false;
 
             DropLoot();
 
@@ -269,7 +344,7 @@ namespace Obrissom.Enemy
             StartCoroutine(DespawnRoutine());
         }
 
-        //Loot
+        // Loot
 
         private void DropLoot()
         {
@@ -281,7 +356,7 @@ namespace Obrissom.Enemy
         //TODO
         //}
 
-        //Patrol
+        // Patrol
 
         public virtual void SetPatrolPoints(GameObject[] points)
         {
@@ -293,6 +368,7 @@ namespace Obrissom.Enemy
         {
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_patrolPoints[_currentPatrolIndex] == null) return;
+            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
 
             Vector3 destination = _patrolPoints[_currentPatrolIndex].transform.position;
             Vector2 offset = Random.insideUnitCircle * _wanderRadius;
@@ -306,6 +382,7 @@ namespace Obrissom.Enemy
         {
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_isWaypointPausing) return;
+            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
             if (_agent.pathPending || _agent.remainingDistance >= 0.5f) return;
 
             _isWaypointPausing = true;
@@ -314,7 +391,7 @@ namespace Obrissom.Enemy
 
         private System.Collections.IEnumerator WaypointPauseRoutine()
         {
-            _agent.isStopped = true;
+            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = true;
 
             int lookCount = Random.Range(1, 3);
             for (int i = 0; i < lookCount; i++)
@@ -340,7 +417,7 @@ namespace Obrissom.Enemy
 
             if (_stateMachine.CurrentState != EnemyState.Move) yield break;
 
-            _agent.isStopped = false;
+            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = false;
             _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
             MoveToNextPatrolPoint();
         }
@@ -353,7 +430,10 @@ namespace Obrissom.Enemy
 
         public virtual void OnChaseStateTick()
         {
-            if (_target != null) _agent.SetDestination(_target.position);
+            if (_target != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh) 
+            {
+                _agent.SetDestination(_target.position);
+            }
         }
 
         public virtual float GetMoveSpeed(EnemyState state) =>

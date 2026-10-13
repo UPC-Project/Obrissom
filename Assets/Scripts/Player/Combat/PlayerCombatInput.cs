@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Obrissom.UI;
 
 namespace Obrissom.Player
 {
@@ -40,6 +41,7 @@ namespace Obrissom.Player
 
             if (context.performed && _playerSkills.CanActivateSkill(SkillKey.LB))
             {
+                if (InputStateManager.Instance != null && InputStateManager.Instance.IsPointerOverUI) return;
                 _playerSkills.OnSkillPressed(SkillKey.LB);
                 if (!isHold) _animator.SetTrigger("basic");
             }
@@ -59,6 +61,7 @@ namespace Obrissom.Player
 
             if (context.performed && _playerSkills.CanActivateSkill(SkillKey.ONE))
             {
+                if (InputStateManager.Instance != null && InputStateManager.Instance.IsPointerOverUI) return;
                 _playerSkills.OnSkillPressed(SkillKey.ONE);
                 if (!isHold) _animator.SetTrigger("skill1");
             }
@@ -74,15 +77,20 @@ namespace Obrissom.Player
         public void OnSkill2(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
+            bool isHold = _playerSkills.IsHoldSkill(SkillKey.TWO);
 
             if (context.performed && _playerSkills.CanActivateSkill(SkillKey.TWO))
             {
+                if (InputStateManager.Instance != null && InputStateManager.Instance.IsPointerOverUI) return;
                 _playerSkills.OnSkillPressed(SkillKey.TWO);
+                if (!isHold) _animator.SetTrigger("skill2");
             }
 
             if (context.canceled && _playerSkills.CanReleaseSkill(SkillKey.TWO))
             {
                 _playerSkills.OnSkillReleased(SkillKey.TWO);
+                if (isHold) _animator.SetTrigger("skill2");
+                else _animator.ResetTrigger("skill2");
             }
         }
 
@@ -93,6 +101,7 @@ namespace Obrissom.Player
 
             if (context.performed && _playerSkills.CanActivateSkill(SkillKey.THREE))
             {
+                if (InputStateManager.Instance != null && InputStateManager.Instance.IsPointerOverUI) return;
                 _playerSkills.OnSkillPressed(SkillKey.THREE);
                 if (!isHold) _animator.SetTrigger("skill3");
             }
@@ -108,15 +117,20 @@ namespace Obrissom.Player
         public void OnSkill4(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
+            bool isHold = _playerSkills.IsHoldSkill(SkillKey.FOUR);
 
             if (context.performed && _playerSkills.CanActivateSkill(SkillKey.FOUR))
             {
+                if (InputStateManager.Instance != null && InputStateManager.Instance.IsPointerOverUI) return;
                 _playerSkills.OnSkillPressed(SkillKey.FOUR);
+                if (!isHold) _animator.SetTrigger("skill4");
             }
 
             if (context.canceled && _playerSkills.CanReleaseSkill(SkillKey.FOUR))
             {
                 _playerSkills.OnSkillReleased(SkillKey.FOUR);
+                if (isHold) _animator.SetTrigger("skill4");
+                else _animator.ResetTrigger("skill4");
             }
         }
     }
