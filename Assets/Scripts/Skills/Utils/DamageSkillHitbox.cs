@@ -17,7 +17,7 @@ public class DamageSkillHitbox : MonoBehaviour
     private HashSet<EnemyBase> _hitEnemies = new HashSet<EnemyBase>();
     private bool _hitMultiple;
     private bool _isActive;
-    
+
     private bool _applyInitialDamage = false;
     private bool _applyDOT = false;
 
@@ -49,7 +49,6 @@ public class DamageSkillHitbox : MonoBehaviour
         // Base Damage
         if (_applyInitialDamage)
         {
-
             var (damage, isCritic) = _currentSkill.effectType == EffectType.PhysicDamage
                 ? _playerCombat.CalculatePhysicalDamage(_currentSkill.minEffectValue, _currentSkill.maxEffectValue)
                 : _playerCombat.CalculateMagicDamage(_currentSkill.minEffectValue, _currentSkill.maxEffectValue);
@@ -60,15 +59,10 @@ public class DamageSkillHitbox : MonoBehaviour
 
         // Damage Over Time
         if (_applyDOT)
-        {
-            if (_currentSkill.minDamagePerSecond != 0)
-                _playerCombat.StartCoroutine(ApplyDamageOverTime(_currentSkill, other, enemy));
-        }
+            _playerCombat.StartCoroutine(ApplyDamageOverTime(_currentSkill, other, enemy));
 
         if (!_hitMultiple)
-        {
             _isActive = false;
-        }
     }
 
     private IEnumerator ApplyDamageOverTime(Skill skill, Collider hit, EnemyBase enemy)
