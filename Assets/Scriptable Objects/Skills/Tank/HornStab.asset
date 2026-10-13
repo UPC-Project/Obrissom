@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Skill
   skillName: Horn Stab
   skillImage: {fileID: 21300000, guid: 8086792eafdfdfd44a1745252df821c3, type: 3}
-  description: 
+  description: Drag your enemies causing stun per 2.5s and some damage
   cooldownTime: 5
   cost: 5
   castTime: 0
-  minEffectValue: 0
-  maxEffectValue: 0
+  minEffectValue: 1
+  maxEffectValue: 2
   effectType: 0
   minDamagePerSecond: 0
   maxDamagePerSecond: 0

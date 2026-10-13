@@ -3,6 +3,7 @@ using Obrissom.Player;
 using Obrissom.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skills/Behaviours/Dash_and_Stun")]
@@ -66,11 +67,11 @@ public class DashAndStun : SkillBehaviour
         Vector3 dashDestination = origin + forward * dashDistance;
 
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
-        playerCombat.StartCoroutine(DashAndStunCoroutine(caster, playerCombat, dashDestination, forward));
+        playerCombat.StartCoroutine(DashAndStunCoroutine(caster, playerCombat, dashDestination, forward, skillData.minEffectValue, skillData.maxEffectValue, skillData.effectType));
         return true;
     }
 
-    private IEnumerator DashAndStunCoroutine(GameObject caster, PlayerCombat playerCombat, Vector3 destination, Vector3 dashDirection)
+    private IEnumerator DashAndStunCoroutine(GameObject caster, PlayerCombat playerCombat, Vector3 destination, Vector3 dashDirection, int minDamage, int maxDamage, EffectType effectType)
     {
         PlayerLocomotionInput locomotionInput = caster.GetComponent<PlayerLocomotionInput>();
         PlayerCombatInput combatInput = caster.GetComponent<PlayerCombatInput>();
@@ -92,9 +93,9 @@ public class DashAndStun : SkillBehaviour
         while (traveled < distanceToTravel)
         {
             float step = _dashSpeed * Time.deltaTime;
-            
+
             if (traveled + step > distanceToTravel) step = distanceToTravel - traveled;
-            
+
             characterController.Move(dashDirection * step);
             traveled += step;
 
@@ -133,11 +134,11 @@ public class DashAndStun : SkillBehaviour
                 int col = i % 3;
 
                 float lateralMultiplier = col == 0 ? 0f : (col == 1 ? 1f : -1f);
-                
-                float lateralSpacing = _dashWidth * 0.35f; 
+
+                float lateralSpacing = _dashWidth * 0.35f;
                 float depthSpacing = 1.2f;
-                
-                float baseDepth = 1.5f; 
+
+                float baseDepth = 1.5f;
 
                 float lateralOffset = lateralMultiplier * lateralSpacing;
                 float depthOffset = baseDepth + (row * depthSpacing);
@@ -151,11 +152,21 @@ public class DashAndStun : SkillBehaviour
             yield return null;
         }
 
-        // Reenable NavMeshAgent
         foreach (EnemyBase enemy in draggedEnemies)
         {
             if (enemy.IsDead) continue;
+            // Reenable NavMeshAgent
             NavMeshAgentToggle(enemy, true);
+            // deal damage at the end
+            if (minDamage > 0)
+            {
+                var (damage, isCritic) = effectType == EffectType.PhysicDamage
+                ? playerCombat.CalculatePhysicalDamage(minDamage, maxDamage)
+                : playerCombat.CalculateMagicDamage(minDamage, maxDamage);
+
+                NetworkObject netObj = caster.GetComponent<NetworkObject>();
+                enemy.TakeDamageRpc(damage, effectType, isCritic, enemy.transform.position, netObj);
+            }
         }
 
         playerCombat.SetInvulnerable(false);
