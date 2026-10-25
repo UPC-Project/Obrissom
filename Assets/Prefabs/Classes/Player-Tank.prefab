@@ -6956,6 +6956,7 @@ GameObject:
   - component: {fileID: 1435624161708159971}
   - component: {fileID: 1297950958033760729}
   - component: {fileID: 901619545980867179}
+  - component: {fileID: 4014575467630600722}
   - component: {fileID: 3695755342149795438}
   - component: {fileID: 905370609954775158}
   m_Layer: 6
@@ -7076,7 +7077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2424367451
+  GlobalObjectIdHash: 3877462858
   InScenePlacedSourceGlobalObjectIdHash: 3877462858
   DeferredDespawnTick: 0
   Ownership: 1
@@ -7194,7 +7195,7 @@ MonoBehaviour:
     Layer: 1
     OriginatingState: 2140143823
     DestinationState: 1032438339
-    TransitionDuration: 0.25
+    TransitionDuration: 0.1
     TriggerNameHash: 1032438339
     TransitionIndex: 3
   AnimatorParameterEntries:
@@ -7382,6 +7383,16 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
+  _isInvulnerable:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  _isTargetable:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 1
 --- !u!114 &1435624161708159971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7431,6 +7442,19 @@ MonoBehaviour:
   _scanInterval: 0.2
   _activateRadius: 20
   _deactivateRadius: 22
+--- !u!114 &4014575467630600722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022892784541401123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3b008af720015419ac349f89013ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealPopUp
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &3695755342149795438
 MonoBehaviour:
   m_ObjectHideFlags: 0

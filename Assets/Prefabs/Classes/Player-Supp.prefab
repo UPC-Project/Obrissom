@@ -7954,6 +7954,7 @@ GameObject:
   - component: {fileID: 5770801343748012112}
   - component: {fileID: 1312860489959997369}
   - component: {fileID: 561267191000489432}
+  - component: {fileID: 2939126443929259789}
   - component: {fileID: 323315733347752691}
   - component: {fileID: 1967361346551722644}
   m_Layer: 6
@@ -8071,7 +8072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3409395749
+  GlobalObjectIdHash: 63416607
   InScenePlacedSourceGlobalObjectIdHash: 3877462858
   DeferredDespawnTick: 0
   Ownership: 1
@@ -8192,6 +8193,13 @@ MonoBehaviour:
     TransitionDuration: 0.1
     TriggerNameHash: 1032438339
     TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 1
+    OriginatingState: 2140143823
+    DestinationState: -722835594
+    TransitionDuration: 0.1
+    TriggerNameHash: -722835594
+    TransitionIndex: 4
   AnimatorParameterEntries:
     ParameterEntries:
     - name: speed
@@ -8220,6 +8228,10 @@ MonoBehaviour:
       ParameterType: 9
     - name: skill4
       NameHash: 1032438339
+      Synchronize: 1
+      ParameterType: 9
+    - name: skill2
+      NameHash: -722835594
       Synchronize: 1
       ParameterType: 9
   AnimatorParametersExpanded: 0
@@ -8377,6 +8389,16 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
+  _isInvulnerable:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  _isTargetable:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 1
 --- !u!114 &5770801343748012112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8426,6 +8448,19 @@ MonoBehaviour:
   _scanInterval: 0.2
   _activateRadius: 20
   _deactivateRadius: 22
+--- !u!114 &2939126443929259789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7172078654325668339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3b008af720015419ac349f89013ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealPopUp
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &323315733347752691
 MonoBehaviour:
   m_ObjectHideFlags: 0

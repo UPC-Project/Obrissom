@@ -21,6 +21,7 @@ namespace Obrissom.Player
         // Components
         private PlayerStats _playerStats;
         private UI.HealthAndResourceUI _healthAndResourceUI;
+        protected PlayerHealPopUp _healPopUp;
 
         #endregion
 
@@ -31,6 +32,7 @@ namespace Obrissom.Player
         private void Awake()
         {
             _playerStats = GetComponent<PlayerStats>();
+            _healPopUp = GetComponent<PlayerHealPopUp>();
         }
 
         public override void OnNetworkSpawn()
@@ -127,10 +129,12 @@ namespace Obrissom.Player
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public void HealRpc(float healAmount)
+        public void HealRpc(float healAmount, bool isCritic)
         {
             if (!IsServer) return;
             _health.Value = Mathf.Min(_health.Value + healAmount, _playerStats.maxHealth.Value);
+
+            _healPopUp.ShowPopUpClientRpc(healAmount.ToString(), isCritic);
         }
 
         public (int, bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)

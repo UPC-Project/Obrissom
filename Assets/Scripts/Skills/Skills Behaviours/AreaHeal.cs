@@ -29,7 +29,7 @@ public class AreaHeal : SkillBehaviour
             PlayerCombat player = hit.transform.root.GetComponent<PlayerCombat>();
             if (player == null || players.Contains(player)) continue;
             players.Add(player);
-            player.HealRpc(baseHeal);
+            player.HealRpc(baseHeal, baseIsCritic);
         }
 
         // over time heal
@@ -51,7 +51,7 @@ public class AreaHeal : SkillBehaviour
                 PlayerCombat player = hit.transform.root.GetComponent<PlayerCombat>();
                 if (player == null || players.Contains(player) || player == playerCombat) continue;
                 players.Add(player);
-                player.HealRpc(heal);
+                player.HealRpc(heal, isCritic);
             }
         }
     }

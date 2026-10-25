@@ -54,7 +54,7 @@ public class LifeStealRay : SkillBehaviour
             var (damage, isCritic) = _playerCombat.CalculateMagicDamage(skillData.minEffectValue, skillData.maxEffectValue);
             _targetEnemy.TakeDamageRpc(damage, EffectType.MagicDamage, false, _targetEnemy.transform.position, _netObj);
 
-            _playerCombat.HealRpc(_healPerTick);
+            _playerCombat.HealRpc(_healPerTick, false);
         }
 
         return true;
