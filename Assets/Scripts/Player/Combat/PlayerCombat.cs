@@ -137,24 +137,36 @@ namespace Obrissom.Player
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage + 1);
             float damage = (attackDamage + _playerStats.bonusPhysicalAttack) * _playerStats.physicalAttackMultiplier;
-            bool isCritical = Random.value < _playerStats.criticalChance;
-            if (isCritical)
+            bool isCritic = Random.value < _playerStats.criticalChance;
+            if (isCritic)
             {
                 damage *= _playerStats.criticalDamage;
             }
-            return (Mathf.RoundToInt(damage), isCritical);
+            return (Mathf.RoundToInt(damage), isCritic);
         }
 
         public (int, bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage + 1);
             float damage = (attackDamage + _playerStats.bonusMagicAttack) * _playerStats.magicAttackMultiplier;
-            bool isCritical = Random.value < _playerStats.criticalChance;
-            if (isCritical)
+            bool isCritic = Random.value < _playerStats.criticalChance;
+            if (isCritic)
             {
                 damage *= _playerStats.criticalDamage;
             }
-            return (Mathf.RoundToInt(damage), isCritical);
+            return (Mathf.RoundToInt(damage), isCritic);
+        }
+
+        public (int, bool) CalculateHeal(int minHeal, int maxHeal)
+        {
+            int baseHeal = Random.Range(minHeal, maxHeal + 1);
+            float heal = (baseHeal + _playerStats.bonusHeal) * _playerStats.magicAttackMultiplier;
+            bool isCritic = Random.value < _playerStats.criticalChance;
+            if (isCritic)
+            {
+                heal *= _playerStats.criticalDamage;
+            }
+            return (Mathf.RoundToInt(heal), isCritic);
         }
 
         public Vector3 GetAimPosition()

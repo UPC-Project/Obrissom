@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
+  m_Name: AreaHeal
+  m_EditorClassIdentifier: Assembly-CSharp::Skill
+  skillName: Healing Circle
+  skillImage: {fileID: 21300000, guid: 5156821fb4a943f418b63fd6943aa074, type: 3}
+  description: 
+  cooldownTime: 12
+  cost: 10
+  castTime: 0
+  minEffectValue: 5
+  maxEffectValue: 10
+  effectType: 2
+  minDamagePerSecond: 1
+  maxDamagePerSecond: 3
+  damagePerSecondTime: 4
+  damagePerSecondType: 2
+  castSound: 0
+  behaviour: {fileID: 11400000, guid: 3a13e6f0ab13e144687012299e6c60c2, type: 2}
