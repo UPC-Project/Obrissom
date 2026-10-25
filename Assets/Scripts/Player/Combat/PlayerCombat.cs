@@ -7,10 +7,10 @@ namespace Obrissom.Player
     {
         #region
         [Header("Actual health and resource")]
-        [Min(0)] public NetworkVariable<float> _health = 
-            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [Min(0)] public NetworkVariable<float> _resource = 
-            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
+        [Min(0)] public NetworkVariable<float> _health =
+            new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [Min(0)] public NetworkVariable<float> _resource =
+            new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
         // Components
         private PlayerStats _playerStats;
@@ -120,9 +120,16 @@ namespace Obrissom.Player
             }
         }
 
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void HealRpc(float healAmount)
+        {
+            if (!IsServer) return;
+            _health.Value = Mathf.Min(_health.Value + healAmount, _playerStats.maxHealth.Value);
+        }
+
         public (int, bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
         {
-            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
+            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage + 1);
             float damage = (attackDamage + _playerStats.bonusPhysicalAttack) * _playerStats.physicalAttackMultiplier;
             bool isCritical = Random.value < _playerStats.criticalChance;
             if (isCritical)
@@ -134,7 +141,7 @@ namespace Obrissom.Player
 
         public (int, bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
         {
-            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
+            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage + 1);
             float damage = (attackDamage + _playerStats.bonusMagicAttack) * _playerStats.magicAttackMultiplier;
             bool isCritical = Random.value < _playerStats.criticalChance;
             if (isCritical)

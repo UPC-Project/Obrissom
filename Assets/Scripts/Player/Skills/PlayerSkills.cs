@@ -14,6 +14,7 @@ namespace Obrissom.Player
 
         private Dictionary<SkillKey, float> _cooldowns = new Dictionary<SkillKey, float>();
         private Skill _activeSkill = null;
+        private SkillKey _activeSkillKey;
 
         [SerializeField] private float _aimRotationSpeed = 4f;
 
@@ -45,10 +46,17 @@ namespace Obrissom.Player
 
         public void CancelActiveSkill()
         {
-            if (_activeSkill != null && _activeSkill.behaviour.castType == CastType.Hold)
+            if (_activeSkill != null)
             {
-                _activeSkill.behaviour.OnCancel(gameObject, _activeSkill);
-                _activeSkill = null;
+                if (_activeSkill.behaviour.castType == CastType.Hold)
+                {
+                    _activeSkill.behaviour.OnCancel(gameObject, _activeSkill);
+                    _activeSkill = null;
+                }
+                else if (_activeSkill.behaviour.castType == CastType.Channel)
+                {
+                    StopChannel();
+                }
             }
         }
 
@@ -59,20 +67,31 @@ namespace Obrissom.Player
                 if (_cooldowns[key] > 0f) _cooldowns[key] -= Time.deltaTime;
             }
 
-            // Hold skill is being hold
-            if (_activeSkill != null && _activeSkill.behaviour.castType == CastType.Hold)
+            if (_activeSkill != null)
             {
-                Vector3 aimPosition = _playerCombat.GetAimPosition();
-
-                // update Hold skill
-                _activeSkill.behaviour.OnHoldUpdate(gameObject, _activeSkill, aimPosition);
-
-                // Rotate player to crosshair
-                Vector3 direction = new Vector3(aimPosition.x - transform.position.x, 0f, aimPosition.z - transform.position.z).normalized;
-                if (direction != Vector3.zero)
+                // Hold skill is being hold
+                if (_activeSkill.behaviour.castType == CastType.Hold)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _aimRotationSpeed * 360f * Time.deltaTime);
+                    Vector3 aimPosition = _playerCombat.GetAimPosition();
+
+                    // update Hold skill
+                    _activeSkill.behaviour.OnHoldUpdate(gameObject, _activeSkill, aimPosition);
+
+                    // Rotate player to crosshair
+                    Vector3 direction = new Vector3(aimPosition.x - transform.position.x, 0f, aimPosition.z - transform.position.z).normalized;
+                    if (direction != Vector3.zero)
+                    {
+                        Quaternion targetRotation = Quaternion.LookRotation(direction);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _aimRotationSpeed * 360f * Time.deltaTime);
+                    }
+                }
+                else if (_activeSkill.behaviour.castType == CastType.Channel)
+                {
+                    bool keepChanneling = _activeSkill.behaviour.OnChannelUpdate(gameObject, _activeSkill);
+                    if (!keepChanneling)
+                    {
+                        StopChannel();
+                    }
                 }
             }
         }
@@ -93,28 +112,46 @@ namespace Obrissom.Player
             return null;
         }
 
-        public void OnSkillPressed(SkillKey key)
+        public bool OnSkillPressed(SkillKey key)
         {
-            _activeSkills.TryGetValue(key, out Skill skill);
-
+            if (!_activeSkills.TryGetValue(key, out Skill skill) || skill == null || skill.behaviour == null)
+                return false;
             _activeSkill = skill;
+            _activeSkillKey = key;
 
-            if (skill.behaviour.castType == CastType.Hold)
+            if (skill.behaviour.castType == CastType.Channel)
+            {
+                // Channel skill can't start or continue
+                if (!skill.behaviour.OnChannelStart(gameObject, skill)) return false;
+
+                _playerCombat.TryConsumeResource(skill.cost);
+                PlayCastSound(skill);
+            }
+            else if (skill.behaviour.castType == CastType.Hold)
             {
                 skill.behaviour.OnHold(gameObject, skill, Vector3.zero); // pass target vector
             }
             else
             {
-                _cooldowns[key] = skill.cooldownTime;
+                _cooldowns[key] = _activeSkill.cooldownTime;
                 skill.behaviour.Execute(gameObject, skill, Vector3.zero); // pass target vector
                 PlayCastSound(skill);
             }
+            
+            return true;
         }
 
         public void OnSkillReleased(SkillKey key)
         {
+            if (_activeSkill == null) return;
             bool skillExecuted = false;
-            if (_activeSkill.behaviour.castType == CastType.Hold)
+
+            if (_activeSkill.behaviour.castType == CastType.Channel)
+            {
+                _activeSkill.behaviour.OnChannelEnd(gameObject, _activeSkill);
+                skillExecuted = true;
+            }
+            else if (_activeSkill.behaviour.castType == CastType.Hold)
             {
                 Vector3 aimPosition = _playerCombat.GetAimPosition();
                 skillExecuted = _activeSkill.behaviour.OnRelease(gameObject, _activeSkill, aimPosition);
@@ -126,13 +163,24 @@ namespace Obrissom.Player
 
             if (skillExecuted)
             {
-                _cooldowns[key] = _activeSkill.cooldownTime;
-                _playerCombat.TryConsumeResource(_activeSkills[key].cost);
+                if (!(_activeSkill.behaviour.castType == CastType.Instant)) _cooldowns[key] = _activeSkill.cooldownTime;
+                if (!(_activeSkill.behaviour.castType == CastType.Channel)) _playerCombat.TryConsumeResource(_activeSkills[key].cost);
 
                 // Instant skills already played their sound on press
                 if (_activeSkill.behaviour.castType == CastType.Hold)
                     PlayCastSound(_activeSkill);
             }
+            _activeSkill = null;
+        }
+
+        // channel was interrupted.
+        // For example for the healer basic, the distance between the player and the enemy could increase.
+        private void StopChannel()
+        {
+            if (_activeSkill == null) return;
+
+            _cooldowns[_activeSkillKey] = _activeSkill.cooldownTime;
+            _activeSkill.behaviour.OnChannelEnd(gameObject, _activeSkill);
             _activeSkill = null;
         }
 
@@ -177,3 +225,4 @@ namespace Obrissom.Player
 
     }
 }
+
