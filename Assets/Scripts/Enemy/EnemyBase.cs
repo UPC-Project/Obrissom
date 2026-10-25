@@ -155,6 +155,22 @@ namespace Obrissom.Enemy
 
         //Detection
 
+        public virtual bool IsValidTarget(Transform target)
+        {
+            if (target == null) return false;
+            PlayerCombat player = target.GetComponentInParent<PlayerCombat>();
+            return player != null && player.IsTargetable;
+        }
+
+        public virtual void ClearTarget()
+        {
+            _target = null;
+            if (_stateMachine != null && _stateMachine.CurrentState == EnemyState.Attack)
+            {
+                CancelAttack();
+            }
+        }
+
         /// <summary>
         /// Detects the nearest player within chase range and assigns it as target.
         /// Called from the state machine eval loop, not every frame.
@@ -174,11 +190,14 @@ namespace Obrissom.Enemy
 
             foreach (var hit in hits)
             {
-                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                PlayerCombat player = hit.GetComponentInParent<PlayerCombat>();
+                if (player == null || !player.IsTargetable) continue;
+
+                float dist = Vector3.Distance(transform.position, player.transform.position);
                 if (dist < closestDistance)
                 {
                     closestDistance = dist;
-                    closest = hit.transform;
+                    closest = player.transform;
                 }
             }
 
@@ -186,10 +205,10 @@ namespace Obrissom.Enemy
         }
 
         public virtual bool IsPlayerInChaseRange() =>
-            _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.chaseRange;
+            _target != null && IsValidTarget(_target) && Vector3.Distance(transform.position, _target.position) <= _stats.chaseRange;
 
         public virtual bool IsPlayerInAttackRange() =>
-            _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.attackRange;
+            _target != null && IsValidTarget(_target) && Vector3.Distance(transform.position, _target.position) <= _stats.attackRange;
 
         //Combat 
 

@@ -43,7 +43,7 @@ namespace Obrissom.Enemy
                            || CurrentState == EnemyState.Attack
                            || _enemy.IsRetreating;
 
-            if (shouldFace && _enemy.CanFaceTarget && _enemy.Target != null)
+            if (shouldFace && _enemy.CanFaceTarget && _enemy.Target != null && _enemy.IsValidTarget(_enemy.Target))
                 FaceTarget(_enemy.Target.position);
         }
 
@@ -69,6 +69,12 @@ namespace Obrissom.Enemy
         private void EvaluateTransitions()
         {
             if (_enemy.IsRetreating) return;
+
+            if (_enemy.Target != null && !_enemy.IsValidTarget(_enemy.Target))
+            {
+                _enemy.ClearTarget();
+            }
+
             switch (CurrentState)
             {
                 case EnemyState.Idle:
@@ -92,7 +98,12 @@ namespace Obrissom.Enemy
 
                 case EnemyState.Attack:
                     if (!_enemy.IsPlayerInAttackRange())
-                        ChangeState(EnemyState.Chase);
+                    {
+                        if (_enemy.IsPlayerInChaseRange())
+                            ChangeState(EnemyState.Chase);
+                        else
+                            ChangeState(EnemyState.Move);
+                    }
                     break;
 
                 case EnemyState.TakingDamage:
@@ -224,3 +235,4 @@ namespace Obrissom.Enemy
         }
     }
 }
+

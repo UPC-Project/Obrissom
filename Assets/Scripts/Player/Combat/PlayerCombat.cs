@@ -7,16 +7,20 @@ namespace Obrissom.Player
     {
         #region
         [Header("Actual health and resource")]
-        [Min(0)] public NetworkVariable<float> _health =
-            new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [Min(0)] public NetworkVariable<float> _resource =
-            new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
+        [Min(0)] public NetworkVariable<float> _health = 
+            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [Min(0)] public NetworkVariable<float> _resource = 
+            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
+
+        [Header("Targeting and Invulnerability")]
+        public NetworkVariable<bool> _isInvulnerable = new NetworkVariable<bool>(
+            false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> _isTargetable = new NetworkVariable<bool>(
+            true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         // Components
         private PlayerStats _playerStats;
         private UI.HealthAndResourceUI _healthAndResourceUI;
-
-        private bool _isInvulnerable = false;
 
         #endregion
 
@@ -85,7 +89,9 @@ namespace Obrissom.Player
             }
         }
 
-        public void SetInvulnerable(bool value) => _isInvulnerable = value;
+        public void SetInvulnerable(bool value) => _isInvulnerable.Value = value;
+        public void SetTargetable(bool value) => _isTargetable.Value = value;
+        public bool IsTargetable => _isTargetable.Value && _health.Value > 0f;
 
         public bool TryConsumeResource(int cost, bool consume = true)
         {
@@ -101,7 +107,7 @@ namespace Obrissom.Player
 
         public void TakeDamage(float damageAmount, EffectType damageType)
         {
-            if (_isInvulnerable) return;
+            if (_isInvulnerable.Value) return;
 
             if (!IsServer) return;
 
@@ -168,3 +174,4 @@ namespace Obrissom.Player
     }
 
 }
+

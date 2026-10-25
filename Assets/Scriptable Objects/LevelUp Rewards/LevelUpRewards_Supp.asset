@@ -14,4 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelUpRewards
   playerClass: 2
   basicSkill: {fileID: 11400000, guid: ed211f715bd264d43950dbcdb8ffa124, type: 2}
-  rewards: []
+  rewards:
+  - level: 2
+    newSkill: {fileID: 11400000, guid: 8cb99faf8abb46f4fa73f0fe79252be0, type: 2}
+    stats:
+    - stat: 8
+      value: 1
+    - stat: 10
+      value: 1
