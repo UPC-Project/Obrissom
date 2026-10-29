@@ -1,4 +1,5 @@
 using Obrissom.Player;
+using Obrissom.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +8,19 @@ using UnityEngine;
 public class AreaHeal : SkillBehaviour
 {
     [SerializeField] private float _healCircleRange = 5;
+    private GameObject _healCircle;
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
+        if (_healCircle == null) _healCircle = SuppUIManager.Instance.GetHealCircle();
 
+        PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
         playerCombat.StartCoroutine(HealOverTime(playerCombat, skillData, caster));
     }
 
     // Only player inside the area will recive healing
     private IEnumerator HealOverTime(PlayerCombat playerCombat, Skill skillData, GameObject caster)
     {
+        _healCircle.SetActive(true);
         // initial base heal
         // caster also recives instant healing.
         var (baseHeal, baseIsCritic) = playerCombat.CalculateHeal(skillData.minEffectValue, skillData.maxEffectValue);
@@ -54,5 +58,6 @@ public class AreaHeal : SkillBehaviour
                 player.HealRpc(heal, isCritic);
             }
         }
+        _healCircle.SetActive(false);
     }
 }
