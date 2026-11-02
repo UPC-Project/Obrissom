@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
+  m_Name: BuffPlayersDebuffEnemies
+  m_EditorClassIdentifier: Assembly-CSharp::Skill
+  skillName: Help call
+  skillImage: {fileID: 21300000, guid: 6027e0c6feaf9b94aa62ed133950280d, type: 3}
+  description: Buff your friends and root your enemies
+  cooldownTime: 10
+  cost: 8
+  castTime: 0
+  minEffectValue: 0
+  maxEffectValue: 0
+  effectType: 2
+  minDamagePerSecond: 0
+  maxDamagePerSecond: 0
+  damagePerSecondTime: 0
+  damagePerSecondType: 2
+  castSound: 0
+  behaviour: {fileID: 11400000, guid: 26921325b9d25ed4e987fdab3acbbe12, type: 2}

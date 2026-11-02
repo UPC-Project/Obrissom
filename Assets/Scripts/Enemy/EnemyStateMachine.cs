@@ -99,11 +99,18 @@ namespace Obrissom.Enemy
                 case EnemyState.Attack:
                     if (!_enemy.IsPlayerInAttackRange())
                     {
-                        if (_enemy.IsPlayerInChaseRange())
+                        if (_enemy.IsRooted)
+                            ChangeState(EnemyState.Rooted);
+                        else if (_enemy.IsPlayerInChaseRange())
                             ChangeState(EnemyState.Chase);
                         else
                             ChangeState(EnemyState.Move);
                     }
+                    break;
+
+                case EnemyState.Rooted:
+                    if (_enemy.IsPlayerInAttackRange())
+                        ChangeState(EnemyState.Attack);
                     break;
 
                 case EnemyState.TakingDamage:
@@ -181,6 +188,7 @@ namespace Obrissom.Enemy
                     break;
 
                 case EnemyState.Stunned:
+                case EnemyState.Rooted:
                     if (agentActive) _agent.isStopped = true;
                     break;
 

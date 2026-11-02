@@ -7,7 +7,7 @@ namespace Obrissom.UI
         public static SuppUIManager Instance { get; private set; }
 
         [SerializeField] private GameObject _healCircle;
-        
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
