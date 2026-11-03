@@ -141,6 +141,7 @@ namespace Obrissom.Enemy
 
         private void OnRootedSyncedChanged(bool previous, bool current)
         {
+            if (_rootEffect == null) return;
             if (current)
             {
                 _rootEffect?.Play();

@@ -49,7 +49,7 @@ public class ChannelMagicProjectile : SkillBehaviour
         dpsCombat.ChannelMagicProjectileServerRpc(spawnPosition, directionToTarget, skillData.minEffectValue, skillData.maxEffectValue, _speed, _lifeTime);
     }
 
-    // called on dpsCombat
+    // called on DPSCombat
     public static void ExecuteOnServer(GameObject caster, Vector3 spawnPosition, Vector3 directionToTarget, int minDamage, int maxDamage, float speed, float lifeTime)
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();

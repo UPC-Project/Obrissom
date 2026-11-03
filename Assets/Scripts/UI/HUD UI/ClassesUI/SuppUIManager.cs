@@ -7,6 +7,7 @@ namespace Obrissom.UI
         public static SuppUIManager Instance { get; private set; }
 
         [SerializeField] private GameObject _healCircle;
+        [SerializeField] private GameObject _crosshair;
 
         private void Awake()
         {
@@ -20,5 +21,6 @@ namespace Obrissom.UI
         }
 
         public GameObject GetHealCircle() => _healCircle;
+        public GameObject GetCrosshair() => _crosshair;
     }
 }

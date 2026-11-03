@@ -752,12 +752,14 @@ namespace Obrissom.Enemy
             return offset.magnitude;
         }
 
-        private static bool IsValidTarget(Transform target) =>
-            target != null
+        private static bool IsValidTarget(Transform target)
+        {
+            return target != null
             && target.gameObject.activeInHierarchy
             && target.TryGetComponent(out PlayerCombat player)
             && IsAlive(player)
             && player.IsTargetable;
+        }
 
         private static bool IsAlive(PlayerCombat player) => player._health.Value > 0f;
 

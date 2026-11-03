@@ -2,26 +2,28 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider), typeof(MeshRenderer))]
+[RequireComponent(typeof(Collider))]
 public class ProjectileTrigger : NetworkBehaviour
 {
     public event Action<Collider> OnHit;
 
-    [SerializeField] private Renderer _renderer;
-    [SerializeField] private Collider _collider;
-    [SerializeField] private ParticleSystem _fire;
-    [SerializeField] private ParticleSystem _smoke;
-    [SerializeField] private ParticleSystem _sparks;
+    private Renderer[] _renderers;
+    private Collider[] _colliders;
+    private ParticleSystem[] _particleSystems;
+
+    private void Awake()
+    {
+        _renderers = GetComponentsInChildren<Renderer>(true);
+        _colliders = GetComponentsInChildren<Collider>(true);
+        _particleSystems = GetComponentsInChildren<ParticleSystem>(true);
+    }
+
     public override void OnNetworkSpawn()
     {
-        _renderer = GetComponent<Renderer>();
-        _collider = GetComponent<Collider>();
-
-        // clients joins after projectiles where spawn by the pool
+        // clients joins after projectiles were spawn by the pool
         if (!IsServer)
         {
-            _renderer.enabled = false;
-            _collider.enabled = false;
+            SetComponentsEnabled(false);
         }
     }
 
@@ -36,27 +38,41 @@ public class ProjectileTrigger : NetworkBehaviour
     [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
     public void SetActiveClientRpc(bool visible)
     {
-        if (_renderer != null) _renderer.enabled = visible;
-        if (_collider != null) _collider.enabled = visible;
+        SetComponentsEnabled(visible);
 
+        if (_particleSystems == null || _particleSystems.Length == 0)
+            _particleSystems = GetComponentsInChildren<ParticleSystem>(true);
 
-        if (_fire != null)
+        foreach (var ps in _particleSystems)
         {
-            var emission = _fire.emission;
-            emission.enabled = visible; 
-        }
+            if (ps == null) continue;
 
-        if (_smoke != null)
-        {
-            var emission = _smoke.emission;
+            var emission = ps.emission;
             emission.enabled = visible;
-        }
 
-        if (_sparks != null)
-        {
-            var emission = _sparks.emission;
-            emission.enabled = visible;
+            if (visible)
+            {
+                ps.Play(true);
+            }
+            else
+            {
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
         }
     }
 
+    private void SetComponentsEnabled(bool isEnabled)
+    {
+        if (_renderers != null)
+        {
+            foreach (var r in _renderers)
+                if (r != null) r.enabled = isEnabled;
+        }
+
+        if (_colliders != null)
+        {
+            foreach (var c in _colliders)
+                if (c != null) c.enabled = isEnabled;
+        }
+    }
 }
