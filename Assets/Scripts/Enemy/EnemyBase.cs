@@ -67,12 +67,19 @@ namespace Obrissom.Enemy
         private float _tauntTimer;
         public bool IsTaunted => _forcedTarget != null;
         protected Transform ForcedTarget => _forcedTarget;
+        public bool IsRooted => _isRootedSynced.Value;
 
         // Synced so all clients play the death animation
         private readonly NetworkVariable<bool> _isDeadSynced = new NetworkVariable<bool>(false);
+        private readonly NetworkVariable<bool> _isStunnedSynced = new NetworkVariable<bool>(false);
+        private readonly NetworkVariable<bool> _isRootedSynced = new NetworkVariable<bool>(false);
 
         // Lifecycle
         protected EnemyStateMachine _stateMachine;
+
+        [Header("Debuff effects")]
+        [SerializeField] private ParticleSystem _stunEffect;
+        [SerializeField] private ParticleSystem _rootEffect;
 
 
         protected virtual void Awake()
@@ -91,6 +98,9 @@ namespace Obrissom.Enemy
             _isDeadSynced.OnValueChanged += OnDeadSyncedChanged;
             if (_isDeadSynced.Value) _enemyAnimation.PlayDeathAnimation();
 
+            _isStunnedSynced.OnValueChanged += OnStunnedSyncedChanged;
+            _isRootedSynced.OnValueChanged += OnRootedSyncedChanged;
+
             if (!IsServer) return;
 
             _agent.enabled = true;
@@ -106,11 +116,40 @@ namespace Obrissom.Enemy
         public override void OnNetworkDespawn()
         {
             _isDeadSynced.OnValueChanged -= OnDeadSyncedChanged;
+            _isStunnedSynced.OnValueChanged -= OnStunnedSyncedChanged;
+            _isRootedSynced.OnValueChanged -= OnRootedSyncedChanged;
         }
 
         private void OnDeadSyncedChanged(bool previous, bool current)
         {
             if (current) _enemyAnimation.PlayDeathAnimation();
+        }
+
+        private void OnStunnedSyncedChanged(bool previous, bool current)
+        {
+            if (current)
+            {
+                _stunEffect?.Play();
+                _enemyAnimation?.SetStunned(true);
+            }
+            else
+            {
+                _stunEffect?.Stop();
+                _enemyAnimation?.SetStunned(false);
+            }
+        }
+
+        private void OnRootedSyncedChanged(bool previous, bool current)
+        {
+            if (_rootEffect == null) return;
+            if (current)
+            {
+                _rootEffect?.Play();
+            }
+            else
+            {
+                _rootEffect?.Stop();
+            }
         }
 
         protected virtual void Update()
@@ -134,6 +173,22 @@ namespace Obrissom.Enemy
 
         //Detection
 
+        public virtual bool IsValidTarget(Transform target)
+        {
+            if (target == null) return false;
+            PlayerCombat player = target.GetComponentInParent<PlayerCombat>();
+            return player != null && player.IsTargetable;
+        }
+
+        public virtual void ClearTarget()
+        {
+            _target = null;
+            if (_stateMachine != null && _stateMachine.CurrentState == EnemyState.Attack)
+            {
+                CancelAttack();
+            }
+        }
+
         /// <summary>
         /// Detects the nearest player within chase range and assigns it as target.
         /// Called from the state machine eval loop, not every frame.
@@ -153,11 +208,14 @@ namespace Obrissom.Enemy
 
             foreach (var hit in hits)
             {
-                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                PlayerCombat player = hit.GetComponentInParent<PlayerCombat>();
+                if (player == null || !player.IsTargetable) continue;
+
+                float dist = Vector3.Distance(transform.position, player.transform.position);
                 if (dist < closestDistance)
                 {
                     closestDistance = dist;
-                    closest = hit.transform;
+                    closest = player.transform;
                 }
             }
 
@@ -165,10 +223,10 @@ namespace Obrissom.Enemy
         }
 
         public virtual bool IsPlayerInChaseRange() =>
-            _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.chaseRange;
+            _target != null && IsValidTarget(_target) && Vector3.Distance(transform.position, _target.position) <= _stats.chaseRange;
 
         public virtual bool IsPlayerInAttackRange() =>
-            _target != null && Vector3.Distance(transform.position, _target.position) <= _stats.attackRange;
+            _target != null && IsValidTarget(_target) && Vector3.Distance(transform.position, _target.position) <= _stats.attackRange;
 
         //Combat 
 
@@ -190,7 +248,7 @@ namespace Obrissom.Enemy
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             PlaySoundForEveryone(type == EffectType.PhysicDamage ? AudioID.HitPhysical : AudioID.HitMagic, hitPos);
-            bool staggered = !IsStaggerImmune;
+            bool staggered = !IsStaggerImmune && _stateMachine.CurrentState != EnemyState.Stunned;
             if (staggered) _stateMachine.ChangeState(EnemyState.TakingDamage);
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
@@ -213,6 +271,8 @@ namespace Obrissom.Enemy
         // Server only
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
         protected void PlayAttackAnimationRpc() => _enemyAnimation.PlayAttackAnimation();
+
+        public virtual void CancelAttack() => _enemyAnimation?.CancelAttack();
 
         /// <summary>
         /// Server only. Plays a 3D sound on every client. Silent if the prefab has no NetworkSoundEmitter.
@@ -244,6 +304,68 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Debuff system
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void ApplyDebuffRpc(DebuffType debuff, float duration)
+        {
+            if (_isDead) return;
+            StartCoroutine(DebuffRoutine(debuff, duration));
+        }
+
+        private System.Collections.IEnumerator DebuffRoutine(DebuffType debuff, float duration)
+        {
+            ApplyDebuffEffect(debuff);
+            yield return new WaitForSeconds(duration);
+            RemoveDebuffEffect(debuff);
+        }
+
+        // Here add animation trigger por each debuff
+        protected virtual void ApplyDebuffEffect(DebuffType debuff)
+        {
+            switch (debuff)
+            {
+                case DebuffType.Stun:
+                    CancelAttack();
+                    _stateMachine.ChangeState(EnemyState.Stunned);
+                    _isStunnedSynced.Value = true;
+                    break;
+                case DebuffType.Root:
+                    if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = true;
+                    _stateMachine.ChangeState(EnemyState.Rooted);
+                    _isRootedSynced.Value = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Removes the effect of a debuff and restores normal behaviour.
+        protected virtual void RemoveDebuffEffect(DebuffType debuff)
+        {
+            if (_isDead) return;
+
+            switch (debuff)
+            {
+                case DebuffType.Stun:
+                    if (_stateMachine.CurrentState != EnemyState.Stunned) break;
+                    _isStunnedSynced.Value = false;
+                    break;
+                case DebuffType.Root:
+                    _isRootedSynced.Value = false;
+                    if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = false;
+                    break;
+                default:
+                    break;
+            }
+            if (IsPlayerInAttackRange())
+                _stateMachine.ChangeState(EnemyState.Attack);
+            else if (IsPlayerInChaseRange())
+                _stateMachine.ChangeState(EnemyState.Chase);
+            else
+                _stateMachine.ChangeState(EnemyState.Idle);
+        }
+
         /// <summary>
         /// Returns a random damage value within the configured range.
         /// </summary>
@@ -257,6 +379,8 @@ namespace Obrissom.Enemy
             _stateMachine.ChangeState(EnemyState.Dead);
 
             _isDeadSynced.Value = true;
+            _isStunnedSynced.Value = false;
+            _isRootedSynced.Value = false;
 
             DropLoot();
 
@@ -269,7 +393,7 @@ namespace Obrissom.Enemy
             StartCoroutine(DespawnRoutine());
         }
 
-        //Loot
+        // Loot
 
         private void DropLoot()
         {
@@ -281,7 +405,7 @@ namespace Obrissom.Enemy
         //TODO
         //}
 
-        //Patrol
+        // Patrol
 
         public virtual void SetPatrolPoints(GameObject[] points)
         {
@@ -291,8 +415,10 @@ namespace Obrissom.Enemy
         // Called once when entering Move state
         public void MoveToNextPatrolPoint()
         {
+            if (_isRootedSynced.Value) return;
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_patrolPoints[_currentPatrolIndex] == null) return;
+            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
 
             Vector3 destination = _patrolPoints[_currentPatrolIndex].transform.position;
             Vector2 offset = Random.insideUnitCircle * _wanderRadius;
@@ -306,6 +432,7 @@ namespace Obrissom.Enemy
         {
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_isWaypointPausing) return;
+            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
             if (_agent.pathPending || _agent.remainingDistance >= 0.5f) return;
 
             _isWaypointPausing = true;
@@ -314,7 +441,7 @@ namespace Obrissom.Enemy
 
         private System.Collections.IEnumerator WaypointPauseRoutine()
         {
-            _agent.isStopped = true;
+            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = true;
 
             int lookCount = Random.Range(1, 3);
             for (int i = 0; i < lookCount; i++)
@@ -340,7 +467,7 @@ namespace Obrissom.Enemy
 
             if (_stateMachine.CurrentState != EnemyState.Move) yield break;
 
-            _agent.isStopped = false;
+            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = false;
             _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
             MoveToNextPatrolPoint();
         }
@@ -353,11 +480,15 @@ namespace Obrissom.Enemy
 
         public virtual void OnChaseStateTick()
         {
-            if (_target != null) _agent.SetDestination(_target.position);
+            if (_isRootedSynced.Value) return;
+            if (_target != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh) 
+            {
+                _agent.SetDestination(_target.position);
+            }
         }
 
         public virtual float GetMoveSpeed(EnemyState state) =>
-            state == EnemyState.Chase ? _stats.moveSpeed * _stats.chaseSpeedMultiplier : _stats.moveSpeed;
+            _isRootedSynced.Value ? 0f : (state == EnemyState.Chase ? _stats.moveSpeed * _stats.chaseSpeedMultiplier : _stats.moveSpeed);
 
         public virtual void OnStateChanged(EnemyState previous, EnemyState current) { }
 

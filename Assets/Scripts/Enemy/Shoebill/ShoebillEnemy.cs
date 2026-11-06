@@ -174,8 +174,26 @@ namespace Obrissom.Enemy
 
         public override float GetMoveSpeed(EnemyState state) => base.GetMoveSpeed(state) * _speedMultiplier;
 
+        public override void CancelAttack()
+        {
+            base.CancelAttack();
+            if (_attackRoutine != null)
+            {
+                StopCoroutine(_attackRoutine);
+                _attackRoutine = null;
+            }
+            ReleaseAttackSlot();
+            FinishAttack();
+            CancelAttackAnimationRpc();
+        }
+
         public override void OnStateChanged(EnemyState previous, EnemyState current)
         {
+            if (current == EnemyState.Stunned)
+            {
+                CancelAttack();
+            }
+
             if (previous == EnemyState.Move && _herd != null) _herd.ReleaseDestination(this);
 
             bool justSpotted = current == EnemyState.Chase
@@ -297,7 +315,7 @@ namespace Obrissom.Enemy
             for (int i = 0; i < count; i++)
             {
                 PlayerCombat player = s_overlapHits[i].GetComponentInParent<PlayerCombat>();
-                if (player == null || player.transform == best || !IsAlive(player)) continue;
+                if (player == null || player.transform == best || !IsAlive(player) || !player.IsTargetable) continue;
 
                 float score = ScoreTarget(player.transform);
                 if (score < bestScore)
@@ -734,11 +752,14 @@ namespace Obrissom.Enemy
             return offset.magnitude;
         }
 
-        private static bool IsValidTarget(Transform target) =>
-            target != null
+        private static bool IsValidTarget(Transform target)
+        {
+            return target != null
             && target.gameObject.activeInHierarchy
             && target.TryGetComponent(out PlayerCombat player)
-            && IsAlive(player);
+            && IsAlive(player)
+            && player.IsTargetable;
+        }
 
         private static bool IsAlive(PlayerCombat player) => player._health.Value > 0f;
 

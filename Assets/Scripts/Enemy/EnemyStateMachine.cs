@@ -43,7 +43,7 @@ namespace Obrissom.Enemy
                            || CurrentState == EnemyState.Attack
                            || _enemy.IsRetreating;
 
-            if (shouldFace && _enemy.CanFaceTarget && _enemy.Target != null)
+            if (shouldFace && _enemy.CanFaceTarget && _enemy.Target != null && _enemy.IsValidTarget(_enemy.Target))
                 FaceTarget(_enemy.Target.position);
         }
 
@@ -69,6 +69,12 @@ namespace Obrissom.Enemy
         private void EvaluateTransitions()
         {
             if (_enemy.IsRetreating) return;
+
+            if (_enemy.Target != null && !_enemy.IsValidTarget(_enemy.Target))
+            {
+                _enemy.ClearTarget();
+            }
+
             switch (CurrentState)
             {
                 case EnemyState.Idle:
@@ -92,10 +98,23 @@ namespace Obrissom.Enemy
 
                 case EnemyState.Attack:
                     if (!_enemy.IsPlayerInAttackRange())
-                        ChangeState(EnemyState.Chase);
+                    {
+                        if (_enemy.IsRooted)
+                            ChangeState(EnemyState.Rooted);
+                        else if (_enemy.IsPlayerInChaseRange())
+                            ChangeState(EnemyState.Chase);
+                        else
+                            ChangeState(EnemyState.Move);
+                    }
+                    break;
+
+                case EnemyState.Rooted:
+                    if (_enemy.IsPlayerInAttackRange())
+                        ChangeState(EnemyState.Attack);
                     break;
 
                 case EnemyState.TakingDamage:
+                case EnemyState.Stunned:
                 case EnemyState.Dead:
                     break;
             }
@@ -133,35 +152,48 @@ namespace Obrissom.Enemy
 
         private void OnStateEnter(EnemyState state)
         {
+            bool agentActive = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
+
             switch (state)
             {
                 case EnemyState.Idle:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     StartCoroutine(IdleTimer());
                     break;
 
                 case EnemyState.Move:
-                    _agent.isStopped = false;
-                    _agent.speed = _enemy.GetMoveSpeed(EnemyState.Move);
+                    if (agentActive)
+                    {
+                        _agent.isStopped = false;
+                        _agent.speed = _enemy.GetMoveSpeed(EnemyState.Move);
+                    }
                     _enemy.OnMoveStateEnter();
                     break;
 
                 case EnemyState.Chase:
-                    _agent.isStopped = false;
-                    _agent.speed = _enemy.GetMoveSpeed(EnemyState.Chase);
+                    if (agentActive)
+                    {
+                        _agent.isStopped = false;
+                        _agent.speed = _enemy.GetMoveSpeed(EnemyState.Chase);
+                    }
                     break;
 
                 case EnemyState.Attack:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     break;
 
                 case EnemyState.TakingDamage:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     StartCoroutine(TakingDamageExit());
                     break;
 
+                case EnemyState.Stunned:
+                case EnemyState.Rooted:
+                    if (agentActive) _agent.isStopped = true;
+                    break;
+
                 case EnemyState.Dead:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     if (_evalLoopCoroutine != null)
                         StopCoroutine(_evalLoopCoroutine);
                     break;
@@ -211,3 +243,4 @@ namespace Obrissom.Enemy
         }
     }
 }
+

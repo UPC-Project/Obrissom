@@ -12,11 +12,16 @@ namespace Obrissom.Player
         [Min(0)] public NetworkVariable<float> _resource = 
             new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
+        [Header("Targeting and Invulnerability")]
+        public NetworkVariable<bool> _isInvulnerable = new NetworkVariable<bool>(
+            false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> _isTargetable = new NetworkVariable<bool>(
+            true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
         // Components
         private PlayerStats _playerStats;
         private UI.HealthAndResourceUI _healthAndResourceUI;
-
-        private bool _isInvulnerable = false;
+        protected PlayerHealPopUp _healPopUp;
 
         #endregion
 
@@ -27,6 +32,7 @@ namespace Obrissom.Player
         private void Awake()
         {
             _playerStats = GetComponent<PlayerStats>();
+            _healPopUp = GetComponent<PlayerHealPopUp>();
         }
 
         public override void OnNetworkSpawn()
@@ -85,7 +91,9 @@ namespace Obrissom.Player
             }
         }
 
-        public void SetInvulnerable(bool value) => _isInvulnerable = value;
+        public void SetInvulnerable(bool value) => _isInvulnerable.Value = value;
+        public void SetTargetable(bool value) => _isTargetable.Value = value;
+        public bool IsTargetable => _isTargetable.Value && _health.Value > 0f;
 
         public bool TryConsumeResource(int cost, bool consume = true)
         {
@@ -101,7 +109,7 @@ namespace Obrissom.Player
 
         public void TakeDamage(float damageAmount, EffectType damageType)
         {
-            if (_isInvulnerable) return;
+            if (_isInvulnerable.Value) return;
 
             if (!IsServer) return;
 
@@ -120,28 +128,49 @@ namespace Obrissom.Player
             }
         }
 
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void HealRpc(float healAmount, bool isCritic)
+        {
+            if (!IsServer) return;
+            _health.Value = Mathf.Min(_health.Value + healAmount, _playerStats.maxHealth.Value);
+
+            _healPopUp.ShowPopUpClientRpc(healAmount.ToString(), isCritic);
+        }
+
         public (int, bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
         {
-            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
+            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage + 1);
             float damage = (attackDamage + _playerStats.bonusPhysicalAttack) * _playerStats.physicalAttackMultiplier;
-            bool isCritical = Random.value < _playerStats.criticalChance;
-            if (isCritical)
+            bool isCritic = Random.value < _playerStats.criticalChance;
+            if (isCritic)
             {
                 damage *= _playerStats.criticalDamage;
             }
-            return (Mathf.RoundToInt(damage), isCritical);
+            return (Mathf.RoundToInt(damage), isCritic);
         }
 
         public (int, bool) CalculateMagicDamage(int minAttackDamage, int maxAttackDamage)
         {
-            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage);
+            int attackDamage = Random.Range(minAttackDamage, maxAttackDamage + 1);
             float damage = (attackDamage + _playerStats.bonusMagicAttack) * _playerStats.magicAttackMultiplier;
-            bool isCritical = Random.value < _playerStats.criticalChance;
-            if (isCritical)
+            bool isCritic = Random.value < _playerStats.criticalChance;
+            if (isCritic)
             {
                 damage *= _playerStats.criticalDamage;
             }
-            return (Mathf.RoundToInt(damage), isCritical);
+            return (Mathf.RoundToInt(damage), isCritic);
+        }
+
+        public (int, bool) CalculateHeal(int minHeal, int maxHeal)
+        {
+            int baseHeal = Random.Range(minHeal, maxHeal + 1);
+            float heal = (baseHeal + _playerStats.bonusHeal) * _playerStats.magicAttackMultiplier;
+            bool isCritic = Random.value < _playerStats.criticalChance;
+            if (isCritic)
+            {
+                heal *= _playerStats.criticalDamage;
+            }
+            return (Mathf.RoundToInt(heal), isCritic);
         }
 
         public Vector3 GetAimPosition()
@@ -161,3 +190,4 @@ namespace Obrissom.Player
     }
 
 }
+
