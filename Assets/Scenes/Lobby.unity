@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 78c8a894637320740a4cb24d51073ba3, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: b5e6dfbc3d8eb4048964ab259502b22a, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -130,6 +130,10 @@ PrefabInstance:
     - target: {fileID: 5864037298088040992, guid: 2a83f1ef4bd67f84e9f198d57acdc416, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5864037298088040992, guid: 2a83f1ef4bd67f84e9f198d57acdc416, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6497267603488997530, guid: 2a83f1ef4bd67f84e9f198d57acdc416, type: 3}
       propertyPath: m_LocalPosition.x
@@ -195,6 +199,10 @@ PrefabInstance:
     - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_04 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2924202890548066459, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_LocalPosition.x
@@ -301,6 +309,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -326,7 +338,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &21501920
 Transform:
@@ -378,7 +390,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &33506006
 Transform:
@@ -432,7 +444,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &42748418
 Transform:
@@ -482,12 +494,12 @@ GameObject:
   - component: {fileID: 54111853}
   - component: {fileID: 54111852}
   m_Layer: 0
-  m_Name: Point Light
+  m_Name: Green Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &54111852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567,7 +579,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -610,9 +622,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -676,6 +716,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_group_00
       objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -114.14325
@@ -734,9 +778,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -835,6 +907,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -897,6 +973,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -922,7 +1002,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &100403264
 Transform:
@@ -975,7 +1055,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &103912235
 Transform:
@@ -1033,7 +1113,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &108800860
 Transform:
@@ -1082,6 +1162,10 @@ PrefabInstance:
     - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_small (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1185,6 +1269,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_medium (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1138167453354288073, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1498406977229308444, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1220,7 +1308,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &117806981
 Transform:
@@ -1310,6 +1398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_yellow_grass_04
       objectReference: {fileID: 0}
+    - target: {fileID: 875848935828765082, guid: 4002c2ed5ddd4fa44830406e51e81cc6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1379,6 +1471,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1404,7 +1500,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &156525215
 Transform:
@@ -1450,9 +1546,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1510,6 +1634,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1569,9 +1697,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1675,6 +1831,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (37)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1696,6 +1856,10 @@ PrefabInstance:
     - target: {fileID: 7376447614372616850, guid: 28296661d6c105f44af3c0c0dead840d, type: 3}
       propertyPath: m_Name
       value: shared_green_grass_00
+      objectReference: {fileID: 0}
+    - target: {fileID: 7376447614372616850, guid: 28296661d6c105f44af3c0c0dead840d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7860391762584748072, guid: 28296661d6c105f44af3c0c0dead840d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1825,6 +1989,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1887,6 +2055,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1912,7 +2084,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &229112974
 Transform:
@@ -2002,6 +2174,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2064,6 +2240,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2089,7 +2269,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &252542340
 Transform:
@@ -2232,6 +2412,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_small (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -290.01807
@@ -2293,6 +2477,10 @@ PrefabInstance:
     - target: {fileID: 1207150486672831795, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
       propertyPath: m_Name
       value: shared_stonewall_00 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1207150486672831795, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1984812364404535177, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
       propertyPath: m_LocalScale.x
@@ -2368,6 +2556,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_yellow_grass_02
       objectReference: {fileID: 0}
+    - target: {fileID: 6177989416583641710, guid: b1ee7c3b716dad743ab1277458093fdc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6843061341748945108, guid: b1ee7c3b716dad743ab1277458093fdc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -101.43416
@@ -2429,6 +2621,10 @@ PrefabInstance:
     - target: {fileID: 5854498320218725159, guid: a31acd90a96ed174ba5ef4aff2de23d1, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_standard
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854498320218725159, guid: a31acd90a96ed174ba5ef4aff2de23d1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6517988048623518109, guid: a31acd90a96ed174ba5ef4aff2de23d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2527,6 +2723,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (35)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2589,6 +2789,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2614,7 +2818,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &302155113
 Transform:
@@ -2666,7 +2870,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &306290524
 Transform:
@@ -2707,6 +2911,10 @@ PrefabInstance:
     - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_square_fence (72)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2810,6 +3018,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_stick_fance_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 842370646820354542, guid: 53a6443d46b690040852c714dae54de3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2875,6 +3087,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2896,6 +3112,10 @@ PrefabInstance:
     - target: {fileID: 3872114531789558248, guid: 82c4b083502bf7348b4eaa376f80e747, type: 3}
       propertyPath: m_Name
       value: shared_stonewall_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872114531789558248, guid: 82c4b083502bf7348b4eaa376f80e747, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4537186452655672146, guid: 82c4b083502bf7348b4eaa376f80e747, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2999,6 +3219,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (32)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3024,7 +3248,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &365608059
 Transform:
@@ -3070,9 +3294,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (24)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3130,6 +3382,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3189,9 +3445,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3253,7 +3537,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &383701489
 Transform:
@@ -3307,6 +3591,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3366,9 +3654,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3447,7 +3763,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!64 &412925330
 MeshCollider:
@@ -3555,6 +3871,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_stonewall_00
       objectReference: {fileID: 0}
+    - target: {fileID: 1207150486672831795, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1984812364404535177, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
       propertyPath: m_LocalPosition.x
       value: -27.04419
@@ -3620,7 +3940,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &432374771
 Transform:
@@ -3710,6 +4030,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3784,6 +4108,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3817,9 +4145,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3881,7 +4237,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &459085722
 Transform:
@@ -3930,6 +4286,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4033,6 +4393,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_green_grassflower_00
       objectReference: {fileID: 0}
+    - target: {fileID: 8991027132114958516, guid: 3cc470a46921c8a40a39ea0a15d4ae15, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4089,6 +4453,10 @@ PrefabInstance:
     - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
       propertyPath: m_Name
       value: Log_Wall (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4152,6 +4520,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_stonewall_08
       objectReference: {fileID: 0}
+    - target: {fileID: 6692756210668181588, guid: 72e56509345063a458f178f8735c33fb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4177,7 +4549,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &495998393
 Transform:
@@ -4235,7 +4607,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &502458464
 Transform:
@@ -4325,6 +4697,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4343,9 +4719,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (31)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4449,6 +4853,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4474,7 +4882,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &510028050
 Transform:
@@ -4526,7 +4934,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &512173774
 Transform:
@@ -4570,7 +4978,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &520441820
 Transform:
@@ -4619,6 +5027,10 @@ PrefabInstance:
     - target: {fileID: 110536267909783289, guid: 83a38e560fc51e04abd731ad6ba06107, type: 3}
       propertyPath: m_Name
       value: ruraltown_bridge_large
+      objectReference: {fileID: 0}
+    - target: {fileID: 110536267909783289, guid: 83a38e560fc51e04abd731ad6ba06107, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 775574108954887235, guid: 83a38e560fc51e04abd731ad6ba06107, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4687,7 +5099,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &522127916
 Transform:
@@ -4740,7 +5152,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &523907714
 Transform:
@@ -4789,6 +5201,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4855,7 +5271,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &540303850
 Transform:
@@ -4950,6 +5366,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5012,6 +5432,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (44)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5036,7 +5460,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &579161006
 Transform:
@@ -5152,6 +5576,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (26)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5200,9 +5628,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (29)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5271,6 +5727,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_yellow_grass_01
       objectReference: {fileID: 0}
+    - target: {fileID: 386109923286100406, guid: 5e8d250f2febb1046a571fd311288439, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1013428944449893132, guid: 5e8d250f2febb1046a571fd311288439, type: 3}
       propertyPath: m_LocalPosition.x
       value: -102.7023
@@ -5336,7 +5796,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &664522338
 Transform:
@@ -5426,6 +5886,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (28)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5508,7 +5972,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &688136087
 Transform:
@@ -5598,6 +6062,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (27)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5659,6 +6127,10 @@ PrefabInstance:
     - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_00
+      objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5727,6 +6199,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_stonewall_08 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6692756210668181588, guid: 72e56509345063a458f178f8735c33fb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5784,6 +6260,10 @@ PrefabInstance:
     - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_square_fence (74)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5849,7 +6329,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &712232529
 Transform:
@@ -5919,6 +6399,10 @@ PrefabInstance:
     - target: {fileID: 1138167453354288073, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_medium (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1138167453354288073, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1498406977229308444, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5997,6 +6481,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (33)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6022,7 +6510,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &751297494
 Transform:
@@ -6077,7 +6565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &774141557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6157,7 +6645,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -6297,6 +6785,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_medium (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 1138167453354288073, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1498406977229308444, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -6332,7 +6824,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &791916815
 Transform:
@@ -6456,6 +6948,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_small
       objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -336.5079
@@ -6563,6 +7059,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_broken_square_fence
       objectReference: {fileID: 0}
+    - target: {fileID: 4584081591608604538, guid: 39ec7f37a002ad84fa96ed722bc8145d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6624,6 +7124,10 @@ PrefabInstance:
     - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
       propertyPath: m_Name
       value: Log_Wall (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6692,6 +7196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (43)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6710,9 +7218,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6816,6 +7352,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_stonewall_01
       objectReference: {fileID: 0}
+    - target: {fileID: 3396020269036080184, guid: 5dd722cf80fafde41808016331f5ca3a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6878,6 +7418,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6903,7 +7447,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &905956652
 Transform:
@@ -6993,6 +7537,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7055,6 +7603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7116,6 +7668,10 @@ PrefabInstance:
     - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
       propertyPath: m_Name
       value: Log_Wall (25)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7192,9 +7748,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7249,9 +7833,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7315,6 +7927,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_square_fence (71)
       objectReference: {fileID: 0}
+    - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -138.87225
@@ -7373,9 +7989,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7433,6 +8077,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7536,6 +8184,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (40)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7557,6 +8209,10 @@ PrefabInstance:
     - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_04 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2924202890548066459, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7646,7 +8302,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &962992146
 Transform:
@@ -7707,6 +8363,10 @@ PrefabInstance:
     - target: {fileID: 3872114531789558248, guid: 82c4b083502bf7348b4eaa376f80e747, type: 3}
       propertyPath: m_Name
       value: shared_stonewall_02 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872114531789558248, guid: 82c4b083502bf7348b4eaa376f80e747, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4537186452655672146, guid: 82c4b083502bf7348b4eaa376f80e747, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7773,7 +8433,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1004345724
 Transform:
@@ -7822,6 +8482,10 @@ PrefabInstance:
     - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_square_fence (73)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7925,6 +8589,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (36)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7987,6 +8655,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_small_01
       objectReference: {fileID: 0}
+    - target: {fileID: 6570975687650119351, guid: 150c474d6df8b4f42825bd3b2542428e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8013,6 +8685,10 @@ PrefabInstance:
     - target: {fileID: 3677571373724487402, guid: e5567f8064c39374bb97de096d0d6cc7, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 3677571373724487402, guid: e5567f8064c39374bb97de096d0d6cc7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4053955457915425872, guid: e5567f8064c39374bb97de096d0d6cc7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8103,7 +8779,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1097724182
 Transform:
@@ -8161,7 +8837,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1104700513
 Transform:
@@ -8251,6 +8927,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_yellow_grass_00
       objectReference: {fileID: 0}
+    - target: {fileID: 4371647943674163831, guid: a7e2c4b616516bc47a00170d2ec39cdb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8308,6 +8988,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8334,6 +9018,10 @@ PrefabInstance:
     - target: {fileID: 5066232313255626503, guid: dbc3118d80ee30248a74e46884d8d12c, type: 3}
       propertyPath: m_Name
       value: ruraltown_roundabout
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066232313255626503, guid: dbc3118d80ee30248a74e46884d8d12c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5549859566248091069, guid: dbc3118d80ee30248a74e46884d8d12c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8399,6 +9087,10 @@ PrefabInstance:
     - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_square_fence (73)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079026683867767094, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8502,9 +9194,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: lilypad (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d54cd0bac3ada8d4c9c79d05b79cab9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7013099432040996905, guid: d54cd0bac3ada8d4c9c79d05b79cab9b, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7013099432040996905, guid: d54cd0bac3ada8d4c9c79d05b79cab9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8527,6 +9227,10 @@ PrefabInstance:
     - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_04 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2924202890548066459, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8617,7 +9321,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1152201331
 Transform:
@@ -8670,7 +9374,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1164720161
 Transform:
@@ -8723,7 +9427,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1193622810
 Transform:
@@ -8769,9 +9473,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9068,6 +9800,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_stick_fance_04
       objectReference: {fileID: 0}
+    - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 2924202890548066459, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_LocalPosition.x
       value: -118.54947
@@ -9157,7 +9893,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1288756673
 Transform:
@@ -9208,9 +9944,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9296,6 +10060,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_small (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -314.90225
@@ -9359,9 +10127,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9419,6 +10215,10 @@ PrefabInstance:
     - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_small
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9527,6 +10327,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9548,6 +10352,10 @@ PrefabInstance:
     - target: {fileID: 1207150486672831795, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
       propertyPath: m_Name
       value: shared_stonewall_00 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1207150486672831795, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1984812364404535177, guid: 3ff0369487e893c47954db2466cf6357, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9651,6 +10459,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9718,6 +10530,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9739,6 +10555,10 @@ PrefabInstance:
     - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_small (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9842,6 +10662,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (38)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9903,6 +10727,10 @@ PrefabInstance:
     - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
       propertyPath: m_Name
       value: Log_Wall (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9966,6 +10794,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9999,6 +10831,10 @@ PrefabInstance:
     - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_small
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10091,7 +10927,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1431231286
 Transform:
@@ -10185,6 +11021,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f19c2ec5b9c2c3540aef4d5fd0b9b251, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10203,9 +11043,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10272,7 +11140,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1496108482
 Transform:
@@ -10323,9 +11191,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10387,7 +11283,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1525290485
 Transform:
@@ -10477,6 +11373,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_green_grass_02
       objectReference: {fileID: 0}
+    - target: {fileID: 3134908827931087671, guid: 73bb2badf10ae4b458dbf98162966c08, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10497,7 +11397,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1552934009
 Transform:
@@ -10587,6 +11487,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10612,7 +11516,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1585701483
 Transform:
@@ -10858,7 +11762,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1605893418
 Transform:
@@ -10904,9 +11808,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11005,6 +11937,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11031,6 +11967,10 @@ PrefabInstance:
     - target: {fileID: 110536267909783289, guid: 83a38e560fc51e04abd731ad6ba06107, type: 3}
       propertyPath: m_Name
       value: ruraltown_bridge_large
+      objectReference: {fileID: 0}
+    - target: {fileID: 110536267909783289, guid: 83a38e560fc51e04abd731ad6ba06107, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 775574108954887235, guid: 83a38e560fc51e04abd731ad6ba06107, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11104,6 +12044,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_small (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6466613009718968958, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -288.6026
@@ -11174,9 +12118,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11231,9 +12203,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11332,6 +12332,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_stonewall_04
       objectReference: {fileID: 0}
+    - target: {fileID: 699613785808367337, guid: 812e0d68946626247946170cf4f7b61c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11394,6 +12398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (34)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11419,7 +12427,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1658390793
 Transform:
@@ -11471,7 +12479,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1669846319
 Transform:
@@ -11559,6 +12567,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11621,6 +12633,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11651,7 +12667,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1688906193
 Transform:
@@ -11703,7 +12719,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1697019471
 Transform:
@@ -11832,7 +12848,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1711918775
 Transform:
@@ -11885,7 +12901,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1715082839
 Transform:
@@ -11938,7 +12954,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1717080198
 Transform:
@@ -12028,6 +13044,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12049,6 +13069,10 @@ PrefabInstance:
     - target: {fileID: 7369335170057890773, guid: 4425b179c55a1804bbef86c1c7692b91, type: 3}
       propertyPath: m_Name
       value: shared_stonewall_07 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369335170057890773, guid: 4425b179c55a1804bbef86c1c7692b91, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7858486570731942255, guid: 4425b179c55a1804bbef86c1c7692b91, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12281,6 +13305,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12343,6 +13371,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_yellow_grass_03
       objectReference: {fileID: 0}
+    - target: {fileID: 9102587573065758103, guid: c3072cf788e4bec4bbd85d159eb02263, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12359,6 +13391,10 @@ PrefabInstance:
     - target: {fileID: 8253412727578638393, guid: a4d59582c9343674a85bec1de174d099, type: 3}
       propertyPath: m_Name
       value: shared_green_grass_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8253412727578638393, guid: a4d59582c9343674a85bec1de174d099, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8773526135241925251, guid: a4d59582c9343674a85bec1de174d099, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12457,6 +13493,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (30)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12524,6 +13564,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_green_grass_04
       objectReference: {fileID: 0}
+    - target: {fileID: 6683195953207538814, guid: 22a95c6c510ae9f41bace47fd82abb95, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12569,7 +13613,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1782810307
 Transform:
@@ -12603,6 +13647,10 @@ PrefabInstance:
     - target: {fileID: 3840027588255978992, guid: fc6f3a60dd37420488820813850554d9, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_big
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840027588255978992, guid: fc6f3a60dd37420488820813850554d9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4467944748577115978, guid: fc6f3a60dd37420488820813850554d9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12701,6 +13749,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Gate_R
       objectReference: {fileID: 0}
+    - target: {fileID: 7809645722496727503, guid: a3da31528f7ae2f429e1abdc1c789594, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12762,6 +13814,10 @@ PrefabInstance:
     - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
       propertyPath: m_Name
       value: Log_Wall (24)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12825,6 +13881,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (41)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12843,9 +13903,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12950,7 +14038,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1818373122
 Transform:
@@ -12999,6 +14087,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13058,9 +14150,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13118,6 +14238,10 @@ PrefabInstance:
     - target: {fileID: 1206694851286459381, guid: 1cfd876fe7d23b54cbaf00a1b48ae5b8, type: 3}
       propertyPath: m_Name
       value: shared_stonewall_06
+      objectReference: {fileID: 0}
+    - target: {fileID: 1206694851286459381, guid: 1cfd876fe7d23b54cbaf00a1b48ae5b8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2014474895069067599, guid: 1cfd876fe7d23b54cbaf00a1b48ae5b8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13189,7 +14313,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1862155967
 Transform:
@@ -13235,9 +14359,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13292,9 +14444,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13356,7 +14536,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1883591218
 Transform:
@@ -13458,6 +14638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13519,6 +14703,10 @@ PrefabInstance:
     - target: {fileID: 842370646820354542, guid: 53a6443d46b690040852c714dae54de3, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 842370646820354542, guid: 53a6443d46b690040852c714dae54de3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13606,6 +14794,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (42)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13627,6 +14819,10 @@ PrefabInstance:
     - target: {fileID: 1375448550817357999, guid: 9101018521aa04545ae1756f98aaaf12, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_00
+      objectReference: {fileID: 0}
+    - target: {fileID: 1375448550817357999, guid: 9101018521aa04545ae1756f98aaaf12, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1755633681088330261, guid: 9101018521aa04545ae1756f98aaaf12, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13689,9 +14885,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13749,6 +14973,10 @@ PrefabInstance:
     - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2924202890548066459, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13869,7 +15097,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1925056876
 Transform:
@@ -13921,7 +15149,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1926565831
 Transform:
@@ -13991,6 +15219,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_house_small_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6570975687650119351, guid: 150c474d6df8b4f42825bd3b2542428e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14012,6 +15244,10 @@ PrefabInstance:
     - target: {fileID: 5854498320218725159, guid: a31acd90a96ed174ba5ef4aff2de23d1, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_standard (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854498320218725159, guid: a31acd90a96ed174ba5ef4aff2de23d1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6517988048623518109, guid: a31acd90a96ed174ba5ef4aff2de23d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14115,6 +15351,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14176,6 +15416,10 @@ PrefabInstance:
     - target: {fileID: 1138167453354288073, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
       propertyPath: m_Name
       value: ruraltown_house_medium
+      objectReference: {fileID: 0}
+    - target: {fileID: 1138167453354288073, guid: 9504ec5a08a63d84a8f054e4391be262, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14239,6 +15483,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (31)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14263,7 +15511,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1970969530
 Transform:
@@ -14334,6 +15582,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Gate_L
       objectReference: {fileID: 0}
+    - target: {fileID: 4881040362772207026, guid: 8843aee7bb778964fbca21f03d6570de, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5257707329969835784, guid: 8843aee7bb778964fbca21f03d6570de, type: 3}
       propertyPath: m_LocalPosition.x
       value: 197.78
@@ -14392,9 +15644,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14478,6 +15758,10 @@ PrefabInstance:
     - target: {fileID: 7369335170057890773, guid: 4425b179c55a1804bbef86c1c7692b91, type: 3}
       propertyPath: m_Name
       value: shared_stonewall_07
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369335170057890773, guid: 4425b179c55a1804bbef86c1c7692b91, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7858486570731942255, guid: 4425b179c55a1804bbef86c1c7692b91, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14581,6 +15865,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (39)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14629,9 +15917,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (25)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14748,9 +16064,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14808,6 +16152,10 @@ PrefabInstance:
     - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_Name
       value: shared_stick_fance_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2924202890548066459, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14945,6 +16293,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log_Wall (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 5565698295490313042, guid: fddc1286ed7e92f4f9aee3908c861585, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14970,7 +16322,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2067686344
 Transform:
@@ -15016,9 +16368,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (26)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15117,6 +16497,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: lilypad
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d54cd0bac3ada8d4c9c79d05b79cab9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7013099432040996905, guid: d54cd0bac3ada8d4c9c79d05b79cab9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15138,6 +16526,10 @@ PrefabInstance:
     - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_Name
       value: flatten_mushroom_group_00 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792280244980098131, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4605830460813442793, guid: 7bf59f001a73be9479ecf07f8b9d5c16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15310,6 +16702,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15389,6 +16785,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: flatten_mushroom_00
       objectReference: {fileID: 0}
+    - target: {fileID: 685881862605751416, guid: 912b5329d75703e4899961058a94a6b7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15415,6 +16815,10 @@ PrefabInstance:
     - target: {fileID: 8500166798093938016, guid: 3110b618a81d45640a925910a91a3718, type: 3}
       propertyPath: m_Name
       value: shared_green_grass_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 8500166798093938016, guid: 3110b618a81d45640a925910a91a3718, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 9132587588040079322, guid: 3110b618a81d45640a925910a91a3718, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15469,9 +16873,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15526,9 +16958,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 962992146}
     m_Modifications:
+    - target: {fileID: 2251723877921126399, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482109929990151874, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642652319256796653, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330296760371461402, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_Name
       value: ruraltown_street_lamp_double
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355247274410277376, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15587,6 +17047,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_table_00
       objectReference: {fileID: 0}
+    - target: {fileID: 5787505678547928768, guid: 4571ac8d4a8e91f468696ffadbf973b0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6564710507349515386, guid: 4571ac8d4a8e91f468696ffadbf973b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -283.6925
@@ -15643,6 +17107,10 @@ PrefabInstance:
     - target: {fileID: 7188911233713773480, guid: 21923722b21002742833a1a06eb82c2e, type: 3}
       propertyPath: m_Name
       value: shared_bush_berry_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188911233713773480, guid: 21923722b21002742833a1a06eb82c2e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7534508987516141842, guid: 21923722b21002742833a1a06eb82c2e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15705,6 +17173,10 @@ PrefabInstance:
     - target: {fileID: 5101224182555420697, guid: 076023dfee2483b49814b8217eb51519, type: 3}
       propertyPath: m_Name
       value: shared_bush_berry_00
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101224182555420697, guid: 076023dfee2483b49814b8217eb51519, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5584710864745362083, guid: 076023dfee2483b49814b8217eb51519, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15808,6 +17280,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_bush_01
       objectReference: {fileID: 0}
+    - target: {fileID: 7999021097057533886, guid: f6e2b5fbb689803419ed62d7734960c1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15869,6 +17345,10 @@ PrefabInstance:
     - target: {fileID: 7586806500814074602, guid: 29bbfea2052c0c8449f125d66457b971, type: 3}
       propertyPath: m_Name
       value: shared_bush_berry_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7586806500814074602, guid: 29bbfea2052c0c8449f125d66457b971, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15932,6 +17412,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_bush_berry_02
       objectReference: {fileID: 0}
+    - target: {fileID: 2951844539345351691, guid: b8317ae1a8e53fe42a7bd27be1bce9e1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15953,6 +17437,10 @@ PrefabInstance:
     - target: {fileID: 5184269302289359900, guid: cf379119389cb3b47bb43126d9741f43, type: 3}
       propertyPath: m_Name
       value: shared_bush_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184269302289359900, guid: cf379119389cb3b47bb43126d9741f43, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5528707140561878694, guid: cf379119389cb3b47bb43126d9741f43, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16056,6 +17544,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ruraltown_chapelbench
       objectReference: {fileID: 0}
+    - target: {fileID: 5491691972251499959, guid: eb11db3a5f96902498bfce37962fbece, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16113,6 +17605,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shared_bush_00
       objectReference: {fileID: 0}
+    - target: {fileID: 2022467402896426999, guid: 86bf3b8d59147ae49a63c52fc9456bd3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16134,6 +17630,10 @@ PrefabInstance:
     - target: {fileID: 8205589853029917662, guid: 2a3c16a119888c34297897e21344dc6f, type: 3}
       propertyPath: m_Name
       value: shared_bush_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205589853029917662, guid: 2a3c16a119888c34297897e21344dc6f, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8839383902684821860, guid: 2a3c16a119888c34297897e21344dc6f, type: 3}
       propertyPath: m_LocalPosition.x
