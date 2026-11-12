@@ -28,6 +28,11 @@ public class MagicDamageRing : SkillBehaviour
         ringIndicator.SetActive(true);
     }
 
+    public override void OnCancel(GameObject caster, Skill skillData)
+    {
+        GetRingIndicator().SetActive(false);
+    }
+
     // Changes magic ring indicator position relative to camera direction.
     // Updates each frame (called on PlayerSkills).
     public override void OnHoldUpdate(GameObject caster, Skill skillData, Vector3 targetPosition)
@@ -147,4 +152,3 @@ public class MagicDamageRing : SkillBehaviour
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition) { }
 
 }
-

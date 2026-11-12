@@ -8,6 +8,7 @@ namespace Obrissom.Enemy
         Chase,
         Attack,
         TakingDamage,
+        Stunned,
         Dead
     }
 }

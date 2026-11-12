@@ -15,7 +15,7 @@ public class DamageByCollider : SkillBehaviour
         {
             if (hitbox.hitboxType == _hitboxType)
             {
-                hitbox.SetupCollider(skillData, _hitMultipleEnemies, true, false);
+                hitbox.SetupCollider(skillData, _hitMultipleEnemies, skillData.minEffectValue > 0, skillData.minDamagePerSecond > 0);
             }
         }
     }

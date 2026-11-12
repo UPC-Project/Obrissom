@@ -26,6 +26,11 @@ public class ChannelMagicProjectile : SkillBehaviour
         crosshair.SetActive(true);
     }
 
+    public override void OnCancel(GameObject caster, Skill skillData)
+    {
+        GetCrosshair().SetActive(false);
+    }
+
     public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         GameObject crosshair = GetCrosshair();

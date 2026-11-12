@@ -86,7 +86,7 @@ namespace Obrissom.UI
             if (skill.minDamagePerSecond != 0 && skill.minEffectValue != 0) _skillValue.text += " |\n";
 
             if (skill.minDamagePerSecond != 0) 
-                _skillValue.text += _effectNames[skill.damagePerSecondType] + " per second: " + skill.minEffectValue + " - " + skill.maxDamagePerSecond + " (" + skill.damagePerSecondTime + "s)";
+                _skillValue.text += _effectNames[skill.damagePerSecondType] + " per second: " + skill.minDamagePerSecond + " - " + skill.maxDamagePerSecond + " (" + skill.damagePerSecondTime + "s)";
 
 
             gameObject.transform.GetChild(0).gameObject.SetActive(true);

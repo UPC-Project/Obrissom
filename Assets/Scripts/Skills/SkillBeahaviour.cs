@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Skill", menuName = "Skills/SkillBehaviour")]
 public abstract class SkillBehaviour : ScriptableObject
 {
     public CastType castType;
@@ -12,4 +11,6 @@ public abstract class SkillBehaviour : ScriptableObject
     public virtual void OnHoldUpdate(GameObject caster, Skill skillData, Vector3 targetPosition) { }
     
     public virtual bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition) { return true; }
+
+    public virtual void OnCancel(GameObject caster, Skill skillData) { }
 }

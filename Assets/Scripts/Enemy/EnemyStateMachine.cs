@@ -96,6 +96,7 @@ namespace Obrissom.Enemy
                     break;
 
                 case EnemyState.TakingDamage:
+                case EnemyState.Stunned:
                 case EnemyState.Dead:
                     break;
             }
@@ -133,35 +134,47 @@ namespace Obrissom.Enemy
 
         private void OnStateEnter(EnemyState state)
         {
+            bool agentActive = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
+
             switch (state)
             {
                 case EnemyState.Idle:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     StartCoroutine(IdleTimer());
                     break;
 
                 case EnemyState.Move:
-                    _agent.isStopped = false;
-                    _agent.speed = _enemy.GetMoveSpeed(EnemyState.Move);
+                    if (agentActive)
+                    {
+                        _agent.isStopped = false;
+                        _agent.speed = _enemy.GetMoveSpeed(EnemyState.Move);
+                    }
                     _enemy.OnMoveStateEnter();
                     break;
 
                 case EnemyState.Chase:
-                    _agent.isStopped = false;
-                    _agent.speed = _enemy.GetMoveSpeed(EnemyState.Chase);
+                    if (agentActive)
+                    {
+                        _agent.isStopped = false;
+                        _agent.speed = _enemy.GetMoveSpeed(EnemyState.Chase);
+                    }
                     break;
 
                 case EnemyState.Attack:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     break;
 
                 case EnemyState.TakingDamage:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     StartCoroutine(TakingDamageExit());
                     break;
 
+                case EnemyState.Stunned:
+                    if (agentActive) _agent.isStopped = true;
+                    break;
+
                 case EnemyState.Dead:
-                    _agent.isStopped = true;
+                    if (agentActive) _agent.isStopped = true;
                     if (_evalLoopCoroutine != null)
                         StopCoroutine(_evalLoopCoroutine);
                     break;
