@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -97,6 +98,19 @@ namespace Obrissom.Player
                 apply(value);
             else
                 Debug.LogWarning($"Applicator not found for stat: {stat}");
+        }
+
+        public IEnumerator AddTempStat(Stats stat, float value, float time)
+        {
+            AddStat(stat,value);
+            yield return new WaitForSeconds(time);
+            RemoveStat(stat,value);
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
+        public void AddTempStatRpc(Stats stat, float value, float duration)
+        {
+            StartCoroutine(AddTempStat(stat, value, duration));
         }
     }
 }

@@ -7,8 +7,8 @@ namespace Obrissom.Enemy
     public enum DebuffType
     {
         Stun,
-        Slow,
         Root,
+        Slow,
         Silence,
     }
 }

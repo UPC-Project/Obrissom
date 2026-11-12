@@ -9,6 +9,7 @@ namespace Obrissom.Enemy
         Attack,
         TakingDamage,
         Stunned,
+        Rooted,
         Dead
     }
 }

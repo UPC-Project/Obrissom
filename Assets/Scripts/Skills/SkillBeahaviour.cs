@@ -13,4 +13,10 @@ public abstract class SkillBehaviour : ScriptableObject
     public virtual bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition) { return true; }
 
     public virtual void OnCancel(GameObject caster, Skill skillData) { }
+
+    public virtual bool OnChannelStart(GameObject caster, Skill skillData) { return true; }
+
+    public virtual bool OnChannelUpdate(GameObject caster, Skill skillData) { return true; }
+
+    public virtual void OnChannelEnd(GameObject caster, Skill skillData) { }
 }

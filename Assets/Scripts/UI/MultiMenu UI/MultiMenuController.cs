@@ -81,9 +81,13 @@ namespace Obrissom.UI
 
         private void OnDisable()
         {
-            _playerInput.UIMultiMenu.Disable();
-            _playerInput.UIMultiMenu.RemoveCallbacks(this);
-            InputStateManager.Instance.OnPlayerInputRegistered -= SetupInput;
+            if (_playerInput != null)
+            {
+                _playerInput.UIMultiMenu.Disable();
+                _playerInput.UIMultiMenu.RemoveCallbacks(this);
+            }
+            if (InputStateManager.Instance != null)
+                InputStateManager.Instance.OnPlayerInputRegistered -= SetupInput;
         }
 
         #region keycall

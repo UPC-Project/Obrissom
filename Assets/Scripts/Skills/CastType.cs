@@ -1,5 +1,6 @@
-﻿public enum CastType
+public enum CastType
 {
     Instant,
     Hold,
+    Channel,
 }
