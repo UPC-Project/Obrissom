@@ -169,6 +169,12 @@ namespace Obrissom.Player
             }
         }
 
+        public void ResetVelocity()
+        {
+            _verticalVelocity = 0f;
+            _newVelocity = Vector3.zero;
+        }
+
         // NETWORKING
         public override void OnNetworkSpawn()
         {
