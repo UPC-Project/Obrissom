@@ -12359,6 +12359,26 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3929898672312629154, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929898672312629154, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929898672312629154, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929898672312629154, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929898672312629154, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4232432213854373713, guid: ace03ffca375762458c48e2eefa427be, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -12653,6 +12673,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7767775163834394409, guid: ace03ffca375762458c48e2eefa427be, type: 3}
       propertyPath: m_ChildControlHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139311841420843676, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139311841420843676, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139311841420843676, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139311841420843676, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139311841420843676, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8170945661795162208, guid: ace03ffca375762458c48e2eefa427be, type: 3}
@@ -19797,6 +19837,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.BossArenaPortal
   _destinationAnchor: {fileID: 1242414683}
   _requiredLevel: 3
+  _deniedMessage: Area unavailable
+  _grantedMessage: Available area
   _gizmoColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!65 &1762212976
 BoxCollider:

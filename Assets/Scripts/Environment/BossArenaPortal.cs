@@ -1,4 +1,5 @@
 using Obrissom.Player;
+using Obrissom.UI;
 using UnityEngine;
 
 namespace Obrissom.Environment
@@ -11,6 +12,8 @@ namespace Obrissom.Environment
 
         [Header("Requirements")]
         [SerializeField] private int _requiredLevel = 3;
+        [SerializeField] private string _deniedMessage = "Area unavailable";
+        [SerializeField] private string _grantedMessage = "Available area";
 
         [Header("Gizmo Settings")]
         [SerializeField] private Color _gizmoColor = Color.magenta;
@@ -43,11 +46,14 @@ namespace Obrissom.Environment
 
             if (!canEnter)
             {
-                Debug.Log($"[BossArenaPortal] Access denied: Level {playerXP.currentLevel} / {_requiredLevel} required.");
+                string message = string.Format(_deniedMessage, playerXP.currentLevel, _requiredLevel);
+                NotificationPopup.Instance?.ShowMessage(message);
+                Debug.Log($"Area unavailable");
             }
             else
             {
-                Debug.Log($"[BossArenaPortal] Access granted: Level {playerXP.currentLevel} meets the requirement.");
+                NotificationPopup.Instance?.ShowMessage(_grantedMessage);
+                Debug.Log($"Available area");
             }
         }
 
