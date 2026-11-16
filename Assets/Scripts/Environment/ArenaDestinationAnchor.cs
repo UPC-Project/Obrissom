@@ -3,27 +3,12 @@ using UnityEngine;
 namespace Obrissom.Environment
 {
 
+    // Arrival point for a portal. Used both inside the church and outside it (exit).
     public class ArenaDestinationAnchor : MonoBehaviour
     {
-        public static ArenaDestinationAnchor Instance { get; private set; }
-
         [Header("Gizmo Settings")]
         [SerializeField] private Color _gizmoColor = Color.cyan;
         [SerializeField] private float _forwardRayLength = 3f;
-
-        private void Awake()
-        {
-            Instance = this;
-        }
-
-
-        private void OnDestroy()
-        {
-            if (Instance == this)
-            {
-                Instance = null;
-            }
-        }
 
         public Vector3 GetSpawnPosition() => transform.position;
 

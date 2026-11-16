@@ -19,22 +19,9 @@ namespace Obrissom.Environment
         [Header("Gizmo Settings")]
         [SerializeField] private Color _gizmoColor = Color.magenta;
 
-        public ArenaDestinationAnchor DestinationAnchor => _destinationAnchor != null ? _destinationAnchor : ArenaDestinationAnchor.Instance;
-        public int RequiredLevel => _requiredLevel;
-
-        public event System.Action<PlayerXP, bool> OnPlayerLevelChecked;
-
         private void Awake()
         {
             GetComponent<Collider>().isTrigger = true;
-        }
-
-        private void Start()
-        {
-            if (_destinationAnchor == null)
-            {
-                _destinationAnchor = ArenaDestinationAnchor.Instance;
-            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -42,39 +29,36 @@ namespace Obrissom.Environment
             PlayerXP playerXP = other.GetComponentInParent<PlayerXP>();
             if (playerXP == null || !playerXP.IsOwner) return;
 
-            bool canEnter = HasRequiredLevel(playerXP);
-            OnPlayerLevelChecked?.Invoke(playerXP, canEnter);
-
-            if (!canEnter)
+            if (!HasRequiredLevel(playerXP))
             {
                 string message = string.Format(_deniedMessage, playerXP.currentLevel, _requiredLevel);
                 NotificationPopup.Instance?.ShowMessage(message);
-                Debug.Log($"Area unavailable");
+                return;
             }
-            else
-            {
+
+            // Leave empty for portals that need no message (e.g. the church exit)
+            if (!string.IsNullOrEmpty(_grantedMessage))
                 NotificationPopup.Instance?.ShowMessage(_grantedMessage);
-                Debug.Log($"Available area");
-                RequestTeleport(playerXP);
-            }
+
+            RequestTeleport(playerXP);
         }
 
         private void RequestTeleport(PlayerXP playerXP)
         {
-            ArenaDestinationAnchor anchor = DestinationAnchor;
             PlayerTeleportService teleportService = playerXP.GetComponent<PlayerTeleportService>();
-            if (anchor == null || teleportService == null) return;
+            if (_destinationAnchor == null || teleportService == null) return;
 
-            teleportService.RequestTeleportRpc(anchor.GetSpawnPosition(), anchor.GetSpawnRotation());
+            Vector3 arrival = _destinationAnchor.GetSpawnPosition();
+            teleportService.RequestTeleportRpc(arrival, _destinationAnchor.GetSpawnRotation());
 
             // 3D sound 
             NetworkSoundEmitter soundEmitter = playerXP.GetComponent<NetworkSoundEmitter>();
             if (soundEmitter == null) return;
             soundEmitter.PlayFromOwner(AudioID.PortalTeleport, playerXP.transform.position);
-            soundEmitter.PlayFromOwner(AudioID.PortalTeleport, anchor.GetSpawnPosition());
+            soundEmitter.PlayFromOwner(AudioID.PortalTeleport, arrival);
         }
 
-        public bool HasRequiredLevel(PlayerXP playerXP)
+        private bool HasRequiredLevel(PlayerXP playerXP)
         {
             return playerXP.currentLevel >= _requiredLevel;
         }
@@ -100,11 +84,10 @@ namespace Obrissom.Environment
                 Gizmos.DrawWireSphere(transform.position, 2f);
             }
 
-            ArenaDestinationAnchor targetAnchor = _destinationAnchor != null ? _destinationAnchor : ArenaDestinationAnchor.Instance;
-            if (targetAnchor != null)
+            if (_destinationAnchor != null)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(transform.position, targetAnchor.transform.position);
+                Gizmos.DrawLine(transform.position, _destinationAnchor.transform.position);
             }
         }
     }

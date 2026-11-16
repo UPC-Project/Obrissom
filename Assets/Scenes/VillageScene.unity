@@ -594,6 +594,77 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.11239041, y: 21.854553, z: 0.29473943}
   m_Center: {x: -0.02415817, y: 8.781221, z: -0.14065918}
+--- !u!1 &50911149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 50911150}
+  - component: {fileID: 50911152}
+  - component: {fileID: 50911151}
+  m_Layer: 0
+  m_Name: ChurchExitPortal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &50911150
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50911149}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.0039028926, y: -0.33050942, z: -0.007898301, w: 0.9437616}
+  m_LocalPosition: {x: -39.619385, y: -27.879793, z: -24.381561}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 263514909}
+  m_LocalEulerAnglesHint: {x: 0.123, y: -38.602, z: -1.002}
+--- !u!114 &50911151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50911149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af16fcfebcfe886418e0c3d872c605d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.BossArenaPortal
+  _destinationAnchor: {fileID: 311953935}
+  _requiredLevel: 3
+  _deniedMessage: Area unavailable
+  _grantedMessage: Available area
+  _gizmoColor: {r: 1, g: 0, b: 1, a: 1}
+--- !u!65 &50911152
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50911149}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 8.036369, z: 7.129975}
+  m_Center: {x: 0.000005862025, y: 3.5181847, z: -0.15495849}
 --- !u!1001 &53589688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3097,7 +3168,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1242414684}
+  - {fileID: 311953936}
   - {fileID: 1762212974}
+  - {fileID: 50911150}
   - {fileID: 1352103153}
   m_Father: {fileID: 1815090764}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3642,6 +3715,52 @@ Transform:
   - {fileID: 1926565831}
   m_Father: {fileID: 1815090764}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &311953934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 311953936}
+  - component: {fileID: 311953935}
+  m_Layer: 0
+  m_Name: ChurchExitAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &311953935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311953934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8a115bdeaa7b9429b91a4d29dcbb8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.ArenaDestinationAnchor
+  _gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  _forwardRayLength: 3
+--- !u!4 &311953936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311953934}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9050802, z: -0, w: -0.425241}
+  m_LocalPosition: {x: -31.25, y: 70.9, z: -15.89}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 263514909}
+  m_LocalEulerAnglesHint: {x: 0, y: -489.668, z: 0}
 --- !u!1001 &315064177
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15109,7 +15228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
   m_SerializedVersion: 0
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
