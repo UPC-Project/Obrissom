@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -8,6 +9,9 @@ namespace Obrissom.Player
 {
     public class PlayerTeleportService : NetworkBehaviour
     {
+        [Tooltip("Distance from the destination for each extra player, so players never land inside each other.")]
+        [SerializeField] private float _spawnSpacing = 1.5f;
+
         private PlayerController _playerController;
         private CharacterController _characterController;
         private NetworkTransform _networkTransform;
@@ -25,10 +29,27 @@ namespace Obrissom.Player
         {
             if (!IsServer) return;
 
+            // Spread first, then snap, so the spread spot also ends up on walkable ground.
+            destination += GetSpreadOffset();
+
             if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 3f, NavMesh.AllAreas))
                 destination = hit.position;
 
             TeleportOwnerRpc(destination, rotation);
+        }
+
+        // Server only. The first connected player lands on the destination, the rest around it.
+        private Vector3 GetSpreadOffset()
+        {
+            IReadOnlyList<ulong> clientIds = NetworkManager.ConnectedClientsIds;
+            for (int slot = 1; slot < clientIds.Count; slot++)
+            {
+                if (clientIds[slot] != OwnerClientId) continue;
+
+                float angle = slot * 90f * Mathf.Deg2Rad;
+                return new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * _spawnSpacing;
+            }
+            return Vector3.zero;
         }
 
        
