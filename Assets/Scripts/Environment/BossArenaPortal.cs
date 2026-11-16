@@ -39,7 +39,7 @@ namespace Obrissom.Environment
         private void OnTriggerEnter(Collider other)
         {
             PlayerXP playerXP = other.GetComponentInParent<PlayerXP>();
-            if (playerXP == null) return;
+            if (playerXP == null || !playerXP.IsOwner) return;
 
             bool canEnter = HasRequiredLevel(playerXP);
             OnPlayerLevelChecked?.Invoke(playerXP, canEnter);
@@ -54,7 +54,17 @@ namespace Obrissom.Environment
             {
                 NotificationPopup.Instance?.ShowMessage(_grantedMessage);
                 Debug.Log($"Available area");
+                RequestTeleport(playerXP);
             }
+        }
+
+        private void RequestTeleport(PlayerXP playerXP)
+        {
+            ArenaDestinationAnchor anchor = DestinationAnchor;
+            PlayerTeleportService teleportService = playerXP.GetComponent<PlayerTeleportService>();
+            if (anchor == null || teleportService == null) return;
+
+            teleportService.RequestTeleportRpc(anchor.GetSpawnPosition(), anchor.GetSpawnRotation());
         }
 
         public bool HasRequiredLevel(PlayerXP playerXP)

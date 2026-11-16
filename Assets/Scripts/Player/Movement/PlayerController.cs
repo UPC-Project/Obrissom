@@ -71,7 +71,8 @@ namespace Obrissom.Player
 
         private void Update()
         {
-            if (!IsOwner) return;
+            // The controller is disabled while teleporting; Move() on it would log warnings.
+            if (!IsOwner || !_characterController.enabled) return;
 
             HandleHorizontalMovement();
 
@@ -169,10 +170,13 @@ namespace Obrissom.Player
             }
         }
 
+        // Call with the CharacterController enabled.
         public void ResetVelocity()
         {
             _verticalVelocity = 0f;
             _newVelocity = Vector3.zero;
+            // Horizontal movement is built from _characterController.velocity, so clear it too.
+            _characterController.Move(Vector3.zero);
         }
 
         // NETWORKING
