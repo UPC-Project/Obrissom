@@ -13,12 +13,14 @@ namespace Obrissom.Player
         [SerializeField] private float _spawnSpacing = 1.5f;
 
         private PlayerController _playerController;
+        private PlayerSkills _playerSkills;
         private CharacterController _characterController;
         private NetworkTransform _networkTransform;
 
         private void Awake()
         {
             _playerController = GetComponent<PlayerController>();
+            _playerSkills = GetComponent<PlayerSkills>();
             _characterController = GetComponent<CharacterController>();
             _networkTransform = GetComponent<NetworkTransform>();
         }
@@ -67,6 +69,8 @@ namespace Obrissom.Player
 
         private IEnumerator DoTeleport(Vector3 destination, Quaternion rotation)
         {
+            // Skills run on the owner; cancel any hold/channel so its aim or VFX doesn't follow the player.
+            _playerSkills.CancelActiveSkill();
             _characterController.enabled = false;
             _networkTransform.Teleport(destination, rotation, transform.localScale);
             yield return null;
