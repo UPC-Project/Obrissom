@@ -1,3 +1,4 @@
+using Obrissom.Audio;
 using Obrissom.Player;
 using Obrissom.UI;
 using UnityEngine;
@@ -65,6 +66,12 @@ namespace Obrissom.Environment
             if (anchor == null || teleportService == null) return;
 
             teleportService.RequestTeleportRpc(anchor.GetSpawnPosition(), anchor.GetSpawnRotation());
+
+            // 3D sound 
+            NetworkSoundEmitter soundEmitter = playerXP.GetComponent<NetworkSoundEmitter>();
+            if (soundEmitter == null) return;
+            soundEmitter.PlayFromOwner(AudioID.PortalTeleport, playerXP.transform.position);
+            soundEmitter.PlayFromOwner(AudioID.PortalTeleport, anchor.GetSpawnPosition());
         }
 
         public bool HasRequiredLevel(PlayerXP playerXP)
