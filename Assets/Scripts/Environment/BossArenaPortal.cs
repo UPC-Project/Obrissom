@@ -3,16 +3,13 @@ using UnityEngine;
 
 namespace Obrissom.Environment
 {
-
     [RequireComponent(typeof(Collider))]
     public class BossArenaPortal : MonoBehaviour
     {
         [Header("Destination")]
-        [Tooltip("Destination anchor inside the church. If left empty, will automatically locate ArenaDestinationAnchor.Instance.")]
         [SerializeField] private ArenaDestinationAnchor _destinationAnchor;
 
         [Header("Requirements")]
-        [Tooltip("Minimum player level required to enter the church arena.")]
         [SerializeField] private int _requiredLevel = 3;
 
         [Header("Gizmo Settings")]
@@ -21,13 +18,11 @@ namespace Obrissom.Environment
         public ArenaDestinationAnchor DestinationAnchor => _destinationAnchor != null ? _destinationAnchor : ArenaDestinationAnchor.Instance;
         public int RequiredLevel => _requiredLevel;
 
+        public event System.Action<PlayerXP, bool> OnPlayerLevelChecked;
+
         private void Awake()
         {
-            Collider col = GetComponent<Collider>();
-            if (col != null && !col.isTrigger)
-            {
-                col.isTrigger = true;
-            }
+            GetComponent<Collider>().isTrigger = true;
         }
 
         private void Start()
@@ -40,29 +35,25 @@ namespace Obrissom.Environment
 
         private void OnTriggerEnter(Collider other)
         {
-            PlayerCombat player = other.GetComponentInParent<PlayerCombat>();
-            if (player != null)
+            PlayerXP playerXP = other.GetComponentInParent<PlayerXP>();
+            if (playerXP == null) return;
+
+            bool canEnter = HasRequiredLevel(playerXP);
+            OnPlayerLevelChecked?.Invoke(playerXP, canEnter);
+
+            if (!canEnter)
             {
-                OnPlayerApproachedPortal(player);
+                Debug.Log($"[BossArenaPortal] Access denied: Level {playerXP.currentLevel} / {_requiredLevel} required.");
+            }
+            else
+            {
+                Debug.Log($"[BossArenaPortal] Access granted: Level {playerXP.currentLevel} meets the requirement.");
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        public bool HasRequiredLevel(PlayerXP playerXP)
         {
-            PlayerCombat player = other.GetComponentInParent<PlayerCombat>();
-            if (player != null)
-            {
-                OnPlayerLeftPortal(player);
-            }
-        }
-
-        protected virtual void OnPlayerApproachedPortal(PlayerCombat player)
-        {
-        }
-
-        protected virtual void OnPlayerLeftPortal(PlayerCombat player)
-        {
-            // Exit hook
+            return playerXP.currentLevel >= _requiredLevel;
         }
 
         private void OnDrawGizmos()
@@ -70,26 +61,22 @@ namespace Obrissom.Environment
             Gizmos.color = _gizmoColor;
 
             Collider col = GetComponent<Collider>();
-            if (col != null)
+            if (col is BoxCollider box)
             {
-                if (col is BoxCollider box)
-                {
-                    Gizmos.matrix = transform.localToWorldMatrix;
-                    Gizmos.DrawWireCube(box.center, box.size);
-                    Gizmos.matrix = Matrix4x4.identity;
-                }
-                else if (col is SphereCollider sphere)
-                {
-                    float maxScale = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
-                    Gizmos.DrawWireSphere(transform.TransformPoint(sphere.center), sphere.radius * maxScale);
-                }
+                Gizmos.matrix = transform.localToWorldMatrix;
+                Gizmos.DrawWireCube(box.center, box.size);
+                Gizmos.matrix = Matrix4x4.identity;
+            }
+            else if (col is SphereCollider sphere)
+            {
+                float maxScale = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
+                Gizmos.DrawWireSphere(transform.TransformPoint(sphere.center), sphere.radius * maxScale);
             }
             else
             {
                 Gizmos.DrawWireSphere(transform.position, 2f);
             }
 
-            // Draw line to destination anchor if available
             ArenaDestinationAnchor targetAnchor = _destinationAnchor != null ? _destinationAnchor : ArenaDestinationAnchor.Instance;
             if (targetAnchor != null)
             {
