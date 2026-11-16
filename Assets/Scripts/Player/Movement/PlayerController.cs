@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -175,8 +176,15 @@ namespace Obrissom.Player
         {
             _verticalVelocity = 0f;
             _newVelocity = Vector3.zero;
-            // Horizontal movement is built from _characterController.velocity, so clear it too.
             _characterController.Move(Vector3.zero);
+        }
+
+
+        public void SnapCameraTo(Quaternion rotation)
+        {
+            _cameraRotation = new Vector2(rotation.eulerAngles.y, 0f);
+            _playerCamera.transform.rotation = Quaternion.Euler(0f, _cameraRotation.x, 0f);
+            CinemachineCore.ResetCameraState();
         }
 
         // NETWORKING

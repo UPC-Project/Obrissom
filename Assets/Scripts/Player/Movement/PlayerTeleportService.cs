@@ -31,7 +31,6 @@ namespace Obrissom.Player
         {
             if (!IsServer) return;
 
-            // Spread first, then snap, so the spread spot also ends up on walkable ground.
             destination += GetSpreadOffset();
 
             if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 3f, NavMesh.AllAreas))
@@ -40,7 +39,6 @@ namespace Obrissom.Player
             TeleportOwnerRpc(destination, rotation);
         }
 
-        // Server only. The first connected player lands on the destination, the rest around it.
         private Vector3 GetSpreadOffset()
         {
             IReadOnlyList<ulong> clientIds = NetworkManager.ConnectedClientsIds;
@@ -69,10 +67,10 @@ namespace Obrissom.Player
 
         private IEnumerator DoTeleport(Vector3 destination, Quaternion rotation)
         {
-            // Skills run on the owner; cancel any hold/channel so its aim or VFX doesn't follow the player.
             _playerSkills.CancelActiveSkill();
             _characterController.enabled = false;
             _networkTransform.Teleport(destination, rotation, transform.localScale);
+            _playerController.SnapCameraTo(rotation);
             yield return null;
             _characterController.enabled = true;
             _playerController.ResetVelocity();
