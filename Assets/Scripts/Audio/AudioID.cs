@@ -25,8 +25,9 @@ namespace Obrissom.Audio
         ShoebillAreaImpact  = 213,
 
         // Environment 300–399
-        DoorOpen    = 300,
-        ChestOpen   = 301,
+        DoorOpen       = 300,
+        ChestOpen      = 301,
+        PortalTeleport = 302,
 
         // UI 400–499
         UIClick         = 400,

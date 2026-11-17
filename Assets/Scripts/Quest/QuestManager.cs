@@ -13,6 +13,8 @@ public class QuestManager : NetworkBehaviour
     //(questId, (itemTargetIndex, (clientId, amount of items)))
     private Dictionary<string, Dictionary<int, Dictionary<ulong, int>>> _sharedCollectProgress = new Dictionary<string, Dictionary<int, Dictionary<ulong, int>>>();
     private Dictionary<string, List<PlayerQuestTracker>> _participants = new Dictionary<string, List<PlayerQuestTracker>>();
+    // Shared quests the party already finished, sent to late joiners so the quest chain continues for them
+    private HashSet<string> _completedSharedQuests = new HashSet<string>();
 
     // Client-side
     private PlayerQuestTracker _localTracker = null;
@@ -35,12 +37,23 @@ public class QuestManager : NetworkBehaviour
         if (Instance == this) Instance = null;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        // Late join: the local player can spawn before this object does,
+        // so whichever of the two spawns last asks the server for the shared quests
+        if (!IsServer && _localTracker != null) RequestSyncSharedQuestsServerRpc();
+    }
+
     // CLIENT REGISTRATION
 
     /// Registers a local PlayerQuestTracker so it can receive shared quest sync updates.
     public void RegisterLocalTracker(PlayerQuestTracker tracker)
     {
-        if (_localTracker == null) _localTracker = tracker;
+        if (_localTracker != null) return;
+        _localTracker = tracker;
+
+        // If not spawned yet, OnNetworkSpawn sends the request instead
+        if (IsSpawned && !IsServer) RequestSyncSharedQuestsServerRpc();
     }
 
     // SHARED QUEST MANAGEMENT
@@ -53,6 +66,9 @@ public class QuestManager : NetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void ShareAcceptQuestServerRpc(string questId)
     {
+        // The party already finished it: re-accepting would only show it to the player who asked
+        if (_completedSharedQuests.Contains(questId)) return;
+
         RegisterSharedQuestServerRpc(questId);
         ShareAcceptQuestClientRpc(questId);
     }
@@ -81,10 +97,16 @@ public class QuestManager : NetworkBehaviour
 
     /// When a players spawns, automatically syncs with all current shared quest going on
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void RequestSyncSharedQuestsServerRpc(RpcParams rpcParams = default)
+    private void RequestSyncSharedQuestsServerRpc(RpcParams rpcParams = default)
     {
         ulong clientId = rpcParams.Receive.SenderClientId;
         ClientRpcParams clientRpcParams = new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } } };
+
+        // Completed first, so prerequisites are already met when the active quests arrive
+        foreach (string completedQuestId in _completedSharedQuests)
+        {
+            SyncCompletedQuestTargetedClientRpc(completedQuestId, clientRpcParams);
+        }
 
         foreach (var kvp in _sharedQuests)
         {
@@ -140,6 +162,18 @@ public class QuestManager : NetworkBehaviour
             {
                 _localTracker.AcceptQuestLocally(template);
             }
+        }
+    }
+
+    [ClientRpc]
+    private void SyncCompletedQuestTargetedClientRpc(string questId, ClientRpcParams rpcParams = default)
+    {
+        if (_localTracker == null) return;
+
+        QuestTemplate template = FindQuestTemplateById(questId);
+        if (template != null)
+        {
+            _localTracker.MarkQuestCompletedFromSync(template);
         }
     }
 
@@ -205,6 +239,9 @@ public class QuestManager : NetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void ShareCompleteQuestServerRpc(string questId, RpcParams rpcParams = default)
     {
+        // Already delivered (ej two players delivering at once): don't deduct items twice
+        if (!_completedSharedQuests.Add(questId)) return;
+
         ulong completingClientId = rpcParams.Receive.SenderClientId;
         QuestTemplate template = FindQuestTemplateById(questId);
 

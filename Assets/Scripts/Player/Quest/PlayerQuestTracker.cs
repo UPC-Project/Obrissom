@@ -41,11 +41,9 @@ public class PlayerQuestTracker : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        // Also requests the shared quest sync on late join (QuestManager handles spawn order)
         if (QuestManager.Instance != null)
-        {
             QuestManager.Instance.RegisterLocalTracker(this);
-            if (!IsServer) QuestManager.Instance.RequestSyncSharedQuestsServerRpc();
-        }
 
         if (QuestProgressUI.Instance != null)
             QuestProgressUI.Instance.Bind(this, _inventory);
@@ -144,6 +142,19 @@ public class PlayerQuestTracker : NetworkBehaviour
 
         OnQuestsChanged?.Invoke();
         QuestCompletePopup.Instance.ShowQuestCompletePopup(template.title);
+    }
+
+    /// Late join sync: the party finished this shared quest before this player joined.
+    /// Only marks it as completed so the quest chain continues (no rewards, no popup).
+    public void MarkQuestCompletedFromSync(QuestTemplate template)
+    {
+        if (template == null || HasCompletedQuest(template)) return;
+
+        QuestInstance instance = GetQuestInstance(template);
+        if (instance != null) _activeQuests.Remove(instance);
+
+        _completedQuests.Add(template);
+        OnQuestsChanged?.Invoke();
     }
 
     // PROGRESS REPORTING
@@ -321,6 +332,8 @@ public class PlayerQuestTracker : NetworkBehaviour
         }
         return false;
     }
+
+    public bool HasActiveQuest(string questId) => GetQuestInstanceById(questId) != null;
 
     public bool HasCompletedQuest(QuestTemplate template)
     {
