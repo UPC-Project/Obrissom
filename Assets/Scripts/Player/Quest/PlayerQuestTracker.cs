@@ -322,6 +322,8 @@ public class PlayerQuestTracker : NetworkBehaviour
         return false;
     }
 
+    public bool HasActiveQuest(string questId) => GetQuestInstanceById(questId) != null;
+
     public bool HasCompletedQuest(QuestTemplate template)
     {
         return _completedQuests.Contains(template);
