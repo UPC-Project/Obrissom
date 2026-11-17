@@ -6959,6 +6959,8 @@ GameObject:
   - component: {fileID: 4014575467630600722}
   - component: {fileID: 3695755342149795438}
   - component: {fileID: 905370609954775158}
+  - component: {fileID: 7204122582210107346}
+  - component: {fileID: 4772991867485290192}
   m_Layer: 6
   m_Name: Player-Tank
   m_TagString: Player
@@ -7482,6 +7484,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de13e3e9256d624f85ce25be524f620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerInteraction
+--- !u!114 &7204122582210107346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022892784541401123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 240418c2c32b4d746a6a70b13255d673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerTeleportService
+  ShowTopMostFoldoutHeaderGroup: 1
+  _spawnSpacing: 1.5
+--- !u!114 &4772991867485290192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022892784541401123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385e26956483fa54991af2b71e6706b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.NetworkSoundEmitter
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &4083477124172011764
 GameObject:
   m_ObjectHideFlags: 0
