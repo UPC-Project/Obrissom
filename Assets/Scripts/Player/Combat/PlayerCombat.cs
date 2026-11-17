@@ -18,7 +18,12 @@ namespace Obrissom.Player
         public NetworkVariable<bool> _isTargetable = new NetworkVariable<bool>(
             true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        [Header("Death")]
+        public NetworkVariable<bool> _isDead = new NetworkVariable<bool>(
+            false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
         // Components
+        private PlayerRespawn _playerRespawn;
         private PlayerStats _playerStats;
         private UI.HealthAndResourceUI _healthAndResourceUI;
         protected PlayerHealPopUp _healPopUp;
@@ -33,6 +38,7 @@ namespace Obrissom.Player
         {
             _playerStats = GetComponent<PlayerStats>();
             _healPopUp = GetComponent<PlayerHealPopUp>();
+            _playerRespawn = GetComponent<PlayerRespawn>();
         }
 
         public override void OnNetworkSpawn()
@@ -78,7 +84,7 @@ namespace Obrissom.Player
         public void Update()
         {
 
-            if (!IsServer) return;
+            if (!IsServer || _isDead.Value) return;
 
             if (_resource.Value < _playerStats.maxResource.Value)
             {
@@ -93,7 +99,8 @@ namespace Obrissom.Player
 
         public void SetInvulnerable(bool value) => _isInvulnerable.Value = value;
         public void SetTargetable(bool value) => _isTargetable.Value = value;
-        public bool IsTargetable => _isTargetable.Value && _health.Value > 0f;
+        public bool IsTargetable => _isTargetable.Value && !_isDead.Value && _health.Value > 0f;
+        public bool IsDead => _isDead.Value;
 
         public bool TryConsumeResource(int cost, bool consume = true)
         {
@@ -109,7 +116,7 @@ namespace Obrissom.Player
 
         public void TakeDamage(float damageAmount, EffectType damageType)
         {
-            if (_isInvulnerable.Value) return;
+            if (_isInvulnerable.Value || _isDead.Value) return;
 
             if (!IsServer) return;
 
@@ -131,7 +138,7 @@ namespace Obrissom.Player
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void HealRpc(float healAmount, bool isCritic)
         {
-            if (!IsServer) return;
+            if (!IsServer || _isDead.Value) return;
             _health.Value = Mathf.Min(_health.Value + healAmount, _playerStats.maxHealth.Value);
 
             _healPopUp.ShowPopUpClientRpc(healAmount.ToString(), isCritic);
@@ -182,10 +189,21 @@ namespace Obrissom.Player
             return ray.origin + ray.direction * 100f;
         }
 
+        public void Revive(float fraction)
+        {
+            if (!IsServer || !_isDead.Value) return;
+
+            _health.Value = Mathf.Max(1f, Mathf.Round(_playerStats.maxHealth.Value * fraction));
+            _resource.Value = _playerStats.maxResource.Value * fraction;
+            _isDead.Value = false;
+        }
+
         private void Die()
         {
-            Debug.Log($"Player {OwnerClientId} has died.");
-            // TODO
+            _isDead.Value = true;
+
+            if (_playerRespawn != null) _playerRespawn.OnDowned();
+            else Debug.LogWarning($"[PlayerCombat] {name} has no PlayerRespawn, the player will stay dead.");
         }
     }
 

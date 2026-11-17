@@ -6961,6 +6961,7 @@ GameObject:
   - component: {fileID: 905370609954775158}
   - component: {fileID: 7204122582210107346}
   - component: {fileID: 4772991867485290192}
+  - component: {fileID: -4084968624424858795}
   m_Layer: 6
   m_Name: Player-Tank
   m_TagString: Player
@@ -7395,6 +7396,11 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 1
+  _isDead:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
 --- !u!114 &1435624161708159971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7511,6 +7517,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.NetworkSoundEmitter
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-4084968624424858795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022892784541401123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbcbd8e8492e8cd45babebb9623c5215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerRespawn
+  ShowTopMostFoldoutHeaderGroup: 1
+  _downedDuration: 15
+  _noReviveRespawnDelay: 3
+  _arrivalGrace: 0.5
+  _reviveHoldTime: 3
+  _reviveRange: 2.5
+  _reviveFraction: 0.5
+  _downedMessage: You are down. A teammate can revive you
+  _deathMessage: You died
+  _revivingMessage: Reviving teammate...
+  _reviveInterruptedMessage: Revive interrupted
+  _revivedMessage: You were revived
 --- !u!1 &4083477124172011764
 GameObject:
   m_ObjectHideFlags: 0

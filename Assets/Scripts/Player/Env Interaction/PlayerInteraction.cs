@@ -8,12 +8,14 @@ namespace Obrissom.Player
     public class PlayerInteraction : MonoBehaviour, PlayerInput.IPlayerInteractMapActions
     {
         private PlayerQuestTracker _playerQuestTracker;
+        private PlayerRespawn _playerRespawn;
         private List<NPCInteractable> _nearbyNPCs = new List<NPCInteractable>();
         private List<PickupBase> _nearbyItems = new List<PickupBase>();
         private PlayerInput _playerInput;
         private void Awake()
         {
             _playerQuestTracker = GetComponent<PlayerQuestTracker>();
+            _playerRespawn = GetComponent<PlayerRespawn>();
         }
 
         private void OnEnable()
@@ -31,7 +33,17 @@ namespace Obrissom.Player
 
         public void OnInteract(InputAction.CallbackContext context)
         {
+            // Reviving is held: releasing the key stops it
+            if (context.canceled)
+            {
+                if (_playerRespawn != null) _playerRespawn.CancelRevive();
+                return;
+            }
+
             if (!context.performed) return;
+
+            // A downed teammate nearby comes first
+            if (_playerRespawn != null && _playerRespawn.TryStartRevive()) return;
 
             // Clean up destroyed or disabled objects (items picked up/waiting respawn)
             _nearbyItems.RemoveAll(item => item == null || !item.isActiveAndEnabled || !item.GetComponent<Collider>().enabled);
