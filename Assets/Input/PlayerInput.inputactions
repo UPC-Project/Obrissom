@@ -472,6 +472,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "GlobalUI",
+            "id": "aaee1ec2-3804-428c-8d31-6054fccd8e25",
+            "actions": [
+                {
+                    "name": "EscPressed",
+                    "type": "Button",
+                    "id": "468e6d69-9280-45f3-ac6b-c4047162e661",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f34f5ab5-2d69-47fa-b4fd-fdef311bb4ec",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EscPressed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

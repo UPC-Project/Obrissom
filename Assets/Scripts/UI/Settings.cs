@@ -2,6 +2,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Obrissom.UI
@@ -18,6 +19,7 @@ namespace Obrissom.UI
         private const string SfxParam    = "SFXVolume";
 
         [SerializeField] private AudioMixer _mixer;
+        [SerializeField] private InputActionReference _toggleSettingsAction;
 
         [Header("Sliders (0 to 1)")]
         [SerializeField] private Slider _masterSlider;
@@ -43,6 +45,17 @@ namespace Obrissom.UI
                 LobbyNetworking.Instance.OnDisconnecting += ShowDisconnectPanel;
         }
 
+        private void OnEnable()
+        {
+            _toggleSettingsAction.action.Enable();
+            _toggleSettingsAction.action.performed += OnToggleSettings;
+        }
+
+        private void OnDisable()
+        {
+            _toggleSettingsAction.action.performed -= OnToggleSettings;
+        }
+
         private void OnDestroy()
         {
             if (LobbyNetworking.Instance != null)
@@ -54,6 +67,12 @@ namespace Obrissom.UI
         public void TogglePanel() 
         {
             _panel.SetActive(!_panel.activeSelf);
+        }
+
+        private void OnToggleSettings(InputAction.CallbackContext context)
+        {
+            if (_exitModal.activeSelf) { TryExitGame(false); return; }
+            TogglePanel();
         }
 
         // AUDIO SETTINGS

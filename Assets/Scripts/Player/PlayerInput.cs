@@ -560,6 +560,34 @@ namespace Obrissom.Player
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""GlobalUI"",
+            ""id"": ""aaee1ec2-3804-428c-8d31-6054fccd8e25"",
+            ""actions"": [
+                {
+                    ""name"": ""EscPressed"",
+                    ""type"": ""Button"",
+                    ""id"": ""468e6d69-9280-45f3-ac6b-c4047162e661"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f34f5ab5-2d69-47fa-b4fd-fdef311bb4ec"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EscPressed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -589,6 +617,9 @@ namespace Obrissom.Player
             m_UIMultiMenu_OpenCrafting = m_UIMultiMenu.FindAction("OpenCrafting", throwIfNotFound: true);
             m_UIMultiMenu_OpenStats = m_UIMultiMenu.FindAction("OpenStats", throwIfNotFound: true);
             m_UIMultiMenu_OpenSkills = m_UIMultiMenu.FindAction("OpenSkills", throwIfNotFound: true);
+            // GlobalUI
+            m_GlobalUI = asset.FindActionMap("GlobalUI", throwIfNotFound: true);
+            m_GlobalUI_EscPressed = m_GlobalUI.FindAction("EscPressed", throwIfNotFound: true);
         }
 
         ~@PlayerInput()
@@ -597,6 +628,7 @@ namespace Obrissom.Player
             UnityEngine.Debug.Assert(!m_PlayerSkillMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerSkillMap.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_PlayerInteractMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerInteractMap.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UIMultiMenu.enabled, "This will cause a leak and performance issues, PlayerInput.UIMultiMenu.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_GlobalUI.enabled, "This will cause a leak and performance issues, PlayerInput.GlobalUI.Disable() has not been called.");
         }
 
         /// <summary>
@@ -1195,6 +1227,102 @@ namespace Obrissom.Player
         /// Provides a new <see cref="UIMultiMenuActions" /> instance referencing this action map.
         /// </summary>
         public UIMultiMenuActions @UIMultiMenu => new UIMultiMenuActions(this);
+
+        // GlobalUI
+        private readonly InputActionMap m_GlobalUI;
+        private List<IGlobalUIActions> m_GlobalUIActionsCallbackInterfaces = new List<IGlobalUIActions>();
+        private readonly InputAction m_GlobalUI_EscPressed;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "GlobalUI".
+        /// </summary>
+        public struct GlobalUIActions
+        {
+            private @PlayerInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public GlobalUIActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "GlobalUI/EscPressed".
+            /// </summary>
+            public InputAction @EscPressed => m_Wrapper.m_GlobalUI_EscPressed;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_GlobalUI; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="GlobalUIActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(GlobalUIActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="GlobalUIActions" />
+            public void AddCallbacks(IGlobalUIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_GlobalUIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_GlobalUIActionsCallbackInterfaces.Add(instance);
+                @EscPressed.started += instance.OnEscPressed;
+                @EscPressed.performed += instance.OnEscPressed;
+                @EscPressed.canceled += instance.OnEscPressed;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="GlobalUIActions" />
+            private void UnregisterCallbacks(IGlobalUIActions instance)
+            {
+                @EscPressed.started -= instance.OnEscPressed;
+                @EscPressed.performed -= instance.OnEscPressed;
+                @EscPressed.canceled -= instance.OnEscPressed;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="GlobalUIActions.UnregisterCallbacks(IGlobalUIActions)" />.
+            /// </summary>
+            /// <seealso cref="GlobalUIActions.UnregisterCallbacks(IGlobalUIActions)" />
+            public void RemoveCallbacks(IGlobalUIActions instance)
+            {
+                if (m_Wrapper.m_GlobalUIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="GlobalUIActions.AddCallbacks(IGlobalUIActions)" />
+            /// <seealso cref="GlobalUIActions.RemoveCallbacks(IGlobalUIActions)" />
+            /// <seealso cref="GlobalUIActions.UnregisterCallbacks(IGlobalUIActions)" />
+            public void SetCallbacks(IGlobalUIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_GlobalUIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_GlobalUIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="GlobalUIActions" /> instance referencing this action map.
+        /// </summary>
+        public GlobalUIActions @GlobalUI => new GlobalUIActions(this);
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerLocomotionMap" which allows adding and removing callbacks.
         /// </summary>
@@ -1345,6 +1473,21 @@ namespace Obrissom.Player
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOpenSkills(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GlobalUI" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="GlobalUIActions.AddCallbacks(IGlobalUIActions)" />
+        /// <seealso cref="GlobalUIActions.RemoveCallbacks(IGlobalUIActions)" />
+        public interface IGlobalUIActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "EscPressed" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnEscPressed(InputAction.CallbackContext context);
         }
     }
 }
