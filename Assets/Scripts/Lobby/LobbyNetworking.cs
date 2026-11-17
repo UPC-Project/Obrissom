@@ -16,6 +16,7 @@ public class LobbyNetworking : MonoBehaviour
     // Constants
     private const int MAX_PLAYER_AMOUNT = 4;
     private const string GAME_SCENE_NAME = "VillageScene";
+    private const string LOBBY_SCENE_NAME = "Lobby";
 
     // Player information
     public string PlayerName { get; private set; }
@@ -25,6 +26,7 @@ public class LobbyNetworking : MonoBehaviour
     // Player active session
     private ISession _currentSession;
     public ISession CurrentSession => _currentSession;
+    public event Action OnDisconnecting;
 
     private void Awake()
     {
@@ -128,11 +130,18 @@ public class LobbyNetworking : MonoBehaviour
         if (_currentSession == null)
             return;
 
+        OnDisconnecting?.Invoke();
+
         ISession session = _currentSession;
         _currentSession = null;
         JoinCode = null;
+        PlayerName = null;
+        LastError = null;
 
         await session.LeaveAsync();
+
+        if (SceneManager.GetActiveScene().name != LOBBY_SCENE_NAME)
+            SceneManager.LoadScene(LOBBY_SCENE_NAME);
     }
 
     private void OnClientDisconnected(ulong clientId)

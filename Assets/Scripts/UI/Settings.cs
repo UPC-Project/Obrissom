@@ -1,14 +1,16 @@
+using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-namespace Obrissom.Audio
+namespace Obrissom.UI
 {
     /// <summary>
     /// Master, Music and Effects volume sliders in a side panel.
     /// Local to each player (no networking) and saved in PlayerPrefs between sessions.
     /// </summary>
-    public class VolumeSettings : MonoBehaviour
+    public class Settings : MonoBehaviour
     {
         // Exposed parameter names in MainMixer, also used as PlayerPrefs keys
         private const string MasterParam = "MasterVolume";
@@ -22,9 +24,11 @@ namespace Obrissom.Audio
         [SerializeField] private Slider _musicSlider;
         [SerializeField] private Slider _sfxSlider;
 
-        [Header("Side Panel")]
+        [Header("UI Components")]
         [SerializeField] private GameObject _panel;
-        [SerializeField] private Button _toggleButton;
+        [SerializeField] private GameObject _exitModal;
+        [SerializeField] private GameObject _disconnectPanel;
+        [SerializeField] private TextMeshProUGUI _warningText;
 
         // Start, not Awake: AudioMixer.SetFloat is ignored before the mixer is ready
         private void Start()
@@ -33,12 +37,17 @@ namespace Obrissom.Audio
             Bind(_musicSlider, MusicParam);
             Bind(_sfxSlider, SfxParam);
 
-            if (_toggleButton != null) _toggleButton.onClick.AddListener(TogglePanel);
             if (_panel != null) _panel.SetActive(false);
+
+            if (LobbyNetworking.Instance != null)
+                LobbyNetworking.Instance.OnDisconnecting += ShowDisconnectPanel;
         }
 
         private void OnDestroy()
         {
+            if (LobbyNetworking.Instance != null)
+                LobbyNetworking.Instance.OnDisconnecting -= ShowDisconnectPanel;
+
             PlayerPrefs.Save();
         }
 
@@ -47,6 +56,7 @@ namespace Obrissom.Audio
             _panel.SetActive(!_panel.activeSelf);
         }
 
+        // AUDIO SETTINGS
         private void Bind(Slider slider, string param)
         {
             float value = PlayerPrefs.GetFloat(param, 1f);
@@ -67,6 +77,27 @@ namespace Obrissom.Audio
         {
             if (_mixer == null) return;
             _mixer.SetFloat(param, Mathf.Log10(Mathf.Max(value, 0.0001f)) * 20f);
+        }
+
+        // EXIT GAME
+        public void TryExitGame(bool tryExit)
+        {
+            _exitModal.SetActive(tryExit);
+            if (tryExit) _panel.SetActive(false);
+            if (tryExit && NetworkManager.Singleton.IsHost) _warningText.text = "Are you sure? \n Match will end for everyone";
+        }
+        /// <summary>
+        /// restore initial state, moving player to lobby.
+        /// </summary>
+        public async void ExitGame()
+        {
+            _exitModal.SetActive(false);
+            await LobbyNetworking.Instance.LeaveLobby();
+        }
+
+        private void ShowDisconnectPanel()
+        {
+            _disconnectPanel.SetActive(true);
         }
     }
 }

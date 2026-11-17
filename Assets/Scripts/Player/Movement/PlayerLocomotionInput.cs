@@ -74,6 +74,13 @@ namespace Obrissom.Player
             PlayerInput.PlayerLocomotionMap.RemoveCallbacks(this);
         }
 
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            _playerInput.Disable();
+            _playerInput.Dispose();
+        }
+
         private void Update()
         {
             _camera.CameraDistance = Mathf.Clamp(_camera.CameraDistance + ScrollInput.y, _cameraZoomMinZoom, _cameraZoomMaxZoom);
