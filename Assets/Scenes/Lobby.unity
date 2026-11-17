@@ -1758,6 +1758,7 @@ GameObject:
   - component: {fileID: 118042419}
   - component: {fileID: 118042418}
   - component: {fileID: 118042417}
+  - component: {fileID: 118042420}
   m_Layer: 5
   m_Name: Button GoBack
   m_TagString: Untagged
@@ -1879,6 +1880,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 118042415}
   m_CullTransparentMesh: 1
+--- !u!114 &118042420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118042415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &126376975
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,6 +2603,7 @@ GameObject:
   - component: {fileID: 195742892}
   - component: {fileID: 195742891}
   - component: {fileID: 195742890}
+  - component: {fileID: 195742893}
   m_Layer: 5
   m_Name: Crow DPS
   m_TagString: Untagged
@@ -2610,10 +2626,10 @@ RectTransform:
   - {fileID: 1371997561}
   m_Father: {fileID: 1540729929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -41.666668}
-  m_SizeDelta: {x: 100, y: 83.333336}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &195742890
 MonoBehaviour:
@@ -2709,6 +2725,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195742888}
   m_CullTransparentMesh: 1
+--- !u!114 &195742893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195742888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &207958064 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5977920380017858756, guid: 62c60df98f7412141b6c11c2020582b0, type: 3}
@@ -4752,10 +4782,10 @@ RectTransform:
   - {fileID: 1978694669}
   m_Father: {fileID: 919376479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -62.5}
-  m_SizeDelta: {x: 350, y: 55}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &358843860
 MonoBehaviour:
@@ -7382,6 +7412,7 @@ GameObject:
   - component: {fileID: 504556668}
   - component: {fileID: 504556667}
   - component: {fileID: 504556666}
+  - component: {fileID: 504556669}
   m_Layer: 5
   m_Name: Button Join
   m_TagString: Untagged
@@ -7404,10 +7435,10 @@ RectTransform:
   - {fileID: 1333523518}
   m_Father: {fileID: 1714603924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 360, y: -165}
+  m_SizeDelta: {x: 520, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &504556666
 MonoBehaviour:
@@ -7503,6 +7534,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 504556664}
   m_CullTransparentMesh: 1
+--- !u!114 &504556669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504556664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1001 &504906816
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8460,6 +8505,7 @@ GameObject:
   - component: {fileID: 554362015}
   - component: {fileID: 554362014}
   - component: {fileID: 554362013}
+  - component: {fileID: 554362016}
   m_Layer: 5
   m_Name: Beetle Tank
   m_TagString: Untagged
@@ -8482,10 +8528,10 @@ RectTransform:
   - {fileID: 941430364}
   m_Father: {fileID: 1540729929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -125}
-  m_SizeDelta: {x: 100, y: 83.333336}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &554362013
 MonoBehaviour:
@@ -8581,6 +8627,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554362011}
   m_CullTransparentMesh: 1
+--- !u!114 &554362016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554362011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1001 &555640186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8737,6 +8797,7 @@ GameObject:
   - component: {fileID: 584903684}
   - component: {fileID: 584903683}
   - component: {fileID: 584903682}
+  - component: {fileID: 584903685}
   m_Layer: 5
   m_Name: Button Settings
   m_TagString: Untagged
@@ -8759,10 +8820,10 @@ RectTransform:
   - {fileID: 1684712708}
   m_Father: {fileID: 1714603924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 360, y: -265}
+  m_SizeDelta: {x: 520, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &584903682
 MonoBehaviour:
@@ -8858,6 +8919,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584903680}
   m_CullTransparentMesh: 1
+--- !u!114 &584903685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584903680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1001 &586738930
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9730,6 +9805,7 @@ GameObject:
   - component: {fileID: 718213618}
   - component: {fileID: 718213617}
   - component: {fileID: 718213616}
+  - component: {fileID: 718213619}
   m_Layer: 5
   m_Name: Button Host
   m_TagString: Untagged
@@ -9752,10 +9828,10 @@ RectTransform:
   - {fileID: 1322802949}
   m_Father: {fileID: 1714603924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 360, y: -65}
+  m_SizeDelta: {x: 520, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &718213616
 MonoBehaviour:
@@ -9851,6 +9927,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 718213614}
   m_CullTransparentMesh: 1
+--- !u!114 &718213619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718213614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1001 &727452037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10183,59 +10273,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2584797517467738657, guid: a6b8e51cde2c008498814a42d6906277, type: 3}
   m_PrefabInstance: {fileID: 2056417251}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &786769108
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 786769110}
-  - component: {fileID: 786769109}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &786769109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786769108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a123625caaf4c6646a896d68cb260974, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.AudioManager
-  _libraries:
-  - {fileID: 11400000, guid: 73c299325510e1c44981f560a9ac3600, type: 2}
-  - {fileID: 11400000, guid: ede44a820aa841e4d9c0eb84deecd8a5, type: 2}
-  - {fileID: 11400000, guid: 2a2656731b0603f4f8444a4d62ae46fa, type: 2}
-  - {fileID: 11400000, guid: a2a574bdbfa55fe4b8cd8cd7f2ee75db, type: 2}
-  - {fileID: 11400000, guid: 689db31c41d15074e8725ee2971f1272, type: 2}
-  _initialPoolSize: 16
-  _maxPoolSize: 32
-  _logPlays: 0
---- !u!4 &786769110
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786769108}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 235.99924, y: 44.50823, z: 439.189}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &788789073
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10864,6 +10901,7 @@ GameObject:
   - component: {fileID: 852847205}
   - component: {fileID: 852847204}
   - component: {fileID: 852847203}
+  - component: {fileID: 852847206}
   m_Layer: 5
   m_Name: Button Host Start
   m_TagString: Untagged
@@ -10985,6 +11023,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 852847201}
   m_CullTransparentMesh: 1
+--- !u!114 &852847206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852847201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &854380780
 GameObject:
   m_ObjectHideFlags: 0
@@ -11018,7 +11070,7 @@ RectTransform:
   m_Father: {fileID: 629647047}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12236,7 +12288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &953295678
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13212,6 +13264,7 @@ GameObject:
   - component: {fileID: 1037602055}
   - component: {fileID: 1037602054}
   - component: {fileID: 1037602053}
+  - component: {fileID: 1037602056}
   m_Layer: 5
   m_Name: Button Client Start
   m_TagString: Untagged
@@ -13333,6 +13386,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1037602051}
   m_CullTransparentMesh: 1
+--- !u!114 &1037602056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037602051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &1064170440
 GameObject:
   m_ObjectHideFlags: 0
@@ -13809,6 +13876,7 @@ GameObject:
   - component: {fileID: 1116931216}
   - component: {fileID: 1116931215}
   - component: {fileID: 1116931214}
+  - component: {fileID: 1116931217}
   m_Layer: 5
   m_Name: Spectre Support
   m_TagString: Untagged
@@ -13831,10 +13899,10 @@ RectTransform:
   - {fileID: 410847259}
   m_Father: {fileID: 1540729929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -208.33334}
-  m_SizeDelta: {x: 100, y: 83.333336}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1116931214
 MonoBehaviour:
@@ -13930,6 +13998,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1116931212}
   m_CullTransparentMesh: 1
+--- !u!114 &1116931217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116931212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1001 &1130982216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15059,9 +15141,9 @@ RectTransform:
   - {fileID: 1239139564}
   m_Father: {fileID: 421125031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -650}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1237761663
@@ -15102,6 +15184,7 @@ GameObject:
   - component: {fileID: 1239139567}
   - component: {fileID: 1239139566}
   - component: {fileID: 1239139565}
+  - component: {fileID: 1239139568}
   m_Layer: 5
   m_Name: Button Skills
   m_TagString: Untagged
@@ -15124,9 +15207,9 @@ RectTransform:
   - {fileID: 412717223}
   m_Father: {fileID: 1237761662}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1239139565
@@ -15223,6 +15306,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239139563}
   m_CullTransparentMesh: 1
+--- !u!114 &1239139568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239139563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &1269372840
 GameObject:
   m_ObjectHideFlags: 0
@@ -20067,6 +20164,7 @@ GameObject:
   - component: {fileID: 1713659954}
   - component: {fileID: 1713659953}
   - component: {fileID: 1713659952}
+  - component: {fileID: 1713659955}
   m_Layer: 5
   m_Name: Button Description
   m_TagString: Untagged
@@ -20089,9 +20187,9 @@ RectTransform:
   - {fileID: 84188884}
   m_Father: {fileID: 1237761662}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1713659952
@@ -20188,6 +20286,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713659950}
   m_CullTransparentMesh: 1
+--- !u!114 &1713659955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713659950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &1714603923
 GameObject:
   m_ObjectHideFlags: 0
@@ -20206,7 +20318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1714603924
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20568,7 +20680,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30.45}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1722502378
 MonoBehaviour:
@@ -23941,6 +24053,7 @@ GameObject:
   - component: {fileID: 1949606295}
   - component: {fileID: 1949606294}
   - component: {fileID: 1949606293}
+  - component: {fileID: 1949606296}
   m_Layer: 5
   m_Name: Button Exit
   m_TagString: Untagged
@@ -23963,10 +24076,10 @@ RectTransform:
   - {fileID: 335529633}
   m_Father: {fileID: 1714603924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 360, y: -365}
+  m_SizeDelta: {x: 520, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1949606293
 MonoBehaviour:
@@ -24062,6 +24175,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1949606291}
   m_CullTransparentMesh: 1
+--- !u!114 &1949606296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949606291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e56d22b6c1d234db275a778f26fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
+  _clickSound: 400
+  _hoverSound: 405
 --- !u!1 &1955054701
 GameObject:
   m_ObjectHideFlags: 0
@@ -24250,10 +24377,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 919376479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -15}
-  m_SizeDelta: {x: 350, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1968906994
 MonoBehaviour:
@@ -25697,9 +25824,9 @@ RectTransform:
   - {fileID: 228758941}
   m_Father: {fileID: 421125031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2084513932
@@ -26452,6 +26579,27 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+--- !u!114 &537833870393008178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000142205217523532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a123625caaf4c6646a896d68cb260974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.AudioManager
+  _libraries:
+  - {fileID: 11400000, guid: 73c299325510e1c44981f560a9ac3600, type: 2}
+  - {fileID: 11400000, guid: ede44a820aa841e4d9c0eb84deecd8a5, type: 2}
+  - {fileID: 11400000, guid: 2a2656731b0603f4f8444a4d62ae46fa, type: 2}
+  - {fileID: 11400000, guid: a2a574bdbfa55fe4b8cd8cd7f2ee75db, type: 2}
+  - {fileID: 11400000, guid: 689db31c41d15074e8725ee2971f1272, type: 2}
+  _initialPoolSize: 16
+  _maxPoolSize: 32
+  _logPlays: 0
 --- !u!1001 &1103922841553730245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26664,6 +26812,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7534508987516141842, guid: 21923722b21002742833a1a06eb82c2e, type: 3}
   m_PrefabInstance: {fileID: 1743064957467596041}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2000142205217523532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5927972633634941328}
+  - component: {fileID: 537833870393008178}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1001 &2662293465612193979
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26928,6 +27093,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2575177541814546097, guid: b8317ae1a8e53fe42a7bd27be1bce9e1, type: 3}
   m_PrefabInstance: {fileID: 4460533502219643357}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &5927972633634941328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000142205217523532}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7025141621270815517
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27192,6 +27372,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1601125017}
+  - {fileID: 5927972633634941328}
   - {fileID: 406336454}
   - {fileID: 2111997947}
   - {fileID: 1815090764}
@@ -27202,7 +27383,6 @@ SceneRoots:
   - {fileID: 1605215708}
   - {fileID: 2039597776}
   - {fileID: 828443984}
-  - {fileID: 786769110}
   - {fileID: 1722951030}
   - {fileID: 1202260509}
   - {fileID: 1711177438}
