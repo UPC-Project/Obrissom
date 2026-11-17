@@ -621,7 +621,7 @@ Transform:
   m_GameObject: {fileID: 50911149}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0039028926, y: -0.33050942, z: -0.007898301, w: 0.9437616}
-  m_LocalPosition: {x: -39.619385, y: -27.879793, z: -24.381561}
+  m_LocalPosition: {x: -28.78, y: -28.19, z: -10.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3171,11 +3171,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1242414684}
   - {fileID: 311953936}
+  - {fileID: 1177586097}
   - {fileID: 1762212974}
   - {fileID: 50911150}
   - {fileID: 1352103153}
+  - {fileID: 1870373838}
   m_Father: {fileID: 1815090764}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &266463986
@@ -11781,6 +11782,70 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 68c0c94a6b9e83b4ebddfb9baefd3179, type: 3}
   m_PrefabInstance: {fileID: 1077819042}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1086164587
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 263514909}
+    m_Modifications:
+    - target: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_Name
+      value: ruraltown_chapel_int (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.199982
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -28.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.4859009
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.43562388
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.90012884
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -128.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1870373839}
+  m_SourcePrefab: {fileID: 100100000, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
 --- !u!1001 &1088964401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13677,6 +13742,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
   m_PrefabInstance: {fileID: 1175102019}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1177586096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1177586097}
+  - component: {fileID: 1177586098}
+  m_Layer: 0
+  m_Name: 'ChurchEntryAnchor '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1177586097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1177586096}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.45419315, z: -0, w: -0.89090323}
+  m_LocalPosition: {x: -24.720001, y: -27.9, z: -7.5200195}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 263514909}
+  m_LocalEulerAnglesHint: {x: 0, y: -305.974, z: 0}
+--- !u!114 &1177586098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1177586096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8a115bdeaa7b9429b91a4d29dcbb8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.ArenaDestinationAnchor
+  _gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  _forwardRayLength: 3
 --- !u!1001 &1177655534
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14493,52 +14604,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
   m_PrefabInstance: {fileID: 1232609430}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1242414682
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1242414684}
-  - component: {fileID: 1242414683}
-  m_Layer: 0
-  m_Name: BossArenaDestinationAnchor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1242414683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1242414682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f8a115bdeaa7b9429b91a4d29dcbb8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.ArenaDestinationAnchor
-  _gizmoColor: {r: 0, g: 1, b: 1, a: 1}
-  _forwardRayLength: 3
---- !u!4 &1242414684
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1242414682}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.45771384, z: -0, w: 0.8890996}
-  m_LocalPosition: {x: -37.299988, y: -28.06, z: -18.700012}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 263514909}
-  m_LocalEulerAnglesHint: {x: 0, y: -665.521, z: 0}
 --- !u!1001 &1243171369
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15390,7 +15455,6 @@ GameObject:
   - component: {fileID: 1352103157}
   - component: {fileID: 1352103156}
   - component: {fileID: 1352103155}
-  - component: {fileID: 1352103154}
   m_Layer: 3
   m_Name: BossArena
   m_TagString: Ground
@@ -15407,44 +15471,12 @@ Transform:
   m_GameObject: {fileID: 1352103152}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.90012884, z: 0, w: 0.43562388}
-  m_LocalPosition: {x: -8.2, y: -28.5, z: 3.1}
-  m_LocalScale: {x: 7.84, y: 1, z: 8.9}
+  m_LocalPosition: {x: -11.6525, y: -28.4, z: 2.8655}
+  m_LocalScale: {x: 2.0777607, y: 1, z: 4.598719}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 263514909}
   m_LocalEulerAnglesHint: {x: 0, y: -128.35, z: 0}
---- !u!114 &1352103154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1352103152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
-  m_SerializedVersion: 0
-  m_AgentTypeID: 0
-  m_CollectObjects: 2
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: ee8e7d969576c44419885ede6a0b2afa, type: 2}
-  m_BuildHeightMesh: 0
 --- !u!64 &1352103155
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -20364,7 +20396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af16fcfebcfe886418e0c3d872c605d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.BossArenaPortal
-  _destinationAnchor: {fileID: 1242414683}
+  _destinationAnchor: {fileID: 1177586098}
   _requiredLevel: 2
   _deniedMessage: Area unavailable
   _grantedMessage: Available area
@@ -21393,6 +21425,48 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
+--- !u!1 &1870373837 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+  m_PrefabInstance: {fileID: 1086164587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1870373838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5208514630702298786, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+  m_PrefabInstance: {fileID: 1086164587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1870373839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870373837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 2
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 046afca17ba6b3841838b8b1749e517a, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1001 &1882770430
 PrefabInstance:
   m_ObjectHideFlags: 0
