@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Obrissom.Environment;
 using Obrissom.UI;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Obrissom.Player
     [RequireComponent(typeof(PlayerTeleportService))]
     public class PlayerRespawn : NetworkBehaviour
     {
-        public enum RespawnNotice : byte { Downed, Died, Revived, ReviveInterrupted }
+        public enum RespawnNotice : byte { Downed, Died, Revived, ReviveInterrupted, Rested, EnemiesNearby }
 
         [Header("Downed")]
         [Tooltip("Seconds a downed player waits for a revive before respawning. Paused while a teammate is reviving them.")]
@@ -36,6 +37,8 @@ namespace Obrissom.Player
         [SerializeField] private string _revivingMessage = "Reviving teammate...";
         [SerializeField] private string _reviveInterruptedMessage = "Revive interrupted";
         [SerializeField] private string _revivedMessage = "You were revived";
+        [SerializeField] private string _restedMessage = "You rested. Respawn point set";
+        [SerializeField] private string _enemiesNearbyMessage = "You can't rest with enemies nearby";
 
         // Every player on this peer: used to find downed teammates and to detect a party wipe
         private static readonly List<PlayerRespawn> s_players = new List<PlayerRespawn>();
@@ -98,6 +101,34 @@ namespace Obrissom.Player
 
             _respawnPosition = position;
             _respawnRotation = rotation;
+        }
+
+        // BONFIRES
+
+        /// Owner. Rest at a bonfire in range (interact key).
+        public void RequestRest(Bonfire bonfire)
+        {
+            // Non-owner copies also receive local input
+            if (!IsOwner || bonfire == null) return;
+
+            RestRpc(bonfire.BonfireId);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        private void RestRpc(string bonfireId)
+        {
+            Bonfire bonfire = Bonfire.FindById(bonfireId);
+            if (bonfire == null || IsDowned || !bonfire.IsInRestRange(transform.position)) return;
+
+            if (bonfire.AreEnemiesNearby())
+            {
+                NotifyOwnerRpc(RespawnNotice.EnemiesNearby);
+                return;
+            }
+
+            _playerCombat.RestoreHealthAndResource();
+            SetRespawnPoint(bonfire.RespawnPosition, bonfire.RespawnRotation);
+            NotifyOwnerRpc(RespawnNotice.Rested);
         }
 
         // DOWNED (server)
@@ -303,6 +334,8 @@ namespace Obrissom.Player
                 RespawnNotice.Downed => _downedMessage,
                 RespawnNotice.Died => _deathMessage,
                 RespawnNotice.Revived => _revivedMessage,
+                RespawnNotice.Rested => _restedMessage,
+                RespawnNotice.EnemiesNearby => _enemiesNearbyMessage,
                 _ => _reviveInterruptedMessage,
             };
 

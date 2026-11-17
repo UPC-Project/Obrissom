@@ -189,6 +189,15 @@ namespace Obrissom.Player
             return ray.origin + ray.direction * 100f;
         }
 
+        // Server only. Resting at a bonfire
+        public void RestoreHealthAndResource()
+        {
+            if (!IsServer || _isDead.Value) return;
+
+            _health.Value = _playerStats.maxHealth.Value;
+            _resource.Value = _playerStats.maxResource.Value;
+        }
+
         public void Revive(float fraction)
         {
             if (!IsServer || !_isDead.Value) return;

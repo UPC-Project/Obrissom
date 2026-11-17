@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Obrissom.Environment;
 
-/// Handles player interaction input and NPC/Item proximity detection.
+/// Handles player interaction input and NPC/Item/Bonfire proximity detection.
 namespace Obrissom.Player
 {
     public class PlayerInteraction : MonoBehaviour, PlayerInput.IPlayerInteractMapActions
@@ -11,6 +12,7 @@ namespace Obrissom.Player
         private PlayerRespawn _playerRespawn;
         private List<NPCInteractable> _nearbyNPCs = new List<NPCInteractable>();
         private List<PickupBase> _nearbyItems = new List<PickupBase>();
+        private List<Bonfire> _nearbyBonfires = new List<Bonfire>();
         private PlayerInput _playerInput;
         private void Awake()
         {
@@ -48,6 +50,7 @@ namespace Obrissom.Player
             // Clean up destroyed or disabled objects (items picked up/waiting respawn)
             _nearbyItems.RemoveAll(item => item == null || !item.isActiveAndEnabled || !item.GetComponent<Collider>().enabled);
             _nearbyNPCs.RemoveAll(npc => npc == null || !npc.isActiveAndEnabled);
+            _nearbyBonfires.RemoveAll(bonfire => bonfire == null || !bonfire.isActiveAndEnabled);
 
             if (_nearbyItems.Count > 0)
             {
@@ -58,6 +61,12 @@ namespace Obrissom.Player
             if (_nearbyNPCs.Count > 0)
             {
                 _nearbyNPCs[0].OnInteract(_playerQuestTracker);
+                return;
+            }
+
+            if (_nearbyBonfires.Count > 0 && _playerRespawn != null)
+            {
+                _playerRespawn.RequestRest(_nearbyBonfires[0]);
                 return;
             }
         }
@@ -73,6 +82,11 @@ namespace Obrissom.Player
             {
                 _nearbyItems.Add(item);
             }
+
+            if (other.TryGetComponent(out Bonfire bonfire) && !_nearbyBonfires.Contains(bonfire))
+            {
+                _nearbyBonfires.Add(bonfire);
+            }
         }
 
         private void OnTriggerExit(Collider other)
@@ -85,6 +99,11 @@ namespace Obrissom.Player
             if (other.TryGetComponent(out PickupBase item))
             {
                 _nearbyItems.Remove(item);
+            }
+
+            if (other.TryGetComponent(out Bonfire bonfire))
+            {
+                _nearbyBonfires.Remove(bonfire);
             }
         }
     }
