@@ -8951,16 +8951,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerRespawn
   ShowTopMostFoldoutHeaderGroup: 1
   _downedDuration: 15
-  _noReviveRespawnDelay: 3
   _arrivalGrace: 0.5
   _reviveHoldTime: 3
   _reviveRange: 2.5
   _reviveFraction: 0.5
-  _downedMessage: You are down. A teammate can revive you
-  _deathMessage: You died
-  _revivingMessage: Reviving teammate...
+  _reviveStone: {fileID: 11400000, guid: 6191ffe6cea0f9b41a1bb2482e74bc4d, type: 2}
+  _stoneReviveFraction: 1
   _reviveInterruptedMessage: Revive interrupted
   _revivedMessage: You were revived
+  _stoneRevivedMessage: The magic stone brought you back
+  _restedMessage: You rested. Respawn point set
+  _enemiesNearbyMessage: You can't rest with enemies nearby
 --- !u!1 &7204947459475530585
 GameObject:
   m_ObjectHideFlags: 0

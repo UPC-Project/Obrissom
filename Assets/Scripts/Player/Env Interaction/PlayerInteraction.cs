@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using Obrissom.Environment;
+using Unity.Netcode;
 
 /// Handles player interaction input and NPC/Item/Bonfire proximity detection.
 namespace Obrissom.Player
@@ -14,10 +15,16 @@ namespace Obrissom.Player
         private List<PickupBase> _nearbyItems = new List<PickupBase>();
         private List<Bonfire> _nearbyBonfires = new List<Bonfire>();
         private PlayerInput _playerInput;
+        private NetworkObject _networkObject;
+
+        // Every player copy has this script and reads the local keyboard: only your own player may interact
+        private bool IsOwner => _networkObject != null && _networkObject.IsOwner;
+
         private void Awake()
         {
             _playerQuestTracker = GetComponent<PlayerQuestTracker>();
             _playerRespawn = GetComponent<PlayerRespawn>();
+            _networkObject = GetComponent<NetworkObject>();
         }
 
         private void OnEnable()
@@ -35,6 +42,8 @@ namespace Obrissom.Player
 
         public void OnInteract(InputAction.CallbackContext context)
         {
+            if (!IsOwner) return;
+
             // Reviving is held: releasing the key stops it
             if (context.canceled)
             {
@@ -54,7 +63,7 @@ namespace Obrissom.Player
 
             if (_nearbyItems.Count > 0)
             {
-                _nearbyItems[0].Interact();
+                GetClosestItem().Interact();
                 return;
             }
 
@@ -69,6 +78,24 @@ namespace Obrissom.Player
                 _playerRespawn.RequestRest(_nearbyBonfires[0]);
                 return;
             }
+        }
+
+        // With several items in range, F takes the one you're standing next to (not the first that entered the trigger)
+        private PickupBase GetClosestItem()
+        {
+            PickupBase closest = _nearbyItems[0];
+            float closestSqrDistance = float.MaxValue;
+
+            foreach (PickupBase item in _nearbyItems)
+            {
+                float sqrDistance = (item.transform.position - transform.position).sqrMagnitude;
+                if (sqrDistance < closestSqrDistance)
+                {
+                    closestSqrDistance = sqrDistance;
+                    closest = item;
+                }
+            }
+            return closest;
         }
 
         private void OnTriggerEnter(Collider other)

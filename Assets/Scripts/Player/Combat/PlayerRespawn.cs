@@ -4,23 +4,23 @@ using Obrissom.Environment;
 using Obrissom.UI;
 using Unity.Netcode;
 using UnityEngine;
+using PlayerInventory = Obrissom.Player.Inventory.Inventory;
 
 namespace Obrissom.Player
 {
-    /// Death flow: at 0 health the player goes down and a teammate can revive them for a while.
-    /// If nobody does (or the whole party is down), they respawn at their respawn point with full health and resource.
+    /// Death flow: at 0 health the player goes down for a while. Meanwhile a teammate can revive them (hold F),
+    /// or they can choose to respawn at their bonfire right away or spend a magic stone to get up where they fell.
+    /// When the time runs out they respawn at their respawn point with full health and resource.
     /// The respawn point starts at the spawn position; bonfires replace it.
     [RequireComponent(typeof(PlayerCombat))]
     [RequireComponent(typeof(PlayerTeleportService))]
     public class PlayerRespawn : NetworkBehaviour
     {
-        public enum RespawnNotice : byte { Downed, Died, Revived, ReviveInterrupted, Rested, EnemiesNearby }
+        public enum RespawnNotice : byte { Died, Revived, StoneRevived, ReviveInterrupted, Rested, EnemiesNearby }
 
         [Header("Downed")]
-        [Tooltip("Seconds a downed player waits for a revive before respawning. Paused while a teammate is reviving them.")]
+        [Tooltip("Seconds a downed player stays down before respawning at the bonfire. Paused while a teammate is reviving them.")]
         [SerializeField] private float _downedDuration = 15f;
-        [Tooltip("Delay before respawning when nobody can revive (solo, or the whole party is down).")]
-        [SerializeField] private float _noReviveRespawnDelay = 3f;
         [Tooltip("Time after the teleport before the player can be targeted again, so enemies near the death spot can't hit the arrival.")]
         [SerializeField] private float _arrivalGrace = 0.5f;
 
@@ -31,16 +31,20 @@ namespace Obrissom.Player
         [Tooltip("Health and resource the revived player gets back, as a fraction of max.")]
         [SerializeField, Range(0.1f, 1f)] private float _reviveFraction = 0.5f;
 
+        [Header("Magic stone")]
+        [Tooltip("Consumable item that revives the player where they fell.")]
+        [SerializeField] private Item _reviveStone;
+        [Tooltip("Health and resource after using the stone, as a fraction of max.")]
+        [SerializeField, Range(0.1f, 1f)] private float _stoneReviveFraction = 1f;
+
         [Header("Messages")]
-        [SerializeField] private string _downedMessage = "You are down. A teammate can revive you";
-        [SerializeField] private string _deathMessage = "You died";
-        [SerializeField] private string _revivingMessage = "Reviving teammate...";
         [SerializeField] private string _reviveInterruptedMessage = "Revive interrupted";
         [SerializeField] private string _revivedMessage = "You were revived";
+        [SerializeField] private string _stoneRevivedMessage = "The magic stone brought you back";
         [SerializeField] private string _restedMessage = "You rested. Respawn point set";
         [SerializeField] private string _enemiesNearbyMessage = "You can't rest with enemies nearby";
 
-        // Every player on this peer: used to find downed teammates and to detect a party wipe
+        // Every player on this peer: used to find downed teammates and to know if anyone can still revive
         private static readonly List<PlayerRespawn> s_players = new List<PlayerRespawn>();
 
         private PlayerCombat _playerCombat;
@@ -49,11 +53,17 @@ namespace Obrissom.Player
         private PlayerLocomotionInput _locomotionInput;
         private PlayerCombatInput _combatInput;
         private PlayerInteraction _interaction;
+        private PlayerInventory _inventory;
+        private Animator _animator;
+
+        // Bool in the class Animator Controller. Classes without it simply skip the death animation.
+        private static readonly int IsDeadHash = Animator.StringToHash("isDead");
 
         // Server only
         private Vector3 _respawnPosition;
         private Quaternion _respawnRotation;
         private Coroutine _downedRoutine;
+        private float _downedTimeLeft;
         private bool _isRespawning;
         private bool _isBeingRevived;
         private Coroutine _reviveRoutine; // this player reviving a teammate
@@ -61,9 +71,16 @@ namespace Obrissom.Player
 
         // Owner only
         private bool _isHoldingRevive;
+        // Local copy of the downed timer for the UI; the server resyncs it when it pauses or resumes
+        private float _ownerTimeLeft;
+        private bool _ownerTimerPaused;
+        private bool _ownerRespawning;
 
         public bool IsDowned => _playerCombat.IsDead;
         private bool CanBeRevived => IsDowned && !_isRespawning && !_isBeingRevived;
+
+        /// Magic stones in this player's inventory (meaningful on the owner, where the inventory lives).
+        public int ReviveStoneCount => _reviveStone != null && _inventory != null ? _inventory.GetItemCount(_reviveStone) : 0;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics() => s_players.Clear();
@@ -76,6 +93,8 @@ namespace Obrissom.Player
             _locomotionInput = GetComponent<PlayerLocomotionInput>();
             _combatInput = GetComponent<PlayerCombatInput>();
             _interaction = GetComponent<PlayerInteraction>();
+            _inventory = GetComponent<PlayerInventory>();
+            _animator = GetComponent<PlayerController>()._animator;
         }
 
         public override void OnNetworkSpawn()
@@ -83,7 +102,12 @@ namespace Obrissom.Player
             s_players.Add(this);
 
             if (IsServer) SetRespawnPoint(transform.position, transform.rotation);
-            if (IsOwner) _playerCombat._isDead.OnValueChanged += OnDeadChanged;
+            if (IsOwner)
+            {
+                _playerCombat._isDead.OnValueChanged += OnDeadChanged;
+                ResetOwnerTimer();
+                DownedUI.Instance?.Bind(this);
+            }
         }
 
         public override void OnNetworkDespawn()
@@ -91,7 +115,31 @@ namespace Obrissom.Player
             s_players.Remove(this);
 
             if (IsServer) StopReviving(false);
-            if (IsOwner) _playerCombat._isDead.OnValueChanged -= OnDeadChanged;
+            if (IsOwner)
+            {
+                _playerCombat._isDead.OnValueChanged -= OnDeadChanged;
+                DownedUI.Instance?.HideDowned();
+                DownedUI.Instance?.HideRevivePrompt();
+            }
+        }
+
+        // Owner: downed screen (timer + choices), or the "Hold F" prompt near a downed teammate
+        private void Update()
+        {
+            if (!IsOwner || DownedUI.Instance == null) return;
+
+            if (IsDowned)
+            {
+                if (!_ownerTimerPaused && !_ownerRespawning)
+                    _ownerTimeLeft = Mathf.Max(0f, _ownerTimeLeft - Time.deltaTime);
+
+                DownedUI.Instance.ShowDowned(_ownerTimeLeft, _ownerTimerPaused, _ownerRespawning, AnyTeammateAlive(), ReviveStoneCount);
+                DownedUI.Instance.HideRevivePrompt();
+                return;
+            }
+
+            if (FindDownedTeammateInRange() != null) DownedUI.Instance.ShowRevivePrompt(_isHoldingRevive);
+            else DownedUI.Instance.HideRevivePrompt();
         }
 
         /// Server only.
@@ -141,47 +189,37 @@ namespace Obrissom.Player
             // A downed player can't keep reviving someone else
             StopReviving(false);
 
-            if (AnyPlayerAlive())
-            {
-                _downedRoutine = StartCoroutine(DownedRoutine());
-                NotifyOwnerRpc(RespawnNotice.Downed);
-                return;
-            }
-
-            // Party wipe: nobody left to revive, so every downed player respawns
-            foreach (PlayerRespawn player in s_players)
-            {
-                if (player.IsDowned) player.RespawnAfter(_noReviveRespawnDelay);
-            }
+            // Always a window to choose: wait for a teammate, respawn at the bonfire or use a magic stone.
+            // With nobody left to revive (solo or whole party down) the time just runs out the same way.
+            _downedTimeLeft = _downedDuration;
+            _downedRoutine = StartCoroutine(DownedRoutine());
+            SyncDownedTimerOwnerRpc(_downedTimeLeft, false);
         }
 
         private IEnumerator DownedRoutine()
         {
-            float remaining = _downedDuration;
-            while (remaining > 0f)
+            while (_downedTimeLeft > 0f)
             {
-                if (!_isBeingRevived) remaining -= Time.deltaTime;
+                if (!_isBeingRevived) _downedTimeLeft -= Time.deltaTime;
                 yield return null;
             }
 
-            // Nobody revived in time
-            yield return RespawnRoutine(0f);
+            // Time's up
+            yield return RespawnRoutine();
         }
 
-        private void RespawnAfter(float delay)
+        private void RespawnNow()
         {
             if (_isRespawning) return;
 
             if (_downedRoutine != null) StopCoroutine(_downedRoutine);
-            _downedRoutine = StartCoroutine(RespawnRoutine(delay));
+            _downedRoutine = StartCoroutine(RespawnRoutine());
         }
 
-        private IEnumerator RespawnRoutine(float delay)
+        private IEnumerator RespawnRoutine()
         {
             _isRespawning = true;
             NotifyOwnerRpc(RespawnNotice.Died);
-
-            if (delay > 0f) yield return new WaitForSeconds(delay);
 
             _teleportService.TeleportTo(_respawnPosition, _respawnRotation);
 
@@ -193,24 +231,72 @@ namespace Obrissom.Player
             _downedRoutine = null;
         }
 
-        private bool AnyPlayerAlive()
-        {
-            foreach (PlayerRespawn player in s_players)
-            {
-                if (!player.IsDowned) return true;
-            }
-            return false;
-        }
-
-        // Called on the downed player by the teammate that finished reviving them
-        private void ReviveByTeammate()
+        // Teammate revive or magic stone: back up where they fell
+        private void ReviveInPlace(float fraction, RespawnNotice notice)
         {
             if (_downedRoutine != null) StopCoroutine(_downedRoutine);
             _downedRoutine = null;
             _isBeingRevived = false;
 
-            _playerCombat.Revive(_reviveFraction);
-            NotifyOwnerRpc(RespawnNotice.Revived);
+            _playerCombat.Revive(fraction);
+            NotifyOwnerRpc(notice);
+        }
+
+        // Server. Pauses or resumes the downed timer and tells the owner, so their countdown matches
+        private void SetBeingRevived(bool beingRevived)
+        {
+            _isBeingRevived = beingRevived;
+            if (IsSpawned && IsDowned) SyncDownedTimerOwnerRpc(_downedTimeLeft, beingRevived);
+        }
+
+        private bool AnyTeammateAlive()
+        {
+            foreach (PlayerRespawn player in s_players)
+            {
+                if (player != this && !player.IsDowned) return true;
+            }
+            return false;
+        }
+
+        // DOWNED CHOICES (owner buttons -> server)
+
+        /// Owner. Downed screen button: stop waiting and respawn at the bonfire now.
+        public void RequestRespawnAtBonfire()
+        {
+            if (!IsOwner || !IsDowned || _ownerRespawning) return;
+
+            RespawnNowRpc();
+        }
+
+        /// Owner. Downed screen button: spend a magic stone to get up right here.
+        public void RequestStoneRevive()
+        {
+            if (!IsOwner || !IsDowned || _ownerRespawning || ReviveStoneCount <= 0) return;
+
+            StoneReviveRpc();
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        private void RespawnNowRpc()
+        {
+            if (IsDowned) RespawnNow();
+        }
+
+        // The inventory isn't networked (it lives on the owner), so the owner checks the stone
+        // and only spends it once the server has accepted the revive
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        private void StoneReviveRpc()
+        {
+            if (!IsDowned || _isRespawning) return;
+
+            ReviveInPlace(_stoneReviveFraction, RespawnNotice.StoneRevived);
+            ConsumeReviveStoneOwnerRpc();
+        }
+
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Server)]
+        private void ConsumeReviveStoneOwnerRpc()
+        {
+            if (_reviveStone != null && _inventory != null) _inventory.RemoveItem(_reviveStone, 1);
         }
 
         // REVIVE A TEAMMATE (owner input -> server)
@@ -225,7 +311,6 @@ namespace Obrissom.Player
             if (target == null) return false;
 
             _isHoldingRevive = true;
-            NotificationPopup.Instance?.ShowMessage(_revivingMessage);
             StartReviveRpc(target.NetworkObject);
             return true;
         }
@@ -279,7 +364,7 @@ namespace Obrissom.Player
         private IEnumerator ReviveRoutine(PlayerRespawn target)
         {
             _reviveTarget = target;
-            target._isBeingRevived = true;
+            target.SetBeingRevived(true);
 
             float elapsed = 0f;
             while (elapsed < _reviveHoldTime)
@@ -287,7 +372,9 @@ namespace Obrissom.Player
                 yield return null;
                 elapsed += Time.deltaTime;
 
-                bool interrupted = IsDowned || target == null || !target.IsSpawned || !target.IsDowned || !IsInReviveRange(target);
+                // Also stops if the target chose to respawn at the bonfire or used a magic stone
+                bool interrupted = IsDowned || target == null || !target.IsSpawned || !target.IsDowned
+                                   || target._isRespawning || !IsInReviveRange(target);
                 if (interrupted)
                 {
                     ClearRevive();
@@ -297,7 +384,7 @@ namespace Obrissom.Player
             }
 
             ClearRevive();
-            target.ReviveByTeammate();
+            target.ReviveInPlace(target._reviveFraction, RespawnNotice.Revived);
         }
 
         // Small margin over the start range, so the server's interpolated positions don't cut it off
@@ -319,7 +406,7 @@ namespace Obrissom.Player
 
         private void ClearRevive()
         {
-            if (_reviveTarget != null) _reviveTarget._isBeingRevived = false;
+            if (_reviveTarget != null) _reviveTarget.SetBeingRevived(false);
             _reviveTarget = null;
             _reviveRoutine = null;
         }
@@ -329,11 +416,17 @@ namespace Obrissom.Player
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Server)]
         private void NotifyOwnerRpc(RespawnNotice notice)
         {
+            // Downed, death and reviving are shown by DownedUI, no popup for them
+            if (notice == RespawnNotice.Died)
+            {
+                _ownerRespawning = true;
+                return;
+            }
+
             string message = notice switch
             {
-                RespawnNotice.Downed => _downedMessage,
-                RespawnNotice.Died => _deathMessage,
                 RespawnNotice.Revived => _revivedMessage,
+                RespawnNotice.StoneRevived => _stoneRevivedMessage,
                 RespawnNotice.Rested => _restedMessage,
                 RespawnNotice.EnemiesNearby => _enemiesNearbyMessage,
                 _ => _reviveInterruptedMessage,
@@ -341,7 +434,22 @@ namespace Obrissom.Player
 
             if (notice == RespawnNotice.ReviveInterrupted) _isHoldingRevive = false;
 
-            NotificationPopup.Instance?.ShowMessage(message);
+            // Empty message in the inspector = no popup
+            if (!string.IsNullOrEmpty(message)) NotificationPopup.Instance?.ShowMessage(message);
+        }
+
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Server)]
+        private void SyncDownedTimerOwnerRpc(float timeLeft, bool paused)
+        {
+            _ownerTimeLeft = timeLeft;
+            _ownerTimerPaused = paused;
+        }
+
+        private void ResetOwnerTimer()
+        {
+            _ownerTimeLeft = _downedDuration;
+            _ownerTimerPaused = false;
+            _ownerRespawning = false;
         }
 
         // Owner: no moving, attacking or interacting while downed
@@ -352,6 +460,30 @@ namespace Obrissom.Player
             _locomotionInput.enabled = !isDead;
             _combatInput.enabled = !isDead;
             _interaction.enabled = !isDead;
+
+            SetDeathAnimation(isDead);
+
+            // Back up: ready for the next time and grey screen off
+            if (!isDead)
+            {
+                ResetOwnerTimer();
+                DownedUI.Instance?.HideDowned();
+            }
+        }
+
+        // Owner. The NetworkAnimator is owner-authoritative, so the parameter reaches everyone (late joiners too).
+        private void SetDeathAnimation(bool isDead)
+        {
+            if (_animator == null) return;
+
+            foreach (AnimatorControllerParameter parameter in _animator.parameters)
+            {
+                if (parameter.nameHash == IsDeadHash && parameter.type == AnimatorControllerParameterType.Bool)
+                {
+                    _animator.SetBool(IsDeadHash, isDead);
+                    return;
+                }
+            }
         }
     }
 }
