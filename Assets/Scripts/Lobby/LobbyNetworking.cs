@@ -21,6 +21,7 @@ public class LobbyNetworking : MonoBehaviour
     public string PlayerName { get; private set; }
     public PlayerClass SelectedClass { get; private set; }
     public string JoinCode { get; private set; }
+    public string LastError { get; private set; }
     // Player active session
     private ISession _currentSession;
     public ISession CurrentSession => _currentSession;
@@ -63,6 +64,7 @@ public class LobbyNetworking : MonoBehaviour
     {
         PlayerName = playerName;
         SelectedClass = selectedClass;
+        LastError = null;
 
         var options = new SessionOptions
         {
@@ -81,6 +83,7 @@ public class LobbyNetworking : MonoBehaviour
         }
         catch (Exception e)
         {
+            LastError = e.Message;
             Debug.LogError($"An error has occurred: {e.Message}");
             return null;
         }
@@ -91,6 +94,7 @@ public class LobbyNetworking : MonoBehaviour
         PlayerName = playerName;
         SelectedClass = selectedClass;
         JoinCode = joinCode;
+        LastError = null;
 
         try
         {
@@ -100,6 +104,7 @@ public class LobbyNetworking : MonoBehaviour
         catch (SessionException e)
         {
             JoinCode = null;
+            LastError = e.Message;
             Debug.LogWarning($"Connection failed: {e.Message}");
             return false;
         }

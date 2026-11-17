@@ -36,6 +36,8 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private GameObject _classSkillsInfo;
     [SerializeField] private TMP_InputField _playerNameInputField;
     [SerializeField] private TMP_InputField _roomCodeInputField;
+    [SerializeField] private GameObject _connectingText;
+    [SerializeField] private TMP_Text _errorText;
 
     [Header("Classes")]
     [SerializeField] private List<ClassData> _classes;
@@ -111,6 +113,9 @@ public class CharacterSelection : MonoBehaviour
     {
         _hostPanel.SetActive(isHost);
         _clientPanel.SetActive(!isHost);
+        _connectingText.SetActive(false);
+        _errorText.gameObject.SetActive(false);
+        SetClassButtonsInteractable(true);
 
         PlayerClass randomClass = _classes[Random.Range(0, _classes.Count)].ClassType;
         SelectClass(randomClass);
@@ -126,10 +131,37 @@ public class CharacterSelection : MonoBehaviour
     public async void StartGame(bool isHost)
     {
         string playerName = _playerNameInputField.text.Trim();
+        if (playerName == "" || playerName == null)
+        {
+            _errorText.gameObject.SetActive(true);
+            _errorText.text = "* Please choose a name.";
+            return;
+        }
 
-        if (isHost)
-            await LobbyNetworking.Instance.CreateLobby(playerName, _currentClass);
-        else
-            await LobbyNetworking.Instance.JoinLobby(_roomCodeInputField.text.Trim(), playerName, _currentClass);
+        _hostPanel.SetActive(false);
+        _clientPanel.SetActive(false);
+        _errorText.gameObject.SetActive(false);
+        _connectingText.SetActive(true);
+        SetClassButtonsInteractable(false);
+
+        bool success = isHost
+            ? await LobbyNetworking.Instance.CreateLobby(playerName, _currentClass) != null
+            : await LobbyNetworking.Instance.JoinLobby(_roomCodeInputField.text.Trim(), playerName, _currentClass);
+
+        if (!success)
+        {
+            _connectingText.SetActive(false);
+            _hostPanel.SetActive(isHost);
+            _clientPanel.SetActive(!isHost);
+            SetClassButtonsInteractable(true);
+            _errorText.text = "* " + LobbyNetworking.Instance.LastError;
+            _errorText.gameObject.SetActive(true);
+        }
+    }
+
+    private void SetClassButtonsInteractable(bool interactable)
+    {
+        foreach (var data in _classes)
+            data.Button.interactable = interactable;
     }
 }
