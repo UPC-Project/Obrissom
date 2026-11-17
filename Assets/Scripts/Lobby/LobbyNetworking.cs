@@ -81,6 +81,13 @@ public class LobbyNetworking : MonoBehaviour
 
             return JoinCode;
         }
+        catch (SessionException e)
+        {
+            LastError = GetFriendlyError(e.Error);
+            Debug.LogWarning($"Connection failed: {e.Message}");
+            return null;
+
+        }
         catch (Exception e)
         {
             LastError = e.Message;
@@ -104,8 +111,14 @@ public class LobbyNetworking : MonoBehaviour
         catch (SessionException e)
         {
             JoinCode = null;
-            LastError = e.Message;
+            LastError = GetFriendlyError(e.Error);
             Debug.LogWarning($"Connection failed: {e.Message}");
+            return false;
+        }
+        catch (Exception e)
+        {
+            LastError = e.Message;
+            Debug.LogError($"An error has occurred: {e.Message}");
             return false;
         }
     }
@@ -129,4 +142,15 @@ public class LobbyNetworking : MonoBehaviour
 
         _ = LeaveLobby();
     }
+
+    // text changed for the user
+    private string GetFriendlyError(SessionError error) => error switch
+    {
+        SessionError.SessionNotFound => "Room not found.",
+        SessionError.SessionDeleted => "This room no longer exists.",
+        SessionError.InvalidSessionIdentifier => "Invalid room code format.",
+        SessionError.RateLimitExceeded => "Too many attempts. Please wait a moment.",
+        SessionError.NotAuthorized => "Still signing in, try again in a second.",
+        _ => "Could not connect to the room."
+    };
 }

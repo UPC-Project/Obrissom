@@ -131,10 +131,17 @@ public class CharacterSelection : MonoBehaviour
     public async void StartGame(bool isHost)
     {
         string playerName = _playerNameInputField.text.Trim();
+        string roomCode = _roomCodeInputField.text.Trim();
         if (playerName == "" || playerName == null)
         {
             _errorText.gameObject.SetActive(true);
             _errorText.text = "* Please choose a name.";
+            return;
+        }
+        if ((roomCode == "" || roomCode == null) && !isHost)
+        {
+            _errorText.gameObject.SetActive(true);
+            _errorText.text = "* Room code is needed.";
             return;
         }
 
