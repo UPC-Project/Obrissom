@@ -20,10 +20,10 @@ public class LobbyNetworking : MonoBehaviour
     // Player information
     public string PlayerName { get; private set; }
     public PlayerClass SelectedClass { get; private set; }
+    public string JoinCode { get; private set; }
     // Player active session
     private ISession _currentSession;
     public ISession CurrentSession => _currentSession;
-    public string JoinCode => _currentSession?.Code;
 
     private void Awake()
     {
@@ -73,11 +73,11 @@ public class LobbyNetworking : MonoBehaviour
         try
         {
             _currentSession = await MultiplayerService.Instance.CreateSessionAsync(options);
+            JoinCode = _currentSession.Code;
 
             NetworkManager.Singleton.SceneManager.LoadScene(GAME_SCENE_NAME, LoadSceneMode.Single);
-            Debug.Log($"room code: {_currentSession.Code}");
 
-            return _currentSession.Code;
+            return JoinCode;
         }
         catch (Exception e)
         {
@@ -90,15 +90,17 @@ public class LobbyNetworking : MonoBehaviour
     {
         PlayerName = playerName;
         SelectedClass = selectedClass;
+        JoinCode = joinCode;
 
         try
         {
-            _currentSession = await MultiplayerService.Instance.JoinSessionByCodeAsync(joinCode.Trim());
+            _currentSession = await MultiplayerService.Instance.JoinSessionByCodeAsync(JoinCode);
             return true;
         }
         catch (SessionException e)
         {
-            Debug.LogWarning($"Connection fail: {e.Message}");
+            JoinCode = null;
+            Debug.LogWarning($"Connection failed: {e.Message}");
             return false;
         }
     }
@@ -110,6 +112,7 @@ public class LobbyNetworking : MonoBehaviour
 
         ISession session = _currentSession;
         _currentSession = null;
+        JoinCode = null;
 
         await session.LeaveAsync();
     }

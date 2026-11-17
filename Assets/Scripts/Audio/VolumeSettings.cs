@@ -42,9 +42,9 @@ namespace Obrissom.Audio
             PlayerPrefs.Save();
         }
 
-        public void TogglePanel()
+        public void TogglePanel() 
         {
-            if (_panel != null) _panel.SetActive(!_panel.activeSelf);
+            _panel.SetActive(!_panel.activeSelf);
         }
 
         private void Bind(Slider slider, string param)

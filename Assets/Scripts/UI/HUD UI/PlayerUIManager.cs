@@ -1,5 +1,6 @@
 using Obrissom.Player;
 using Obrissom.Player.Inventory;
+using TMPro;
 using UnityEngine;
 
 namespace Obrissom.UI
@@ -17,6 +18,11 @@ namespace Obrissom.UI
         [SerializeField] private CraftingMenu _craftingMenu;
         [SerializeField] private SkillsUI _skillsUI;
 
+        [Header("Room Code")]
+        [SerializeField] private GameObject _roomCodePanel;
+        [SerializeField] private TMP_Text _roomCodeText;
+        [SerializeField] private TMP_Text _roomCodeTextSettings;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -26,6 +32,23 @@ namespace Obrissom.UI
             }
 
             Instance = this;
+        }
+
+        private void Start()
+        {
+            SetRoomCode(LobbyNetworking.Instance.JoinCode);
+        }
+
+        public void SetRoomCode(string code)
+        {
+            _roomCodeText.text = "Room code: " + code;
+            _roomCodeTextSettings.text = "Room code: " + code;
+            _roomCodePanel.SetActive(true);
+        }
+
+        public void CloseRoomCodePanel()
+        {
+            _roomCodePanel.SetActive(false);
         }
 
         public LevelAndXPUI GetLevelAndXPUI() => _levelAndXPUI;
