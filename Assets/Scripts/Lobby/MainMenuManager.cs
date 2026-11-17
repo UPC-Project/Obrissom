@@ -2,9 +2,9 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class LobbyManager : MonoBehaviour
+public class MainMenuManager : MonoBehaviour
 {
-    public static LobbyManager Instance { get; private set; }
+    public static MainMenuManager Instance { get; private set; }
 
     [Header("Panels")]
     [SerializeField] private GameObject _mainMenuPannel;

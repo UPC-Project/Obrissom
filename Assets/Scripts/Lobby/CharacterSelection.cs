@@ -34,6 +34,8 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private List<SkillSlotUI> _skillSlots;
     [SerializeField] private GameObject _classDescription;
     [SerializeField] private GameObject _classSkillsInfo;
+    [SerializeField] private TMP_InputField _playerNameInputField;
+    [SerializeField] private TMP_InputField _roomCodeInputField;
 
     [Header("Classes")]
     [SerializeField] private List<ClassData> _classes;
@@ -119,5 +121,15 @@ public class CharacterSelection : MonoBehaviour
     {
         _classDescription.SetActive(isDescription);
         _classSkillsInfo.SetActive(!isDescription);
+    }
+
+    public async void StartGame(bool isHost)
+    {
+        string playerName = _playerNameInputField.text.Trim();
+
+        if (isHost)
+            await LobbyNetworking.Instance.CreateLobby(playerName, _currentClass);
+        else
+            await LobbyNetworking.Instance.JoinLobby(_roomCodeInputField.text.Trim(), playerName, _currentClass);
     }
 }
