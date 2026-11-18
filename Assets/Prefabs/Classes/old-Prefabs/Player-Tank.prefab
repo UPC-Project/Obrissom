@@ -5985,8 +5985,9 @@ GameObject:
   - component: {fileID: 4216917748957468018}
   - component: {fileID: 3287161384081684456}
   - component: {fileID: 5728618084089389708}
+  - component: {fileID: 7764782030738633839}
   m_Layer: 0
-  m_Name: Main Camera (2)
+  m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6000,8 +6001,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2717077222769044121}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.40000153, z: -4.0000124}
+  m_LocalRotation: {x: 0.10233572, y: -0.8739603, z: 0.20981929, w: 0.42625898}
+  m_LocalPosition: {x: 43.169067, y: 23.244911, z: 44.702595}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6040,7 +6041,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 70
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -6134,6 +6135,14 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!81 &7764782030738633839
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717077222769044121}
+  m_Enabled: 1
 --- !u!1 &2845721184070431422
 GameObject:
   m_ObjectHideFlags: 0
@@ -6959,6 +6968,8 @@ GameObject:
   - component: {fileID: 4014575467630600722}
   - component: {fileID: 3695755342149795438}
   - component: {fileID: 905370609954775158}
+  - component: {fileID: 7204122582210107346}
+  - component: {fileID: 4772991867485290192}
   m_Layer: 6
   m_Name: Player-Tank
   m_TagString: Player
@@ -7482,6 +7493,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de13e3e9256d624f85ce25be524f620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerInteraction
+--- !u!114 &7204122582210107346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022892784541401123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 240418c2c32b4d746a6a70b13255d673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerTeleportService
+  ShowTopMostFoldoutHeaderGroup: 1
+  _spawnSpacing: 1.5
+--- !u!114 &4772991867485290192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022892784541401123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385e26956483fa54991af2b71e6706b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.NetworkSoundEmitter
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &4083477124172011764
 GameObject:
   m_ObjectHideFlags: 0

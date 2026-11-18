@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -71,7 +72,8 @@ namespace Obrissom.Player
 
         private void Update()
         {
-            if (!IsOwner) return;
+            // The controller is disabled while teleporting; Move() on it would log warnings.
+            if (!IsOwner || !_characterController.enabled) return;
 
             HandleHorizontalMovement();
 
@@ -167,6 +169,22 @@ namespace Obrissom.Player
             {
                 _hitNormal = hit.normal;
             }
+        }
+
+        // Call with the CharacterController enabled.
+        public void ResetVelocity()
+        {
+            _verticalVelocity = 0f;
+            _newVelocity = Vector3.zero;
+            _characterController.Move(Vector3.zero);
+        }
+
+
+        public void SnapCameraTo(Quaternion rotation)
+        {
+            _cameraRotation = new Vector2(rotation.eulerAngles.y, 0f);
+            _playerCamera.transform.rotation = Quaternion.Euler(0f, _cameraRotation.x, 0f);
+            CinemachineCore.ResetCameraState();
         }
 
         // NETWORKING

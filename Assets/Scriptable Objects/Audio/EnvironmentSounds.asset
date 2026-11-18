@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: EnvironmentSounds
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.SoundLibrary
   _output: {fileID: 24300020, guid: da2ca3e1fee74956a1cc1730afc2a996, type: 2}
-  _sounds: []
+  _sounds:
+  - id: 302
+    clips:
+    - {fileID: 8300000, guid: 1a103660c6de39646afb44782bcdc70d, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minDistance: 1
+    maxDistance: 25
