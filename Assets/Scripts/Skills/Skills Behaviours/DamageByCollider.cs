@@ -7,6 +7,7 @@ public class DamageByCollider : SkillBehaviour
     [SerializeField] private SkillHitboxType _hitboxType = SkillHitboxType.Weapon;
     [Tooltip("true = damages all enemies the collider passes through.\nfalse = only damages the first enemy hit and then stops.")]
     [SerializeField] private bool _hitMultipleEnemies = false;
+    [SerializeField] private bool _lockMovement = false;
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
@@ -15,7 +16,7 @@ public class DamageByCollider : SkillBehaviour
         {
             if (hitbox.hitboxType == _hitboxType)
             {
-                hitbox.SetupCollider(skillData, _hitMultipleEnemies, skillData.minEffectValue > 0, skillData.minDamagePerSecond > 0);
+                hitbox.SetupCollider(skillData, _hitMultipleEnemies, skillData.minEffectValue > 0, skillData.minDamagePerSecond > 0, caster, _lockMovement);
             }
         }
     }

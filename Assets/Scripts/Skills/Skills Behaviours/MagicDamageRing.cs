@@ -97,15 +97,17 @@ public class MagicDamageRing : SkillBehaviour
     {
         GameObject ringIndicator = GetRingIndicator();
         if (!ringIndicator.activeSelf) return false;
+
         Vector3 ringAim = ringIndicator.transform.position;
+        Quaternion ringRotation = ringIndicator.transform.rotation; // se guarda antes de apagar el indicador
         ringIndicator.SetActive(false);
 
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
-        playerCombat.StartCoroutine(CastMagicRing(caster, playerCombat, ringAim, skillData));
+        playerCombat.StartCoroutine(CastMagicRing(caster, playerCombat, ringAim, ringRotation, skillData));
         return true;
     }
 
-    private IEnumerator CastMagicRing(GameObject caster, PlayerCombat playerCombat, Vector3 ringAim, Skill skillData)
+    private IEnumerator CastMagicRing(GameObject caster, PlayerCombat playerCombat, Vector3 ringAim, Quaternion ringRotation, Skill skillData)
     {
         // TODO: trigger casting animation
         // TODO: in a future don't block camera movement
@@ -123,6 +125,19 @@ public class MagicDamageRing : SkillBehaviour
         playerController.enabled = true;
         caster.GetComponent<CharacterController>().enabled = true;
         Debug.Log("magic ring casted");
+
+        // Anillo visual (pooling): se crea la primera vez y después siempre se reutiliza.
+        // Se muestra en todos los peers durante el tiempo que dura el daño.
+        DPSCombat dpsCombat = caster.GetComponent<DPSCombat>();
+        if (dpsCombat != null)
+        {
+            // La rotación del indicador lleva su "forward" hacia la normal del suelo (la imagen está parada sobre Z).
+            // El prefab visual está apoyado sobre Y, así que alineamos su "up" con esa misma normal.
+            Vector3 groundNormal = ringRotation * Vector3.forward;
+            Quaternion visualRotation = Quaternion.FromToRotation(Vector3.up, groundNormal);
+
+            dpsCombat.ShowMagicRing(ringAim, visualRotation, skillData.damagePerSecondTime);
+        }
 
         float elapsed = 0f;
         while (elapsed < skillData.damagePerSecondTime)
