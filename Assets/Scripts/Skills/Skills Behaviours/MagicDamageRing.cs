@@ -99,7 +99,7 @@ public class MagicDamageRing : SkillBehaviour
         if (!ringIndicator.activeSelf) return false;
 
         Vector3 ringAim = ringIndicator.transform.position;
-        Quaternion ringRotation = ringIndicator.transform.rotation; // se guarda antes de apagar el indicador
+        Quaternion ringRotation = ringIndicator.transform.rotation;
         ringIndicator.SetActive(false);
 
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
@@ -126,13 +126,9 @@ public class MagicDamageRing : SkillBehaviour
         caster.GetComponent<CharacterController>().enabled = true;
         Debug.Log("magic ring casted");
 
-        // Anillo visual (pooling): se crea la primera vez y después siempre se reutiliza.
-        // Se muestra en todos los peers durante el tiempo que dura el daño.
         DPSCombat dpsCombat = caster.GetComponent<DPSCombat>();
         if (dpsCombat != null)
         {
-            // La rotación del indicador lleva su "forward" hacia la normal del suelo (la imagen está parada sobre Z).
-            // El prefab visual está apoyado sobre Y, así que alineamos su "up" con esa misma normal.
             Vector3 groundNormal = ringRotation * Vector3.forward;
             Quaternion visualRotation = Quaternion.FromToRotation(Vector3.up, groundNormal);
 

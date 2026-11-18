@@ -14,7 +14,6 @@ namespace Obrissom.Player
         [Tooltip("Prefab puramente visual del anillo mágico (sin NetworkObject).")]
         [SerializeField] private GameObject _magicRingPrefab;
 
-        // Una sola instancia local por peer, se crea la primera vez y después se reutiliza.
         private GameObject _magicRingInstance;
         private Coroutine _magicRingHideRoutine;
 
@@ -31,13 +30,10 @@ namespace Obrissom.Player
             InstantFront.ExecuteOnServer(gameObject, minDamage, maxDamage, range, angle, originOffset, effect, minDamagePerSecond, maxDamagePerSecond, damagePerSecondTime, damagePerSecondType);
         }
 
-        // -------------------------
         // MAGIC RING VISUAL
-        // -------------------------
 
         /// <summary>
-        /// Called by MagicDamageRing on the casting client (the owner).
-        /// Shows the ring locally right away and tells everyone else to show it too.
+        /// Called by MagicDamageRing on the casting client (owner).
         /// </summary>
         public void ShowMagicRing(Vector3 position, Quaternion rotation, float duration)
         {
@@ -50,7 +46,6 @@ namespace Obrissom.Player
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void ShowMagicRingServerRpc(Vector3 position, Quaternion rotation, float duration)
         {
-            // The server relays it to every peer except the owner (who already showed it locally).
             ShowMagicRingClientRpc(position, rotation, duration);
         }
 
@@ -68,11 +63,9 @@ namespace Obrissom.Player
                 return;
             }
 
-            // First use (or instance destroyed, e.g. scene reload): create it
             if (_magicRingInstance == null)
                 _magicRingInstance = Instantiate(_magicRingPrefab, position, rotation);
 
-            // Off/on restarts the effects if it was still active from a previous use
             _magicRingInstance.SetActive(false);
             _magicRingInstance.transform.SetPositionAndRotation(position, rotation);
             _magicRingInstance.SetActive(true);
@@ -97,7 +90,6 @@ namespace Obrissom.Player
         {
             base.OnNetworkDespawn();
 
-            // The instance isn't a child of the player, so it has to be cleaned up manually
             if (_magicRingInstance != null)
                 Destroy(_magicRingInstance);
         }

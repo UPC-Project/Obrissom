@@ -40,17 +40,8 @@ public class DamageSkillHitbox : MonoBehaviour
         _caster = caster;
         _lockMovement = lockMovement;
 
-           
-
         if (_lockMovement)
         {
-
-
-            Debug.Log("Locking movement...");
-
-
-
-
             StartCoroutine(LockMovementCor());
         }
 
@@ -105,11 +96,6 @@ public class DamageSkillHitbox : MonoBehaviour
 
     private IEnumerator ApplyDamageOverTime(Skill skill, Collider hit, EnemyBase enemy)
     {
-
-       
-        
-        
-        
         Vector3 hitpos = hit.transform.position;
         float elapsed = 0f;
         while (elapsed < skill.damagePerSecondTime)

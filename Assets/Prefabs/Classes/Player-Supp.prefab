@@ -35195,7 +35195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
       propertyPath: m_Name
-      value: Player-Supp-new
+      value: Player-Supp
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
       propertyPath: m_Layer
@@ -35431,6 +35431,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7140564167343561770}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6156653063970356081}
   m_SourcePrefab: {fileID: 100100000, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
 --- !u!4 &2728604938849679875 stripped
 Transform:
@@ -35570,7 +35573,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -35623,7 +35626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkAnimatorExpanded: 0
-  AuthorityMode: 0
+  AuthorityMode: 1
   m_Animator: {fileID: 5563537525786590557}
   TransitionStateInfoList:
   - IsCrossFadeExit: 0
@@ -35966,6 +35969,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de13e3e9256d624f85ce25be524f620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerInteraction
+--- !u!114 &6156653063970356081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351125029781183662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385e26956483fa54991af2b71e6706b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.NetworkSoundEmitter
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!4 &8072717560275773805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6563188758756882286, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
