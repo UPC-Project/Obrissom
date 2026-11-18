@@ -38,6 +38,8 @@ namespace Obrissom.Enemy
 
         public virtual bool IsInvulnerable => false;
 
+        public virtual bool IsImmovable => false;
+
         public bool IsDead => _isDead;
 
         // Hits still deal damage but don't stagger
@@ -104,7 +106,6 @@ namespace Obrissom.Enemy
 
             if (!IsServer) return;
 
-            // Stationary enemies (the church boss) have no NavMeshAgent
             if (_agent != null)
             {
                 _agent.enabled = true;

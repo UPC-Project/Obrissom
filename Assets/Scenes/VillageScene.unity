@@ -426,11 +426,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.080662645, y: 21.854557, z: 0.8093866}
   m_Center: {x: -0.0278108, y: 8.791175, z: 0.1172537}
---- !u!4 &21687122 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
-  m_PrefabInstance: {fileID: 5986244561477582106}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &33506005
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,7 +640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.BossArenaPortal
   _destinationAnchor: {fileID: 311953935}
-  _requiredLevel: 2
+  _requiredLevel: 0
   _deniedMessage: Area unavailable
   _grantedMessage: Available area
   _requiredKey: {fileID: 0}
@@ -12595,6 +12590,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8104018711167772421, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_Size.x
+      value: 17.16893
+      objectReference: {fileID: 0}
+    - target: {fileID: 8104018711167772421, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_Size.z
+      value: 42.53216
+      objectReference: {fileID: 0}
+    - target: {fileID: 8104018711167772421, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_Center.x
+      value: -0.04552555
+      objectReference: {fileID: 0}
+    - target: {fileID: 8104018711167772421, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      propertyPath: m_Center.z
+      value: -0.042120934
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12602,6 +12613,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1870373839}
+    - targetCorrespondingSourceObject: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1870373840}
   m_SourcePrefab: {fileID: 100100000, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
 --- !u!1001 &1088964401
 PrefabInstance:
@@ -16301,7 +16315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1352103153
 Transform:
   m_ObjectHideFlags: 0
@@ -23092,6 +23106,27 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 046afca17ba6b3841838b8b1749e517a, type: 2}
   m_BuildHeightMesh: 0
+--- !u!65 &1870373840
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870373837}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 20.888231, y: 0, z: 45.631237}
+  m_Center: {x: 0.000032405333, y: 0.005558014, z: -1.0260391}
 --- !u!1001 &1882770430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27858,4 +27893,4 @@ SceneRoots:
   - {fileID: 1719164210}
   - {fileID: 1949897057}
   - {fileID: 832983909}
-  - {fileID: 21687122}
+  - {fileID: 5986244561477582106}
