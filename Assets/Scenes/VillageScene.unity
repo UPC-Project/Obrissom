@@ -184,6 +184,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6497267603488997530, guid: 2a83f1ef4bd67f84e9f198d57acdc416, type: 3}
   m_PrefabInstance: {fileID: 1981219}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2114117
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 187.30655
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 50.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 486.14816
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258830890129726148, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5501112988243590444, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
+      propertyPath: m_Name
+      value: bonfire Village
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 70df3632d4a8abc42a2000fd6358d4f6, type: 3}
 --- !u!1001 &4788731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9531,6 +9588,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
   m_PrefabInstance: {fileID: 954503114}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &642196510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 642196511}
+  m_Layer: 0
+  m_Name: Bonfires
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &642196511
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642196510}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &647923407
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11966,6 +12054,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2273724120218744722, guid: 0e794cf0e54ef114ea88ce320ec4546a, type: 3}
   m_PrefabInstance: {fileID: 853393656}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &858797373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 858797374}
+  m_Layer: 0
+  m_Name: village revive point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &858797374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858797373}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 189.55, y: 50.46, z: 486.14816}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &864772488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21562,6 +21681,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
   m_PrefabInstance: {fileID: 1496175249}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1496930230
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 435.65756
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 50.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 547.7091
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111605467851864273, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6186878619949111683, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
+      propertyPath: m_Name
+      value: bonfire Church
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a2fc45666db8c2948ba97b8ba5ab5ba6, type: 3}
 --- !u!4 &1506141924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8698735168798990522, guid: 48ee4e01920f0924c9cb3825ec20e8ba, type: 3}
@@ -22628,6 +22804,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8887193446761593740, guid: ae06074ba42ef9e4782886b1c66bf7b0, type: 3}
   m_PrefabInstance: {fileID: 1577246364}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1579465028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1579465029}
+  m_Layer: 0
+  m_Name: church revive point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1579465029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579465028}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 441.75, y: 50.8, z: 547.7091}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1585109945
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32872,3 +33079,8 @@ SceneRoots:
   - {fileID: 1602213687}
   - {fileID: 1722951030}
   - {fileID: 1260093045}
+  - {fileID: 642196511}
+  - {fileID: 1496930230}
+  - {fileID: 1579465029}
+  - {fileID: 858797374}
+  - {fileID: 2114117}
