@@ -180,13 +180,28 @@ namespace Obrissom.Player
             return (Mathf.RoundToInt(heal), isCritic);
         }
 
+        private static readonly RaycastHit[] s_aimHits = new RaycastHit[16];
+
         public Vector3 GetAimPosition()
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f)) return hit.point;
+            int hitCount = Physics.RaycastNonAlloc(ray, s_aimHits, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
 
-            // fixed distance
-            return ray.origin + ray.direction * 100f;
+            float closestDistance = float.MaxValue;
+            Vector3 closestPoint = ray.origin + ray.direction * 100f;
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                if (s_aimHits[i].collider.transform.root == transform.root) continue;
+
+                if (s_aimHits[i].distance < closestDistance)
+                {
+                    closestDistance = s_aimHits[i].distance;
+                    closestPoint = s_aimHits[i].point;
+                }
+            }
+
+            return closestPoint;
         }
 
         // Server only. Resting at a bonfire

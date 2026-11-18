@@ -3,12 +3,21 @@ using UnityEngine;
 /// Generic interaction script for all NPCs.
 /// Handles player interaction, reports Talk quest progress, and delegates to QuestGiver if the NPC has quests.
 /// Falls back to generic dialogue via NPCDialogueUI otherwise.
-public class NPCInteractable : MonoBehaviour
+public class NPCInteractable : MonoBehaviour, IInteractable
 {
     [Header("NPC Info")]
     [SerializeField] private string _npcId;
     [SerializeField] private string _npcName;
     [SerializeField, TextArea] private string[] _dialogueLines;
+    [SerializeField] private GameObject _interactPrompt;
+
+    public Vector3 Position => transform.position;
+
+    public void SetInteractPromptActive(bool active)
+    {
+        if (_interactPrompt != null)
+            _interactPrompt.SetActive(active);
+    }
 
 
     private QuestGiver _questGiver;

@@ -1,3 +1,4 @@
+using System.Collections;
 using Obrissom.Enemy;
 using Unity.Netcode;
 using UnityEngine;
@@ -20,6 +21,10 @@ public class EnemySpawner : NetworkBehaviour
     [SerializeField] private float _herdRoamRadius = 15f;
     [Tooltip("Random pause at each destination, in seconds.")]
     [SerializeField] private Vector2 _herdPause = new Vector2(2f, 5f);
+
+    [Header("Respawn")]
+    [Tooltip("Seconds after an enemy dies until a new one appears here. 0 = never.")]
+    [SerializeField] private float _respawnDelay = 30f;
 
     public override void OnNetworkSpawn()
     {
@@ -50,12 +55,25 @@ public class EnemySpawner : NetworkBehaviour
         // Assign patrol points after Spawn so OnNetworkSpawn of EnemyBase already ran
         EnemyBase enemy = instantiatedEnemy.GetComponent<EnemyBase>();
         enemy.SetPatrolPoints(_patrolPoints);
+        enemy.Died += OnEnemyDied;
 
         if (enemy is IHerdMember member)
         {
             EnemyHerd herd = GetOrCreateHerd();
             if (herd != null) herd.AddMember(member);
         }
+    }
+
+    private void OnEnemyDied(EnemyBase enemy)
+    {
+        enemy.Died -= OnEnemyDied;
+        if (_respawnDelay > 0f && IsSpawned) StartCoroutine(RespawnRoutine());
+    }
+
+    private IEnumerator RespawnRoutine()
+    {
+        yield return new WaitForSeconds(_respawnDelay);
+        if (IsSpawned && _enemyPrefab != null) SpawnEnemy();
     }
 
     private EnemyHerd GetOrCreateHerd()
