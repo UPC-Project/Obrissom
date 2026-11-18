@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 6865670728720379151}
   - component: {fileID: 2482109929990151874}
   - component: {fileID: 9203071506617609898}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Point Light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6865670728720379151
 Transform:
@@ -138,12 +138,12 @@ GameObject:
   - component: {fileID: 6172832718940940742}
   - component: {fileID: 2251723877921126399}
   - component: {fileID: 6095697233342855962}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Point Light (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6172832718940940742
 Transform:
@@ -309,6 +309,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 32ff2da52a6876d4db9caf976c5231fa, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 32ff2da52a6876d4db9caf976c5231fa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
