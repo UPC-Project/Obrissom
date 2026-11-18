@@ -15045,8 +15045,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4524589941021722809}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.40000153, z: -4.0000124}
+  m_LocalRotation: {x: 0.10233572, y: -0.8739603, z: 0.20981929, w: 0.42625898}
+  m_LocalPosition: {x: 56.460693, y: 23.24488, z: 40.79363}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15085,7 +15085,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 70
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -35434,6 +35434,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6156653063970356081}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4994234333800096309}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 629982866846616695}
   m_SourcePrefab: {fileID: 100100000, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
 --- !u!4 &2728604938849679875 stripped
 Transform:
@@ -35880,6 +35886,11 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 1
+  _isDead:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
 --- !u!114 &5893866453841291089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35982,6 +35993,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.NetworkSoundEmitter
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &4994234333800096309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351125029781183662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 240418c2c32b4d746a6a70b13255d673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerTeleportService
+  ShowTopMostFoldoutHeaderGroup: 1
+  _spawnSpacing: 1.5
+--- !u!114 &629982866846616695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351125029781183662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbcbd8e8492e8cd45babebb9623c5215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerRespawn
+  ShowTopMostFoldoutHeaderGroup: 1
+  _downedDuration: 15
+  _arrivalGrace: 0.5
+  _reviveHoldTime: 3
+  _reviveRange: 2.5
+  _reviveFraction: 0.5
+  _reviveStone: {fileID: 11400000, guid: 6191ffe6cea0f9b41a1bb2482e74bc4d, type: 2}
+  _stoneReviveFraction: 1
+  _reviveInterruptedMessage: Revive interrupted
+  _revivedMessage: You were revived
+  _stoneRevivedMessage: The magic stone brought you back
+  _restedMessage: You rested. Respawn point set
+  _enemiesNearbyMessage: You can't rest with enemies nearby
 --- !u!4 &8072717560275773805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6563188758756882286, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}

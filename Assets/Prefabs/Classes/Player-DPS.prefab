@@ -21039,6 +21039,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1439688395793313993}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8171057798850917260}
     - targetCorrespondingSourceObject: {fileID: -1331202741623749937, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5345843466070313466}
@@ -21469,6 +21472,11 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 1
+  _isDead:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
 --- !u!114 &1811501453391520490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21598,6 +21606,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerTeleportService
   ShowTopMostFoldoutHeaderGroup: 1
+  _spawnSpacing: 1.5
+--- !u!114 &8171057798850917260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170950436608528497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbcbd8e8492e8cd45babebb9623c5215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerRespawn
+  ShowTopMostFoldoutHeaderGroup: 1
+  _downedDuration: 15
+  _arrivalGrace: 0.5
+  _reviveHoldTime: 3
+  _reviveRange: 2.5
+  _reviveFraction: 0.5
+  _reviveStone: {fileID: 11400000, guid: 6191ffe6cea0f9b41a1bb2482e74bc4d, type: 2}
+  _stoneReviveFraction: 1
+  _reviveInterruptedMessage: Revive interrupted
+  _revivedMessage: You were revived
+  _stoneRevivedMessage: The magic stone brought you back
+  _restedMessage: You rested. Respawn point set
+  _enemiesNearbyMessage: You can't rest with enemies nearby
 --- !u!4 &3274721493728796496 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 986911294515606128, guid: 6ce5eb3d26e96b74783920f06a74f82c, type: 3}
