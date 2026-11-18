@@ -77,7 +77,7 @@ public class ChannelHealOrDamage : SkillBehaviour
             }
             else if (col.transform.root.CompareTag("Player"))
             {
-                PlayerCombat playerHit = col.GetComponent<PlayerCombat>();
+                PlayerCombat playerHit = col.transform.root.GetComponent<PlayerCombat>();
                 (float heal, bool isCritic) = playerCombat.CalculateHeal(minDamage, maxDamage);
                 playerHit.HealRpc(heal, isCritic);
             }
