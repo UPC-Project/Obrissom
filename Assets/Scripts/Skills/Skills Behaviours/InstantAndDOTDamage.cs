@@ -23,11 +23,11 @@ public class InstantAndDOTDamage : SkillBehaviour
         {
             if (hitbox.hitboxType == SkillHitboxType.Weapon)
             {
-                hitbox.SetupCollider(skillData, _weaponHitMultipleEnemies, _weaponInstantEffect, _weaponDOT);
+                hitbox.SetupCollider(skillData, _weaponHitMultipleEnemies, _weaponInstantEffect, _weaponDOT, caster, false);
             }
             else if (hitbox.hitboxType == SkillHitboxType.SkillZone)
             {
-                hitbox.SetupCollider(skillData, _skillZoneHitMultipleEnemies, _skillZoneInstantEffect, _skillZoneDOT);
+                hitbox.SetupCollider(skillData, _skillZoneHitMultipleEnemies, _skillZoneInstantEffect, _skillZoneDOT, caster, false);
 
             }
         }

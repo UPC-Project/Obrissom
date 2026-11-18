@@ -20,6 +20,8 @@ public class DamageSkillHitbox : MonoBehaviour
 
     private bool _applyInitialDamage = false;
     private bool _applyDOT = false;
+    private GameObject _caster;
+    private bool _lockMovement = false;
 
     private void Awake()
     {
@@ -27,7 +29,7 @@ public class DamageSkillHitbox : MonoBehaviour
         _netObj = GetComponentInParent<NetworkObject>();
     }
 
-    public void SetupCollider(Skill skill, bool hitMultiple, bool applyInitialDamage, bool applyDOT)
+    public void SetupCollider(Skill skill, bool hitMultiple, bool applyInitialDamage, bool applyDOT, GameObject caster, bool lockMovement)
     {
         _currentSkill = skill;
         _hitMultiple = hitMultiple;
@@ -35,6 +37,33 @@ public class DamageSkillHitbox : MonoBehaviour
         _isActive = true;
         _applyInitialDamage = applyInitialDamage;
         _applyDOT = applyDOT;
+        _caster = caster;
+        _lockMovement = lockMovement;
+
+        if (_lockMovement)
+        {
+            StartCoroutine(LockMovementCor());
+        }
+
+    }
+
+    private IEnumerator LockMovementCor()
+    {
+
+        PlayerLocomotionInput locomotionInput = _caster.GetComponent<PlayerLocomotionInput>();
+        PlayerCombatInput combatInput = _caster.GetComponent<PlayerCombatInput>();
+        PlayerController playerController = _caster.GetComponent<PlayerController>();
+        locomotionInput.enabled = false;
+        combatInput.enabled = false;
+        playerController.enabled = false;
+        _caster.GetComponent<CharacterController>().enabled = false;
+
+        yield return new WaitForSeconds(_currentSkill.damagePerSecondTime);
+
+        locomotionInput.enabled = true;
+        combatInput.enabled = true;
+        playerController.enabled = true;
+        _caster.GetComponent<CharacterController>().enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -81,6 +110,7 @@ public class DamageSkillHitbox : MonoBehaviour
 
             enemy.TakeDamageRpc(damage, skill.damagePerSecondType, isCritic, hitpos, _netObj);
         }
+        
         _isActive = false;
     }
 }
