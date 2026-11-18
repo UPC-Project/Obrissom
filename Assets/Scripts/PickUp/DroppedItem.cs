@@ -18,6 +18,7 @@ public class DroppedItem : PickupBase
     [Header("Label")]
     [SerializeField] private Transform _labelTransform;
     [SerializeField] private TextMeshProUGUI _labelText;
+    [SerializeField] private float _labelHeight = 0.8f;
 
     // LOCAL VARIABLES
     private Vector3 _startPosition;
@@ -71,7 +72,10 @@ public class DroppedItem : PickupBase
         // Make the floating label always face the camera (Billboarding)
         if (_camera == null) _camera = Camera.main;
         if (_labelTransform != null && _camera != null)
+        {
+            _labelTransform.position = transform.position + Vector3.up * _labelHeight;
             _labelTransform.rotation = _camera.transform.rotation;
+        }
     }
 
 

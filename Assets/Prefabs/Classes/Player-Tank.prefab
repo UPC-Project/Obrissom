@@ -16652,6 +16652,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8289434469579892794}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8348265053139091435}
     - targetCorrespondingSourceObject: {fileID: -2008612906426897506, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1233422765642085808}
@@ -17258,6 +17261,25 @@ MonoBehaviour:
   _stoneRevivedMessage: The magic stone brought you back
   _restedMessage: You rested. Respawn point set
   _enemiesNearbyMessage: You can't rest with enemies nearby
+--- !u!114 &8348265053139091435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931868137325054916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ba2dcb48602b145be0cc4bc288a040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.InteractableScanner
+  ShowTopMostFoldoutHeaderGroup: 1
+  _interactableLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  _scanInterval: 0.2
+  _activateRadius: 3
+  _deactivateRadius: 4
 --- !u!1 &1186043861485561938 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1178373448476384967, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}

@@ -72,6 +72,13 @@ namespace Obrissom.Player
         {
             PlayerInput.PlayerLocomotionMap.Disable();
             PlayerInput.PlayerLocomotionMap.RemoveCallbacks(this);
+
+            if (IsOwner)
+            {
+                CameraPressed = false;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
 
         public override void OnDestroy()
@@ -120,6 +127,8 @@ namespace Obrissom.Player
         public void OnCameraControls(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
             CameraPressed = context.ReadValueAsButton();
+            Cursor.visible = !CameraPressed;
+            Cursor.lockState = CameraPressed ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
         public void OnScrollCamera(UnityEngine.InputSystem.InputAction.CallbackContext context)

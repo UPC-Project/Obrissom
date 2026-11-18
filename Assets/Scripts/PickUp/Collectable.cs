@@ -62,6 +62,7 @@ public class Collectable : PickupBase
         }
 
         _trigger.enabled = newValue;
+        if (!newValue) SetInteractPromptActive(false);
     }
 
     protected override bool CanBePickedUp()
