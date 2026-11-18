@@ -9812,6 +9812,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: magic_stone_collectable
       objectReference: {fileID: 0}
+    - target: {fileID: 7581171800055269324, guid: 31d60562c19f99c4cb01c187fea48378, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20905,6 +20909,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.Bonfire
   _bonfireId: village
   _respawnPoint: {fileID: 1285780580}
+  _interactPrompt: {fileID: 0}
   _enemyCheckRadius: 5
   _enemyLayer:
     serializedVersion: 2
@@ -24414,6 +24419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.Bonfire
   _bonfireId: church_entrance
   _respawnPoint: {fileID: 719067666}
+  _interactPrompt: {fileID: 0}
   _enemyCheckRadius: 5
   _enemyLayer:
     serializedVersion: 2

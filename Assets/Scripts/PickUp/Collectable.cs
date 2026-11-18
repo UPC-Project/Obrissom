@@ -28,6 +28,7 @@ public class Collectable : PickupBase
     {
         model.SetActive(newValue);
         _trigger.enabled = newValue;
+        if (!newValue) SetInteractPromptActive(false);
     }
 
     protected override bool CanBePickedUp()
