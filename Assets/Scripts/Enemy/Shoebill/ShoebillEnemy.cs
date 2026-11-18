@@ -12,6 +12,7 @@ namespace Obrissom.Enemy
     /// Mid range enemy that attacks with a root circle on the ground and pecks players that get close.
     /// The server runs the AI. Clients only show the area attack using the synced snapshot.
     /// </summary>
+    [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(ShoebillAnimation))]
     public class ShoebillEnemy : EnemyBase, IHerdMember
     {
