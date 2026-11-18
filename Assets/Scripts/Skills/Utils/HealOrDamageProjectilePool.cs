@@ -37,16 +37,18 @@ public class HealOrDamagePool : NetworkBehaviour
         return trigger;
     }
 
-    public ProjectileTrigger Get(Vector3 position)
+    public ProjectileTrigger Get(Vector3 position) => Get(position, Quaternion.identity);
+
+    public ProjectileTrigger Get(Vector3 position, Quaternion rotation)
     {
         ProjectileTrigger obj = _pool.Count > 0 ? _pool.Dequeue() : CreateNew();
         if (obj.TryGetComponent<NetworkTransform>(out var netTransform))
         {
-            netTransform.Teleport(position, obj.transform.rotation, obj.transform.localScale);
+            netTransform.Teleport(position, rotation, obj.transform.localScale);
         }
         else
         {
-            obj.transform.position = position;
+            obj.transform.SetPositionAndRotation(position, rotation);
         }
 
         obj.SetActiveClientRpc(true);
