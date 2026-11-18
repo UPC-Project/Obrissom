@@ -3,12 +3,21 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(NetworkObject))]
-public class PickupBase : NetworkBehaviour
+public class PickupBase : NetworkBehaviour, IInteractable
 {
     [Header("Pickup Settings")]
     public bool autoPickup = false;
     [SerializeField] protected bool _respawn = false;
     [SerializeField] protected Item _item;
+    [SerializeField] private GameObject _interactPrompt;
+
+    public Vector3 Position => transform.position;
+
+    public void SetInteractPromptActive(bool active)
+    {
+        if (_interactPrompt != null)
+            _interactPrompt.SetActive(active && !autoPickup && CanBePickedUp());
+    }
 
     // NETWORK VARIABLES 
     protected NetworkVariable<int> _quantity = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
