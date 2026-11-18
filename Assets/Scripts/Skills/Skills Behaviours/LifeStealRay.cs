@@ -26,6 +26,8 @@ public class LifeStealRay : SkillBehaviour
         _netObj = caster.GetComponent<NetworkObject>();
         _tickTimer = 0f;
 
+        SetLifestealing(caster, true);
+
         return true;
     }
 
@@ -64,6 +66,16 @@ public class LifeStealRay : SkillBehaviour
     {
         _targetEnemy = null;
         _tickTimer = 0f;
+
+        SetLifestealing(caster, false);
+    }
+
+
+    private void SetLifestealing(GameObject caster, bool value)
+    {
+        Animator animator = caster.GetComponent<Animator>();
+        if (animator != null)
+            animator.SetBool("isLifestealing", value);
     }
 
     private EnemyBase FindClosestEnemy(Vector3 origin)
@@ -90,4 +102,3 @@ public class LifeStealRay : SkillBehaviour
         return closestEnemy;
     }
 }
-
