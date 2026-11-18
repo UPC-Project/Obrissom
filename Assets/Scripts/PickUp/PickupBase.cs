@@ -63,6 +63,8 @@ public class PickupBase : NetworkBehaviour
     [Rpc(SendTo.Server)]
     private void RequestPickupServerRpc(RpcParams rpcParams = default)
     {
+        // Two requests in the same frame (on the host they run immediately): the first one despawns it, the rest get nothing
+        if (!IsSpawned) return;
         if (_item == null || !CanBePickedUp()) return;
         
         OnPickupServer();

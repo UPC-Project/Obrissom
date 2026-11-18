@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bafd9c86541b0141bd9ce872d68a473, type: 3}
   m_Name: AreaPhysicDOT
   m_EditorClassIdentifier: Assembly-CSharp::Skill
-  skillName: Rumble
-  skillImage: {fileID: 21300000, guid: 2c0c254ded8611a4294116f4e80be315, type: 3}
-  description: The land trembles around you causing damage per second
+  skillName: Sword-quake
+  skillImage: {fileID: 21300000, guid: 6af64e60e626e3846bb4607c9185ba39, type: 3}
+  description: The ground trembles around you causing damage per second.
   cooldownTime: 5
   cost: 0
   castTime: 0
@@ -26,4 +26,4 @@ MonoBehaviour:
   damagePerSecondTime: 2
   damagePerSecondType: 0
   castSound: 0
-  behaviour: {fileID: 11400000, guid: bb742ddaccd06c54db0d49421251fcb0, type: 2}
+  behaviour: {fileID: 11400000, guid: d313cf4b337ac4540addac856b04041a, type: 2}

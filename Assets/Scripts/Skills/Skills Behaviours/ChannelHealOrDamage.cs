@@ -55,7 +55,12 @@ public class ChannelHealOrDamage : SkillBehaviour
     {
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
 
-        ProjectileTrigger trigger = HealOrDamagePool.Instance.Get(spawnPosition);
+        Vector3 flatDirection = new Vector3(directionToTarget.x, 0f, directionToTarget.z);
+        Quaternion rotation = flatDirection.sqrMagnitude > 0.0001f
+            ? Quaternion.LookRotation(flatDirection) * Quaternion.Euler(0f, -90f, 0f)
+            : Quaternion.identity;
+
+        ProjectileTrigger trigger = HealOrDamagePool.Instance.Get(spawnPosition, rotation);
         GameObject projectile = trigger.gameObject;
 
         projectile.SetActive(true);
@@ -67,6 +72,7 @@ public class ChannelHealOrDamage : SkillBehaviour
         trigger.OnHit += (col) =>
         {
             if (col.transform.root == caster.transform.root) return;
+            if (col.isTrigger) return;
 
             if (col.transform.root.CompareTag("Enemy"))
             {
@@ -77,7 +83,7 @@ public class ChannelHealOrDamage : SkillBehaviour
             }
             else if (col.transform.root.CompareTag("Player"))
             {
-                PlayerCombat playerHit = col.GetComponent<PlayerCombat>();
+                PlayerCombat playerHit = col.transform.root.GetComponent<PlayerCombat>();
                 (float heal, bool isCritic) = playerCombat.CalculateHeal(minDamage, maxDamage);
                 playerHit.HealRpc(heal, isCritic);
             }
