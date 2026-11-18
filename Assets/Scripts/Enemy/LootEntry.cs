@@ -10,6 +10,7 @@ namespace Obrissom.Enemy
     [Serializable]
     public class LootEntry
     {
+        [Tooltip("Empty = this roll drops nothing.")]
         public Item item;
         [Min(1)] public int quantity = 1;
         [Min(0f)] public float weight = 1f;

@@ -67,7 +67,7 @@ public class ItemDropper : NetworkBehaviour
     {
         // Calculate spawn position in front of the character
         Vector3 dropPosition = transform.position + transform.forward * 1f + Vector3.up * 0.5f;
-        GameObject dropped = Instantiate(_worldItemPrefab, dropPosition, Random.rotation);
+        GameObject dropped = Instantiate(_worldItemPrefab, dropPosition, Quaternion.Euler(0f, Random.Range(0f, 360f), 0f));
 
         // Network Spawn: syncs the new object with all connected players
         NetworkObject networkObject = dropped.GetComponent<NetworkObject>();
