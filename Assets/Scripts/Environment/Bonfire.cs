@@ -8,12 +8,21 @@ namespace Obrissom.Environment
     /// Each player keeps their own respawn point. Not networked: the server finds it by id (see PlayerRespawn.RestRpc).
     /// The trigger collider is the area where the player can rest.
     [RequireComponent(typeof(Collider))]
-    public class Bonfire : MonoBehaviour
+    public class Bonfire : MonoBehaviour, IInteractable
     {
         [Tooltip("Unique per bonfire in the scene.")]
         [SerializeField] private string _bonfireId;
         [Tooltip("Where the player appears when respawning here. If empty, 2m in front of the bonfire.")]
         [SerializeField] private Transform _respawnPoint;
+        [SerializeField] private GameObject _interactPrompt;
+
+        public Vector3 Position => transform.position;
+
+        public void SetInteractPromptActive(bool active)
+        {
+            if (_interactPrompt != null)
+                _interactPrompt.SetActive(active);
+        }
 
         [Header("Enemies nearby")]
         [Tooltip("Resting is blocked while a living enemy is this close. 0 = never blocked.")]

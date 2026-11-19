@@ -42,6 +42,8 @@ namespace Obrissom.Enemy
 
         public bool IsDead => _isDead;
 
+        public event System.Action<EnemyBase> Died;
+
         // Hits still deal damage but don't stagger
         protected virtual bool IsStaggerImmune => false;
 
@@ -395,6 +397,7 @@ namespace Obrissom.Enemy
                 attackerObj.GetComponent<PlayerQuestTracker>()?.ReportKill(_stats);
             }
 
+            Died?.Invoke(this);
             StartCoroutine(DespawnRoutine());
         }
 
@@ -402,13 +405,30 @@ namespace Obrissom.Enemy
 
         private void DropLoot()
         {
-            //TODO
+            if (_itemDropper == null || _stats.lootTable == null) return;
+
+            float roll = Random.Range(0f, TotalLootWeight());
+            foreach (LootEntry entry in _stats.lootTable)
+            {
+                if (entry == null || entry.weight <= 0f) continue;
+
+                roll -= entry.weight;
+                if (roll > 0f) continue;
+
+                if (entry.item != null) _itemDropper.DropItem(entry.item, entry.quantity);
+                return;
+            }
         }
 
-        //private float TotalLootWeight()
-        //{
-        //TODO
-        //}
+        private float TotalLootWeight()
+        {
+            float total = 0f;
+            foreach (LootEntry entry in _stats.lootTable)
+            {
+                if (entry != null && entry.weight > 0f) total += entry.weight;
+            }
+            return total;
+        }
 
         // Patrol
 
