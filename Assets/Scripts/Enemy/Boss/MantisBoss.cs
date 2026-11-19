@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace Obrissom.Enemy
 {
+    // Church boss. Starts as an altar, wakes up when a player walks in and never walks.
+    // The server runs the AI; clients only play animations and warnings.
     [RequireComponent(typeof(MantisBossAnimation))]
     [RequireComponent(typeof(BossRootPool))]
     public class MantisBoss : EnemyBase
@@ -57,6 +59,12 @@ namespace Obrissom.Enemy
         [Tooltip("Root attacks. The boss picks one at random (never the same twice in a row).")]
         [SerializeField] private RootPattern[] _rootPatterns = DefaultPatterns();
 
+        [Header("Threat")]
+        [Tooltip("To pull the boss, a player needs this many times the threat of its current target (1.1 = 10% more).")]
+        [SerializeField, Min(1f)] private float _threatSwitchRatio = 1.1f;
+        [Tooltip("While taunted, the tank keeps this much threat above everyone, so the boss stays on it after the taunt ends.")]
+        [SerializeField, Min(0f)] private float _tauntThreatLead = 20f;
+
         [Header("Arena")]
         [Tooltip("Seconds with nobody in the church (standing or down) before the boss heals and turns back into the altar.")]
         [SerializeField] private float _resetDelay = 0f;
@@ -66,8 +74,10 @@ namespace Obrissom.Enemy
         [SerializeField] private string _victoryFormat = "{0} defeated";
         [SerializeField] private float _victoryBannerTime = 5f;
 
+        // Synced so late joiners see the boss and not the altar
         private readonly NetworkVariable<bool> _isAwake = new NetworkVariable<bool>(false);
 
+        // Health from 0 to 1, for the boss bar on every client
         private readonly NetworkVariable<float> _healthSynced = new NetworkVariable<float>(1f);
 
         private readonly HashSet<PlayerCombat> _meleeHits = new HashSet<PlayerCombat>();
@@ -92,11 +102,15 @@ namespace Obrissom.Enemy
         private int _lastPattern = -1;
         private int _castingPattern = -1;
         private float[] _nextTimedCast;
+        // Damage done by each player (key = player object id)
+        private readonly Dictionary<ulong, float> _threat = new Dictionary<ulong, float>();
 
         public bool IsAwake => _isAwake.Value;
 
+        // The altar can't be hurt
         public override bool IsInvulnerable => !_isAwake.Value;
 
+        // The tank dash can't drag it
         public override bool IsImmovable => true;
 
         public override bool CanFaceTarget => _faceTarget && _isAwake.Value && !_facingLocked;
@@ -105,6 +119,7 @@ namespace Obrissom.Enemy
 
         private string BossName => _stats != null && !string.IsNullOrEmpty(_stats.enemyName) ? _stats.enemyName : "Mantis";
 
+        // Ground for the roots: everything except players and the boss itself
         private int GroundMask => _groundMask.value & ~_playerLayer.value & ~(1 << gameObject.layer);
 
         protected override void Awake()
@@ -113,6 +128,7 @@ namespace Obrissom.Enemy
             _bossAnimation = GetComponent<MantisBossAnimation>();
             _rootPool = GetComponent<BossRootPool>();
 
+            // Both hands share one hit list: one hit per swing
             foreach (BossDamageTrigger hitbox in _meleeHitboxes)
             {
                 if (hitbox != null) hitbox.CanHit = player => _meleeHits.Add(player);
@@ -128,6 +144,7 @@ namespace Obrissom.Enemy
             _isAwake.OnValueChanged += OnAwakeChanged;
             _healthSynced.OnValueChanged += OnHealthChanged;
 
+            // Every peer builds its own roots; only the server's roots deal damage
             _rootPool.Build();
 
             if (IsClient)
@@ -146,6 +163,7 @@ namespace Obrissom.Enemy
                 }
             }
 
+            // Late joiners skip the transformation
             _bossAnimation.SetAwake(_isAwake.Value, true);
         }
 
@@ -195,6 +213,7 @@ namespace Obrissom.Enemy
             UpdateMeleePressure();
         }
 
+        // Counts how long someone stays close to the boss, to trigger the anti-melee attack
         private void UpdateMeleePressure()
         {
             if (_isDead || !_isAwake.Value)
@@ -218,6 +237,7 @@ namespace Obrissom.Enemy
             _meleePressure = anyoneClose ? _meleePressure + Time.deltaTime : Mathf.Max(0f, _meleePressure - Time.deltaTime);
         }
 
+        // Sent by BossAwakenTrigger when a player walks into the church
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void RequestAwakenRpc()
         {
@@ -226,10 +246,13 @@ namespace Obrissom.Enemy
             _isAwake.Value = true;
             _emptyArenaTime = 0f;
             _attacksAllowedTime = Time.time + _wakeUpTime;
+            _threat.Clear();
             _rootReadyTime = _attacksAllowedTime;
             StartTimedPatterns();
         }
 
+        // Target = player with the most threat. A taunt always wins.
+        // While nobody has done damage, the nearest player is the target.
         public override void DetectPlayer()
         {
             if (!_isAwake.Value)
@@ -240,26 +263,63 @@ namespace Obrissom.Enemy
 
             if (ForcedTarget != null)
             {
+                PlayerCombat taunter = ForcedTarget.GetComponent<PlayerCombat>();
+                if (taunter != null) KeepThreatLead(taunter);
                 _target = ForcedTarget;
                 return;
             }
 
-            PlayerCombat nearest = null;
-            float nearestSqr = float.MaxValue;
+            PlayerCombat best = null;
+            float bestThreat = -1f;
+            float bestSqr = float.MaxValue;
             foreach (NetworkClient client in NetworkManager.ConnectedClientsList)
             {
                 PlayerCombat player = GetFighter(client);
                 if (player == null) continue;
 
+                float threat = ThreatOf(player);
                 float sqr = (player.transform.position - transform.position).sqrMagnitude;
-                if (sqr < nearestSqr)
+                if (threat > bestThreat || (threat == bestThreat && sqr < bestSqr))
                 {
-                    nearestSqr = sqr;
-                    nearest = player;
+                    best = player;
+                    bestThreat = threat;
+                    bestSqr = sqr;
                 }
             }
 
-            _target = nearest != null ? nearest.transform : null;
+            // Keep the current target unless someone beats it by the switch ratio
+            PlayerCombat current = _target != null ? _target.GetComponent<PlayerCombat>() : null;
+            if (best != null && current != null && current != best && IsFighter(current) &&
+                bestThreat <= ThreatOf(current) * _threatSwitchRatio)
+            {
+                best = current;
+            }
+
+            _target = best != null ? best.transform : null;
+        }
+
+        // Every point of damage adds one point of threat
+        protected override void OnDamagedBy(NetworkObjectReference attackerRef, float damage)
+        {
+            if (damage <= 0f || !attackerRef.TryGet(out NetworkObject attacker)) return;
+
+            _threat.TryGetValue(attacker.NetworkObjectId, out float threat);
+            _threat[attacker.NetworkObjectId] = threat + damage;
+        }
+
+        private float ThreatOf(PlayerCombat player) =>
+            _threat.TryGetValue(player.NetworkObjectId, out float threat) ? threat : 0f;
+
+        // The taunt puts the tank on top of the threat list
+        private void KeepThreatLead(PlayerCombat taunter)
+        {
+            float top = 0f;
+            foreach (KeyValuePair<ulong, float> entry in _threat)
+            {
+                if (entry.Key != taunter.NetworkObjectId && entry.Value > top) top = entry.Value;
+            }
+
+            if (ThreatOf(taunter) < top + _tauntThreatLead) _threat[taunter.NetworkObjectId] = top + _tauntThreatLead;
         }
 
         public override bool IsPlayerInChaseRange() =>
@@ -270,9 +330,14 @@ namespace Obrissom.Enemy
             if (client.PlayerObject == null) return null;
 
             PlayerCombat player = client.PlayerObject.GetComponent<PlayerCombat>();
-            return player != null && player.IsTargetable && IsInArena(player.transform.position) ? player : null;
+            return IsFighter(player) ? player : null;
         }
 
+        // Alive, not down, and inside the church
+        private bool IsFighter(PlayerCombat player) =>
+            player != null && player.IsTargetable && IsInArena(player.transform.position);
+
+        // The arena is the BossAwakenTrigger volume
         private bool IsInArena(Vector3 position) => _arena != null && _arena.Contains(position);
 
         private bool IsLocalPlayerInArena()
@@ -304,6 +369,7 @@ namespace Obrissom.Enemy
             if (!IsServer || _isDead || !_isAwake.Value || _attackRoutine != null) return;
             if (Time.time < _attacksAllowedTime) return;
 
+            // 1. Timed attacks (the ring) go first
             int timed = DueTimedPattern();
             if (timed >= 0)
             {
@@ -314,6 +380,7 @@ namespace Obrissom.Enemy
 
             bool rootsReady = Time.time >= _rootReadyTime;
 
+            // 2. Anti-melee when someone stayed close too long
             if (rootsReady && _meleePressure >= _meleePressureTime)
             {
                 int antiMelee = PickPattern(true);
@@ -325,6 +392,7 @@ namespace Obrissom.Enemy
                 }
             }
 
+            // 3. Melee if the target is close, otherwise a random root attack
             if (targetInMeleeRange && _attackCooldownTimer <= 0f)
             {
                 _attackRoutine = StartCoroutine(MeleeRoutine());
@@ -336,6 +404,7 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Weighted random root attack, never the same one twice in a row
         private int PickPattern(bool antiMeleeOnly)
         {
             if (_rootPatterns == null) return -1;
@@ -376,6 +445,7 @@ namespace Obrissom.Enemy
 
         private static bool HasWaves(RootPattern pattern) => pattern != null && pattern.waves != null && pattern.waves.Length > 0;
 
+        // Attacks with an interval run on their own timer, outside the random pick
         private void StartTimedPatterns()
         {
             if (_rootPatterns == null) return;
@@ -410,12 +480,14 @@ namespace Obrissom.Enemy
                 if (hitbox != null) hitbox.Damage = damage;
             }
 
+            // Stop turning during the windup so the swing can be dodged
             _facingLocked = true;
             Vector3 warningCenter = transform.position + transform.forward * _meleeWarningDistance;
             PlayMeleeRpc(warningCenter, NetworkManager.ServerTime.Time, !_animationEvents);
 
             if (_animationEvents)
             {
+                // The animation turns the hands on and off
                 yield return new WaitForSeconds(_meleeWindup + _meleeActiveTime);
                 _facingLocked = false;
                 yield return new WaitForSeconds(_meleeRecovery);
@@ -423,6 +495,7 @@ namespace Obrissom.Enemy
             }
             else
             {
+                // Placeholder: timers turn the hands on and off
                 yield return new WaitForSeconds(_meleeWindup);
                 SetMeleeHitboxes(true);
                 yield return new WaitForSeconds(_meleeActiveTime);
@@ -434,6 +507,7 @@ namespace Obrissom.Enemy
             _attackRoutine = null;
         }
 
+        // Plays the cast animation, then raises the roots (or waits for the animation event)
         private IEnumerator RootRoutine(int patternIndex)
         {
             if (_rootPatterns[patternIndex].interval <= 0f) _lastPattern = patternIndex;
@@ -471,6 +545,7 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Server: works out every root of the attack and sends them all in one message
         public void CastRoots()
         {
             if (!IsServer || _isDead || !_isAwake.Value) return;
@@ -490,6 +565,7 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Each shape adds its roots, each one with a position, a delay and a size
         private void AddWave(RootWave wave)
         {
             if (wave == null) return;
@@ -576,6 +652,7 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Roots along a line. Stagger makes them come out one after another
         private void AddLine(Vector3 start, Vector3 direction, RootWave wave)
         {
             int steps = Mathf.FloorToInt(wave.length / wave.rootSpacing) + 1;
@@ -588,6 +665,7 @@ namespace Obrissom.Enemy
             }
         }
 
+        // Inside the church and no wall between the boss and the spot
         private bool IsValidRootSpot(Vector3 ground)
         {
             if (!IsInArena(ground)) return false;
@@ -606,6 +684,7 @@ namespace Obrissom.Enemy
             return offset.sqrMagnitude < ClearRadius(size) * ClearRadius(size);
         }
 
+        // Circles too close to the boss get pushed out, so no root comes out under it
         private bool TryPlaceCircle(Vector3 position, float size, out Vector3 ground)
         {
             Vector3 offset = position - transform.position;
@@ -667,6 +746,7 @@ namespace Obrissom.Enemy
             return direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.forward;
         }
 
+        // Used only when the prefab has no patterns saved. The prefab values win.
         private static RootPattern[] DefaultPatterns() => new[]
         {
             new RootPattern("Big circle", false,
@@ -745,6 +825,7 @@ namespace Obrissom.Enemy
             _bossAnimation.PlayRootsAnimation(pattern != null ? pattern.animatorTrigger : null);
         }
 
+        // Every peer schedules the same roots at the same server time
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
         private void SpawnRootsRpc(Vector3[] positions, float[] delays, float[] sizes, double startServerTime)
         {
@@ -772,6 +853,7 @@ namespace Obrissom.Enemy
             _healthSynced.Value = _currentHealth / _stats.maxHealth;
         }
 
+        // Nobody left in the church (standing or down): heal and go back to the altar
         private void CheckForEmptyArena()
         {
             if (_isDead || !_isAwake.Value)
@@ -814,6 +896,7 @@ namespace Obrissom.Enemy
             _castingPattern = -1;
             _lastPattern = -1;
             _target = null;
+            _threat.Clear();
 
             _currentHealth = _stats.maxHealth;
             _healthSynced.Value = 1f;
@@ -822,6 +905,7 @@ namespace Obrissom.Enemy
             _stateMachine.ChangeState(EnemyState.Idle);
         }
 
+        // Clears the roots and shows the victory banner to everyone
         protected override void Die(NetworkObjectReference attackerRef)
         {
             StopAttack();

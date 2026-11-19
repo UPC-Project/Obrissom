@@ -260,6 +260,7 @@ namespace Obrissom.Enemy
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
             OnTakeDamage(rawAmount);
+            OnDamagedBy(attackerRef, finalDamage);
 
             if (_currentHealth <= 0f)
             {
@@ -271,6 +272,8 @@ namespace Obrissom.Enemy
         }
 
         protected virtual void OnTakeDamage(float rawAmount) { }
+
+        protected virtual void OnDamagedBy(NetworkObjectReference attackerRef, float damage) { }
 
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
         private void PlayTakeDamageAnimationRpc() => _enemyAnimation.PlayTakeDamageAnimation();
