@@ -105,7 +105,7 @@ namespace Obrissom.UI
             CloseQuestDisplayer();
         }
 
-        private string BuildRewardsString(QuestTemplate template)
+        public static string BuildRewardsString(QuestTemplate template)
         {
             StringBuilder sb = new StringBuilder();
 

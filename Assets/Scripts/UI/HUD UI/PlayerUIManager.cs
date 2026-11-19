@@ -18,6 +18,7 @@ namespace Obrissom.UI
         [SerializeField] private CraftingMenu _craftingMenu;
         [SerializeField] private SkillsUI _skillsUI;
         [SerializeField] private SkillsMenu _skillsMenu;
+        [SerializeField] private QuestsMenu _questsMenu;
 
         [Header("Room Code")]
         [SerializeField] private GameObject _roomCodePanel;
@@ -70,6 +71,7 @@ namespace Obrissom.UI
             _inventoryManager.BindInventory(playerInventory);
             _craftingMenu.BindInventory(playerInventory);
             _skillsMenu.BindPlayerXP(playerXp);
+            _questsMenu.BindTracker(itemDropper.GetComponent<PlayerQuestTracker>());
         }
     }
 }
