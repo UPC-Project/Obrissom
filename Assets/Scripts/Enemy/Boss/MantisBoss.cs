@@ -109,6 +109,9 @@ namespace Obrissom.Enemy
 
         public bool IsAwake => _isAwake.Value;
 
+        // Awake and still alive. Clients can read it too
+        public bool IsFighting => _isAwake.Value && !IsDeadSynced;
+
         // The altar can't be hurt
         public override bool IsInvulnerable => !_isAwake.Value;
 

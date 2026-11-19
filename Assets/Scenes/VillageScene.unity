@@ -771,6 +771,8 @@ MonoBehaviour:
   _keyQuestId: 
   _missingKeyMessage: You need the church key
   _finishQuestMessage: Finish the quest to get the church key
+  _lockedDuringFight: {fileID: 1817745793}
+  _lockedMessage: The church is sealed
   _gizmoColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!65 &50911152
 BoxCollider:
@@ -3815,6 +3817,7 @@ Transform:
   - {fileID: 50911150}
   - {fileID: 1352103153}
   - {fileID: 1870373838}
+  - {fileID: 1897181943}
   m_Father: {fileID: 2061747981}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &266463986
@@ -15376,6 +15379,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1870373839}
+    - targetCorrespondingSourceObject: {fileID: 4828858090866551832, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1870373840}
   m_SourcePrefab: {fileID: 100100000, guid: deac160f62d6fb3488336761a3402fc8, type: 3}
 --- !u!1001 &1088078558
 PrefabInstance:
@@ -16169,6 +16175,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2902397557459543086, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2902397557459543086, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2902397557459543086, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2902397557459543086, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3375552156910316757, guid: ace03ffca375762458c48e2eefa427be, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -16201,6 +16223,26 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3966422577025149882, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7603760355696648913, guid: 83bb664a5851e1849adc6c271003ea04, type: 2}
+    - target: {fileID: 4232432213854373713, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232432213854373713, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232432213854373713, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232432213854373713, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4463618655445595967, guid: ace03ffca375762458c48e2eefa427be, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -16222,6 +16264,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4463618655445595967, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577986456499387764, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577986456499387764, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577986456499387764, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577986456499387764, guid: ace03ffca375762458c48e2eefa427be, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -16410,6 +16468,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7236574481608431578, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8410873700892766280, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8410873700892766280, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8410873700892766280, guid: ace03ffca375762458c48e2eefa427be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8410873700892766280, guid: ace03ffca375762458c48e2eefa427be, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -19740,7 +19814,7 @@ Transform:
   m_GameObject: {fileID: 1352103152}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.90012884, z: 0, w: 0.43562388}
-  m_LocalPosition: {x: -11.6525, y: -28.4, z: 2.8655}
+  m_LocalPosition: {x: -11.6525, y: -28.35, z: 2.8655}
   m_LocalScale: {x: 2.0777607, y: 1, z: 4.598719}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19775,7 +19849,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1352103152}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -26271,13 +26345,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1762212973}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.38748702, z: -0, w: 0.92187524}
-  m_LocalPosition: {x: -27.08, y: 70.65, z: -11.58}
+  m_LocalRotation: {x: 0.00013413183, y: -0.34035945, z: 0.010712115, w: 0.9402344}
+  m_LocalPosition: {x: -29.59729, y: 70.64964, z: -14.2046585}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 263514909}
-  m_LocalEulerAnglesHint: {x: 0, y: -45.596, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.432, y: -39.796, z: 1.149}
 --- !u!114 &1762212975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26291,13 +26365,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Environment.BossArenaPortal
   _destinationAnchor: {fileID: 1177586098}
-  _requiredLevel: 2
+  _requiredLevel: 0
   _deniedMessage: Area unavailable
   _grantedMessage: Available area
-  _requiredKey: {fileID: 11400000, guid: 6b6a700444c84e99bb8e189d565b227e, type: 2}
+  _requiredKey: {fileID: 0}
   _keyQuestId: QB-02
   _missingKeyMessage: You need the church key
   _finishQuestMessage: Finish the quest to get the church key
+  _lockedDuringFight: {fileID: 0}
+  _lockedMessage: The church is sealed
   _gizmoColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!65 &1762212976
 BoxCollider:
@@ -33070,3 +33146,168 @@ SceneRoots:
   - {fileID: 1722951030}
   - {fileID: 1260093045}
   - {fileID: 642196511}
+  - {fileID: 5986244561477582106}
+--- !u!114 &1817745793 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 718999985706809499, guid: cc34e781419216540af50d91a1b14583, type: 3}
+  m_PrefabInstance: {fileID: 5986244561477582106}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53cd9932cd0403a4488d27079ea1df48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.MantisBoss
+--- !u!65 &1870373840
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870373837}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 20.888231, y: 0, z: 45.631237}
+  m_Center: {x: 0.000032405333, y: 0.005558014, z: -1.0260391}
+--- !u!1 &1897181942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1897181943}
+  - component: {fileID: 1897181945}
+  - component: {fileID: 1897181944}
+  m_Layer: 0
+  m_Name: BossAwakenTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1897181943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897181942}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.90012884, z: 0, w: 0.43562388}
+  m_LocalPosition: {x: 0, y: -24.8, z: 9.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 263514909}
+  m_LocalEulerAnglesHint: {x: 0, y: -128.35, z: 0}
+--- !u!114 &1897181944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897181942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4486709b95383804e821123824ac61f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.BossAwakenTrigger
+  _boss: {fileID: 1817745793}
+--- !u!65 &1897181945
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897181942}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 22.043728, y: 11.518173, z: 53.237045}
+  m_Center: {x: 1.9391428, y: 0.062408447, z: 14.368517}
+--- !u!1001 &5986244561477582106
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 343980472134793563, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2741581272
+      objectReference: {fileID: 0}
+    - target: {fileID: 343980472134793563, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1804341677
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 461.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -47.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 590.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.42925388
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9031838
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -129.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 630567782737789665, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2195724801204987243, guid: cc34e781419216540af50d91a1b14583, type: 3}
+      propertyPath: m_Name
+      value: Boss_Mantis
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cc34e781419216540af50d91a1b14583, type: 3}

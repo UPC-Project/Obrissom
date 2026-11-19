@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Obrissom.Player;
 using UnityEngine;
 
@@ -10,8 +11,20 @@ namespace Obrissom.Enemy
 
         [SerializeField] private MantisBoss _boss;
 
+        private static readonly List<BossAwakenTrigger> s_arenas = new List<BossAwakenTrigger>();
+
         private Collider _volume;
         private float _nextRequestTime;
+
+        // True if the position is inside any boss room
+        public static bool IsInsideAnyArena(Vector3 position)
+        {
+            foreach (BossAwakenTrigger arena in s_arenas)
+            {
+                if (arena.Contains(position)) return true;
+            }
+            return false;
+        }
 
         private void Awake()
         {
@@ -19,6 +32,10 @@ namespace Obrissom.Enemy
             _volume.isTrigger = true;
             if (_boss != null) _boss.SetArena(this);
         }
+
+        private void OnEnable() => s_arenas.Add(this);
+
+        private void OnDisable() => s_arenas.Remove(this);
 
         public bool Contains(Vector3 position) =>
             (_volume.ClosestPoint(position) - position).sqrMagnitude < 0.0001f;

@@ -1,3 +1,4 @@
+using Obrissom.Enemy;
 using Obrissom.Player;
 using Obrissom.UI;
 using System.Collections;
@@ -9,6 +10,7 @@ public class Teleport : SkillBehaviour
 {
     [SerializeField] private float _distanceLimit = 10f;
     [SerializeField] private float _tpIndicatorGroundElevation = 1f;
+    [SerializeField] private string _blockedMessage = "You can't teleport here";
 
     private GameObject _tpIndicator;
 
@@ -18,8 +20,17 @@ public class Teleport : SkillBehaviour
         return _tpIndicator;
     }
 
+    // No teleport inside the boss church
+    private static bool IsBlocked(GameObject caster) => BossAwakenTrigger.IsInsideAnyArena(caster.transform.position);
+
     public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
+        if (IsBlocked(caster))
+        {
+            NotificationPopup.Instance?.ShowMessage(_blockedMessage);
+            return;
+        }
+
         GameObject tpIndicator = GetTpIndicator();
         tpIndicator.SetActive(true);
     }
@@ -34,6 +45,10 @@ public class Teleport : SkillBehaviour
     public override void OnHoldUpdate(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
         GameObject tpIndicator = GetTpIndicator();
+
+        bool blocked = IsBlocked(caster);
+        if (tpIndicator.activeSelf == blocked) tpIndicator.SetActive(!blocked);
+        if (blocked) return;
 
         Vector3 casterPos = caster.transform.position;
 
@@ -86,6 +101,9 @@ public class Teleport : SkillBehaviour
         GameObject tpIndicator = GetTpIndicator();
         Vector3 destination = tpIndicator.transform.position;
         tpIndicator.SetActive(false);
+
+        // false = no cooldown and no resource spent
+        if (IsBlocked(caster)) return false;
 
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
         playerCombat.StartCoroutine(CastTeleport(caster, playerCombat, destination, skillData.castTime));
