@@ -15,6 +15,7 @@ namespace Obrissom.Player
 
         [Header("Components")]
         [SerializeField] private LevelUpRewards _levelUpRewards; // Depends on Player Class
+        public LevelUpRewards LevelUpRewards => _levelUpRewards;
         private UI.LevelAndXPUI _XpUi;
         private PlayerSkills _playerSkills;
         private PlayerStats _playerStats;
