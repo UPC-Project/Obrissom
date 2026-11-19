@@ -80,7 +80,7 @@ public class LifeStealRay : SkillBehaviour
 
     private EnemyBase FindClosestEnemy(Vector3 origin)
     {
-        Collider[] hits = Physics.OverlapSphere(origin, _range);
+        Collider[] hits = Physics.OverlapSphere(origin, _range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         EnemyBase closestEnemy = null;
         float closestDistance = Mathf.Infinity;
 
