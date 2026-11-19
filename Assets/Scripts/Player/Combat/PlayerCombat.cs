@@ -1,5 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace Obrissom.Player
 {
@@ -7,9 +9,11 @@ namespace Obrissom.Player
     {
         #region
         [Header("Actual health and resource")]
-        [Min(0)] public NetworkVariable<float> _health = 
+        [Min(0)]
+        public NetworkVariable<float> _health =
             new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [Min(0)] public NetworkVariable<float> _resource = 
+        [Min(0)]
+        public NetworkVariable<float> _resource =
             new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
         [Header("Targeting and Invulnerability")]
@@ -27,6 +31,7 @@ namespace Obrissom.Player
         private PlayerStats _playerStats;
         private UI.HealthAndResourceUI _healthAndResourceUI;
         protected PlayerHealPopUp _healPopUp;
+        private Vignette _vignette;
 
         #endregion
 
@@ -39,6 +44,8 @@ namespace Obrissom.Player
             _playerStats = GetComponent<PlayerStats>();
             _healPopUp = GetComponent<PlayerHealPopUp>();
             _playerRespawn = GetComponent<PlayerRespawn>();
+            Volume camVolume = GetComponentInChildren<Volume>();
+            camVolume.profile.TryGet(out _vignette);
         }
 
         public override void OnNetworkSpawn()
@@ -54,13 +61,13 @@ namespace Obrissom.Player
                 _healthAndResourceUI = UI.PlayerUIManager.Instance.GetHealthAndResourceUI();
                 _healthAndResourceUI.UpdateHealth(_health.Value, _playerStats.maxHealth.Value);
                 _healthAndResourceUI.UpdateResource(_resource.Value, _playerStats.maxResource.Value);
+                UpdateLowHealthVignette();
 
                 _health.OnValueChanged += OnHealthChanged;
                 _playerStats.maxHealth.OnValueChanged += OnHealthChanged;
                 _resource.OnValueChanged += OnResourceChanged;
                 _playerStats.maxResource.OnValueChanged += OnResourceChanged;
             }
-
         }
 
         public override void OnNetworkDespawn()
@@ -74,6 +81,31 @@ namespace Obrissom.Player
         private void OnHealthChanged(float previousValue, float newValue)
         {
             _healthAndResourceUI.UpdateHealth(newValue, _playerStats.maxHealth.Value);
+            UpdateLowHealthVignette();
+        }
+
+        private void UpdateLowHealthVignette()
+        {
+            float maxHealth = _playerStats.maxHealth.Value;
+            float healthPercent = maxHealth > 0f ? _health.Value / maxHealth : 0f;
+
+            if (healthPercent > 0.5f)
+            {
+                _vignette.intensity.value = 0f;
+            }
+            else if (healthPercent < 0.2f)
+            {
+                _vignette.intensity.value = 0.7f;
+            }
+            else
+            {
+                // normalize
+                float t = Mathf.InverseLerp(0.5f, 0.2f, healthPercent);
+                // exponential
+                float curvedT = Mathf.Pow(t, 2f);
+                // range between  0-0.4
+                _vignette.intensity.value = curvedT * 0.4f;
+            }
         }
 
         private void OnResourceChanged(float previousValue, float newValue)
