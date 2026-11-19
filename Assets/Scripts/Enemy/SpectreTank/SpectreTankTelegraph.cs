@@ -5,26 +5,37 @@ namespace Obrissom.Enemy
 {
     /// <summary>
     /// Ground warning for the spectre tank attacks (clients only).
-    /// Strip: the dash path. It fills from the back to the front, then the dash comes.
+    /// Strip: the dash path, it fills from the back to the front.
+    /// Circle: a slam ring, it fills from the center to the edge.
     /// </summary>
     public class SpectreTankTelegraph : MonoBehaviour
     {
+        private const int CircleSegments = 48;
         private const float OutlineWidth = 0.08f;
         private const float FillAlpha = 0.45f;
+        private const float MinFill = 0.02f;
         private const float GroundProbeHeight = 1.5f;
         private const float GroundOffset = 0.06f;
         private const float PulseFrequency = 12f;
 
+        private static readonly int ColorId = Shader.PropertyToID("_Color");
+        private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+
         private static Material s_defaultMaterial;
+        private static Mesh s_discMesh;
 
         private enum Mode { Hidden, Telegraph, Impact }
 
         private LineRenderer _outline;
-        private LineRenderer _fill;
+        private LineRenderer _stripFill;
+        private MeshRenderer _discFill;
+        private MaterialPropertyBlock _propertyBlock;
+        private bool _isCircle;
         private Mode _mode = Mode.Hidden;
 
         private Vector3 _start;
         private Vector3 _end;
+        private float _radius;
         private double _startServerTime;
         private float _duration;
         private float _impactEndTime;
@@ -46,7 +57,9 @@ namespace Obrissom.Enemy
             root.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
 
             var telegraph = root.AddComponent<SpectreTankTelegraph>();
-            telegraph._fill = CreateLine(root.transform, "Fill", material);
+            telegraph._propertyBlock = new MaterialPropertyBlock();
+            telegraph._stripFill = CreateLine(root.transform, "Strip Fill", material);
+            telegraph._discFill = CreateDisc(root.transform, material);
             telegraph._outline = CreateLine(root.transform, "Outline", material);
             telegraph._outline.loop = true;
             telegraph._outline.widthMultiplier = OutlineWidth;
@@ -57,14 +70,9 @@ namespace Obrissom.Enemy
         public void ShowStrip(Vector3 start, Vector3 end, float width, double startServerTime, float duration,
                               Color color, Color warningColor, float warningThreshold, LayerMask groundMask)
         {
+            _isCircle = false;
             _start = OnGround(start, groundMask);
             _end = OnGround(end, groundMask);
-            _startServerTime = startServerTime;
-            _duration = Mathf.Max(duration, 0.01f);
-            _color = color;
-            _warningColor = warningColor;
-            _warningThreshold = warningThreshold;
-            _mode = Mode.Telegraph;
 
             Vector3 side = Vector3.Cross(Vector3.up, Flat(_end - _start).normalized) * (width * 0.5f);
             _outline.positionCount = 4;
@@ -73,14 +81,36 @@ namespace Obrissom.Enemy
             _outline.SetPosition(2, _end + side);
             _outline.SetPosition(3, _start + side);
 
-            _fill.widthMultiplier = width;
-            _fill.positionCount = 2;
+            _stripFill.widthMultiplier = width;
+            _stripFill.positionCount = 2;
+            _stripFill.enabled = true;
+            _discFill.enabled = false;
 
-            gameObject.SetActive(true);
-            Refresh();
+            Begin(startServerTime, duration, color, warningColor, warningThreshold);
         }
 
-        // The attack landed: full strip, then it fades
+        public void ShowCircle(Vector3 center, float radius, double startServerTime, float duration,
+                               Color color, Color warningColor, float warningThreshold, LayerMask groundMask)
+        {
+            _isCircle = true;
+            _radius = radius;
+            Vector3 ground = OnGround(center, groundMask);
+            transform.position = ground;
+
+            _outline.positionCount = CircleSegments;
+            for (int i = 0; i < CircleSegments; i++)
+            {
+                float angle = i / (float)CircleSegments * Mathf.PI * 2f;
+                _outline.SetPosition(i, ground + new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * radius);
+            }
+
+            _stripFill.enabled = false;
+            _discFill.enabled = true;
+
+            Begin(startServerTime, duration, color, warningColor, warningThreshold);
+        }
+
+        // The attack landed: full shape, then it fades
         public void PlayImpact(float duration)
         {
             if (_mode == Mode.Hidden) return;
@@ -95,6 +125,19 @@ namespace Obrissom.Enemy
         {
             _mode = Mode.Hidden;
             gameObject.SetActive(false);
+        }
+
+        private void Begin(double startServerTime, float duration, Color color, Color warningColor, float warningThreshold)
+        {
+            _startServerTime = startServerTime;
+            _duration = Mathf.Max(duration, 0.01f);
+            _color = color;
+            _warningColor = warningColor;
+            _warningThreshold = warningThreshold;
+            _mode = Mode.Telegraph;
+
+            gameObject.SetActive(true);
+            Refresh();
         }
 
         private void Update() => Refresh();
@@ -135,19 +178,32 @@ namespace Obrissom.Enemy
             }
         }
 
-        // Fill grows from the start of the strip
         private void SetFill(float progress)
         {
-            _fill.SetPosition(0, _start);
-            _fill.SetPosition(1, Vector3.Lerp(_start, _end, Mathf.Max(progress, 0.02f)));
+            progress = Mathf.Max(progress, MinFill);
+
+            if (_isCircle)
+            {
+                float size = _radius * progress;
+                _discFill.transform.localScale = new Vector3(size, size, 1f);
+                return;
+            }
+
+            _stripFill.SetPosition(0, _start);
+            _stripFill.SetPosition(1, Vector3.Lerp(_start, _end, progress));
         }
 
         private void ApplyColor(Color color)
         {
             _outline.startColor = _outline.endColor = color;
+
             Color fillColor = color;
             fillColor.a *= FillAlpha;
-            _fill.startColor = _fill.endColor = fillColor;
+            _stripFill.startColor = _stripFill.endColor = fillColor;
+
+            _propertyBlock.SetColor(ColorId, fillColor);
+            _propertyBlock.SetColor(BaseColorId, fillColor);
+            _discFill.SetPropertyBlock(_propertyBlock);
         }
 
         private static Vector3 OnGround(Vector3 point, LayerMask groundMask)
@@ -181,6 +237,45 @@ namespace Obrissom.Enemy
             line.receiveShadows = false;
             line.sharedMaterial = material;
             return line;
+        }
+
+        // Flat disc of radius 1, scaled to the circle size
+        private static MeshRenderer CreateDisc(Transform parent, Material material)
+        {
+            var go = new GameObject("Disc Fill");
+            go.transform.SetParent(parent, false);
+            go.AddComponent<MeshFilter>().sharedMesh = GetDiscMesh();
+
+            var disc = go.AddComponent<MeshRenderer>();
+            disc.sharedMaterial = material;
+            disc.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            disc.receiveShadows = false;
+            return disc;
+        }
+
+        private static Mesh GetDiscMesh()
+        {
+            if (s_discMesh != null) return s_discMesh;
+
+            var vertices = new Vector3[CircleSegments + 1];
+            var colors = new Color32[CircleSegments + 1];
+            var triangles = new int[CircleSegments * 3];
+            colors[0] = new Color32(255, 255, 255, 255);
+
+            for (int i = 0; i < CircleSegments; i++)
+            {
+                float angle = i / (float)CircleSegments * Mathf.PI * 2f;
+                vertices[i + 1] = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+                colors[i + 1] = colors[0];
+
+                triangles[i * 3] = 0;
+                triangles[i * 3 + 1] = i + 1;
+                triangles[i * 3 + 2] = i + 1 == CircleSegments ? 1 : i + 2;
+            }
+
+            s_discMesh = new Mesh { name = "SpectreTankDisc", vertices = vertices, colors32 = colors, triangles = triangles };
+            s_discMesh.RecalculateBounds();
+            return s_discMesh;
         }
     }
 }

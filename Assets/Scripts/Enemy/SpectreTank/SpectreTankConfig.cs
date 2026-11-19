@@ -1,3 +1,4 @@
+using System;
 using Obrissom.Audio;
 using UnityEngine;
 
@@ -31,6 +32,31 @@ namespace Obrissom.Enemy
         [Tooltip("Time standing still after the dash.")]
         [Min(0f)] public float dashRecoveryDuration = 1f;
 
+        [Header("Ground Slam")]
+        [Tooltip("Slams when the target is this close.")]
+        [Min(0f)] public float slamTriggerRange = 4f;
+
+        [Tooltip("Time before the first circle appears.")]
+        [Min(0f)] public float slamStartupDuration = 0.4f;
+
+        [Tooltip("Time standing still after the last circle.")]
+        [Min(0f)] public float slamRecoveryDuration = 1.2f;
+
+        [Min(0f)] public float slamCooldown = 8f;
+
+        public EffectType slamDamageType = EffectType.PhysicDamage;
+
+        [Tooltip("Max height difference to be hit.")]
+        [Min(0f)] public float slamVerticalTolerance = 1.5f;
+
+        [Tooltip("Circles in order, from the small one to the big one. Each one hits everyone inside it.")]
+        public SlamStage[] slamStages =
+        {
+            new SlamStage(2.5f, 0.8f, 6f, 8f),
+            new SlamStage(4.5f, 0.7f, 9f, 12f),
+            new SlamStage(6.5f, 0.7f, 13f, 17f),
+        };
+
         [Header("Ground Warning")]
         [Tooltip("If empty, Sprites/Default is used.")]
         public Material telegraphMaterial;
@@ -54,6 +80,38 @@ namespace Obrissom.Enemy
 
         [Header("Audio")]
         public AudioID dashSound = AudioID.SlasherAttack;
+        public AudioID slamSound = AudioID.ShoebillAreaImpact;
         public AudioID deathSound = AudioID.SlasherDeath;
+
+        private void OnValidate()
+        {
+            if (slamStages == null) return;
+            foreach (SlamStage stage in slamStages)
+            {
+                if (stage != null) stage.maxDamage = Mathf.Max(stage.maxDamage, stage.minDamage);
+            }
+        }
+    }
+
+    [Serializable]
+    public class SlamStage
+    {
+        [Min(0.1f)] public float radius = 2.5f;
+
+        [Tooltip("Time the circle shows before it hits.")]
+        [Min(0.1f)] public float telegraphDuration = 0.8f;
+
+        [Min(0f)] public float minDamage = 6f;
+        [Min(0f)] public float maxDamage = 8f;
+
+        public SlamStage() { }
+
+        public SlamStage(float radius, float telegraphDuration, float minDamage, float maxDamage)
+        {
+            this.radius = radius;
+            this.telegraphDuration = telegraphDuration;
+            this.minDamage = minDamage;
+            this.maxDamage = maxDamage;
+        }
     }
 }

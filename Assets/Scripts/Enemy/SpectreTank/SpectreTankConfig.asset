@@ -19,6 +19,25 @@ MonoBehaviour:
   dashTelegraphDuration: 1
   dashDuration: 0.35
   dashRecoveryDuration: 1
+  slamTriggerRange: 4
+  slamStartupDuration: 0.4
+  slamRecoveryDuration: 1.2
+  slamCooldown: 8
+  slamDamageType: 0
+  slamVerticalTolerance: 1.5
+  slamStages:
+  - radius: 2.5
+    telegraphDuration: 0.8
+    minDamage: 6
+    maxDamage: 8
+  - radius: 4.5
+    telegraphDuration: 0.7
+    minDamage: 9
+    maxDamage: 12
+  - radius: 6.5
+    telegraphDuration: 0.7
+    minDamage: 13
+    maxDamage: 17
   telegraphMaterial: {fileID: 0}
   groundMask:
     serializedVersion: 2
@@ -31,4 +50,5 @@ MonoBehaviour:
   angularSpeed: 240
   stoppingDistance: 1.5
   dashSound: 200
+  slamSound: 213
   deathSound: 202
