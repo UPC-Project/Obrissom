@@ -43,6 +43,8 @@ namespace Obrissom.Enemy
         [Tooltip("Placeholder warning on the ground in front of the boss (off with Animation Events).")]
         [SerializeField] private float _meleeWarningDistance = 2f;
         [SerializeField] private float _meleeWarningRadius = 1.6f;
+        [Tooltip("The swing only starts when the target is inside this angle in front of the boss (degrees, total).")]
+        [SerializeField, Range(10f, 360f)] private float _meleeFrontAngle = 100f;
 
         [Header("Roots")]
         [SerializeField] private float _rootDamage = 8f;
@@ -392,8 +394,8 @@ namespace Obrissom.Enemy
                 }
             }
 
-            // 3. Melee if the target is close, otherwise a random root attack
-            if (targetInMeleeRange && _attackCooldownTimer <= 0f)
+            // 3. Melee if the target is close and in front, otherwise a random root attack
+            if (targetInMeleeRange && _attackCooldownTimer <= 0f && IsTargetInFront())
             {
                 _attackRoutine = StartCoroutine(MeleeRoutine());
             }
@@ -402,6 +404,18 @@ namespace Obrissom.Enemy
                 int pattern = PickPattern(false);
                 if (pattern >= 0) _attackRoutine = StartCoroutine(RootRoutine(pattern));
             }
+        }
+
+        // The boss doesn't turn, so the hands only reach players in front of it
+        private bool IsTargetInFront()
+        {
+            if (_target == null) return false;
+
+            Vector3 toTarget = _target.position - transform.position;
+            toTarget.y = 0f;
+            if (toTarget.sqrMagnitude < 0.0001f) return true;
+
+            return Vector3.Angle(Flat(transform.forward), toTarget) <= _meleeFrontAngle * 0.5f;
         }
 
         // Weighted random root attack, never the same one twice in a row
