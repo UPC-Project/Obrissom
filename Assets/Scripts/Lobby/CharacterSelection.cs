@@ -97,8 +97,7 @@ public class CharacterSelection : MonoBehaviour
         List<Skill> skills = new List<Skill> { rewards.basicSkill };
         foreach (var reward in rewards.rewards)
         {
-            if (reward.newSkill != null)
-                skills.Add(reward.newSkill);
+            skills.Add(reward.newSkill);
         }
         return skills;
     }
