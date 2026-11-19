@@ -61,7 +61,7 @@ namespace Obrissom.UI
             _lockedQuestButton.SetActive(false);
             _completeQuestButton.gameObject.SetActive(false);
 
-            _QuestModal.SetActive(true);
+            OpenModal();
         }
 
         public void ShowQuestCompletion(QuestTemplate template, Action onComplete)
@@ -76,7 +76,7 @@ namespace Obrissom.UI
             _lockedQuestButton.SetActive(false);
             _completeQuestButton.gameObject.SetActive(true);
 
-            _QuestModal.SetActive(true);
+            OpenModal();
         }
 
         /// Shows quest info with missing requirements (level, prerequisite quests).
@@ -90,7 +90,17 @@ namespace Obrissom.UI
             _lockedQuestButton.SetActive(true);
             _completeQuestButton.gameObject.SetActive(false);
 
+            OpenModal();
+        }
+
+        private void OpenModal()
+        {
             _QuestModal.SetActive(true);
+            _questTitle.ForceMeshUpdate();
+            _questDescription.ForceMeshUpdate();
+            _reward.ForceMeshUpdate();
+            _requirements.ForceMeshUpdate();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_QuestModal.GetComponent<RectTransform>());
         }
 
         private void OnAcceptClicked()
