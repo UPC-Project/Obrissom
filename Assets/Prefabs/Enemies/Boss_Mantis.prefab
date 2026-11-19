@@ -278,14 +278,125 @@ MonoBehaviour:
   _meleeRecovery: 0.6
   _meleeWarningDistance: 2
   _meleeWarningRadius: 1.6
-  _rootDamage: 3
-  _rootCooldown: 5
+  _rootDamage: 8
+  _rootCooldown: 1.5
   _rootCastTime: 0.5
   _rootRecovery: 0.7
   _groundMask:
     serializedVersion: 2
     m_Bits: 4294967291
-  _resetDelay: 4
+  _rootClearRadius: 1.5
+  _meleePressureTime: 4
+  _rootPatterns:
+  - name: Big circle
+    animatorTrigger: Roots
+    antiMelee: 0
+    weight: 1
+    interval: 0
+    waves:
+    - shape: 0
+      delay: 0
+      size: 2.2
+      count: 1
+      spread: 0
+      rootSpacing: 2
+      radius: 2.5
+      length: 0
+      stagger: 0
+  - name: Little circles
+    animatorTrigger: Roots
+    antiMelee: 0
+    weight: 1
+    interval: 0
+    waves:
+    - shape: 1
+      delay: 0
+      size: 1
+      count: 35
+      spread: 0
+      rootSpacing: 2
+      radius: 2.5
+      length: 0
+      stagger: 2
+    - shape: 0
+      delay: 0.6
+      size: 1
+      count: 1
+      spread: 0
+      rootSpacing: 2
+      radius: 2.5
+      length: 0
+      stagger: 0
+  - name: Circles then lines
+    animatorTrigger: Roots
+    antiMelee: 1
+    weight: 1
+    interval: 0
+    waves:
+    - shape: 1
+      delay: 0
+      size: 1
+      count: 6
+      spread: 0
+      rootSpacing: 2
+      radius: 2.5
+      length: 0
+      stagger: 0.5
+    - shape: 2
+      delay: 1.5
+      size: 1
+      count: 3
+      spread: 6
+      rootSpacing: 2
+      radius: 2.5
+      length: 18
+      stagger: 0
+  - name: Fan
+    animatorTrigger: Roots
+    antiMelee: 0
+    weight: 1
+    interval: 0
+    waves:
+    - shape: 3
+      delay: 0
+      size: 1
+      count: 5
+      spread: 90
+      rootSpacing: 2
+      radius: 2.5
+      length: 22
+      stagger: 0.08
+  - name: Columns
+    animatorTrigger: Roots
+    antiMelee: 0
+    weight: 1
+    interval: 0
+    waves:
+    - shape: 4
+      delay: 0
+      size: 1
+      count: 3
+      spread: 4
+      rootSpacing: 2
+      radius: 2.5
+      length: 26
+      stagger: 0.08
+  - name: Ring
+    animatorTrigger: Roots
+    antiMelee: 0
+    weight: 1
+    interval: 12
+    waves:
+    - shape: 5
+      delay: 0
+      size: 1
+      count: 2
+      spread: 2
+      rootSpacing: 2
+      radius: 2.5
+      length: 0
+      stagger: 0.4
+  _resetDelay: 0
   _victoryFormat: '{0} defeated'
   _victoryBannerTime: 5
 --- !u!95 &1007467671809606530

@@ -10,9 +10,12 @@ namespace Obrissom.Enemy
     [RequireComponent(typeof(BossRootPool))]
     public class MantisBoss : EnemyBase
     {
-        private const float ArenaCheckInterval = 0.5f;
+        private const float ArenaCheckInterval = 0.25f;
         private const float GroundProbeHeight = 1f;
         private const float GroundProbeDistance = 6f;
+        private const float RandomPointProbeDistance = 15f;
+        private const int RandomPointAttempts = 8;
+        private const float SightHeight = 2f;
 
         private static readonly Color WarningColor = new Color(1f, 0.55f, 0.1f, 0.8f);
         private static readonly Color ImpactColor = new Color(1f, 0.1f, 0.05f, 1f);
@@ -40,17 +43,23 @@ namespace Obrissom.Enemy
         [SerializeField] private float _meleeWarningRadius = 1.6f;
 
         [Header("Roots")]
-        [SerializeField] private float _rootDamage = 3f;
-        [SerializeField] private float _rootCooldown = 5f;
-        [Tooltip("From the start of the cast until the roots come out under the players.")]
+        [SerializeField] private float _rootDamage = 8f;
+        [SerializeField] private float _rootCooldown = 1.5f;
+        [Tooltip("From the start of the cast until the first roots start their warning.")]
         [SerializeField] private float _rootCastTime = 0.5f;
         [SerializeField] private float _rootRecovery = 0.7f;
         [Tooltip("Layers the roots stand on. Player and enemy layers are always skipped.")]
         [SerializeField] private LayerMask _groundMask = Physics.DefaultRaycastLayers;
+        [Tooltip("No root comes out closer than this to the boss (bigger roots keep further away).")]
+        [SerializeField] private float _rootClearRadius = 1.5f;
+        [Tooltip("Seconds a player can stay next to the boss before it answers with an anti-melee attack.")]
+        [SerializeField] private float _meleePressureTime = 4f;
+        [Tooltip("Root attacks. The boss picks one at random (never the same twice in a row).")]
+        [SerializeField] private RootPattern[] _rootPatterns = DefaultPatterns();
 
         [Header("Arena")]
         [Tooltip("Seconds with nobody in the church (standing or down) before the boss heals and turns back into the altar.")]
-        [SerializeField] private float _resetDelay = 4f;
+        [SerializeField] private float _resetDelay = 0f;
 
         [Header("Victory")]
         [Tooltip("{0} = boss name")]
@@ -63,6 +72,8 @@ namespace Obrissom.Enemy
 
         private readonly HashSet<PlayerCombat> _meleeHits = new HashSet<PlayerCombat>();
         private readonly List<Vector3> _rootPositions = new List<Vector3>();
+        private readonly List<float> _rootDelays = new List<float>();
+        private readonly List<float> _rootSizes = new List<float>();
 
         private MantisBossAnimation _bossAnimation;
         private BossRootPool _rootPool;
@@ -77,6 +88,10 @@ namespace Obrissom.Enemy
         private float _rootReadyTime;
         private float _arenaCheckTimer;
         private float _emptyArenaTime;
+        private float _meleePressure;
+        private int _lastPattern = -1;
+        private int _castingPattern = -1;
+        private float[] _nextTimedCast;
 
         public bool IsAwake => _isAwake.Value;
 
@@ -174,7 +189,33 @@ namespace Obrissom.Enemy
             base.Update();
 
             if (_hud != null) _hud.SetBarVisible(_isAwake.Value && _healthSynced.Value > 0f && IsLocalPlayerInArena());
-            if (IsServer) CheckForEmptyArena();
+            if (!IsServer) return;
+
+            CheckForEmptyArena();
+            UpdateMeleePressure();
+        }
+
+        private void UpdateMeleePressure()
+        {
+            if (_isDead || !_isAwake.Value)
+            {
+                _meleePressure = 0f;
+                return;
+            }
+
+            float range = _stats.attackRange + 1f;
+            bool anyoneClose = false;
+            foreach (NetworkClient client in NetworkManager.ConnectedClientsList)
+            {
+                PlayerCombat player = GetFighter(client);
+                if (player != null && (player.transform.position - transform.position).sqrMagnitude <= range * range)
+                {
+                    anyoneClose = true;
+                    break;
+                }
+            }
+
+            _meleePressure = anyoneClose ? _meleePressure + Time.deltaTime : Mathf.Max(0f, _meleePressure - Time.deltaTime);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -186,6 +227,7 @@ namespace Obrissom.Enemy
             _emptyArenaTime = 0f;
             _attacksAllowedTime = Time.time + _wakeUpTime;
             _rootReadyTime = _attacksAllowedTime;
+            StartTimedPatterns();
         }
 
         public override void DetectPlayer()
@@ -262,10 +304,99 @@ namespace Obrissom.Enemy
             if (!IsServer || _isDead || !_isAwake.Value || _attackRoutine != null) return;
             if (Time.time < _attacksAllowedTime) return;
 
+            int timed = DueTimedPattern();
+            if (timed >= 0)
+            {
+                _nextTimedCast[timed] = Time.time + _rootPatterns[timed].interval;
+                _attackRoutine = StartCoroutine(RootRoutine(timed));
+                return;
+            }
+
+            bool rootsReady = Time.time >= _rootReadyTime;
+
+            if (rootsReady && _meleePressure >= _meleePressureTime)
+            {
+                int antiMelee = PickPattern(true);
+                if (antiMelee >= 0)
+                {
+                    _meleePressure = 0f;
+                    _attackRoutine = StartCoroutine(RootRoutine(antiMelee));
+                    return;
+                }
+            }
+
             if (targetInMeleeRange && _attackCooldownTimer <= 0f)
+            {
                 _attackRoutine = StartCoroutine(MeleeRoutine());
-            else if (Time.time >= _rootReadyTime)
-                _attackRoutine = StartCoroutine(RootRoutine());
+            }
+            else if (rootsReady)
+            {
+                int pattern = PickPattern(false);
+                if (pattern >= 0) _attackRoutine = StartCoroutine(RootRoutine(pattern));
+            }
+        }
+
+        private int PickPattern(bool antiMeleeOnly)
+        {
+            if (_rootPatterns == null) return -1;
+
+            bool skipLast = TotalWeight(antiMeleeOnly, true) > 0f;
+            float total = TotalWeight(antiMeleeOnly, skipLast);
+            if (total <= 0f) return -1;
+
+            float roll = Random.Range(0f, total);
+            int picked = -1;
+            for (int i = 0; i < _rootPatterns.Length; i++)
+            {
+                if (!IsPickable(i, antiMeleeOnly, skipLast)) continue;
+                picked = i;
+                roll -= _rootPatterns[i].weight;
+                if (roll <= 0f) break;
+            }
+            return picked;
+        }
+
+        private float TotalWeight(bool antiMeleeOnly, bool skipLast)
+        {
+            float total = 0f;
+            for (int i = 0; i < _rootPatterns.Length; i++)
+            {
+                if (IsPickable(i, antiMeleeOnly, skipLast)) total += _rootPatterns[i].weight;
+            }
+            return total;
+        }
+
+        private bool IsPickable(int index, bool antiMeleeOnly, bool skipLast)
+        {
+            RootPattern pattern = _rootPatterns[index];
+            if (!HasWaves(pattern) || pattern.weight <= 0f || pattern.interval > 0f) return false;
+            if (antiMeleeOnly && !pattern.antiMelee) return false;
+            return !(skipLast && index == _lastPattern);
+        }
+
+        private static bool HasWaves(RootPattern pattern) => pattern != null && pattern.waves != null && pattern.waves.Length > 0;
+
+        private void StartTimedPatterns()
+        {
+            if (_rootPatterns == null) return;
+
+            _nextTimedCast = new float[_rootPatterns.Length];
+            for (int i = 0; i < _rootPatterns.Length; i++)
+            {
+                RootPattern pattern = _rootPatterns[i];
+                _nextTimedCast[i] = HasWaves(pattern) && pattern.interval > 0f ? _attacksAllowedTime + pattern.interval : float.MaxValue;
+            }
+        }
+
+        private int DueTimedPattern()
+        {
+            if (_rootPatterns == null || _nextTimedCast == null || _nextTimedCast.Length != _rootPatterns.Length) return -1;
+
+            for (int i = 0; i < _rootPatterns.Length; i++)
+            {
+                if (Time.time >= _nextTimedCast[i] && HasWaves(_rootPatterns[i]) && _rootPatterns[i].interval > 0f) return i;
+            }
+            return -1;
         }
 
         private IEnumerator MeleeRoutine()
@@ -303,16 +434,33 @@ namespace Obrissom.Enemy
             _attackRoutine = null;
         }
 
-        private IEnumerator RootRoutine()
+        private IEnumerator RootRoutine(int patternIndex)
         {
-            _rootReadyTime = Time.time + _rootCastTime + _rootRecovery + _rootCooldown;
-            PlayRootsAnimationRpc();
+            if (_rootPatterns[patternIndex].interval <= 0f) _lastPattern = patternIndex;
+            _castingPattern = patternIndex;
+            _rootReadyTime = Time.time + _rootCastTime + PatternDuration(_rootPatterns[patternIndex]) + _rootCooldown;
+            PlayRootsAnimationRpc(patternIndex);
 
             yield return new WaitForSeconds(_rootCastTime);
             if (!_animationEvents) CastRoots();
 
             yield return new WaitForSeconds(_rootRecovery);
             _attackRoutine = null;
+        }
+
+        private static float PatternDuration(RootPattern pattern)
+        {
+            float duration = 0f;
+            foreach (RootWave wave in pattern.waves)
+            {
+                if (wave == null) continue;
+                bool isLine = wave.shape == RootShape.LinesAcross || wave.shape == RootShape.Fan || wave.shape == RootShape.ParallelLines;
+                float spread = isLine ? wave.stagger * (wave.length / wave.rootSpacing)
+                    : wave.shape == RootShape.Rings ? wave.stagger * (wave.count - 1)
+                    : wave.stagger;
+                duration = Mathf.Max(duration, wave.delay + spread);
+            }
+            return duration;
         }
 
         public void SetMeleeHitboxes(bool active)
@@ -327,23 +475,215 @@ namespace Obrissom.Enemy
         {
             if (!IsServer || _isDead || !_isAwake.Value) return;
 
+            int patternIndex = _castingPattern >= 0 ? _castingPattern : PickPattern(false);
+            _castingPattern = -1;
+            if (patternIndex < 0) return;
+
             _rootPositions.Clear();
-            foreach (NetworkClient client in NetworkManager.ConnectedClientsList)
+            _rootDelays.Clear();
+            _rootSizes.Clear();
+            foreach (RootWave wave in _rootPatterns[patternIndex].waves) AddWave(wave);
+
+            if (_rootPositions.Count > 0)
             {
-                PlayerCombat player = GetFighter(client);
-                if (player != null) _rootPositions.Add(GetGroundPoint(player.transform.position));
+                SpawnRootsRpc(_rootPositions.ToArray(), _rootDelays.ToArray(), _rootSizes.ToArray(), NetworkManager.ServerTime.Time);
+            }
+        }
+
+        private void AddWave(RootWave wave)
+        {
+            if (wave == null) return;
+
+            switch (wave.shape)
+            {
+                case RootShape.UnderPlayers:
+                    foreach (NetworkClient client in NetworkManager.ConnectedClientsList)
+                    {
+                        PlayerCombat player = GetFighter(client);
+                        if (player != null && TryPlaceCircle(player.transform.position, wave.size, out Vector3 ground))
+                        {
+                            AddRoot(ground, wave.delay + Random.Range(0f, wave.stagger), wave.size);
+                        }
+                    }
+                    break;
+
+                case RootShape.RandomCircles:
+                    for (int i = 0; i < wave.count; i++)
+                    {
+                        if (TryGetRandomArenaPoint(out Vector3 point) && TryPlaceCircle(point, wave.size, out Vector3 ground))
+                        {
+                            AddRoot(ground, wave.delay + Random.Range(0f, wave.stagger), wave.size);
+                        }
+                    }
+                    break;
+
+                case RootShape.LinesAcross:
+                {
+                    Vector3 forward = Flat(transform.forward);
+                    Vector3 right = Vector3.Cross(Vector3.up, forward);
+                    float firstLine = _rootClearRadius + 1f;
+                    for (int i = 0; i < wave.count; i++)
+                    {
+                        Vector3 center = transform.position + forward * (firstLine + wave.spread * i);
+                        AddLine(center - right * (wave.length * 0.5f), right, wave);
+                    }
+                    break;
+                }
+
+                case RootShape.Fan:
+                {
+                    Vector3 aim = AimDirection();
+                    for (int i = 0; i < wave.count; i++)
+                    {
+                        float angle = wave.count == 1 ? 0f : Mathf.Lerp(-wave.spread * 0.5f, wave.spread * 0.5f, i / (float)(wave.count - 1));
+                        AddLine(transform.position, Quaternion.Euler(0f, angle, 0f) * aim, wave);
+                    }
+                    break;
+                }
+
+                case RootShape.ParallelLines:
+                {
+                    Vector3 aim = AimDirection();
+                    Vector3 right = Vector3.Cross(Vector3.up, aim);
+                    for (int i = 0; i < wave.count; i++)
+                    {
+                        float offset = (i - (wave.count - 1) * 0.5f) * wave.spread;
+                        AddLine(transform.position + right * offset, aim, wave);
+                    }
+                    break;
+                }
+
+                case RootShape.Rings:
+                    for (int ring = 0; ring < wave.count; ring++)
+                    {
+                        AddRing(wave.radius + wave.spread * ring, wave, wave.delay + wave.stagger * ring);
+                    }
+                    break;
+            }
+        }
+
+        private void AddRing(float radius, RootWave wave, float delay)
+        {
+            int roots = Mathf.Max(3, Mathf.RoundToInt(2f * Mathf.PI * radius / wave.rootSpacing));
+            float startAngle = Random.Range(0f, 360f);
+            for (int i = 0; i < roots; i++)
+            {
+                Vector3 direction = Quaternion.Euler(0f, startAngle + 360f * i / roots, 0f) * Vector3.forward;
+                Vector3 point = transform.position + direction * radius;
+                if (IsTooCloseToBoss(point, wave.size)) continue;
+                if (!TryGetGround(point, GroundProbeDistance, out Vector3 ground) || !IsValidRootSpot(ground)) continue;
+                AddRoot(ground, delay, wave.size);
+            }
+        }
+
+        private void AddLine(Vector3 start, Vector3 direction, RootWave wave)
+        {
+            int steps = Mathf.FloorToInt(wave.length / wave.rootSpacing) + 1;
+            for (int i = 0; i < steps; i++)
+            {
+                Vector3 point = start + direction * (i * wave.rootSpacing);
+                if (IsTooCloseToBoss(point, wave.size)) continue;
+                if (!TryGetGround(point, GroundProbeDistance, out Vector3 ground) || !IsValidRootSpot(ground)) continue;
+                AddRoot(ground, wave.delay + wave.stagger * i, wave.size);
+            }
+        }
+
+        private bool IsValidRootSpot(Vector3 ground)
+        {
+            if (!IsInArena(ground)) return false;
+
+            Vector3 from = transform.position + Vector3.up * SightHeight;
+            Vector3 to = ground + Vector3.up * SightHeight;
+            return !Physics.Linecast(from, to, GroundMask, QueryTriggerInteraction.Ignore);
+        }
+
+        private float ClearRadius(float size) => _rootClearRadius * Mathf.Max(1f, size);
+
+        private bool IsTooCloseToBoss(Vector3 point, float size)
+        {
+            Vector3 offset = point - transform.position;
+            offset.y = 0f;
+            return offset.sqrMagnitude < ClearRadius(size) * ClearRadius(size);
+        }
+
+        private bool TryPlaceCircle(Vector3 position, float size, out Vector3 ground)
+        {
+            Vector3 offset = position - transform.position;
+            offset.y = 0f;
+            float clear = ClearRadius(size);
+            if (offset.sqrMagnitude < clear * clear)
+            {
+                Vector3 direction = offset.sqrMagnitude > 0.0001f ? offset.normalized : Flat(transform.forward);
+                Vector3 pushed = transform.position + direction * clear;
+                position = new Vector3(pushed.x, position.y, pushed.z);
             }
 
-            if (_rootPositions.Count > 0) SpawnRootsRpc(_rootPositions.ToArray(), NetworkManager.ServerTime.Time);
+            return TryGetGround(position, GroundProbeDistance, out ground) && IsValidRootSpot(ground);
         }
 
-        private Vector3 GetGroundPoint(Vector3 position)
+        private void AddRoot(Vector3 position, float delay, float size)
+        {
+            _rootPositions.Add(position);
+            _rootDelays.Add(delay);
+            _rootSizes.Add(size);
+        }
+
+        private bool TryGetRandomArenaPoint(out Vector3 point)
+        {
+            for (int attempt = 0; attempt < RandomPointAttempts; attempt++)
+            {
+                if (_arena == null) break;
+                if (TryGetGround(_arena.RandomPoint(), RandomPointProbeDistance, out point) && IsValidRootSpot(point)) return true;
+            }
+            point = default;
+            return false;
+        }
+
+        private bool TryGetGround(Vector3 position, float distance, out Vector3 ground)
         {
             Vector3 origin = position + Vector3.up * GroundProbeHeight;
-            return Physics.Raycast(origin, Vector3.down, out RaycastHit hit, GroundProbeDistance, GroundMask, QueryTriggerInteraction.Ignore)
-                ? hit.point
-                : position;
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, distance, GroundMask, QueryTriggerInteraction.Ignore))
+            {
+                ground = hit.point;
+                return true;
+            }
+            ground = position;
+            return false;
         }
+
+        private Vector3 AimDirection()
+        {
+            if (_target != null)
+            {
+                Vector3 toTarget = Flat(_target.position - transform.position);
+                if (toTarget != Vector3.zero) return toTarget;
+            }
+            return Flat(transform.forward);
+        }
+
+        private static Vector3 Flat(Vector3 direction)
+        {
+            direction.y = 0f;
+            return direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.forward;
+        }
+
+        private static RootPattern[] DefaultPatterns() => new[]
+        {
+            new RootPattern("Big circle", false,
+                new RootWave(RootShape.UnderPlayers, 0f, 2.2f, 1, 0f, 2f, 0f, 0f)),
+            new RootPattern("Little circles", false,
+                new RootWave(RootShape.RandomCircles, 0f, 1f, 35, 0f, 2f, 0f, 2f),
+                new RootWave(RootShape.UnderPlayers, 0.6f, 1f, 1, 0f, 2f, 0f, 0f)),
+            new RootPattern("Circles then lines", true,
+                new RootWave(RootShape.RandomCircles, 0f, 1f, 6, 0f, 2f, 0f, 0.5f),
+                new RootWave(RootShape.LinesAcross, 1.5f, 1f, 3, 6f, 2f, 18f, 0f)),
+            new RootPattern("Fan", false,
+                new RootWave(RootShape.Fan, 0f, 1f, 5, 90f, 2f, 22f, 0.08f)),
+            new RootPattern("Columns", false,
+                new RootWave(RootShape.ParallelLines, 0f, 1f, 3, 4f, 2f, 26f, 0.08f)),
+            new RootPattern("Ring", 12f,
+                new RootWave(RootShape.Rings, 0f, 1f, 2, 2f, 2f, 0f, 0.4f, 2.5f)),
+        };
 
         public override void CancelAttack()
         {
@@ -399,12 +739,19 @@ namespace Obrissom.Enemy
         }
 
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
-        private void PlayRootsAnimationRpc() => _bossAnimation.PlayRootsAnimation();
+        private void PlayRootsAnimationRpc(int patternIndex)
+        {
+            RootPattern pattern = _rootPatterns != null && patternIndex >= 0 && patternIndex < _rootPatterns.Length ? _rootPatterns[patternIndex] : null;
+            _bossAnimation.PlayRootsAnimation(pattern != null ? pattern.animatorTrigger : null);
+        }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
-        private void SpawnRootsRpc(Vector3[] positions, double startServerTime)
+        private void SpawnRootsRpc(Vector3[] positions, float[] delays, float[] sizes, double startServerTime)
         {
-            foreach (Vector3 position in positions) _rootPool.Spawn(position, startServerTime, _rootDamage, GroundMask);
+            for (int i = 0; i < positions.Length; i++)
+            {
+                _rootPool.Spawn(positions[i], startServerTime + delays[i], _rootDamage, GroundMask, sizes[i]);
+            }
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
@@ -463,6 +810,9 @@ namespace Obrissom.Enemy
 
             _emptyArenaTime = 0f;
             _attackCooldownTimer = 0f;
+            _meleePressure = 0f;
+            _castingPattern = -1;
+            _lastPattern = -1;
             _target = null;
 
             _currentHealth = _stats.maxHealth;

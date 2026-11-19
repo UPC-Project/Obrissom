@@ -39,7 +39,7 @@ namespace Obrissom.Enemy
 
         public void PlayMeleeAnimation() => SetTrigger(_meleeTrigger);
 
-        public void PlayRootsAnimation() => SetTrigger(_rootsTrigger);
+        public void PlayRootsAnimation(string trigger) => SetTrigger(string.IsNullOrEmpty(trigger) ? _rootsTrigger : trigger);
 
         public void ResetAttacks()
         {

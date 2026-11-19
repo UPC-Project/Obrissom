@@ -21310,6 +21310,10 @@ MonoBehaviour:
       NameHash: 1032438339
       Synchronize: 1
       ParameterType: 9
+    - name: isDead
+      NameHash: 1276664872
+      Synchronize: 1
+      ParameterType: 4
   AnimatorParametersExpanded: 0
 --- !u!114 &5469141996300260983
 MonoBehaviour:
@@ -21411,7 +21415,7 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 10
-  healthRegen: 1
+  healthRegen: 0.2
   maxResource:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0

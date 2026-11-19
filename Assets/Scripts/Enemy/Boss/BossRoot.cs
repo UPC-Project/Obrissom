@@ -38,6 +38,10 @@ namespace Obrissom.Enemy
 
         public float ActiveSince => _activeSince;
 
+        public BossDamageTrigger DamageTrigger => _damageTrigger;
+
+        private float WarningRadius => _warningRadius * transform.localScale.x;
+
         private static double ServerTime =>
             NetworkManager.Singleton != null ? NetworkManager.Singleton.ServerTime.Time : Time.timeAsDouble;
 
@@ -53,9 +57,10 @@ namespace Obrissom.Enemy
             if (_indicator != null) Destroy(_indicator.gameObject);
         }
 
-        public void Activate(Vector3 position, double startServerTime, float damage, int groundMask)
+        public void Activate(Vector3 position, double startServerTime, float damage, int groundMask, float size)
         {
             transform.SetPositionAndRotation(position, Quaternion.Euler(0f, Random.Range(0f, 360f), 0f));
+            transform.localScale = Vector3.one * size;
             _startServerTime = startServerTime;
             _activeSince = Time.time;
             _impactShown = false;
@@ -69,7 +74,7 @@ namespace Obrissom.Enemy
 
             if (_damageTrigger != null) _damageTrigger.SetActive(false);
             SetGrowth(0f);
-            GetIndicator().ShowTelegraph(position, _warningRadius, startServerTime, _warningTime,
+            GetIndicator().ShowTelegraph(position, WarningRadius, startServerTime, _warningTime,
                                          _warningColor, _impactColor, groundMask);
         }
 
@@ -103,7 +108,7 @@ namespace Obrissom.Enemy
             if (!_impactShown)
             {
                 _impactShown = true;
-                GetIndicator().PlayImpact(transform.position, _warningRadius, _hitTime, _impactColor, _groundMask);
+                GetIndicator().PlayImpact(transform.position, WarningRadius, _hitTime, _impactColor, _groundMask);
             }
 
             if (_damageTrigger != null)

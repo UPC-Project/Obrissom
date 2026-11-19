@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: MantisBossStats
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.EnemyStats
   enemyName: Mantis
-  maxHealth: 150
+  maxHealth: 1500
   moveSpeed: 3.5
   chaseRange: 25
   chaseSpeedMultiplier: 1.5
   damageType: 0
-  minAttackDamage: 3
-  maxAttackDamage: 5
+  minAttackDamage: 10
+  maxAttackDamage: 14
   attackRange: 3.5
-  attackCooldown: 2
+  attackCooldown: 1.2
   physicalDefense: 0
-  magicDefense: 0
+  magicDefense: 0.37
   experienceReward: 300
   lootTable: []

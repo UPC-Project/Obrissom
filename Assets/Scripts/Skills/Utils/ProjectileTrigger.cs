@@ -32,6 +32,7 @@ public class ProjectileTrigger : NetworkBehaviour
     private void OnTriggerEnter(Collider col)
     {
         if (!IsServer) return;
+        if (col.isTrigger && !col.transform.root.CompareTag("Enemy") && !col.transform.root.CompareTag("Player")) return;
         OnHit?.Invoke(col);
     }
 

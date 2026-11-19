@@ -23,6 +23,18 @@ namespace Obrissom.Enemy
         public bool Contains(Vector3 position) =>
             (_volume.ClosestPoint(position) - position).sqrMagnitude < 0.0001f;
 
+        public Vector3 RandomPoint()
+        {
+            if (_volume is BoxCollider box)
+            {
+                Vector3 local = box.center + Vector3.Scale(box.size, new Vector3(Random.value - 0.5f, 0f, Random.value - 0.5f));
+                return box.transform.TransformPoint(local);
+            }
+
+            Bounds bounds = _volume.bounds;
+            return new Vector3(Random.Range(bounds.min.x, bounds.max.x), bounds.center.y, Random.Range(bounds.min.z, bounds.max.z));
+        }
+
         private void OnTriggerStay(Collider other)
         {
             if (_boss == null || !_boss.IsSpawned || _boss.IsAwake || _boss.IsDead) return;
