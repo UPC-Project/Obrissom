@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 7936926686535776265}
   - component: {fileID: 7047081218544707135}
   - component: {fileID: 5930458985510426616}
+  - component: {fileID: 135940387138460875}
   m_Layer: 9
   m_Name: NPC Test ant Collect
   m_TagString: Untagged
@@ -103,7 +104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestGiver
   _offeredQuests:
-  - {fileID: 11400000, guid: 074c87fbf53e31b4d88ad867c5ceea5e, type: 2}
+  - {fileID: 11400000, guid: f15113b813884beba75552433934755a, type: 2}
+  - {fileID: 11400000, guid: 62f8f1cbb6694d89bc58f43df4567a02, type: 2}
 --- !u!136 &7936926686535776265
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -411,3 +413,29 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 190570003840417810, guid: b54619096db1fa9488ec822132792a32, type: 3}
   m_PrefabInstance: {fileID: 5072803223853671471}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &135940387138460875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2314680995534470768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32b8a779c4404500b083c5b0de7cde11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestMarker
+  _font: {fileID: 11400000, guid: f335c7f76b78d9747ae327604a5ace88, type: 2}
+  _worldSize: 0.8
+  _minPixelSize: 22
+  _maxPixelSize: 90
+  _heightAboveHead: 0.4
+  _maxDistance: 150
+  _hideWhenOccluded: 1
+  _occluders:
+    serializedVersion: 2
+    m_Bits: 137
+  _readyColor: {r: 1, g: 0.8, b: 0.15, a: 1}
+  _inProgressColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  _bobHeight: 0.12
+  _bobSpeed: 2.5

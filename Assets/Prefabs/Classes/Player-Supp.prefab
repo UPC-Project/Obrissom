@@ -24780,6 +24780,7 @@ GameObject:
   - component: {fileID: 2343958119719545136}
   - component: {fileID: 7621915920709427346}
   - component: {fileID: 1198472485339316005}
+  - component: {fileID: 317033247263035019}
   m_Layer: 0
   m_Name: Main Camera (2)
   m_TagString: MainCamera
@@ -50189,6 +50190,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7416812137358675968}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 626135129131121568}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 301702250442418094}
   m_SourcePrefab: {fileID: 100100000, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
 --- !u!4 &2728604938849679875 stripped
 Transform:
@@ -50906,3 +50913,123 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -6563188758756882286, guid: b59f79aa45e515447a2c9b2669cab569, type: 3}
   m_PrefabInstance: {fileID: 6116683522066227711}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &626135129131121568
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351125029781183662}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300020, guid: da2ca3e1fee74956a1cc1730afc2a996, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 3f092f1c03c484049944b86746083f54, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.7
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 25
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &301702250442418094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351125029781183662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888134a11b96408da03aadf9642740f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.FootstepLoop
+  _minSpeed: 0.5
+  _maxSpeed: 20
+  _fadeTime: 0.15
+--- !u!81 &317033247263035019
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4524589941021722809}
+  m_Enabled: 1
