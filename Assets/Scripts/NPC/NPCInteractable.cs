@@ -10,6 +10,7 @@ public class NPCInteractable : MonoBehaviour, IInteractable
     [SerializeField] private string _npcName;
     [SerializeField, TextArea] private string[] _dialogueLines;
     [SerializeField] private GameObject _interactPrompt;
+    [SerializeField] private Animator _animator;
 
     public Vector3 Position => transform.position;
 
@@ -41,12 +42,26 @@ public class NPCInteractable : MonoBehaviour, IInteractable
         if (_questGiver != null)
         {
             bool handled = _questGiver.HandleInteraction(player);
+            if(_animator != null)
+            {
+                _animator.SetTrigger("interact");
+            }
+            
             if (handled) return;
         }
 
         if (_dialogueLines != null && _dialogueLines.Length > 0)
         {
             NPCDialogueUI.Instance.ShowDialogue(_npcName, _dialogueLines);
+        }
+    }
+
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger("hello");
         }
     }
 }

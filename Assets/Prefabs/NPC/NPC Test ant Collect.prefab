@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 1238464298420020484}
   - component: {fileID: 7936926686535776265}
   - component: {fileID: 7047081218544707135}
+  - component: {fileID: 5930458985510426616}
   m_Layer: 9
   m_Name: NPC Test ant Collect
   m_TagString: Untagged
@@ -88,6 +89,7 @@ MonoBehaviour:
   - Nothing here...
   - Hi to you too
   _interactPrompt: {fileID: 4036651075476707924}
+  _animator: {fileID: 0}
 --- !u!114 &1238464298420020484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,6 +148,28 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!95 &5930458985510426616
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2314680995534470768}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4453939806493949223
 GameObject:
   m_ObjectHideFlags: 0
