@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd75362188a0443c91aad793dc7446dc, type: 3}
+  m_Name: SpectreTankConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.SpectreTankConfig
+  dashDistance: 8
+  dashWidth: 2.5
+  dashReach: 1
+  dashTurnDuration: 0.3
+  dashTelegraphDuration: 1
+  dashDuration: 0.35
+  dashRecoveryDuration: 1
+  slamTriggerRange: 4
+  slamStartupDuration: 0.4
+  slamRecoveryDuration: 1.2
+  slamCooldown: 8
+  slamDamageType: 0
+  slamVerticalTolerance: 1.5
+  slamStages:
+  - radius: 2.5
+    telegraphDuration: 0.8
+    minDamage: 6
+    maxDamage: 8
+    stunDuration: 0
+  - radius: 4.5
+    telegraphDuration: 0.7
+    minDamage: 9
+    maxDamage: 12
+    stunDuration: 0
+  - radius: 6.5
+    telegraphDuration: 0.7
+    minDamage: 13
+    maxDamage: 17
+    stunDuration: 1.5
+  telegraphMaterial: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  telegraphColor: {r: 1, g: 0.55, b: 0.1, a: 0.8}
+  telegraphWarningColor: {r: 1, g: 0.1, b: 0.05, a: 1}
+  warningThreshold: 0.75
+  impactFadeDuration: 0.4
+  roamRadius: 10
+  roamPause: {x: 2, y: 5}
+  herdSpacing: 3
+  separationRadius: 2.2
+  separationStrength: 1.2
+  speedVariance: 0.1
+  engagedRangeMultiplier: 1.4
+  acceleration: 8
+  angularSpeed: 240
+  stoppingDistance: 1.5
+  avoidancePriorityRange: {x: 35, y: 65}
+  obstacleAvoidance: 2
+  dashSound: 200
+  slamSound: 213
+  deathSound: 202
