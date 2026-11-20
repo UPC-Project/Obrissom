@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpectreTankMiniBossStats
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.EnemyStats
   enemyName: Spectre Warden
-  maxHealth: 60
+  maxHealth: 100
   moveSpeed: 2.5
   chaseRange: 15
   chaseSpeedMultiplier: 1.35
@@ -29,15 +29,6 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 8c91cd49f2558e740b9bb7cd72934bbe, type: 2}
     quantity: 1
     weight: 2
-  - item: {fileID: 11400000, guid: b4feadf0f9354ce479f9340b531c314d, type: 2}
-    quantity: 1
-    weight: 3
-  - item: {fileID: 11400000, guid: a9227a900fde4c4419decf33a7df81a6, type: 2}
-    quantity: 1
-    weight: 1
-  - item: {fileID: 0}
-    quantity: 1
-    weight: 6
   guaranteedLoot:
   - item: {fileID: 11400000, guid: a06afe0ec040f8e44a118fa7064998fd, type: 2}
     quantity: 1
