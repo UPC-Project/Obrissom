@@ -10,16 +10,23 @@ namespace Obrissom.UI
         [SerializeField] private TextMeshProUGUI _playerNameText;
         [SerializeField] private Image _healthFill;
 
+        [Header("Class Icon")]
+        [Tooltip("Por debajo de este porcentaje de salud se muestra el icono de dañado.")]
+        [SerializeField, Range(0f, 1f)] private float _damagedThreshold = 0.35f;
+
         [Header("Health Colors")]
         [SerializeField] private Color _healthyColor = Color.green;
         [SerializeField] private Color _mediumColor = Color.yellow;
         [SerializeField] private Color _lowColor = new Color(1f, 0.5f, 0f, 1f);
         [SerializeField] private Color _criticalColor = Color.red;
 
-        public void Setup(Sprite classIcon, string playerName, float health, float maxHealth)
+        private Sprite _healthyIcon;
+        private Sprite _damagedIcon;
+
+        public void Setup(Sprite healthyIcon, Sprite damagedIcon, string playerName, float health, float maxHealth)
         {
-            if (_classIcon != null)
-                _classIcon.sprite = classIcon;
+            _healthyIcon = healthyIcon;
+            _damagedIcon = damagedIcon;
 
             UpdateName(playerName);
             UpdateHealth(health, maxHealth);
@@ -35,6 +42,16 @@ namespace Obrissom.UI
             float percent = max > 0f ? Mathf.Clamp01(amount / max) : 0f;
             _healthFill.fillAmount = percent;
             _healthFill.color = EvaluateHealthColor(percent);
+            UpdateClassIcon(percent);
+        }
+
+        private void UpdateClassIcon(float percent)
+        {
+            if (_classIcon == null) return;
+
+            bool damaged = percent < _damagedThreshold;
+
+            _classIcon.sprite = (damaged && _damagedIcon != null) ? _damagedIcon : _healthyIcon;
         }
 
         private Color EvaluateHealthColor(float percent)
@@ -52,4 +69,3 @@ namespace Obrissom.UI
         }
     }
 }
-

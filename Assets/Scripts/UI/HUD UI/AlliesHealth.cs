@@ -14,7 +14,9 @@ namespace Obrissom.UI
         public struct ClassIconEntry
         {
             public PlayerClass classType;
+
             public Sprite icon;
+            public Sprite damagedIcon;
         }
 
         [Header("UI References")]
@@ -24,7 +26,7 @@ namespace Obrissom.UI
         [Header("Class Icons")]
         [SerializeField] private List<ClassIconEntry> _classIcons;
 
-        private Dictionary<PlayerClass, Sprite> _iconsMap;
+        private Dictionary<PlayerClass, ClassIconEntry> _iconsMap;
         private readonly Dictionary<PlayerCombat, AllyBinding> _allies = new();
 
         private class AllyBinding
@@ -48,9 +50,9 @@ namespace Obrissom.UI
             if (_container == null)
                 _container = transform;
 
-            _iconsMap = new Dictionary<PlayerClass, Sprite>();
+            _iconsMap = new Dictionary<PlayerClass, ClassIconEntry>();
             foreach (var entry in _classIcons)
-                _iconsMap[entry.classType] = entry.icon;
+                _iconsMap[entry.classType] = entry;
         }
 
         private void Start()
@@ -71,9 +73,10 @@ namespace Obrissom.UI
             GameObject go = Instantiate(_allyHealthPrefab, _container);
             AllyHealthEntry entry = go.GetComponent<AllyHealthEntry>();
 
-            _iconsMap.TryGetValue(ally._playerClass.Value, out Sprite icon);
+            _iconsMap.TryGetValue(ally._playerClass.Value, out ClassIconEntry icons);
             entry.Setup(
-                icon,
+                icons.icon,
+                icons.damagedIcon,
                 ally._playerName.Value.ToString(),
                 ally._health.Value,
                 ally.Stats.maxHealth.Value
@@ -125,4 +128,3 @@ namespace Obrissom.UI
         }
     }
 }
-
