@@ -96,7 +96,10 @@ namespace Obrissom.UI
         private void OpenModal()
         {
             _QuestModal.SetActive(true);
-            Canvas.ForceUpdateCanvases();
+            _questTitle.ForceMeshUpdate();
+            _questDescription.ForceMeshUpdate();
+            _reward.ForceMeshUpdate();
+            _requirements.ForceMeshUpdate();
             LayoutRebuilder.ForceRebuildLayoutImmediate(_QuestModal.GetComponent<RectTransform>());
         }
 
@@ -112,7 +115,7 @@ namespace Obrissom.UI
             CloseQuestDisplayer();
         }
 
-        private string BuildRewardsString(QuestTemplate template)
+        public static string BuildRewardsString(QuestTemplate template)
         {
             StringBuilder sb = new StringBuilder();
 

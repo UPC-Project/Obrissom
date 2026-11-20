@@ -17,6 +17,9 @@ namespace Obrissom.UI
         [SerializeField] private InventoryManager _inventoryManager;
         [SerializeField] private CraftingMenu _craftingMenu;
         [SerializeField] private SkillsUI _skillsUI;
+        [SerializeField] private SkillsMenu _skillsMenu;
+        [SerializeField] private QuestsMenu _questsMenu;
+        [SerializeField] private StatsMenu _statsMenu;
 
         [Header("Room Code")]
         [SerializeField] private GameObject _roomCodePanel;
@@ -64,9 +67,13 @@ namespace Obrissom.UI
         public void RegisterPlayerInventory(ItemDropper itemDropper)
         {
             Inventory playerInventory = itemDropper.GetComponent<Inventory>();
+            PlayerXP playerXp = itemDropper.GetComponent<PlayerXP>();
             _inventoryMenu.BindLocalPlayer(playerInventory, itemDropper);
             _inventoryManager.BindInventory(playerInventory);
             _craftingMenu.BindInventory(playerInventory);
+            _skillsMenu.BindPlayerXP(playerXp);
+            _questsMenu.BindTracker(itemDropper.GetComponent<PlayerQuestTracker>());
+            _statsMenu.BindPlayerStats(itemDropper.GetComponent<PlayerStats>());
         }
     }
 }
