@@ -11,7 +11,7 @@ namespace Obrissom.Enemy
     /// <summary>
     /// Slow tank with two attacks:
     /// Dash: marks a strip in front of it, then dashes along it and hits everyone inside.
-    /// Ground slam: circles grow around it one after another, each one hits harder.
+    /// Ground slam: circles grow around it one after another, each one hits harder and the last one stuns.
     /// The server runs the AI. Clients only draw the ground warnings.
     /// </summary>
     public class SpectreTankEnemy : EnemyBase
@@ -248,6 +248,7 @@ namespace Obrissom.Enemy
                 if (offset.sqrMagnitude > sqrRadius || !_hitPlayers.Add(player.NetworkObjectId)) continue;
 
                 player.TakeDamage(Random.Range(stage.minDamage, stage.maxDamage), _config.slamDamageType);
+                if (stage.stunDuration > 0f && player.TryGetComponent(out PlayerStun stun)) stun.ApplyStun(stage.stunDuration);
             }
         }
 

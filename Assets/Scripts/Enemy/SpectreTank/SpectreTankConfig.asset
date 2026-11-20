@@ -30,14 +30,17 @@ MonoBehaviour:
     telegraphDuration: 0.8
     minDamage: 6
     maxDamage: 8
+    stunDuration: 0
   - radius: 4.5
     telegraphDuration: 0.7
     minDamage: 9
     maxDamage: 12
+    stunDuration: 0
   - radius: 6.5
     telegraphDuration: 0.7
     minDamage: 13
     maxDamage: 17
+    stunDuration: 1.5
   telegraphMaterial: {fileID: 0}
   groundMask:
     serializedVersion: 2

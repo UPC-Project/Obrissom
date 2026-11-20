@@ -54,7 +54,7 @@ namespace Obrissom.Enemy
         {
             new SlamStage(2.5f, 0.8f, 6f, 8f),
             new SlamStage(4.5f, 0.7f, 9f, 12f),
-            new SlamStage(6.5f, 0.7f, 13f, 17f),
+            new SlamStage(6.5f, 0.7f, 13f, 17f, 1.5f),
         };
 
         [Header("Ground Warning")]
@@ -104,14 +104,18 @@ namespace Obrissom.Enemy
         [Min(0f)] public float minDamage = 6f;
         [Min(0f)] public float maxDamage = 8f;
 
+        [Tooltip("Seconds the players hit can't move, attack or interact. 0 = no stun.")]
+        [Min(0f)] public float stunDuration;
+
         public SlamStage() { }
 
-        public SlamStage(float radius, float telegraphDuration, float minDamage, float maxDamage)
+        public SlamStage(float radius, float telegraphDuration, float minDamage, float maxDamage, float stunDuration = 0f)
         {
             this.radius = radius;
             this.telegraphDuration = telegraphDuration;
             this.minDamage = minDamage;
             this.maxDamage = maxDamage;
+            this.stunDuration = stunDuration;
         }
     }
 }
