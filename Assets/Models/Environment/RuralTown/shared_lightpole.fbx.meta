@@ -3,7 +3,32 @@ guid: 841b87edaad22ae429d388312dd6bf4b
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glasslight_mat
+    second: {fileID: 2100000, guid: 7cb761121d2c1714b8989750f9b9590e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal_mat
+    second: {fileID: 2100000, guid: 33f767c4014814b40bbc734462e0fe06, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shared_chain
+    second: {fileID: 2100000, guid: e31e30ca80c115941bf326ddd2c0e493, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stone_mat
+    second: {fileID: 2100000, guid: 954dc3b4003a7ab4391bfde9f5378907, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood_mat
+    second: {fileID: 2100000, guid: 56ea6180032ffc6448a61ba5382c99e6, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

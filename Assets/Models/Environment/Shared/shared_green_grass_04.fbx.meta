@@ -3,7 +3,17 @@ guid: dd9995a32aca50f478ba695c850b5e1b
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shared_flora_texture
+    second: {fileID: 2100000, guid: 3e90ddc0ed35d4f47990789348556397, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shared_flora_texture.004
+    second: {fileID: 2100000, guid: a6b84d76d71f75a4c8510d152dc44296, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

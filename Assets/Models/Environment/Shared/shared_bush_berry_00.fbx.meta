@@ -3,7 +3,17 @@ guid: 7386374433d10b24e9c54468583f0b0a
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: berrys_mat
+    second: {fileID: 2100000, guid: bf4096669c519624f9725f6f7fa9f50e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shared_bush_texture.001
+    second: {fileID: 2100000, guid: 713c25d372c17d444a28f7ab9030e578, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

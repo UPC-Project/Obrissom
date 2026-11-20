@@ -3,7 +3,17 @@ guid: 1a535765ee08df14587a9fa0f701c8fe
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: thorn_mat
+    second: {fileID: 2100000, guid: adf1f6694c19a6847be1c08c96a9bec8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood_black_mat
+    second: {fileID: 2100000, guid: 3b26cf8bf20a9934b9cdb8fcb9ca776f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
