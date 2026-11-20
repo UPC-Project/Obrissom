@@ -10,11 +10,11 @@ public class EnemyUI : NetworkBehaviour
     [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
     public void UpdateHealthUIRpc(float amount, float maxHealth)
     {
-        _healthBarImage.fillAmount = amount / maxHealth;
+        if (_healthBarImage != null) _healthBarImage.fillAmount = amount / maxHealth;
     }
 
     public void SetHealthBarActive(bool isActive)
     {
-        _healthBar.SetActive(isActive);
+        if (_healthBar != null) _healthBar.SetActive(isActive);
     }
 }
