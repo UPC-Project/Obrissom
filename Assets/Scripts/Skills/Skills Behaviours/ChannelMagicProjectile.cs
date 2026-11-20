@@ -65,6 +65,7 @@ public class ChannelMagicProjectile : SkillBehaviour
         trigger.ClearSubscriptions();
         trigger.OnHit += (col) =>
         {
+            if (col.isTrigger) return;
             if (col.transform.root.CompareTag("Player")) return;
 
             if (col.transform.root.CompareTag("Enemy"))
