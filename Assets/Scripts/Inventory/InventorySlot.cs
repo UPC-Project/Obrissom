@@ -38,8 +38,7 @@ namespace Obrissom.Player.Inventory
             if (slotType == SlotType.All) return true;
 
             // Equipment slots check if the item is equippable and matches the slot type
-            return incomingItem.isEquippable && SlotType.Equipment == slotType;
-            //  return incomingItem.isEquippable && slotType == SlotType.Equipment ;
+            return (incomingItem.itemType == Item.ItemType.Equippable) && SlotType.Equipment == slotType;
         }
 
         // Helper methods to modify the quantity

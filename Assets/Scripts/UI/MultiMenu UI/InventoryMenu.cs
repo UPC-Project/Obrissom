@@ -134,7 +134,7 @@ namespace Obrissom.UI
                     else
                     {
                         int destinationIndex = GetSlotUnderMouse();
-                        if (destinationIndex != -1 && _equipmentInventory.Unequip(_draggedEquipmentSlotIndex))
+                        if (destinationIndex != -1 && _equipmentInventory.Unequip(_draggedEquipmentSlotIndex, destinationIndex))
                             AudioManager.Instance?.PlaySound(AudioID.Unequip);
                     }
                 }

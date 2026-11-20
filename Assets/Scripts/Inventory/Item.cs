@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
@@ -9,7 +12,7 @@ public class Item : ScriptableObject
     public Sprite image;
 
     [Tooltip("Must be unique")]
-    public int itemID; 
+    public int itemID;
 
     [Header("Stacking Properties")]
     public bool isStackable;
@@ -18,17 +21,22 @@ public class Item : ScriptableObject
     [Header("Type")]
     public ItemType itemType;
 
-    [Header("Equipment")]
-    public bool isEquippable;
 
-    // [Header("Stat Modifiers")]
-    // TODO: Implement modifier system when player statistics system is available
+    [Header("Stat Modifiers. Leave empty for non equippable items.")]
+    public List<Modifier> modifiers;
 
     public enum ItemType
     {
-        Equippable, 
+        Equippable,
         Consumable,
         QuestItem,
         Misc
+    }
+
+    [Serializable]
+    public class Modifier
+    {
+        public float Value;
+        public Stats Stat;
     }
 }
