@@ -226,7 +226,6 @@ GameObject:
   - component: {fileID: 5647165197421816187}
   - component: {fileID: 8603422393457795414}
   - component: {fileID: 5595335746694289572}
-  - component: {fileID: 704570111942345934}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -242,8 +241,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1038489169233356036}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.40000153, z: -4.0000124}
+  m_LocalRotation: {x: 0.10233572, y: -0.8739603, z: 0.20981929, w: 0.42625898}
+  m_LocalPosition: {x: 45.79715, y: 23.244919, z: 42.39464}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -282,7 +281,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 70
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -16674,6 +16673,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8348265053139091435}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5129432662048230912}
     - targetCorrespondingSourceObject: {fileID: -2008612906426897506, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1233422765642085808}
@@ -16710,9 +16712,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1178373448476384967, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3215522371268912267}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5129432662048230912}
   m_SourcePrefab: {fileID: 100100000, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
 --- !u!4 &550980183108325758 stripped
 Transform:
@@ -17141,6 +17140,83 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 1
+  _playerName:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
+  _playerClass:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 1
   _isDead:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0
@@ -17306,6 +17382,21 @@ MonoBehaviour:
   _scanInterval: 0.2
   _activateRadius: 3
   _deactivateRadius: 4
+--- !u!114 &5129432662048230912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931868137325054916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3bcc9677174ee5b1e6fca2c3a10a83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerStun
+  ShowTopMostFoldoutHeaderGroup: 1
+  _stunEffectPrefab: {fileID: 541089732762536491, guid: 2ba27ef8c84fe4548ba166d574b805b5, type: 3}
+  _effectHeight: 2.2
 --- !u!1 &1186043861485561938 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1178373448476384967, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
@@ -17627,8 +17718,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.003
-  m_Height: 0.0135741215
+  m_Radius: 0.005
+  m_Height: 0.02
   m_Direction: 1
   m_Center: {x: -0.000000011091868, y: 0.0077870926, z: -0.000000011145519}
 --- !u!114 &8250156019829033340
@@ -17722,26 +17813,3 @@ CharacterJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &5129432662048230912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931868137325054916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d3bcc9677174ee5b1e6fca2c3a10a83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerStun
-  ShowTopMostFoldoutHeaderGroup: 1
-  _stunEffectPrefab: {fileID: 541089732762536491, guid: 2ba27ef8c84fe4548ba166d574b805b5, type: 3}
-  _effectHeight: 2.2
---- !u!81 &704570111942345934
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1038489169233356036}
-  m_Enabled: 1
