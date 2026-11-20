@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f86a526215b5d47ab96d0e06e59cfc, type: 3}
+  m_Name: QuestSilenceAtTheFarm
+  m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
+  questId: P-01
+  title: Silence at the Farm
+  offerDescription: 'We have had no news from the farm for days. Cross the north bridge and talk to the farmer.'
+  completedDescription: 'You came! Rooted ants have taken over my fields, I could use a hand.'
+  type: 0
+  isShared: 1
+  requiredLevel: 1
+  requiredQuests: []
+  questGiver: T-01
+  questReceiver: F-01
+  objective:
+    type: 1
+    enemyTargets: []
+    itemTargets: []
+    targetNPC: F-01
+  reward:
+    experienceReward: 50
+    items: []

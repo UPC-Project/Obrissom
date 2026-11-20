@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f86a526215b5d47ab96d0e06e59cfc, type: 3}
+  m_Name: QuestFarmInfestation
+  m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
+  questId: P-02
+  title: Farm Infestation
+  offerDescription: 'Rooted ants are eating my crops. Clear the farm, defeat 10 of them.'
+  completedDescription: 'The fields are quiet again, thank you! The collector ant in the village needs help too, go see her.'
+  type: 0
+  isShared: 1
+  requiredLevel: 1
+  requiredQuests:
+  - {fileID: 11400000, guid: 12b8be2becf24effa47d4501caac9b34, type: 2}
+  questGiver: F-01
+  questReceiver: F-01
+  objective:
+    type: 0
+    enemyTargets:
+    - enemy: {fileID: 11400000, guid: 824674f49519256408748801b7d92669, type: 2}
+      amount: 10
+    itemTargets: []
+    targetNPC: 
+  reward:
+    experienceReward: 100
+    items: []

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f86a526215b5d47ab96d0e06e59cfc, type: 3}
+  m_Name: QuestMushroomsAcrossTheRiver
+  m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
+  questId: P-03
+  title: Mushrooms Across the River
+  offerDescription: 'Red mushrooms keep the roots away from the village. Cross the river to the east forest and bring me 6.'
+  completedDescription: 'These will do. But the birds at the forest lake attack anyone who goes near.'
+  type: 0
+  isShared: 1
+  requiredLevel: 1
+  requiredQuests:
+  - {fileID: 11400000, guid: 9be0017819584c96acb64fd53407eb20, type: 2}
+  questGiver: T-02
+  questReceiver: T-02
+  objective:
+    type: 2
+    enemyTargets: []
+    itemTargets:
+    - item: {fileID: 11400000, guid: b4feadf0f9354ce479f9340b531c314d, type: 2}
+      amount: 6
+    targetNPC: 
+  reward:
+    experienceReward: 150
+    items: []

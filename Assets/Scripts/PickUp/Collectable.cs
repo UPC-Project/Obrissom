@@ -31,6 +31,9 @@ public class Collectable : PickupBase
     // Syncs visibility and interactability state to late-joining clients
     private NetworkVariable<bool> _isAvailable = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+    // False while it waits to respawn after being picked
+    public bool IsAvailable => !IsSpawned || _isAvailable.Value;
+
     private void Awake()
     {
         if (_hideMode == HideMode.HideMaterial)

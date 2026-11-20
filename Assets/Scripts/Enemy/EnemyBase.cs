@@ -43,7 +43,7 @@ namespace Obrissom.Enemy
         public bool IsDead => _isDead;
 
         // Same as IsDead but also valid on clients
-        protected bool IsDeadSynced => _isDeadSynced.Value;
+        public bool IsDeadSynced => _isDeadSynced.Value;
 
         public event System.Action<EnemyBase> Died;
 

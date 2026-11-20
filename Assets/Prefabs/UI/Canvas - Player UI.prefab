@@ -23517,6 +23517,7 @@ GameObject:
   - component: {fileID: 4527464403539190385}
   - component: {fileID: 2743766031069270470}
   - component: {fileID: 1450602596745266687}
+  - component: {fileID: 642140201708487294}
   m_Layer: 5
   m_Name: Canvas - Player UI
   m_TagString: Untagged
@@ -28419,3 +28420,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.UIButtonSound
   _clickSound: 401
   _hoverSound: 406
+--- !u!114 &642140201708487294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210762102208367839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b407f2ae1e2a46b5bc8fb82c22e55feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.UI.QuestWaypoint
+  _font: {fileID: 11400000, guid: f335c7f76b78d9747ae327604a5ace88, type: 2}
+  _color: {r: 1, g: 0.8, b: 0.15, a: 1}
+  _arrowSize: 34
+  _fontSize: 26
+  _screenMargin: 70
+  _targetHeight: 2.8
+  _arriveDistance: 12

@@ -26,6 +26,10 @@ public class EnemySpawner : NetworkBehaviour
     [Tooltip("Seconds after an enemy dies until a new one appears here. 0 = never.")]
     [SerializeField] private float _respawnDelay = 30f;
 
+    // Stats of the enemy this spawner creates, null if it has none
+    public EnemyStats SpawnedStats =>
+        _enemyPrefab != null && _enemyPrefab.TryGetComponent(out EnemyBase enemy) ? enemy.Stats : null;
+
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;

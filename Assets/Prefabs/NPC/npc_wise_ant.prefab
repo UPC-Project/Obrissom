@@ -802,6 +802,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d11d090f9a4022e45bc102f534d5b0de, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2192012060312376143}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d11d090f9a4022e45bc102f534d5b0de, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 802914956511288539}
   m_SourcePrefab: {fileID: 100100000, guid: d11d090f9a4022e45bc102f534d5b0de, type: 3}
 --- !u!4 &4647245002975449751 stripped
 Transform:
@@ -843,8 +846,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestGiver
   _offeredQuests:
-  - {fileID: 11400000, guid: af69555f0525b214fbf07a34531a70dd, type: 2}
-  - {fileID: 11400000, guid: df0dde59c919b5141975e5b18ab681d9, type: 2}
+  - {fileID: 11400000, guid: 12b8be2becf24effa47d4501caac9b34, type: 2}
+  - {fileID: 11400000, guid: 04bf262488964fcd8c9b41bfb574d72d, type: 2}
+  - {fileID: 11400000, guid: 503af5f58cb3492499820c3e0a50a437, type: 2}
   - {fileID: 11400000, guid: 8575a255e34a43a79fb5d8b934e19b5e, type: 2}
 --- !u!135 &528428961424407067
 SphereCollider:
@@ -890,3 +894,29 @@ CapsuleCollider:
   m_Height: 1.6
   m_Direction: 1
   m_Center: {x: 0, y: 0.62, z: 0}
+--- !u!114 &802914956511288539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419382973147367469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32b8a779c4404500b083c5b0de7cde11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestMarker
+  _font: {fileID: 11400000, guid: f335c7f76b78d9747ae327604a5ace88, type: 2}
+  _worldSize: 0.8
+  _minPixelSize: 22
+  _maxPixelSize: 90
+  _heightAboveHead: 0.4
+  _maxDistance: 150
+  _hideWhenOccluded: 1
+  _occluders:
+    serializedVersion: 2
+    m_Bits: 137
+  _readyColor: {r: 1, g: 0.8, b: 0.15, a: 1}
+  _inProgressColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  _bobHeight: 0.12
+  _bobSpeed: 2.5

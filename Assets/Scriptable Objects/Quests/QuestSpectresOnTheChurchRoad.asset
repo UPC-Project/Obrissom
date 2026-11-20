@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f86a526215b5d47ab96d0e06e59cfc, type: 3}
+  m_Name: QuestSpectresOnTheChurchRoad
+  m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
+  questId: P-05
+  title: Spectres on the Church Road
+  offerDescription: 'Rooted spectres guard the road to the old church in the east. Defeat 4 of them.'
+  completedDescription: 'The road is open, but the forest is still sick.'
+  type: 0
+  isShared: 1
+  requiredLevel: 1
+  requiredQuests:
+  - {fileID: 11400000, guid: 62f8f1cbb6694d89bc58f43df4567a02, type: 2}
+  questGiver: T-01
+  questReceiver: T-01
+  objective:
+    type: 0
+    enemyTargets:
+    - enemy: {fileID: 11400000, guid: c8b9143ab73f4e65abe7e90bc08ff68f, type: 2}
+      amount: 4
+    itemTargets: []
+    targetNPC: 
+  reward:
+    experienceReward: 500
+    items: []

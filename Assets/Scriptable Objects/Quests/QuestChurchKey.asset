@@ -19,11 +19,9 @@ MonoBehaviour:
   completedDescription: Here is the church key. Be careful, something waits inside.
   type: 0
   isShared: 1
-  requiredLevel: 2
+  requiredLevel: 5
   requiredQuests:
-  - {fileID: 11400000, guid: 074c87fbf53e31b4d88ad867c5ceea5e, type: 2}
-  - {fileID: 11400000, guid: af69555f0525b214fbf07a34531a70dd, type: 2}
-  - {fileID: 11400000, guid: df0dde59c919b5141975e5b18ab681d9, type: 2}
+  - {fileID: 11400000, guid: 503af5f58cb3492499820c3e0a50a437, type: 2}
   questGiver: T-01
   questReceiver: T-02
   objective:
@@ -32,7 +30,7 @@ MonoBehaviour:
     itemTargets: []
     targetNPC: T-02
   reward:
-    experienceReward: 50
+    experienceReward: 0
     items:
     - item: {fileID: 11400000, guid: 6b6a700444c84e99bb8e189d565b227e, type: 2}
       amount: 1

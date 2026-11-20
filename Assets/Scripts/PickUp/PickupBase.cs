@@ -13,6 +13,8 @@ public class PickupBase : NetworkBehaviour, IInteractable
 
     public Vector3 Position => transform.position;
 
+    public Item Item => _item;
+
     public void SetInteractPromptActive(bool active)
     {
         if (_interactPrompt != null)
