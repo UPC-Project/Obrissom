@@ -30,7 +30,7 @@ public class InstantFront : SkillBehaviour
         PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
 
         Vector3 origin = caster.transform.position + Vector3.up * 0.9f - caster.transform.forward * originOffset;
-        Collider[] hits = Physics.OverlapSphere(caster.transform.position, range);
+        Collider[] hits = Physics.OverlapSphere(caster.transform.position, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
 
         // Damage will affect every enemy inside the cone
         foreach (Collider hit in hits)

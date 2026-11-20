@@ -7,27 +7,32 @@ using UnityEngine.UI;
 /// UI component for a single ingredient slot inside a RecipePanel.
 /// Displays the ingredient image, name, and current/required count.
 /// </summary>
-public class IngredientSlotUI : MonoBehaviour
+namespace Obrissom.UI
 {
-    [SerializeField] private Image _image;
-    [SerializeField] private TextMeshProUGUI _countText;
-
-    private IngredientsType _ingredient;
-
-    public void Setup(IngredientsType ingredient)
+    public class IngredientSlotUI : MonoBehaviour
     {
-        _ingredient = ingredient;
-        _image.sprite = ingredient.item.image;
-    }
+        [SerializeField] private Image _image;
+        [SerializeField] private TextMeshProUGUI _countText;
 
-    /// <summary>
-    /// Updates the count text and color based on current inventory.
-    /// </summary>
-    public void UpdateCount(Inventory inventory)
-    {
-        int playerHas = inventory.GetItemCount(_ingredient.item);
-        _countText.text = $"{playerHas}/{_ingredient.amount}";
-        _countText.color = playerHas >= _ingredient.amount ? Color.white : Color.red; // color may change when UI design is decided
+        private IngredientsType _ingredient;
+
+        public void Setup(IngredientsType ingredient)
+        {
+            _ingredient = ingredient;
+            _image.sprite = ingredient.item.image;
+            ItemTooltipDisplayer tooltipDisplayer = GetComponentInChildren<ItemTooltipDisplayer>();
+            if (tooltipDisplayer != null)
+                tooltipDisplayer.SetItem(ingredient.item);
+        }
+
+        /// <summary>
+        /// Updates the count text and color based on current inventory.
+        /// </summary>
+        public void UpdateCount(Inventory inventory)
+        {
+            int playerHas = inventory.GetItemCount(_ingredient.item);
+            _countText.text = $"{playerHas}/{_ingredient.amount}";
+            _countText.color = playerHas >= _ingredient.amount ? Color.white : Color.red; // color may change when UI design is decided
+        }
     }
 }
-
