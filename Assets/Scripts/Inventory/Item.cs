@@ -22,8 +22,11 @@ public class Item : ScriptableObject
     public ItemType itemType;
 
 
-    [Header("Stat Modifiers. Leave empty for non equippable items.")]
+    [Header("Stat Modifiers (leave empty for non equippable items).")]
     public List<Modifier> modifiers;
+
+    [Header("Consumable Effects (leave empty for non consumable items).")]
+    public List<ConsumableEffect> consumableEffects;
 
     public enum ItemType
     {
@@ -33,10 +36,24 @@ public class Item : ScriptableObject
         Misc
     }
 
+    public enum ConsumableEffectType
+    {
+        None,
+        RestoreHealth,
+        RestoreResource
+    }
+
     [Serializable]
     public class Modifier
     {
         public float Value;
         public Stats Stat;
+    }
+
+    [Serializable]
+    public class ConsumableEffect
+    {
+        public ConsumableEffectType EffectType;
+        public float Value;
     }
 }

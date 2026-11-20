@@ -176,6 +176,13 @@ namespace Obrissom.Player
             _healPopUp.ShowPopUpClientRpc(healAmount.ToString(), isCritic);
         }
 
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void RestoreResourceRpc(float amount)
+        {
+            if (!IsServer || _isDead.Value) return;
+            _resource.Value = Mathf.Min(_resource.Value + amount, _playerStats.maxResource.Value);
+        }
+
         public (int, bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
         {
             int attackDamage = Random.Range(minAttackDamage, maxAttackDamage + 1);

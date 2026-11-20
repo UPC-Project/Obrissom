@@ -25,6 +25,10 @@ namespace Obrissom.UI
         [SerializeField] private EquipmentInventory _equipmentInventory;
         [SerializeField] private Transform _equipmentContainer;
 
+        [Header("Consumables")]
+        [SerializeField] private ConsumableInventory _consumableInventory;
+        [SerializeField] private Transform _consumableContainer;
+
         // Data references (set via BindLocalPlayer)
         private Inventory _inventory;
         private ItemDropper _itemDropper;
@@ -33,6 +37,8 @@ namespace Obrissom.UI
         private int _draggedSlotIndex = -1;
         private bool _draggingFromEquipment = false;
         private int _draggedEquipmentSlotIndex = -1;
+        private bool _draggingFromConsumable = false;
+        private int _draggedConsumableSlotIndex = -1;
 
         void Start()
         {
@@ -42,7 +48,11 @@ namespace Obrissom.UI
             if (_equipmentInventory != null)
                 _equipmentInventory.OnEquipmentChanged += UpdateEquipmentUI;
 
+            if (_consumableInventory != null)
+                _consumableInventory.OnConsumablesChanged += UpdateConsumablesUI;
+
             UpdateInventoryUI();
+            UpdateConsumablesUI();
             _dragIcon.enabled = false;
         }
 
@@ -60,12 +70,16 @@ namespace Obrissom.UI
             _itemDropper = localDropper;
 
             _equipmentInventory.SetInventory(_inventory);
+            if (_consumableInventory != null)
+                _consumableInventory.SetInventory(_inventory);
 
             if (_inventory != null)
             {
                 _inventory.OnInventoryChanged += UpdateInventoryUI;
                 UpdateInventoryUI();
             }
+
+            UpdateConsumablesUI();
         }
 
         void Update()
@@ -83,6 +97,7 @@ namespace Obrissom.UI
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 int equipIndex = GetEquipmentSlotUnderMouse();
+                int consumableIndex = equipIndex == -1 ? GetConsumableSlotUnderMouse() : -1;
 
                 if (equipIndex != -1) // Check if clicking an equipment slot
                 {
@@ -97,9 +112,23 @@ namespace Obrissom.UI
                         _dragIcon.enabled = true;
                     }
                 }
+                else if (consumableIndex != -1 && _consumableInventory != null) // Check if clicking a consumable slot
+                {
+                    InventorySlot consumableSlot = _consumableInventory.GetSlotByIndex(consumableIndex);
+                    if (consumableSlot != null && !consumableSlot.IsEmpty)
+                    {
+                        _draggingFromConsumable = true;
+                        _draggedConsumableSlotIndex = consumableIndex;
+                        _draggedSlotIndex = 0; // Temp index to allow dragging
+                        _dragIcon.sprite = consumableSlot.item.image;
+                        _dragIcon.color = new Color(1, 1, 1, 0.5f);
+                        _dragIcon.enabled = true;
+                    }
+                }
                 else if (_inventory != null) // Check if clicking an inventory slot
                 {
                     _draggingFromEquipment = false;
+                    _draggingFromConsumable = false;
                     _draggedSlotIndex = GetSlotUnderMouse();
 
                     if (_draggedSlotIndex != -1 && !_inventory.Slots[_draggedSlotIndex].IsEmpty)
@@ -120,11 +149,11 @@ namespace Obrissom.UI
             }
 
             // UPDATE DRAG ICON POSITION 
-            if ((_draggedSlotIndex != -1 || _draggingFromEquipment) && _dragIcon.enabled)
+            if ((_draggedSlotIndex != -1 || _draggingFromEquipment || _draggingFromConsumable) && _dragIcon.enabled)
                 _dragIcon.transform.position = Mouse.current.position.ReadValue();
 
             // DROP ITEM
-            if (Mouse.current.leftButton.wasReleasedThisFrame && (_draggedSlotIndex != -1 || _draggingFromEquipment))
+            if (Mouse.current.leftButton.wasReleasedThisFrame && (_draggedSlotIndex != -1 || _draggingFromEquipment || _draggingFromConsumable))
             {
                 if (_draggingFromEquipment) // Handle drop from equipment
                 {
@@ -138,13 +167,30 @@ namespace Obrissom.UI
                             AudioManager.Instance?.PlaySound(AudioID.Unequip);
                     }
                 }
+                else if (_draggingFromConsumable && _consumableInventory != null) // Handle drop from consumable
+                {
+                    int consumableIndex = GetConsumableSlotUnderMouse();
+                    if (consumableIndex != -1)
+                        _consumableInventory.MoveConsumable(_draggedConsumableSlotIndex, consumableIndex);
+                    else
+                    {
+                        int destinationIndex = GetSlotUnderMouse();
+                        if (destinationIndex != -1)
+                            _consumableInventory.ReturnToInventory(_draggedConsumableSlotIndex, destinationIndex);
+                    }
+                }
                 else if (_inventory != null) // Handle drop from inventory
                 {
                     int equipIndex = GetEquipmentSlotUnderMouse();
+                    int consumableIndex = equipIndex == -1 ? GetConsumableSlotUnderMouse() : -1;
                     if (equipIndex != -1)
                     {
                         if (_equipmentInventory.Equip(_draggedSlotIndex, equipIndex))
                             AudioManager.Instance?.PlaySound(AudioID.Equip);
+                    }
+                    else if (consumableIndex != -1 && _consumableInventory != null)
+                    {
+                        _consumableInventory.AssignFromInventory(_draggedSlotIndex, consumableIndex);
                     }
                     else
                     {
@@ -159,8 +205,11 @@ namespace Obrissom.UI
                 _draggedSlotIndex = -1;
                 _draggingFromEquipment = false;
                 _draggedEquipmentSlotIndex = -1;
+                _draggingFromConsumable = false;
+                _draggedConsumableSlotIndex = -1;
                 UpdateInventoryUI();
                 UpdateEquipmentUI();
+                UpdateConsumablesUI();
             }
 
             // RIGHT CLICK (Drop to World)
@@ -183,8 +232,14 @@ namespace Obrissom.UI
 
         // HELPER METHODS: Raycast to find UI Slots
 
-        private int GetSlotUnderMouse()
+        private int GetSlotUnderMouse() => GetSlotUnderMouse(_slotContainer);
+        private int GetEquipmentSlotUnderMouse() => GetSlotUnderMouse(_equipmentContainer);
+        private int GetConsumableSlotUnderMouse() => GetSlotUnderMouse(_consumableContainer);
+
+        private int GetSlotUnderMouse(Transform container)
         {
+            if (container == null) return -1;
+
             PointerEventData pointerData = new PointerEventData(EventSystem.current)
             { position = Mouse.current.position.ReadValue() };
             List<RaycastResult> results = new List<RaycastResult>();
@@ -193,28 +248,9 @@ namespace Obrissom.UI
             foreach (RaycastResult result in results)
             {
                 Transform hit = result.gameObject.transform;
-                for (int i = 0; i < _slotContainer.childCount; i++)
+                for (int i = 0; i < container.childCount; i++)
                 {
-                    Transform slotChild = _slotContainer.GetChild(i);
-                    if (hit == slotChild || hit.parent == slotChild) return i;
-                }
-            }
-            return -1;
-        }
-
-        private int GetEquipmentSlotUnderMouse()
-        {
-            PointerEventData pointerData = new PointerEventData(EventSystem.current)
-            { position = Mouse.current.position.ReadValue() };
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-
-            foreach (RaycastResult result in results)
-            {
-                Transform hit = result.gameObject.transform;
-                for (int i = 0; i < _equipmentContainer.childCount; i++)
-                {
-                    Transform slotChild = _equipmentContainer.GetChild(i);
+                    Transform slotChild = container.GetChild(i);
                     if (hit == slotChild || hit.parent == slotChild) return i;
                 }
             }
@@ -228,27 +264,8 @@ namespace Obrissom.UI
             if (_inventory == null) return;
             for (int i = 0; i < _slotContainer.childCount; i++)
             {
-                Transform slotTransform = _slotContainer.GetChild(i);
-                Image itemImage = slotTransform.Find("Item").GetComponent<Image>();
-                TextMeshProUGUI qtyText = slotTransform.Find("QtyText").GetComponent<TextMeshProUGUI>();
-
-                if (i < _inventory.Slots.Count && !_inventory.Slots[i].IsEmpty)
-                {
-                    itemImage.sprite = _inventory.Slots[i].item.image;
-                    itemImage.enabled = true;
-                    itemImage.color = Color.white;
-                    qtyText.text = _inventory.Slots[i].quantity > 1 ? _inventory.Slots[i].quantity.ToString() : "";
-                    if (slotTransform.TryGetComponent(out ItemTooltipDisplayer tooltipDisplayer))
-                        tooltipDisplayer.SetItem(_inventory.Slots[i].item);
-                }
-                else
-                {
-                    itemImage.sprite = null;
-                    itemImage.enabled = false;
-                    qtyText.text = "";
-                    if (slotTransform.TryGetComponent(out ItemTooltipDisplayer tooltipDisplayer))
-                        tooltipDisplayer.SetItem(null);
-                }
+                InventorySlot slot = i < _inventory.Slots.Count ? _inventory.Slots[i] : null;
+                UpdateSlotVisual(_slotContainer.GetChild(i), slot);
             }
         }
 
@@ -262,16 +279,32 @@ namespace Obrissom.UI
 
         private void UpdateEquipmentSlot(int index, InventorySlot slot)
         {
-            if (index >= _equipmentContainer.childCount) return;
+            if (_equipmentContainer == null || index >= _equipmentContainer.childCount) return;
+            UpdateSlotVisual(_equipmentContainer.GetChild(index), slot);
+        }
 
-            Transform slotTransform = _equipmentContainer.GetChild(index);
+        private void UpdateConsumablesUI()
+        {
+            if (_consumableInventory == null || _consumableContainer == null) return;
+            for (int i = 0; i < _consumableContainer.childCount; i++)
+            {
+                UpdateSlotVisual(_consumableContainer.GetChild(i), _consumableInventory.GetSlotByIndex(i));
+            }
+        }
+
+        private void UpdateSlotVisual(Transform slotTransform, InventorySlot slot)
+        {
             Image itemImage = slotTransform.Find("Item").GetComponent<Image>();
+            Transform qtyTransform = slotTransform.Find("QtyText");
+            TextMeshProUGUI qtyText = qtyTransform != null ? qtyTransform.GetComponent<TextMeshProUGUI>() : null;
 
-            if (!slot.IsEmpty)
+            if (slot != null && !slot.IsEmpty)
             {
                 itemImage.sprite = slot.item.image;
                 itemImage.enabled = true;
                 itemImage.color = Color.white;
+                if (qtyText != null)
+                    qtyText.text = slot.quantity > 1 ? slot.quantity.ToString() : "";
                 if (slotTransform.TryGetComponent(out ItemTooltipDisplayer tooltipDisplayer))
                     tooltipDisplayer.SetItem(slot.item);
             }
@@ -279,6 +312,8 @@ namespace Obrissom.UI
             {
                 itemImage.sprite = null;
                 itemImage.enabled = false;
+                if (qtyText != null)
+                    qtyText.text = "";
                 if (slotTransform.TryGetComponent(out ItemTooltipDisplayer tooltipDisplayer))
                     tooltipDisplayer.SetItem(null);
             }

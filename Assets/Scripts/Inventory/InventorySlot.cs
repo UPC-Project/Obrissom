@@ -4,9 +4,9 @@ namespace Obrissom.Player.Inventory
 {
     /// <summary>
     /// Defines the category of the slot. 
-    /// 'All' is for standard inventory, 'Equipment' for specialized gear slots.
+    /// 'All' is for standard inventory, 'Equipment' for specialized gear slots, 'Consumable' for quick-use slots.
     /// </summary>
-    public enum SlotType { All, Equipment }
+    public enum SlotType { All, Equipment, Consumable }
 
     /// <summary>
     /// This class represents a single slot in an inventory or equipment panel.
@@ -37,8 +37,13 @@ namespace Obrissom.Player.Inventory
             // Standard inventory slots accept anything
             if (slotType == SlotType.All) return true;
 
-            // Equipment slots check if the item is equippable and matches the slot type
-            return (incomingItem.itemType == Item.ItemType.Equippable) && SlotType.Equipment == slotType;
+            if (slotType == SlotType.Equipment)
+                return incomingItem.itemType == Item.ItemType.Equippable;
+
+            if (slotType == SlotType.Consumable)
+                return incomingItem.itemType == Item.ItemType.Consumable;
+
+            return false;
         }
 
         // Helper methods to modify the quantity
