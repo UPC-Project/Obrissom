@@ -12,9 +12,9 @@ namespace Obrissom.Enemy
     /// Slow tank with two attacks:
     /// Dash: marks a strip in front of it, then dashes along it and hits everyone inside.
     /// Ground slam: circles grow around it one after another, each one hits harder and the last one stuns.
-    /// The server runs the AI. Clients only draw the ground warnings.
+    /// Roams in a herd like the Picozapato. The server runs the AI. Clients only draw the ground warnings.
     /// </summary>
-    public class SpectreTankEnemy : EnemyBase
+    public class SpectreTankEnemy : EnemyBase, IHerdMember
     {
         private const int MaxOverlapHits = 16;
         private const float HitBoxHeight = 3f;
@@ -33,11 +33,48 @@ namespace Obrissom.Enemy
         private Attack _currentAttack;
         private float _slamReadyTime;
 
+        // Roaming
+        private EnemyHerd _herd;
+        private bool _ownsHerd;
+        private bool _isRoamPausing;
+        private float _roamResumeTime;
+        private float _speedMultiplier = 1f;
+
+        // Alert from a herd mate
+        private Transform _alertTarget;
+        private float _alertActiveTime;
+
         private bool IsAttacking => _currentAttack != Attack.None;
+        private float EngagedRange => _stats.chaseRange * _config.engagedRangeMultiplier;
 
         // Hits don't stop an attack, and it doesn't turn once the warning is shown
         protected override bool IsStaggerImmune => IsAttacking;
         public override bool CanFaceTarget => !IsAttacking;
+
+        // IHerdMember
+
+        public float HerdSpacing => _config.herdSpacing;
+
+        public bool IsEngaged =>
+            _stateMachine.CurrentState is EnemyState.Chase or EnemyState.Attack or EnemyState.TakingDamage;
+
+        public void OnHerdAlert(Transform target, float delay)
+        {
+            if (_isDead || _target != null) return;
+            _alertTarget = target;
+            _alertActiveTime = Time.time + delay;
+        }
+
+        public void SetHerd(EnemyHerd herd)
+        {
+            if (_herd == herd) return;
+
+            EnemyHerd previous = _herd;
+            _herd = herd;
+            _ownsHerd = false;
+
+            if (previous != null) previous.RemoveMember(this);
+        }
 
         // Lifecycle
 
@@ -49,13 +86,20 @@ namespace Obrissom.Enemy
 
         public override void OnNetworkSpawn()
         {
+            // Before base, the state machine starts there and uses the speed
+            if (IsServer) _speedMultiplier = 1f + Random.Range(-_config.speedVariance, _config.speedVariance);
+
             base.OnNetworkSpawn();
-            if (IsServer) ConfigureAgent();
+            if (!IsServer) return;
+
+            ConfigureAgent();
+            EnemySteering.Register(this);
         }
 
         public override void OnNetworkDespawn()
         {
             DestroyTelegraphs();
+            if (IsServer) LeaveGroupSystems();
             base.OnNetworkDespawn();
         }
 
@@ -70,7 +114,142 @@ namespace Obrissom.Enemy
             _agent.acceleration = _config.acceleration;
             _agent.angularSpeed = _config.angularSpeed;
             _agent.stoppingDistance = _config.stoppingDistance;
+            _agent.obstacleAvoidanceType = _config.obstacleAvoidance;
+            _agent.avoidancePriority = Random.Range(_config.avoidancePriorityRange.x, _config.avoidancePriorityRange.y + 1);
         }
+
+        private void LeaveGroupSystems()
+        {
+            EnemySteering.Unregister(this);
+
+            if (_herd != null)
+            {
+                EnemyHerd herd = _herd;
+                _herd = null;
+                herd.RemoveMember(this);
+            }
+        }
+
+        public override float GetMoveSpeed(EnemyState state) => base.GetMoveSpeed(state) * _speedMultiplier;
+
+        public override void OnStateChanged(EnemyState previous, EnemyState current)
+        {
+            if (previous == EnemyState.Move && _herd != null) _herd.ReleaseDestination(this);
+
+            // Spotted someone: the herd mates come too
+            bool justSpotted = current == EnemyState.Chase
+                               && (previous is EnemyState.Idle or EnemyState.Move or EnemyState.None);
+            if (justSpotted && _herd != null) _herd.RaiseAlert(this, _target);
+        }
+
+        // Roaming (same as the Picozapato)
+
+        public override void SetPatrolPoints(GameObject[] points)
+        {
+            base.SetPatrolPoints(points);
+            if (_ownsHerd && _herd != null) _herd.SetWaypoints(points);
+        }
+
+        public override void OnMoveStateEnter()
+        {
+            EnsureHerd();
+
+            // Random start so the group doesn't leave at the same time
+            _isRoamPausing = true;
+            _roamResumeTime = Time.time + Random.Range(0f, _herd.PauseAtDestination.x);
+        }
+
+        public override void OnMoveStateTick()
+        {
+            EnsureHerd();
+
+            if (_isRoamPausing)
+            {
+                if (Time.time >= _roamResumeTime) StartRoamLeg();
+                else KeepPersonalSpace();
+                return;
+            }
+
+            bool arrived = !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance + 0.1f;
+            if (!arrived) return;
+
+            Vector2 pause = _herd.PauseAtDestination;
+            _isRoamPausing = true;
+            _roamResumeTime = Time.time + Random.Range(pause.x, pause.y);
+        }
+
+        // Alone, it becomes a herd of one
+        private void EnsureHerd()
+        {
+            if (_herd != null) return;
+
+            var herdObject = new GameObject($"{name} Herd");
+            herdObject.transform.position = transform.position;
+            var herd = herdObject.AddComponent<EnemyHerd>();
+            herd.Configure(_config.roamRadius, _config.roamPause, _patrolPoints, destroyWhenEmpty: true);
+            herd.AddMember(this);
+            _ownsHerd = true;
+        }
+
+        private void StartRoamLeg()
+        {
+            _isRoamPausing = false;
+            _agent.speed = GetMoveSpeed(EnemyState.Move);
+
+            if (_herd.TryGetDestination(this, out Vector3 destination))
+            {
+                _agent.SetDestination(destination);
+            }
+            else
+            {
+                _isRoamPausing = true;
+                _roamResumeTime = Time.time + 1f;
+            }
+        }
+
+        // Step aside when standing too close to another enemy
+        private void KeepPersonalSpace()
+        {
+            if (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance + 0.1f) return;
+
+            Vector3 push = EnemySteering.ComputeSeparation(this, _config.separationRadius);
+            if (push.sqrMagnitude < 0.01f) return;
+
+            Vector3 target = transform.position + push.normalized * _config.separationStrength;
+            if (NavMesh.SamplePosition(target, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+                _agent.SetDestination(hit.position);
+        }
+
+        // Targeting
+
+        public override void DetectPlayer()
+        {
+            Transform previous = _target;
+            base.DetectPlayer();
+            if (_target != null)
+            {
+                _alertTarget = null;
+                return;
+            }
+
+            // Once fighting it follows a bit further before giving up
+            if (IsValidTarget(previous) && FlatDistance(previous.position) <= EngagedRange)
+            {
+                _target = previous;
+                return;
+            }
+
+            // A herd mate spotted someone
+            if (_alertTarget != null && Time.time >= _alertActiveTime)
+            {
+                if (IsValidTarget(_alertTarget) && FlatDistance(_alertTarget.position) <= EngagedRange)
+                    _target = _alertTarget;
+                _alertTarget = null;
+            }
+        }
+
+        public override bool IsPlayerInChaseRange() =>
+            IsValidTarget(_target) && FlatDistance(_target.position) <= EngagedRange;
 
         // Attack decision
 
@@ -282,6 +461,7 @@ namespace Obrissom.Enemy
 
             PlaySoundForEveryone(_config.deathSound, transform.position);
             base.Die(attackerRef);
+            LeaveGroupSystems();
         }
 
         // Ground warnings (clients and host)

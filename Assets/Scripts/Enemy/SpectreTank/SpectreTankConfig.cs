@@ -1,6 +1,7 @@
 using System;
 using Obrissom.Audio;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Obrissom.Enemy
 {
@@ -73,10 +74,38 @@ namespace Obrissom.Enemy
         [Tooltip("Time the warning fades after the hit.")]
         [Min(0f)] public float impactFadeDuration = 0.4f;
 
+        [Header("Solo Roaming (no herd)")]
+        [Min(0f)] public float roamRadius = 10f;
+
+        [Tooltip("Random pause at each destination, in seconds.")]
+        public Vector2 roamPause = new Vector2(2f, 5f);
+
+        [Header("Group Movement")]
+        [Tooltip("Min distance between roaming destinations.")]
+        [Min(0f)] public float herdSpacing = 3f;
+
+        [Tooltip("Enemies closer than this step away.")]
+        [Min(0f)] public float separationRadius = 2.2f;
+
+        [Tooltip("How far to step away.")]
+        [Min(0f)] public float separationStrength = 1.2f;
+
+        [Tooltip("Random ± change on speed. 0.1 = ±10%.")]
+        [Range(0f, 0.5f)] public float speedVariance = 0.1f;
+
+        [Header("Targeting")]
+        [Tooltip("Once in combat, chase up to chaseRange × this.")]
+        [Min(1f)] public float engagedRangeMultiplier = 1.4f;
+
         [Header("NavMesh Agent")]
         [Min(0f)] public float acceleration = 8f;
         [Min(0f)] public float angularSpeed = 240f;
         [Min(0f)] public float stoppingDistance = 1.5f;
+
+        [Tooltip("Random per enemy, avoids agents blocking each other.")]
+        public Vector2Int avoidancePriorityRange = new Vector2Int(35, 65);
+
+        public ObstacleAvoidanceType obstacleAvoidance = ObstacleAvoidanceType.MedQualityObstacleAvoidance;
 
         [Header("Audio")]
         public AudioID dashSound = AudioID.SlasherAttack;
@@ -85,6 +114,10 @@ namespace Obrissom.Enemy
 
         private void OnValidate()
         {
+            roamPause.y = Mathf.Max(roamPause.y, roamPause.x);
+            avoidancePriorityRange.x = Mathf.Clamp(avoidancePriorityRange.x, 0, 99);
+            avoidancePriorityRange.y = Mathf.Clamp(avoidancePriorityRange.y, avoidancePriorityRange.x, 99);
+
             if (slamStages == null) return;
             foreach (SlamStage stage in slamStages)
             {

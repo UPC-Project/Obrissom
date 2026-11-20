@@ -49,9 +49,18 @@ MonoBehaviour:
   telegraphWarningColor: {r: 1, g: 0.1, b: 0.05, a: 1}
   warningThreshold: 0.75
   impactFadeDuration: 0.4
+  roamRadius: 10
+  roamPause: {x: 2, y: 5}
+  herdSpacing: 3
+  separationRadius: 2.2
+  separationStrength: 1.2
+  speedVariance: 0.1
+  engagedRangeMultiplier: 1.4
   acceleration: 8
   angularSpeed: 240
   stoppingDistance: 1.5
+  avoidancePriorityRange: {x: 35, y: 65}
+  obstacleAvoidance: 2
   dashSound: 200
   slamSound: 213
   deathSound: 202
