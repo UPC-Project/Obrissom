@@ -342,7 +342,6 @@ GameObject:
   - component: {fileID: 6427667809580617934}
   - component: {fileID: 9159431373663792067}
   - component: {fileID: 539672976076334920}
-  - component: {fileID: 2544779525990191948}
   m_Layer: 5
   m_Name: ConsumableSlot
   m_TagString: Slot
@@ -450,18 +449,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.UI.ItemTooltipDisplayer
   _slotItem: {fileID: 0}
---- !u!114 &2544779525990191948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4790447132562581432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af6a49a046128ce4dbb5fc7be1fde800, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ConsumableSlot
 --- !u!1 &7968609806353131075
 GameObject:
   m_ObjectHideFlags: 0

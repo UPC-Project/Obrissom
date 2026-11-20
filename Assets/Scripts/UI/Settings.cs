@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 namespace Obrissom.UI
 {
     /// <summary>
-    /// Master, Music and Effects volume sliders in a side panel.
+    /// Audio and graphics settings in a side panel.
     /// Local to each player (no networking) and saved in PlayerPrefs between sessions.
     /// </summary>
     public class Settings : MonoBehaviour
@@ -18,6 +19,13 @@ namespace Obrissom.UI
         private const string MusicParam  = "MusicVolume";
         private const string SfxParam    = "SFXVolume";
 
+        private const string VSyncKey    = "VSyncEnabled";
+        private const string FpsLimitKey = "FpsLimitIndex";
+
+        // Indices match the dropdown options populated in BindGraphics; -1 means unlimited
+        private static readonly int[] FpsOptions = { 30, 60, 120, 144, -1 };
+        private const int DefaultFpsIndex = 1; // 60 FPS
+
         [SerializeField] private AudioMixer _mixer;
         [SerializeField] private InputActionReference _toggleSettingsAction;
 
@@ -25,6 +33,10 @@ namespace Obrissom.UI
         [SerializeField] private Slider _masterSlider;
         [SerializeField] private Slider _musicSlider;
         [SerializeField] private Slider _sfxSlider;
+
+        [Header("Graphics")]
+        [SerializeField] private Toggle _vSyncToggle;
+        [SerializeField] private TMP_Dropdown _fpsLimitDropdown;
 
         [Header("UI Components")]
         [SerializeField] private GameObject _panel;
@@ -38,6 +50,7 @@ namespace Obrissom.UI
             Bind(_masterSlider, MasterParam);
             Bind(_musicSlider, MusicParam);
             Bind(_sfxSlider, SfxParam);
+            BindGraphics();
 
             if (_panel != null) _panel.SetActive(false);
 
@@ -96,6 +109,68 @@ namespace Obrissom.UI
         {
             if (_mixer == null) return;
             _mixer.SetFloat(param, Mathf.Log10(Mathf.Max(value, 0.0001f)) * 20f);
+        }
+
+        // GRAPHICS SETTINGS
+        private void BindGraphics()
+        {
+            bool vSyncEnabled = PlayerPrefs.GetInt(VSyncKey, 1) == 1;
+            int fpsIndex = Mathf.Clamp(PlayerPrefs.GetInt(FpsLimitKey, DefaultFpsIndex), 0, FpsOptions.Length - 1);
+
+            ApplyGraphics(vSyncEnabled, fpsIndex);
+
+            if (_vSyncToggle != null)
+            {
+                _vSyncToggle.SetIsOnWithoutNotify(vSyncEnabled);
+                _vSyncToggle.onValueChanged.AddListener(OnVSyncChanged);
+            }
+
+            if (_fpsLimitDropdown != null)
+            {
+                _fpsLimitDropdown.ClearOptions();
+                _fpsLimitDropdown.AddOptions(new List<string>
+                {
+                    "30 FPS",
+                    "60 FPS",
+                    "120 FPS",
+                    "144 FPS",
+                    "Unlimited"
+                });
+                _fpsLimitDropdown.SetValueWithoutNotify(fpsIndex);
+                _fpsLimitDropdown.interactable = !vSyncEnabled;
+                _fpsLimitDropdown.onValueChanged.AddListener(OnFpsLimitChanged);
+            }
+        }
+
+        private void OnVSyncChanged(bool isOn)
+        {
+            PlayerPrefs.SetInt(VSyncKey, isOn ? 1 : 0);
+            int fpsIndex = Mathf.Clamp(PlayerPrefs.GetInt(FpsLimitKey, DefaultFpsIndex), 0, FpsOptions.Length - 1);
+            ApplyGraphics(isOn, fpsIndex);
+
+            if (_fpsLimitDropdown != null)
+                _fpsLimitDropdown.interactable = !isOn;
+        }
+
+        private void OnFpsLimitChanged(int index)
+        {
+            int clampedIndex = Mathf.Clamp(index, 0, FpsOptions.Length - 1);
+            PlayerPrefs.SetInt(FpsLimitKey, clampedIndex);
+            bool vSyncEnabled = PlayerPrefs.GetInt(VSyncKey, 1) == 1;
+            ApplyGraphics(vSyncEnabled, clampedIndex);
+        }
+
+        private void ApplyGraphics(bool vSyncEnabled, int fpsIndex)
+        {
+            if (vSyncEnabled)
+            {
+                QualitySettings.vSyncCount = 1;
+                return;
+            }
+
+            QualitySettings.vSyncCount = 0;
+            // Unity applies targetFrameRate only when vSyncCount is 0
+            Application.targetFrameRate = FpsOptions[fpsIndex];
         }
 
         // EXIT GAME
