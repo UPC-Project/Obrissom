@@ -25532,6 +25532,7 @@ GameObject:
   - component: {fileID: 2743766031069270470}
   - component: {fileID: 1450602596745266687}
   - component: {fileID: 642140201708487294}
+  - component: {fileID: 683682011851610285}
   m_Layer: 5
   m_Name: Canvas - Player UI
   m_TagString: Untagged
@@ -30313,3 +30314,16 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1135782396924419832, guid: 16f315035509b664182cd776cb4a28b3, type: 3}
   m_PrefabInstance: {fileID: 9080877081586351480}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &683682011851610285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210762102208367839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62587a61e85942e2a3d374cf68a649ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.UI.HudToggle
+  _toggleKey: 22
