@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e10b7f80b3e8e3469ac62d773884087, type: 3}
   m_Name: SpectreTankMiniBossStats
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Enemy.EnemyStats
-  enemyName: Rooted Spectre
-  maxHealth: 45
+  enemyName: Spectre Warden
+  maxHealth: 60
   moveSpeed: 2.5
   chaseRange: 15
   chaseSpeedMultiplier: 1.35
@@ -23,7 +23,7 @@ MonoBehaviour:
   attackRange: 8
   attackCooldown: 4
   physicalDefense: 0.45
-  magicDefense: 0.2
+  magicDefense: 0.3
   experienceReward: 125
   lootTable:
   - item: {fileID: 11400000, guid: 8c91cd49f2558e740b9bb7cd72934bbe, type: 2}
@@ -35,6 +35,10 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: a9227a900fde4c4419decf33a7df81a6, type: 2}
     quantity: 1
     weight: 1
-  - item: {fileID: 11400000, guid: a06afe0ec040f8e44a118fa7064998fd, type: 2}
+  - item: {fileID: 0}
     quantity: 1
     weight: 6
+  guaranteedLoot:
+  - item: {fileID: 11400000, guid: a06afe0ec040f8e44a118fa7064998fd, type: 2}
+    quantity: 1
+    weight: 1

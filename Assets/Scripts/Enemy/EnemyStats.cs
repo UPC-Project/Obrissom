@@ -32,6 +32,9 @@ namespace Obrissom.Enemy
 
         [Header("Rewards")]
         [Min(0)] public int experienceReward = 10;
+        [Tooltip("One random roll: drops a single entry by weight.")]
         public LootEntry[] lootTable;
+        [Tooltip("Always dropped on death, on top of the loot table roll. Weight is ignored.")]
+        public LootEntry[] guaranteedLoot;
     }
-}
+}

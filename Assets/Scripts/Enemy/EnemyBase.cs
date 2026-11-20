@@ -411,7 +411,17 @@ namespace Obrissom.Enemy
 
         private void DropLoot()
         {
-            if (_itemDropper == null || _stats.lootTable == null) return;
+            if (_itemDropper == null) return;
+
+            if (_stats.guaranteedLoot != null)
+            {
+                foreach (LootEntry entry in _stats.guaranteedLoot)
+                {
+                    if (entry != null && entry.item != null) _itemDropper.DropItem(entry.item, entry.quantity);
+                }
+            }
+
+            if (_stats.lootTable == null) return;
 
             float roll = Random.Range(0f, TotalLootWeight());
             foreach (LootEntry entry in _stats.lootTable)
