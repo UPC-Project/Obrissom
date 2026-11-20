@@ -423,6 +423,9 @@ namespace Obrissom.Player
                 return;
             }
 
+            if (notice == RespawnNotice.Rested && TryGetComponent(out PlayerQuestTracker questTracker))
+                questTracker.ReportRest();
+
             string message = notice switch
             {
                 RespawnNotice.Revived => _revivedMessage,

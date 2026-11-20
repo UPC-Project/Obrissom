@@ -98,6 +98,9 @@ namespace Obrissom.UI
                             progress.AppendLine($"{quest.template.objective.itemTargets[j].item.itemName}: {current}/{quest.template.objective.itemTargets[j].amount}");
                         }
                         break;
+                    case QuestObjectiveType.Rest:
+                        progress.AppendLine(quest.IsTalkCompleted() ? "Rested at a bonfire" : "Rest at a bonfire");
+                        break;
                 }
                 progress.AppendLine($"</color>");
                 entryText.text = progress.ToString();

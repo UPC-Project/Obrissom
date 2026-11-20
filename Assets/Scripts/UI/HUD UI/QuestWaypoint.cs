@@ -137,6 +137,8 @@ namespace Obrissom.UI
                     return FindNearestEnemy(quest, from);
                 case QuestObjectiveType.Collect:
                     return FindNearestCollectable(objective, from) ?? FindNpc(template.questReceiver);
+                case QuestObjectiveType.Rest:
+                    return FindNearestBonfire(from);
                 default:
                     return null;
             }
@@ -216,6 +218,15 @@ namespace Obrissom.UI
                     return true;
             }
             return false;
+        }
+
+        private static Transform FindNearestBonfire(Vector3 from)
+        {
+            Transform best = null;
+            float bestDistance = float.MaxValue;
+            foreach (Obrissom.Environment.Bonfire bonfire in FindObjectsByType<Obrissom.Environment.Bonfire>(FindObjectsSortMode.None))
+                Consider(bonfire.transform, from, ref best, ref bestDistance);
+            return best;
         }
 
         private static Transform FindNearestCollectable(QuestObjective objective, Vector3 from)

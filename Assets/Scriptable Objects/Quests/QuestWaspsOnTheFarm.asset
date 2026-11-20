@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f86a526215b5d47ab96d0e06e59cfc, type: 3}
+  m_Name: QuestWaspsOnTheFarm
+  m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
+  questId: P-08
+  title: Wasps on the Farm
+  offerDescription: 'Rooted wasps came from the forest and they sting everything on my farm. Defeat 6 of them.'
+  completedDescription: 'Thank you, the farm can breathe again. The wise ant in the village square wants to see you.'
+  type: 0
+  isShared: 1
+  requiredLevel: 1
+  requiredQuests:
+  - {fileID: 11400000, guid: 62f8f1cbb6694d89bc58f43df4567a02, type: 2}
+  questGiver: F-01
+  questReceiver: F-01
+  objective:
+    type: 0
+    enemyTargets:
+    - enemy: {fileID: 11400000, guid: 183b0ee125ea5bc488f72a7f2decea26, type: 2}
+      amount: 6
+    itemTargets: []
+    targetNPC: 
+  reward:
+    experienceReward: 200
+    items: []

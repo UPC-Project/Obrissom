@@ -127,7 +127,7 @@ public class QuestManager : NetworkBehaviour
                 }
             }
 
-            if (quest.template.objective.type == QuestObjectiveType.Talk && quest.IsTalkCompleted())
+            if ((quest.template.objective.type == QuestObjectiveType.Talk || quest.template.objective.type == QuestObjectiveType.Rest) && quest.IsTalkCompleted())
             {
                 SyncTalkProgressTargetedClientRpc(questId, clientRpcParams);
             }

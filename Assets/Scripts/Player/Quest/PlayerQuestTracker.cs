@@ -246,6 +246,30 @@ public class PlayerQuestTracker : NetworkBehaviour
         if (changed) OnQuestsChanged?.Invoke();
     }
 
+    /// Called on the owner when this player rests at a bonfire. Completes Rest objectives.
+    public void ReportRest()
+    {
+        bool changed = false;
+
+        foreach (QuestInstance quest in _activeQuests)
+        {
+            if (quest.status != QuestStatus.InProgress) continue;
+
+            QuestObjective obj = quest.template.objective;
+            if (obj == null || obj.type != QuestObjectiveType.Rest || quest.IsTalkCompleted()) continue;
+
+            // Same shared flag as Talk, so the whole party gets it
+            if (quest.template.isShared && QuestManager.Instance != null)
+                QuestManager.Instance.ReportTalkProgress(quest.template.questId);
+
+            quest.SetTalkCompleted();
+            quest.CheckAndUpdateStatus(_inventory);
+            changed = true;
+        }
+
+        if (changed) OnQuestsChanged?.Invoke();
+    }
+
     /// Called when the player's inventory changes. Re-evaluates Collect objectives.
     public void RefreshCollectProgress()
     {

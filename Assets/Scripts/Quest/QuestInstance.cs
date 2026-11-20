@@ -136,6 +136,8 @@ public class QuestInstance
                 return true;
 
             case QuestObjectiveType.Talk:
+            // Rest uses the same done flag as Talk
+            case QuestObjectiveType.Rest:
                 return IsTalkCompleted();
 
             default:

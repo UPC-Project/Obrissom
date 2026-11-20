@@ -3,5 +3,6 @@ public enum QuestObjectiveType
 {
     Kill, 
     Talk, 
-    Collect
+    Collect,
+    Rest    // rest at any bonfire
 }
