@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Obrissom.Enemy
 {
+    [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
     public class EnemyTest : EnemyBase
     {
         [Header("Test Attack Settings")]

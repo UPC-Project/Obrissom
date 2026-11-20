@@ -10,6 +10,7 @@ namespace Obrissom.Enemy
     /// Melee enemy. Attack loop: Lunge → Windup → Active frames → Recovery.
     /// Retreats on burst damage. Enrages below HP threshold.
     /// </summary>
+    [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
     public class SlasherEnemy : EnemyBase
     {
         [Header("Slasher")]

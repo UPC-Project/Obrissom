@@ -111,7 +111,7 @@ public class DashAndStun : SkillBehaviour
             foreach (Collider hit in hits)
             {
                 EnemyBase enemy = hit.GetComponentInParent<EnemyBase>();
-                if (enemy != null && !enemy.IsDead && !draggedEnemies.Contains(enemy))
+                if (enemy != null && !enemy.IsDead && !enemy.IsImmovable && !draggedEnemies.Contains(enemy))
                 {
                     draggedEnemies.Add(enemy);
                     NavMeshAgentToggle(enemy, false);

@@ -11,7 +11,6 @@ namespace Obrissom.Enemy
     /// Do not attach directly to a prefab — use concrete classes.
     /// Requires EnemyStats ScriptableObject assigned in the Inspector.
     /// </summary>
-    [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(EnemyAnimation))]
     [RequireComponent(typeof(ItemDropper))]
     [RequireComponent(typeof(EnemyStateMachine))]
@@ -39,7 +38,12 @@ namespace Obrissom.Enemy
 
         public virtual bool IsInvulnerable => false;
 
+        public virtual bool IsImmovable => false;
+
         public bool IsDead => _isDead;
+
+        // Same as IsDead but also valid on clients
+        protected bool IsDeadSynced => _isDeadSynced.Value;
 
         public event System.Action<EnemyBase> Died;
 
@@ -55,6 +59,8 @@ namespace Obrissom.Enemy
         protected EnemyDamagePopUp _damagePopUp;
         protected EnemyUI _enemyUi;
         private NetworkSoundEmitter _soundEmitter;
+
+        private bool IsAgentReady => _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
 
         // Runtime state
         protected float _currentHealth;
@@ -105,10 +111,12 @@ namespace Obrissom.Enemy
 
             if (!IsServer) return;
 
-            _agent.enabled = true;
+            if (_agent != null)
+            {
+                _agent.enabled = true;
+                _agent.speed = _stats.moveSpeed;
+            }
             _currentHealth = _stats.maxHealth;
-            _agent.speed = _stats.moveSpeed;
-            _agent.enabled = true;
 
             _stateMachine.Initialize(this, _agent);
 
@@ -255,6 +263,7 @@ namespace Obrissom.Enemy
             _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
 
             OnTakeDamage(rawAmount);
+            OnDamagedBy(attackerRef, finalDamage);
 
             if (_currentHealth <= 0f)
             {
@@ -266,6 +275,8 @@ namespace Obrissom.Enemy
         }
 
         protected virtual void OnTakeDamage(float rawAmount) { }
+
+        protected virtual void OnDamagedBy(NetworkObjectReference attackerRef, float damage) { }
 
         [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Server)]
         private void PlayTakeDamageAnimationRpc() => _enemyAnimation.PlayTakeDamageAnimation();
@@ -333,7 +344,7 @@ namespace Obrissom.Enemy
                     _isStunnedSynced.Value = true;
                     break;
                 case DebuffType.Root:
-                    if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = true;
+                    if (IsAgentReady) _agent.isStopped = true;
                     _stateMachine.ChangeState(EnemyState.Rooted);
                     _isRootedSynced.Value = true;
                     break;
@@ -355,7 +366,7 @@ namespace Obrissom.Enemy
                     break;
                 case DebuffType.Root:
                     _isRootedSynced.Value = false;
-                    if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = false;
+                    if (IsAgentReady) _agent.isStopped = false;
                     break;
                 default:
                     break;
@@ -377,7 +388,7 @@ namespace Obrissom.Enemy
         protected virtual void Die(NetworkObjectReference attackerRef)
         {
             _isDead = true;
-            if (_agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
+            if (_agent != null && _agent.isActiveAndEnabled) _agent.isStopped = true; // TODO: delete when navmesh is implemented
             _stateMachine.ChangeState(EnemyState.Dead);
 
             _isDeadSynced.Value = true;
@@ -438,7 +449,7 @@ namespace Obrissom.Enemy
             if (_isRootedSynced.Value) return;
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_patrolPoints[_currentPatrolIndex] == null) return;
-            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
+            if (!IsAgentReady) return;
 
             Vector3 destination = _patrolPoints[_currentPatrolIndex].transform.position;
             Vector2 offset = Random.insideUnitCircle * _wanderRadius;
@@ -452,7 +463,7 @@ namespace Obrissom.Enemy
         {
             if (_patrolPoints == null || _patrolPoints.Length == 0) return;
             if (_isWaypointPausing) return;
-            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
+            if (!IsAgentReady) return;
             if (_agent.pathPending || _agent.remainingDistance >= 0.5f) return;
 
             _isWaypointPausing = true;
@@ -461,7 +472,7 @@ namespace Obrissom.Enemy
 
         private System.Collections.IEnumerator WaypointPauseRoutine()
         {
-            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = true;
+            if (IsAgentReady) _agent.isStopped = true;
 
             int lookCount = Random.Range(1, 3);
             for (int i = 0; i < lookCount; i++)
@@ -487,7 +498,7 @@ namespace Obrissom.Enemy
 
             if (_stateMachine.CurrentState != EnemyState.Move) yield break;
 
-            if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = false;
+            if (IsAgentReady) _agent.isStopped = false;
             _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
             MoveToNextPatrolPoint();
         }
@@ -501,7 +512,7 @@ namespace Obrissom.Enemy
         public virtual void OnChaseStateTick()
         {
             if (_isRootedSynced.Value) return;
-            if (_target != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh) 
+            if (_target != null && IsAgentReady) 
             {
                 _agent.SetDestination(_target.position);
             }

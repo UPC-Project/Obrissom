@@ -1,4 +1,5 @@
 using Obrissom.Audio;
+using Obrissom.Enemy;
 using Obrissom.Player;
 using Obrissom.Player.Inventory;
 using Obrissom.UI;
@@ -24,6 +25,11 @@ namespace Obrissom.Environment
         [SerializeField] private string _missingKeyMessage = "You need the church key";
         [SerializeField] private string _finishQuestMessage = "Finish the quest to get the church key";
 
+        [Header("Lock (leave empty for portals that never lock)")]
+        [Tooltip("The portal stays closed while this boss is fighting.")]
+        [SerializeField] private MantisBoss _lockedDuringFight;
+        [SerializeField] private string _lockedMessage = "The church is sealed";
+
         [Header("Gizmo Settings")]
         [SerializeField] private Color _gizmoColor = Color.magenta;
 
@@ -36,6 +42,13 @@ namespace Obrissom.Environment
         {
             PlayerXP playerXP = other.GetComponentInParent<PlayerXP>();
             if (playerXP == null || !playerXP.IsOwner) return;
+
+            // Nobody leaves while the boss is fighting
+            if (_lockedDuringFight != null && _lockedDuringFight.IsFighting)
+            {
+                NotificationPopup.Instance?.ShowMessage(_lockedMessage);
+                return;
+            }
 
             if (!HasRequiredLevel(playerXP))
             {
