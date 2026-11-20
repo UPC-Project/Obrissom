@@ -1,7 +1,9 @@
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Obrissom.UI;
 
 namespace Obrissom.Player
 {
@@ -11,24 +13,28 @@ namespace Obrissom.Player
         [Header("Actual health and resource")]
         [Min(0)]
         public NetworkVariable<float> _health =
-            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+            new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         [Min(0)]
         public NetworkVariable<float> _resource =
-            new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
+            new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server); // Mana / Stamina / Fury, etc
 
         [Header("Targeting and Invulnerability")]
-        public NetworkVariable<bool> _isInvulnerable = new NetworkVariable<bool>(
-            false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<bool> _isTargetable = new NetworkVariable<bool>(
-            true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> _isInvulnerable = new(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> _isTargetable = new(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+        [Header("Identity")]
+        public NetworkVariable<FixedString64Bytes> _playerName =
+            new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        public NetworkVariable<PlayerClass> _playerClass =
+            new(PlayerClass.Tank, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
         [Header("Death")]
-        public NetworkVariable<bool> _isDead = new NetworkVariable<bool>(
-            false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        public NetworkVariable<bool> _isDead = new(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
         // Components
         private PlayerRespawn _playerRespawn;
         private PlayerStats _playerStats;
+        public PlayerStats Stats => _playerStats;
         private UI.HealthAndResourceUI _healthAndResourceUI;
         protected PlayerHealPopUp _healPopUp;
         private Vignette _vignette;
@@ -46,6 +52,12 @@ namespace Obrissom.Player
             _playerRespawn = GetComponent<PlayerRespawn>();
             Volume camVolume = GetComponentInChildren<Volume>();
             camVolume.profile.TryGet(out _vignette);
+        }
+
+        public void SetPlayerIdentity(string playerName, PlayerClass playerClass)
+        {
+            _playerName.Value = playerName ?? "";
+            _playerClass.Value = playerClass;
         }
 
         public override void OnNetworkSpawn()
@@ -68,6 +80,10 @@ namespace Obrissom.Player
                 _resource.OnValueChanged += OnResourceChanged;
                 _playerStats.maxResource.OnValueChanged += OnResourceChanged;
             }
+            else
+            {
+                UI.AlliesHealth.Instance?.RegisterAlly(this);
+            }
         }
 
         public override void OnNetworkDespawn()
@@ -76,6 +92,10 @@ namespace Obrissom.Player
             {
                 _health.OnValueChanged -= OnHealthChanged;
                 _resource.OnValueChanged -= OnResourceChanged;
+            }
+            else
+            {
+                UI.AlliesHealth.Instance?.UnregisterAlly(this);
             }
         }
         private void OnHealthChanged(float previousValue, float newValue)
@@ -174,6 +194,13 @@ namespace Obrissom.Player
             _health.Value = Mathf.Min(_health.Value + healAmount, _playerStats.maxHealth.Value);
 
             _healPopUp.ShowPopUpClientRpc(healAmount.ToString(), isCritic);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void RestoreResourceRpc(float amount)
+        {
+            if (!IsServer || _isDead.Value) return;
+            _resource.Value = Mathf.Min(_resource.Value + amount, _playerStats.maxResource.Value);
         }
 
         public (int, bool) CalculatePhysicalDamage(int minAttackDamage, int maxAttackDamage)
