@@ -500,6 +500,74 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "ConsumableUI",
+            "id": "b25e1f7b-6f7c-465b-aafd-8918fab4fa89",
+            "actions": [
+                {
+                    "name": "UseSlot1",
+                    "type": "Button",
+                    "id": "13cca885-1a23-4831-b8b7-cd8339318203",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UseSlot2",
+                    "type": "Button",
+                    "id": "0ee38d30-0850-4c43-98a6-55130dcf3e85",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UseSlot3",
+                    "type": "Button",
+                    "id": "70a94907-cdab-47b6-96b5-555ef7e44e0d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "323d20cd-e390-4b3f-8457-861ae17d5afd",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseSlot1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "145148fe-6d92-40d4-8b9c-09033d4f5dc1",
+                    "path": "<Keyboard>/f2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseSlot2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6ce0548f-a3ab-468f-a10e-aa5396049d93",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseSlot3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

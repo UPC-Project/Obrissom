@@ -588,6 +588,74 @@ namespace Obrissom.Player
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""ConsumableUI"",
+            ""id"": ""b25e1f7b-6f7c-465b-aafd-8918fab4fa89"",
+            ""actions"": [
+                {
+                    ""name"": ""UseSlot1"",
+                    ""type"": ""Button"",
+                    ""id"": ""13cca885-1a23-4831-b8b7-cd8339318203"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSlot2"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ee38d30-0850-4c43-98a6-55130dcf3e85"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSlot3"",
+                    ""type"": ""Button"",
+                    ""id"": ""70a94907-cdab-47b6-96b5-555ef7e44e0d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""323d20cd-e390-4b3f-8457-861ae17d5afd"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseSlot1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""145148fe-6d92-40d4-8b9c-09033d4f5dc1"",
+                    ""path"": ""<Keyboard>/f2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseSlot2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ce0548f-a3ab-468f-a10e-aa5396049d93"",
+                    ""path"": ""<Keyboard>/f3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseSlot3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -620,6 +688,11 @@ namespace Obrissom.Player
             // GlobalUI
             m_GlobalUI = asset.FindActionMap("GlobalUI", throwIfNotFound: true);
             m_GlobalUI_EscPressed = m_GlobalUI.FindAction("EscPressed", throwIfNotFound: true);
+            // ConsumableUI
+            m_ConsumableUI = asset.FindActionMap("ConsumableUI", throwIfNotFound: true);
+            m_ConsumableUI_UseSlot1 = m_ConsumableUI.FindAction("UseSlot1", throwIfNotFound: true);
+            m_ConsumableUI_UseSlot2 = m_ConsumableUI.FindAction("UseSlot2", throwIfNotFound: true);
+            m_ConsumableUI_UseSlot3 = m_ConsumableUI.FindAction("UseSlot3", throwIfNotFound: true);
         }
 
         ~@PlayerInput()
@@ -629,6 +702,7 @@ namespace Obrissom.Player
             UnityEngine.Debug.Assert(!m_PlayerInteractMap.enabled, "This will cause a leak and performance issues, PlayerInput.PlayerInteractMap.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UIMultiMenu.enabled, "This will cause a leak and performance issues, PlayerInput.UIMultiMenu.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_GlobalUI.enabled, "This will cause a leak and performance issues, PlayerInput.GlobalUI.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_ConsumableUI.enabled, "This will cause a leak and performance issues, PlayerInput.ConsumableUI.Disable() has not been called.");
         }
 
         /// <summary>
@@ -1323,6 +1397,124 @@ namespace Obrissom.Player
         /// Provides a new <see cref="GlobalUIActions" /> instance referencing this action map.
         /// </summary>
         public GlobalUIActions @GlobalUI => new GlobalUIActions(this);
+
+        // ConsumableUI
+        private readonly InputActionMap m_ConsumableUI;
+        private List<IConsumableUIActions> m_ConsumableUIActionsCallbackInterfaces = new List<IConsumableUIActions>();
+        private readonly InputAction m_ConsumableUI_UseSlot1;
+        private readonly InputAction m_ConsumableUI_UseSlot2;
+        private readonly InputAction m_ConsumableUI_UseSlot3;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "ConsumableUI".
+        /// </summary>
+        public struct ConsumableUIActions
+        {
+            private @PlayerInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public ConsumableUIActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "ConsumableUI/UseSlot1".
+            /// </summary>
+            public InputAction @UseSlot1 => m_Wrapper.m_ConsumableUI_UseSlot1;
+            /// <summary>
+            /// Provides access to the underlying input action "ConsumableUI/UseSlot2".
+            /// </summary>
+            public InputAction @UseSlot2 => m_Wrapper.m_ConsumableUI_UseSlot2;
+            /// <summary>
+            /// Provides access to the underlying input action "ConsumableUI/UseSlot3".
+            /// </summary>
+            public InputAction @UseSlot3 => m_Wrapper.m_ConsumableUI_UseSlot3;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_ConsumableUI; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="ConsumableUIActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(ConsumableUIActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="ConsumableUIActions" />
+            public void AddCallbacks(IConsumableUIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_ConsumableUIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_ConsumableUIActionsCallbackInterfaces.Add(instance);
+                @UseSlot1.started += instance.OnUseSlot1;
+                @UseSlot1.performed += instance.OnUseSlot1;
+                @UseSlot1.canceled += instance.OnUseSlot1;
+                @UseSlot2.started += instance.OnUseSlot2;
+                @UseSlot2.performed += instance.OnUseSlot2;
+                @UseSlot2.canceled += instance.OnUseSlot2;
+                @UseSlot3.started += instance.OnUseSlot3;
+                @UseSlot3.performed += instance.OnUseSlot3;
+                @UseSlot3.canceled += instance.OnUseSlot3;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="ConsumableUIActions" />
+            private void UnregisterCallbacks(IConsumableUIActions instance)
+            {
+                @UseSlot1.started -= instance.OnUseSlot1;
+                @UseSlot1.performed -= instance.OnUseSlot1;
+                @UseSlot1.canceled -= instance.OnUseSlot1;
+                @UseSlot2.started -= instance.OnUseSlot2;
+                @UseSlot2.performed -= instance.OnUseSlot2;
+                @UseSlot2.canceled -= instance.OnUseSlot2;
+                @UseSlot3.started -= instance.OnUseSlot3;
+                @UseSlot3.performed -= instance.OnUseSlot3;
+                @UseSlot3.canceled -= instance.OnUseSlot3;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="ConsumableUIActions.UnregisterCallbacks(IConsumableUIActions)" />.
+            /// </summary>
+            /// <seealso cref="ConsumableUIActions.UnregisterCallbacks(IConsumableUIActions)" />
+            public void RemoveCallbacks(IConsumableUIActions instance)
+            {
+                if (m_Wrapper.m_ConsumableUIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="ConsumableUIActions.AddCallbacks(IConsumableUIActions)" />
+            /// <seealso cref="ConsumableUIActions.RemoveCallbacks(IConsumableUIActions)" />
+            /// <seealso cref="ConsumableUIActions.UnregisterCallbacks(IConsumableUIActions)" />
+            public void SetCallbacks(IConsumableUIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_ConsumableUIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_ConsumableUIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="ConsumableUIActions" /> instance referencing this action map.
+        /// </summary>
+        public ConsumableUIActions @ConsumableUI => new ConsumableUIActions(this);
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerLocomotionMap" which allows adding and removing callbacks.
         /// </summary>
@@ -1488,6 +1680,35 @@ namespace Obrissom.Player
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnEscPressed(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "ConsumableUI" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="ConsumableUIActions.AddCallbacks(IConsumableUIActions)" />
+        /// <seealso cref="ConsumableUIActions.RemoveCallbacks(IConsumableUIActions)" />
+        public interface IConsumableUIActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "UseSlot1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnUseSlot1(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "UseSlot2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnUseSlot2(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "UseSlot3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnUseSlot3(InputAction.CallbackContext context);
         }
     }
 }
