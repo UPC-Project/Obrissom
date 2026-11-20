@@ -85,6 +85,37 @@ namespace Obrissom.Audio
                 return;
             }
 
+            if (is3D) source.transform.position = position;
+            Configure(source, data, output, clip, is3D);
+            source.loop = false;
+            source.Play();
+
+            if (_logPlays)
+                Debug.Log($"[AudioManager] {id}: {clip.name} @ pitch {source.pitch:F2}" + (is3D ? $" at {position}" : " (2D)"));
+        }
+
+        /// <summary>
+        /// Plays a 3D sound on a source owned by the caller, so it follows that object and can be stopped.
+        /// Returns false if the sound has no clip.
+        /// </summary>
+        public bool PlayOn(AudioSource source, AudioID id, bool loop)
+        {
+            if (source == null || !TryGetSound(id, out SoundData data, out AudioMixerGroup output)) return false;
+
+            AudioClip clip = data.GetRandomClip();
+            if (clip == null) return false;
+
+            Configure(source, data, output, clip, true);
+            source.loop = loop;
+            source.Play();
+
+            if (_logPlays)
+                Debug.Log($"[AudioManager] {id}: {clip.name} on {source.name}" + (loop ? " (loop)" : ""));
+            return true;
+        }
+
+        private static void Configure(AudioSource source, SoundData data, AudioMixerGroup output, AudioClip clip, bool is3D)
+        {
             source.clip = clip;
             source.volume = data.volume;
             source.pitch = data.GetRandomPitch();
@@ -92,7 +123,6 @@ namespace Obrissom.Audio
 
             if (is3D)
             {
-                source.transform.position = position;
                 source.spatialBlend = 1f;
                 source.rolloffMode = AudioRolloffMode.Linear;
                 source.minDistance = data.minDistance;
@@ -103,11 +133,6 @@ namespace Obrissom.Audio
             {
                 source.spatialBlend = 0f;
             }
-
-            source.Play();
-
-            if (_logPlays)
-                Debug.Log($"[AudioManager] {id}: {clip.name} @ pitch {source.pitch:F2}" + (is3D ? $" at {position}" : " (2D)"));
         }
 
         private AudioSource GetFreeSource()

@@ -125,7 +125,7 @@ namespace Obrissom.Player
                 if (!skill.behaviour.OnChannelStart(gameObject, skill)) return false;
 
                 _playerCombat.TryConsumeResource(skill.cost);
-                PlayCastSound(skill);
+                PlayChannelSound(skill);
             }
             else if (skill.behaviour.castType == CastType.Hold)
             {
@@ -149,6 +149,7 @@ namespace Obrissom.Player
             if (_activeSkill.behaviour.castType == CastType.Channel)
             {
                 _activeSkill.behaviour.OnChannelEnd(gameObject, _activeSkill);
+                StopChannelSound();
                 skillExecuted = true;
             }
             else if (_activeSkill.behaviour.castType == CastType.Hold)
@@ -181,6 +182,7 @@ namespace Obrissom.Player
 
             _cooldowns[_activeSkillKey] = _activeSkill.cooldownTime;
             _activeSkill.behaviour.OnChannelEnd(gameObject, _activeSkill);
+            StopChannelSound();
             _activeSkill = null;
         }
 
@@ -188,6 +190,18 @@ namespace Obrissom.Player
         {
             if (skill.castSound == AudioID.None || _soundEmitter == null) return;
             _soundEmitter.PlayFromOwner(skill.castSound);
+        }
+
+        // Channel sounds follow the player and last only while channeling
+        private void PlayChannelSound(Skill skill)
+        {
+            if (skill.castSound == AudioID.None || _soundEmitter == null) return;
+            _soundEmitter.PlayLoopFromOwner(skill.castSound);
+        }
+
+        private void StopChannelSound()
+        {
+            if (_soundEmitter != null) _soundEmitter.StopLoopFromOwner();
         }
 
         public bool IsHoldSkill(SkillKey key)
