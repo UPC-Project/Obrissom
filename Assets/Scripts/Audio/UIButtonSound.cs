@@ -10,8 +10,8 @@ namespace Obrissom.Audio
     [RequireComponent(typeof(Button))]
     public class UIButtonSound : MonoBehaviour, IPointerEnterHandler
     {
-        [SerializeField] private AudioID _clickSound = AudioID.UIClick;
-        [SerializeField] private AudioID _hoverSound = AudioID.UIHover;
+        [SerializeField] private AudioID _clickSound = AudioID.UIConfirm;
+        [SerializeField] private AudioID _hoverSound = AudioID.UIHoverInGame;
 
         private Button _button;
 

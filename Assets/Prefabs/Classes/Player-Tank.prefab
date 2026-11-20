@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 5647165197421816187}
   - component: {fileID: 8603422393457795414}
   - component: {fileID: 5595335746694289572}
+  - component: {fileID: 704570111942345934}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -17736,3 +17737,11 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _stunEffectPrefab: {fileID: 541089732762536491, guid: 2ba27ef8c84fe4548ba166d574b805b5, type: 3}
   _effectHeight: 2.2
+--- !u!81 &704570111942345934
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038489169233356036}
+  m_Enabled: 1

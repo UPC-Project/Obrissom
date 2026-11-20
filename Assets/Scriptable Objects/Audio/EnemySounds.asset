@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: EnemySounds
   m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Audio.SoundLibrary
   _output: {fileID: 24300020, guid: da2ca3e1fee74956a1cc1730afc2a996, type: 2}
-  _sounds: []
+  _sounds:
+  - id: 200
+    clips:
+    - {fileID: 8300000, guid: 9393b81d33acb844aa37a79a0937de71, type: 3}
+    volume: 1
+    pitchMin: 0.9
+    pitchMax: 1.1
+    minDistance: 1
+    maxDistance: 25

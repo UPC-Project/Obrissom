@@ -136,6 +136,9 @@ namespace Obrissom.Audio
             data = null;
             output = null;
 
+            // None means "no sound on purpose", not a missing one
+            if (id == AudioID.None) return false;
+
             if (!_sounds.TryGetValue(id, out var entry))
             {
                 if (_warnedIds.Add(id))

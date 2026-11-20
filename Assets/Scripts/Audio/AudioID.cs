@@ -36,6 +36,7 @@ namespace Obrissom.Audio
         InventoryOpen   = 403,
         InventoryClose  = 404,
         UIHover         = 405,
+        UIHoverInGame   = 406,
 
         // Skills 500–599
         ScytheCutCast       = 500,
@@ -45,6 +46,14 @@ namespace Obrissom.Audio
         DestructionRingCast = 504,
         SwordCutCast        = 510,
         BugBuzzCast         = 511,
+        HornStabCast        = 512,
+        BloodBathCast       = 513,
+        SwordQuakeCast      = 514,
+        LifeStealCast       = 520,
+        SpectralFormCast    = 521,
+        HealingShineCast    = 522,
+        HolyCraniumCast     = 523,
+        UnleashedCast       = 524,
         HitPhysical         = 550,
         HitMagic            = 551,
 
