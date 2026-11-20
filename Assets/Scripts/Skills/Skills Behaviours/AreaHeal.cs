@@ -24,7 +24,7 @@ public class AreaHeal : SkillBehaviour
         // initial base heal
         // caster also recives instant healing.
         var (baseHeal, baseIsCritic) = playerCombat.CalculateHeal(skillData.minEffectValue, skillData.maxEffectValue);
-        Collider[] hits = Physics.OverlapSphere(caster.transform.position, _healCircleRange);
+        Collider[] hits = Physics.OverlapSphere(caster.transform.position, _healCircleRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         HashSet<PlayerCombat> players = new HashSet<PlayerCombat>();
         foreach (Collider hit in hits)
         {
@@ -46,7 +46,7 @@ public class AreaHeal : SkillBehaviour
 
             var (heal, isCritic) = playerCombat.CalculateHeal(skillData.minDamagePerSecond, skillData.maxDamagePerSecond);
 
-            hits = Physics.OverlapSphere(caster.transform.position, _healCircleRange);
+            hits = Physics.OverlapSphere(caster.transform.position, _healCircleRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
             players.Clear();
             foreach (Collider hit in hits)
             {

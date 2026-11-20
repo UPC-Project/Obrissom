@@ -56,7 +56,7 @@ public class Teleport : SkillBehaviour
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         Vector3 directionXZ;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 500f))
+        if (Physics.Raycast(ray, out RaycastHit hit, 500f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             directionXZ = new Vector3(hit.point.x - casterPos.x, 0f, hit.point.z - casterPos.z); // Ignores Y
 
@@ -83,7 +83,7 @@ public class Teleport : SkillBehaviour
         Vector3 rayOrigin = new Vector3(limitXZ.x, casterPos.y + 50f, limitXZ.z);
 
         // Checks collison till 100 distance from ray origin
-        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit groundHit, 100f))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit groundHit, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             Vector3 tpIndicatorPos = new Vector3(groundHit.point.x, groundHit.point.y + _tpIndicatorGroundElevation, groundHit.point.z);
             tpIndicator.transform.SetPositionAndRotation(tpIndicatorPos, Quaternion.FromToRotation(Vector3.forward, groundHit.normal));

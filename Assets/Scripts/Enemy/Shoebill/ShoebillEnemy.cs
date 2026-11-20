@@ -753,7 +753,7 @@ namespace Obrissom.Enemy
             return offset.magnitude;
         }
 
-        private static bool IsValidTarget(Transform target)
+        public override bool IsValidTarget(Transform target)
         {
             return target != null
             && target.gameObject.activeInHierarchy

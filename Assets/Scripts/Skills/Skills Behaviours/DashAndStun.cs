@@ -104,7 +104,8 @@ public class DashAndStun : SkillBehaviour
                 sweepCenter,
                 boxHalfExtents,
                 Quaternion.LookRotation(dashDirection),
-                _enemyLayer
+                _enemyLayer,
+                QueryTriggerInteraction.Ignore
             );
 
             foreach (Collider hit in hits)

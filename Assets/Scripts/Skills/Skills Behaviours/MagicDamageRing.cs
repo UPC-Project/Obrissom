@@ -45,7 +45,7 @@ public class MagicDamageRing : SkillBehaviour
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         Vector3 directionXZ;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 500f, _groundLayers))
+        if (Physics.Raycast(ray, out RaycastHit hit, 500f, _groundLayers, QueryTriggerInteraction.Ignore))
         {
             // player can only cast the skill on ground
             if (!hit.collider.CompareTag("Ground"))
@@ -80,7 +80,7 @@ public class MagicDamageRing : SkillBehaviour
         Vector3 rayOrigin = new Vector3(limitXZ.x, casterPos.y + 50f, limitXZ.z);
 
         // Checks collison till 100 distance from ray origin
-        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit groundHit, 100f, _groundLayers))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit groundHit, 100f, _groundLayers, QueryTriggerInteraction.Ignore))
         {
             Vector3 tpIndicatorPos = new Vector3(groundHit.point.x, groundHit.point.y + _ringIndicatorGroundElevation, groundHit.point.z);
             ringIndicator.transform.SetPositionAndRotation(tpIndicatorPos, Quaternion.FromToRotation(Vector3.forward, groundHit.normal));
@@ -144,7 +144,7 @@ public class MagicDamageRing : SkillBehaviour
             // all enemies still in the ring receive the same damage
             var (damage, isCritic) = playerCombat.CalculateMagicDamage(skillData.minDamagePerSecond, skillData.maxDamagePerSecond);
 
-            Collider[] hits = Physics.OverlapSphere(ringAim, _damageRingRange);
+            Collider[] hits = Physics.OverlapSphere(ringAim, _damageRingRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
             HashSet<EnemyBase> hitEnemies = new HashSet<EnemyBase>(); // avoid hitting multiple times same enemy
             foreach (Collider hit in hits)
             {

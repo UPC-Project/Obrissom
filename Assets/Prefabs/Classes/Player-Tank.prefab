@@ -16709,6 +16709,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1178373448476384967, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3215522371268912267}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5129432662048230912}
   m_SourcePrefab: {fileID: 100100000, guid: 333875ba12b79fd4886fd54c5bb61cc7, type: 3}
 --- !u!4 &550980183108325758 stripped
 Transform:
@@ -17718,3 +17721,18 @@ CharacterJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &5129432662048230912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931868137325054916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3bcc9677174ee5b1e6fca2c3a10a83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.Player.PlayerStun
+  ShowTopMostFoldoutHeaderGroup: 1
+  _stunEffectPrefab: {fileID: 541089732762536491, guid: 2ba27ef8c84fe4548ba166d574b805b5, type: 3}
+  _effectHeight: 2.2

@@ -55,7 +55,7 @@ public class BuffAndDebuff : SkillBehaviour
     }
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        Collider[] hits = Physics.OverlapSphere(caster.transform.position, _sphereRange);
+        Collider[] hits = Physics.OverlapSphere(caster.transform.position, _sphereRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         HashSet<PlayerStats> players = new();
         HashSet<EnemyBase> enemies = new();
         foreach (Collider hit in hits)
