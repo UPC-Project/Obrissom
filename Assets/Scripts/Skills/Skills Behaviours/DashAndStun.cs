@@ -88,9 +88,6 @@ public class DashAndStun : SkillBehaviour
         LayerMask originalExclude = characterController.excludeLayers;
         characterController.excludeLayers = originalExclude | _enemyLayer;
 
-        NetworkObject casterNetObj = caster.GetComponent<NetworkObject>();
-        Vector3 rightDirection = Vector3.Cross(Vector3.up, dashDirection).normalized;
-
         List<EnemyBase> draggedEnemies = new List<EnemyBase>();
         Vector3 boxHalfExtents = new Vector3(_dashWidth * 0.5f, 1f, 0.5f);
 
@@ -133,9 +130,9 @@ public class DashAndStun : SkillBehaviour
                     draggedEnemies.Add(enemy);
                     enemy.ApplyDebuffRpc(DebuffType.Stun, _stunDuration);
 
-                    // The server moves the enemy, a bit longer than the dash to cover network delay
-                    float remainingTime = (distanceToTravel - traveled) / _dashSpeed;
-                    enemy.StartDragRpc(casterNetObj, dashDirection, lateralOffset, depthOffset, _dashSpeed * 2.5f, remainingTime + 0.25f);
+                    // The server moves the enemy along the rest of this dash
+                    enemy.StartDragRpc(caster.transform.position, dashDirection, distanceToTravel - traveled, _dashSpeed,
+                        lateralOffset, depthOffset, NetworkManager.Singleton.ServerTime.Time);
 
                     if (enemy.TryGetComponent<EnemyAnimation>(out var enemyAnim))
                     {

@@ -335,27 +335,45 @@ namespace Obrissom.Enemy
 
         // Dash drag: a dashing player carries this enemy in front of it.
         // Runs on the server because enemy positions are server authoritative.
+        // It follows the dash path sent by the player, not the player's synced position, which arrives late.
+
+        // Clients see server objects a bit late, so the enemy goes this much ahead to look in front of the player
+        private const float DragLead = 0.1f;
 
         private Coroutine _dragRoutine;
 
+        /// <summary>
+        /// Carries the enemy along a dash: from start, along direction, for distance meters at speed,
+        /// keeping sideOffset/frontOffset from the dasher. startTime is the server time when the dasher grabbed it.
+        /// </summary>
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public void StartDragRpc(NetworkObjectReference draggerRef, Vector3 direction, float sideOffset, float frontOffset, float speed, float duration)
+        public void StartDragRpc(Vector3 start, Vector3 direction, float distance, float speed, float sideOffset, float frontOffset, double startTime)
         {
-            if (_isDead || IsImmovable || !draggerRef.TryGet(out NetworkObject dragger)) return;
+            if (_isDead || IsImmovable || speed <= 0f) return;
 
             if (_dragRoutine != null) StopCoroutine(_dragRoutine);
-            _dragRoutine = StartCoroutine(DragRoutine(dragger.transform, direction, sideOffset, frontOffset, speed, duration));
+            _dragRoutine = StartCoroutine(DragRoutine(start, direction, distance, speed, sideOffset, frontOffset, startTime));
         }
 
-        private System.Collections.IEnumerator DragRoutine(Transform dragger, Vector3 direction, float sideOffset, float frontOffset, float speed, float duration)
+        private System.Collections.IEnumerator DragRoutine(Vector3 start, Vector3 direction, float distance, float speed, float sideOffset, float frontOffset, double startTime)
         {
             if (_agent != null) _agent.enabled = false;
 
             Vector3 right = Vector3.Cross(Vector3.up, direction).normalized;
-            for (float t = 0f; t < duration && dragger != null && !_isDead; t += Time.deltaTime)
+            Vector3 end = start + direction * (distance + frontOffset) + right * sideOffset;
+            float catchUpSpeed = speed * 2.5f;
+            float giveUpTime = Time.time + distance / speed + 1f;
+
+            while (!_isDead && Time.time < giveUpTime)
             {
-                Vector3 target = dragger.position + direction * frontOffset + right * sideOffset;
-                transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                // Where the dasher is now, counting the time the message took to arrive
+                float elapsed = (float)(NetworkManager.ServerTime.Time - startTime) + DragLead;
+                float along = Mathf.Min(speed * elapsed, distance);
+
+                Vector3 target = start + direction * (along + frontOffset) + right * sideOffset;
+                transform.position = Vector3.MoveTowards(transform.position, target, catchUpSpeed * Time.deltaTime);
+
+                if (along >= distance && (transform.position - end).sqrMagnitude < 0.01f) break;
                 yield return null;
             }
 
