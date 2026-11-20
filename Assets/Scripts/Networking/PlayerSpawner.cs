@@ -25,14 +25,16 @@ public class PlayerSpawner : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        SpawnPlayerServerRpc(LobbyNetworking.Instance.SelectedClass);
+        SpawnPlayerServerRpc(LobbyNetworking.Instance.SelectedClass, LobbyNetworking.Instance.PlayerName);
     }
 
     [Rpc(SendTo.Server)]
-    private void SpawnPlayerServerRpc(PlayerClass playerClass, RpcParams rpcParams = default)
+    private void SpawnPlayerServerRpc(PlayerClass playerClass, string playerName, RpcParams rpcParams = default)
     {
         GameObject prefab = _prefabsMap[playerClass];
         GameObject instance = Instantiate(prefab);
+        if (instance.TryGetComponent(out Obrissom.Player.PlayerCombat combat))
+            combat.SetPlayerIdentity(playerName, playerClass);
         instance.GetComponent<NetworkObject>().SpawnAsPlayerObject(rpcParams.Receive.SenderClientId);
     }
 }
