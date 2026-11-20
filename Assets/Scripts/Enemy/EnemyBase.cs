@@ -333,6 +333,40 @@ namespace Obrissom.Enemy
             RemoveDebuffEffect(debuff);
         }
 
+        // Dash drag: a dashing player carries this enemy in front of it.
+        // Runs on the server because enemy positions are server authoritative.
+
+        private Coroutine _dragRoutine;
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public void StartDragRpc(NetworkObjectReference draggerRef, Vector3 direction, float sideOffset, float frontOffset, float speed, float duration)
+        {
+            if (_isDead || IsImmovable || !draggerRef.TryGet(out NetworkObject dragger)) return;
+
+            if (_dragRoutine != null) StopCoroutine(_dragRoutine);
+            _dragRoutine = StartCoroutine(DragRoutine(dragger.transform, direction, sideOffset, frontOffset, speed, duration));
+        }
+
+        private System.Collections.IEnumerator DragRoutine(Transform dragger, Vector3 direction, float sideOffset, float frontOffset, float speed, float duration)
+        {
+            if (_agent != null) _agent.enabled = false;
+
+            Vector3 right = Vector3.Cross(Vector3.up, direction).normalized;
+            for (float t = 0f; t < duration && dragger != null && !_isDead; t += Time.deltaTime)
+            {
+                Vector3 target = dragger.position + direction * frontOffset + right * sideOffset;
+                transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                yield return null;
+            }
+
+            if (_agent != null && !_isDead)
+            {
+                _agent.enabled = true;
+                _agent.Warp(transform.position);
+            }
+            _dragRoutine = null;
+        }
+
         // Here add animation trigger por each debuff
         protected virtual void ApplyDebuffEffect(DebuffType debuff)
         {

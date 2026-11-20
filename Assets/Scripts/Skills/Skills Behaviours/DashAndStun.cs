@@ -84,6 +84,13 @@ public class DashAndStun : SkillBehaviour
 
         playerCombat.SetInvulnerable(true);
 
+        // Enemies don't stop the dash, they get carried (obstacles already shortened it)
+        LayerMask originalExclude = characterController.excludeLayers;
+        characterController.excludeLayers = originalExclude | _enemyLayer;
+
+        NetworkObject casterNetObj = caster.GetComponent<NetworkObject>();
+        Vector3 rightDirection = Vector3.Cross(Vector3.up, dashDirection).normalized;
+
         List<EnemyBase> draggedEnemies = new List<EnemyBase>();
         Vector3 boxHalfExtents = new Vector3(_dashWidth * 0.5f, 1f, 0.5f);
 
@@ -111,11 +118,25 @@ public class DashAndStun : SkillBehaviour
             foreach (Collider hit in hits)
             {
                 EnemyBase enemy = hit.GetComponentInParent<EnemyBase>();
-                if (enemy != null && !enemy.IsDead && !enemy.IsImmovable && !draggedEnemies.Contains(enemy))
+                if (enemy != null && !enemy.IsDeadSynced && !enemy.IsImmovable && !draggedEnemies.Contains(enemy))
                 {
+                    // -- grid for dragged enemies: 3 per row, in front of the caster
+                    int i = draggedEnemies.Count;
+                    int row = i / 3;
+                    int col = i % 3;
+
+                    float lateralMultiplier = col == 0 ? 0f : (col == 1 ? 1f : -1f);
+                    float lateralOffset = lateralMultiplier * _dashWidth * 0.35f;
+                    float depthOffset = 1.5f + row * 1.2f;
+                    // -- grid
+
                     draggedEnemies.Add(enemy);
-                    NavMeshAgentToggle(enemy, false);
                     enemy.ApplyDebuffRpc(DebuffType.Stun, _stunDuration);
+
+                    // The server moves the enemy, a bit longer than the dash to cover network delay
+                    float remainingTime = (distanceToTravel - traveled) / _dashSpeed;
+                    enemy.StartDragRpc(casterNetObj, dashDirection, lateralOffset, depthOffset, _dashSpeed * 2.5f, remainingTime + 0.25f);
+
                     if (enemy.TryGetComponent<EnemyAnimation>(out var enemyAnim))
                     {
                         enemyAnim.SetStunned(true);
@@ -123,41 +144,14 @@ public class DashAndStun : SkillBehaviour
                 }
             }
 
-            Vector3 rightDirection = Vector3.Cross(Vector3.up, dashDirection).normalized;
-
-            for (int i = 0; i < draggedEnemies.Count; i++)
-            {
-                EnemyBase enemy = draggedEnemies[i];
-                if (enemy.IsDead) continue;
-
-                // -- grid for dragged enemies
-                int row = i / 3;
-                int col = i % 3;
-
-                float lateralMultiplier = col == 0 ? 0f : (col == 1 ? 1f : -1f);
-
-                float lateralSpacing = _dashWidth * 0.35f;
-                float depthSpacing = 1.2f;
-
-                float baseDepth = 1.5f;
-
-                float lateralOffset = lateralMultiplier * lateralSpacing;
-                float depthOffset = baseDepth + (row * depthSpacing);
-
-                Vector3 enemyTarget = caster.transform.position + (dashDirection * depthOffset) + (rightDirection * lateralOffset);
-                // -- grid
-
-                enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, enemyTarget, step * 2.5f);
-            }
-
             yield return null;
         }
 
+        characterController.excludeLayers = originalExclude;
+
         foreach (EnemyBase enemy in draggedEnemies)
         {
-            if (enemy.IsDead) continue;
-            // Reenable NavMeshAgent
-            NavMeshAgentToggle(enemy, true);
+            if (enemy == null || enemy.IsDeadSynced) continue;
             // deal damage at the end
             if (minDamage > 0)
             {
@@ -189,22 +183,6 @@ public class DashAndStun : SkillBehaviour
         }
 
         return distance;
-    }
-
-    private void NavMeshAgentToggle(EnemyBase enemy, bool enabled)
-    {
-        UnityEngine.AI.NavMeshAgent agent = enemy.GetComponent<UnityEngine.AI.NavMeshAgent>();
-        if (agent == null) return;
-
-        if (enabled)
-        {
-            agent.enabled = true;
-            agent.Warp(enemy.transform.position);
-        }
-        else
-        {
-            agent.enabled = false;
-        }
     }
 
     public override void Execute(GameObject caster, Skill skillData, Vector3 targetPosition) { }
