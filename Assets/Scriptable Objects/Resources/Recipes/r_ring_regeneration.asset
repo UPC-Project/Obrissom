@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e7ebd8e9d87da9409fde54eb8162c9f, type: 3}
+  m_Name: r_ring_regeneration
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  recipeID: 5
+  ingredients:
+  - item: {fileID: 11400000, guid: 7fb055ca358117b4c8dda44e1ed7512c, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 41e45a1c36570a34f9ec8a21ea34fd21, type: 2}
+    amount: 10
+  - item: {fileID: 11400000, guid: b4feadf0f9354ce479f9340b531c314d, type: 2}
+    amount: 10
+  result: {fileID: 11400000, guid: 87c487c7dbfd5ca4e8d074dd88df7447, type: 2}
+  resultAmount: 1
