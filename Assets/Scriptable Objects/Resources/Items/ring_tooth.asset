@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5047a4ca74712fe448de02c66df0583b, type: 3}
+  m_Name: ring_tooth
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  itemName: Weird Tooth Ring
+  description: Adds +4 damage to your attacks and healing
+  image: {fileID: 21300000, guid: 5fa257f723e3db74f86e31dcb450442b, type: 3}
+  itemID: 84
+  isStackable: 0
+  maxStackSize: 1
+  itemType: 0
+  modifiers:
+  - Value: 4
+    Stat: 6
+  - Value: 4
+    Stat: 8
+  - Value: 4
+    Stat: 5
+  consumableEffects: []
