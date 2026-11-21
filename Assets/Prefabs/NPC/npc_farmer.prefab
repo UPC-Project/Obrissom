@@ -164,7 +164,7 @@ MonoBehaviour:
   _worldSize: 0.8
   _minPixelSize: 22
   _maxPixelSize: 90
-  _heightAboveHead: 0.4
+  _heightAboveHead: 0.9
   _maxDistance: 150
   _hideWhenOccluded: 1
   _occluders:
@@ -733,6 +733,14 @@ PrefabInstance:
     - target: {fileID: 564748817063569863, guid: b54619096db1fa9488ec822132792a32, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564748817063569863, guid: b54619096db1fa9488ec822132792a32, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564748817063569863, guid: b54619096db1fa9488ec822132792a32, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 564748817063569863, guid: b54619096db1fa9488ec822132792a32, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
