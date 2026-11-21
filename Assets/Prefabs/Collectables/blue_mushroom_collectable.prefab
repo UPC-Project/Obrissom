@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4163284381
+  GlobalObjectIdHash: 882710866
   InScenePlacedSourceGlobalObjectIdHash: 467628839
   DeferredDespawnTick: 0
   Ownership: 1
@@ -97,11 +97,11 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   autoPickup: 0
   _respawn: 1
-  _item: {fileID: 11400000, guid: b4feadf0f9354ce479f9340b531c314d, type: 2}
+  _item: {fileID: 11400000, guid: 61984872f1f59c24ca67e2bae779fe22, type: 2}
   _interactPrompt: {fileID: 1391416960612698}
-  _reSpawnTime: 5
+  _reSpawnTime: 15
   _hideMode: 0
-  model: {fileID: 0}
+  model: {fileID: 9197455903197968273}
   _renderer: {fileID: 0}
   _targetMaterial: {fileID: 0}
   _hiddenMaterial: {fileID: 0}
@@ -168,6 +168,11 @@ PrefabInstance:
 --- !u!4 &8424051021224832299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6775171556914712698, guid: 33248adf68a3d8d42b4689969552b95a, type: 3}
+  m_PrefabInstance: {fileID: 3093413735099022673}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9197455903197968273 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6146830814296083136, guid: 33248adf68a3d8d42b4689969552b95a, type: 3}
   m_PrefabInstance: {fileID: 3093413735099022673}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9108484200668202785

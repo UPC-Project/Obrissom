@@ -4179,6 +4179,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
   inventory: {fileID: 0}
+  testItem1: {fileID: 0}
+  amount1: 1
+  testItem2: {fileID: 0}
+  amount2: 1
+  testItem3: {fileID: 0}
+  amount3: 1
+  testItem4: {fileID: 0}
+  amount4: 1
 --- !u!114 &3512490558587496007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6808,7 +6816,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2830199216410537970
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25671,6 +25679,19 @@ MonoBehaviour:
   _screenMargin: 70
   _targetHeight: 2.8
   _arriveDistance: 12
+--- !u!114 &683682011851610285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210762102208367839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62587a61e85942e2a3d374cf68a649ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.UI.HudToggle
+  _toggleKey: 22
 --- !u!1001 &17180652130740084
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30306,16 +30327,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1135782396924419832, guid: 16f315035509b664182cd776cb4a28b3, type: 3}
   m_PrefabInstance: {fileID: 9080877081586351480}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &683682011851610285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9210762102208367839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62587a61e85942e2a3d374cf68a649ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Obrissom.UI.HudToggle
-  _toggleKey: 22
