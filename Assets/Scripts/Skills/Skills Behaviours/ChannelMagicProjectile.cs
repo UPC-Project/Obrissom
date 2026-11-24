@@ -12,28 +12,23 @@ public class ChannelMagicProjectile : SkillBehaviour
     [SerializeField] float _speed = 4;
     [SerializeField] float _lifeTime = 1.5f;
 
-    private GameObject _crosshair;
-
-    private GameObject GetCrosshair()
-    {
-        if (_crosshair == null) _crosshair = DPSUIManager.Instance.GetCrosshair();
-        return _crosshair;
-    }
+    // The crosshair of this caster, not of another player of the same class
+    private static GameObject GetCrosshair(GameObject caster) => DPSUIManager.Of(caster).GetCrosshair();
 
     public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject crosshair = GetCrosshair();
+        GameObject crosshair = GetCrosshair(caster);
         crosshair.SetActive(true);
     }
 
     public override void OnCancel(GameObject caster, Skill skillData)
     {
-        GetCrosshair().SetActive(false);
+        GetCrosshair(caster).SetActive(false);
     }
 
     public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject crosshair = GetCrosshair();
+        GameObject crosshair = GetCrosshair(caster);
         crosshair.SetActive(false);
         Execute(caster, skillData, targetPosition);
         return true;

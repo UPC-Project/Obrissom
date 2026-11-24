@@ -122,6 +122,9 @@ namespace Obrissom.Enemy
 
         protected override bool IsStaggerImmune => true;
 
+        // It heals fully when the church is empty (ResetToAltar)
+        protected override bool CanRegenerate => false;
+
         private string BossName => _stats != null && !string.IsNullOrEmpty(_stats.enemyName) ? _stats.enemyName : "Mantis";
 
         // Ground for the roots: everything except players and the boss itself
@@ -863,6 +866,10 @@ namespace Obrissom.Enemy
         private void ShowVictoryRpc()
         {
             if (_hud != null) _hud.ShowVictory(string.Format(_victoryFormat, BossName), _victoryBannerTime);
+
+            // Closing cinematic, then leave or keep playing
+            Obrissom.UI.GameEnding ending = FindAnyObjectByType<Obrissom.UI.GameEnding>();
+            if (ending != null) ending.Play();
         }
 
         protected override void OnTakeDamage(float rawAmount)

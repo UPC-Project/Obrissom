@@ -38,6 +38,10 @@ namespace Obrissom.Environment
             GetComponent<Collider>().isTrigger = true;
         }
 
+        // True if this portal takes the player into that boss room
+        public bool LeadsInto(BossAwakenTrigger arena) =>
+            arena != null && _destinationAnchor != null && arena.Contains(_destinationAnchor.GetSpawnPosition());
+
         private void OnTriggerEnter(Collider other)
         {
             PlayerXP playerXP = other.GetComponentInParent<PlayerXP>();

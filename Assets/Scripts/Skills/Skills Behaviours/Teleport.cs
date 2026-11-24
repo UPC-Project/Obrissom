@@ -13,10 +13,16 @@ public class Teleport : SkillBehaviour
     [SerializeField] private string _blockedMessage = "You can't teleport here";
 
     private GameObject _tpIndicator;
+    private GameObject _tpCaster;
 
-    private GameObject GetTpIndicator()
+    // The indicator of this caster, not of another DPS in the game
+    private GameObject GetTpIndicator(GameObject caster)
     {
-        if (_tpIndicator == null) _tpIndicator = DPSUIManager.Instance.GetTeleportCircle();
+        if (_tpIndicator == null || _tpCaster != caster)
+        {
+            _tpIndicator = DPSUIManager.Of(caster).GetTeleportCircle();
+            _tpCaster = caster;
+        }
         return _tpIndicator;
     }
 
@@ -31,20 +37,20 @@ public class Teleport : SkillBehaviour
             return;
         }
 
-        GameObject tpIndicator = GetTpIndicator();
+        GameObject tpIndicator = GetTpIndicator(caster);
         tpIndicator.SetActive(true);
     }
     
     public override void OnCancel(GameObject caster, Skill skillData)
     {
-        GetTpIndicator().SetActive(false);
+        GetTpIndicator(caster).SetActive(false);
     }
     
     // Changes tp circle indicator position relative to camera direction.
     // Updates each frame (called on PlayerSkills).
     public override void OnHoldUpdate(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject tpIndicator = GetTpIndicator();
+        GameObject tpIndicator = GetTpIndicator(caster);
 
         bool blocked = IsBlocked(caster);
         if (tpIndicator.activeSelf == blocked) tpIndicator.SetActive(!blocked);
@@ -98,7 +104,7 @@ public class Teleport : SkillBehaviour
 
     public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject tpIndicator = GetTpIndicator();
+        GameObject tpIndicator = GetTpIndicator(caster);
         Vector3 destination = tpIndicator.transform.position;
         tpIndicator.SetActive(false);
 

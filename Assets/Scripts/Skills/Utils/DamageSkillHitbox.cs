@@ -102,7 +102,7 @@ public class DamageSkillHitbox : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             elapsed += 1f;
-            if (!enemy.IsSpawned || enemy.IsDead) yield break;
+            if (!enemy.IsSpawned || enemy.IsDeadSynced) yield break;
 
             var (damage, isCritic) = skill.damagePerSecondType == EffectType.PhysicDamage
                 ? _playerCombat.CalculatePhysicalDamage(skill.minDamagePerSecond, skill.maxDamagePerSecond)

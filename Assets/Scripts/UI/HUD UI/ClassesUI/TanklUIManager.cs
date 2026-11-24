@@ -4,21 +4,11 @@ namespace Obrissom.UI
 {
     public class TankUIManager : MonoBehaviour
     {
-        public static TankUIManager Instance { get; private set; }
-
         [SerializeField] private GameObject _tauntCircle;
         [SerializeField] private GameObject _dashArea;
 
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-        }
+        // Each player prefab has its own manager: get the one of this player
+        public static TankUIManager Of(GameObject player) => player.GetComponentInChildren<TankUIManager>(true);
 
         public GameObject GetTauntCircle() => _tauntCircle;
         public GameObject GetDashArea() => _dashArea;

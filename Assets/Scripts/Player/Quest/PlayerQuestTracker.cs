@@ -154,6 +154,8 @@ public class PlayerQuestTracker : NetworkBehaviour
         if (instance != null) _activeQuests.Remove(instance);
 
         _completedQuests.Add(template);
+        // Late joiners also get the XP and items, so they can reach the church
+        ApplyRewards(template);
         OnQuestsChanged?.Invoke();
     }
 

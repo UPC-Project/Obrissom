@@ -13,6 +13,13 @@ namespace Obrissom.UI
 
         private Canvas _canvas;
 
+        // Used by the game ending to hide the HUD during the cinematic
+        public bool Visible
+        {
+            get => _canvas.enabled;
+            set => _canvas.enabled = value;
+        }
+
         private void Awake() => _canvas = GetComponent<Canvas>();
 
         private void Update()

@@ -17,13 +17,16 @@ namespace Obrissom.Enemy
         private float _nextRequestTime;
 
         // True if the position is inside any boss room
-        public static bool IsInsideAnyArena(Vector3 position)
+        public static bool IsInsideAnyArena(Vector3 position) => ArenaAt(position) != null;
+
+        // The boss room that contains the position, or null
+        public static BossAwakenTrigger ArenaAt(Vector3 position)
         {
             foreach (BossAwakenTrigger arena in s_arenas)
             {
-                if (arena.Contains(position)) return true;
+                if (arena.Contains(position)) return arena;
             }
-            return false;
+            return null;
         }
 
         private void Awake()

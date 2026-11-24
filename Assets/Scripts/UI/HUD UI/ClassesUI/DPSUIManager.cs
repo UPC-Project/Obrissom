@@ -4,22 +4,12 @@ namespace Obrissom.UI
 {
     public class DPSUIManager : MonoBehaviour
     {
-        public static DPSUIManager Instance { get; private set; }
-
         [SerializeField] private GameObject _crosshair;
         [SerializeField] private GameObject _teleportCircle;
         [SerializeField] private GameObject _magicDamageRing;
 
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-        }
+        // Each player prefab has its own manager: get the one of this player
+        public static DPSUIManager Of(GameObject player) => player.GetComponentInChildren<DPSUIManager>(true);
 
         public GameObject GetCrosshair() => _crosshair;
         public GameObject GetTeleportCircle() => _teleportCircle;

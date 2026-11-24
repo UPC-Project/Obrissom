@@ -14,13 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuestTemplate
   questId: P-07
   title: The Bonfire
-  offerDescription: 'Before you cross the river, rest at the bonfire next to me. Resting heals you and saves your checkpoint: if you fall, you wake up there.'
-  completedDescription: 'Good, your checkpoint is saved. Now I need your help with something else.'
+  offerDescription: 'Welcome to the village, traveler. First, rest at the bonfire next to me. Resting heals you and saves your checkpoint: if you fall, you wake up there.'
+  completedDescription: 'Good, your checkpoint is saved. The wise ant in the village square is worried about the farm, go talk to her.'
   type: 0
   isShared: 1
   requiredLevel: 1
-  requiredQuests:
-  - {fileID: 11400000, guid: 9be0017819584c96acb64fd53407eb20, type: 2}
+  requiredQuests: []
   questGiver: T-02
   questReceiver: T-02
   objective:

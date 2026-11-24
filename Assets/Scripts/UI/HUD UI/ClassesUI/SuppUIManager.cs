@@ -4,21 +4,11 @@ namespace Obrissom.UI
 {
     public class SuppUIManager : MonoBehaviour
     {
-        public static SuppUIManager Instance { get; private set; }
-
         [SerializeField] private GameObject _healCircle;
         [SerializeField] private GameObject _crosshair;
 
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-        }
+        // Each player prefab has its own manager: get the one of this player
+        public static SuppUIManager Of(GameObject player) => player.GetComponentInChildren<SuppUIManager>(true);
 
         public GameObject GetHealCircle() => _healCircle;
         public GameObject GetCrosshair() => _crosshair;

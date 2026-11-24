@@ -8,31 +8,27 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Skills/Behaviours/Channel_Heal_Or_Damage")]
 public class ChannelHealOrDamage : SkillBehaviour
 {
-    private GameObject _crosshair;
     [SerializeField] Vector3 _initialPosition = new();
     [SerializeField] float _speed = 4;
     [SerializeField] float _lifeTime = 1.5f;
 
-    private GameObject GetCrosshair()
-    {
-        if (_crosshair == null) _crosshair = SuppUIManager.Instance.GetCrosshair();
-        return _crosshair;
-    }
+    // The crosshair of this caster, not of another player of the same class
+    private static GameObject GetCrosshair(GameObject caster) => SuppUIManager.Of(caster).GetCrosshair();
 
     public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject crosshair = GetCrosshair();
+        GameObject crosshair = GetCrosshair(caster);
         crosshair.SetActive(true);
     }
 
     public override void OnCancel(GameObject caster, Skill skillData)
     {
-        GetCrosshair().SetActive(false);
+        GetCrosshair(caster).SetActive(false);
     }
 
     public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject crosshair = GetCrosshair();
+        GameObject crosshair = GetCrosshair(caster);
         crosshair.SetActive(false);
         Execute(caster, skillData, targetPosition);
         return true;

@@ -38,6 +38,8 @@ namespace Obrissom.Player
         private UI.HealthAndResourceUI _healthAndResourceUI;
         protected PlayerHealPopUp _healPopUp;
         private Vignette _vignette;
+        private TankUIManager _tankUi;
+        private SuppUIManager _suppUi;
 
         #endregion
 
@@ -50,6 +52,8 @@ namespace Obrissom.Player
             _playerStats = GetComponent<PlayerStats>();
             _healPopUp = GetComponent<PlayerHealPopUp>();
             _playerRespawn = GetComponent<PlayerRespawn>();
+            _tankUi = TankUIManager.Of(gameObject);
+            _suppUi = SuppUIManager.Of(gameObject);
             Volume camVolume = GetComponentInChildren<Volume>();
             camVolume.profile.TryGet(out _vignette);
         }
@@ -288,7 +292,45 @@ namespace Obrissom.Player
             if (_playerRespawn != null) _playerRespawn.OnDowned();
             else Debug.LogWarning($"[PlayerCombat] {name} has no PlayerRespawn, the player will stay dead.");
         }
+
+        // SKILL AREAS: the owner shows them and the other players see them too
+
+        // Owner only. A zero scale keeps the current size.
+        public void SetSkillArea(SkillArea area, bool visible, Vector3 scale = default)
+        {
+            ApplySkillArea(area, visible, scale);
+            if (IsSpawned && IsOwner) SetSkillAreaServerRpc(area, visible, scale);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        private void SetSkillAreaServerRpc(SkillArea area, bool visible, Vector3 scale) => SetSkillAreaForOthersRpc(area, visible, scale);
+
+        [Rpc(SendTo.NotOwner, InvokePermission = RpcInvokePermission.Server)]
+        private void SetSkillAreaForOthersRpc(SkillArea area, bool visible, Vector3 scale) => ApplySkillArea(area, visible, scale);
+
+        private void ApplySkillArea(SkillArea area, bool visible, Vector3 scale)
+        {
+            GameObject target = GetSkillArea(area);
+            if (target == null) return;
+
+            if (scale != Vector3.zero) target.transform.localScale = scale;
+            target.SetActive(visible);
+        }
+
+        // The area object of this player, from its own class UI manager
+        public GameObject GetSkillArea(SkillArea area)
+        {
+            switch (area)
+            {
+                case SkillArea.TauntCircle: return _tankUi != null ? _tankUi.GetTauntCircle() : null;
+                case SkillArea.DashArea: return _tankUi != null ? _tankUi.GetDashArea() : null;
+                case SkillArea.HealCircle: return _suppUi != null ? _suppUi.GetHealCircle() : null;
+                default: return null;
+            }
+        }
     }
 
+    // Skill visuals that other players also see (PlayerCombat.SetSkillArea)
+    public enum SkillArea : byte { TauntCircle, DashArea, HealCircle }
 }
 

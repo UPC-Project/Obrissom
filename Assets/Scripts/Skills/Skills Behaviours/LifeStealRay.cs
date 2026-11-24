@@ -33,7 +33,7 @@ public class LifeStealRay : SkillBehaviour
 
     public override bool OnChannelUpdate(GameObject caster, Skill skillData)
     {
-        if (_targetEnemy == null || !_targetEnemy.IsSpawned || _targetEnemy.IsDead)
+        if (_targetEnemy == null || !_targetEnemy.IsSpawned || _targetEnemy.IsDeadSynced)
             return false;
 
         float distance = Vector3.Distance(caster.transform.position, _targetEnemy.transform.position);
@@ -89,7 +89,7 @@ public class LifeStealRay : SkillBehaviour
             if (!hit.transform.root.CompareTag("Enemy")) continue;
 
             EnemyBase enemy = hit.transform.root.GetComponent<EnemyBase>();
-            if (enemy == null || !enemy.IsSpawned || enemy.IsDead) continue;
+            if (enemy == null || !enemy.IsSpawned || enemy.IsDeadSynced) continue;
 
             float distance = Vector3.Distance(origin, enemy.transform.position);
             if (distance < closestDistance)

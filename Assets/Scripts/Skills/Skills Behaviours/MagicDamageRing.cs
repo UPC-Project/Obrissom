@@ -15,29 +15,35 @@ public class MagicDamageRing : SkillBehaviour
     [SerializeField] private LayerMask _groundLayers;
 
     private GameObject _ringIndicator;
+    private GameObject _ringCaster;
 
-    private GameObject GetRingIndicator()
+    // The indicator of this caster, not of another DPS in the game
+    private GameObject GetRingIndicator(GameObject caster)
     {
-        if (_ringIndicator == null) _ringIndicator = DPSUIManager.Instance.GetMagicDamageRing();
+        if (_ringIndicator == null || _ringCaster != caster)
+        {
+            _ringIndicator = DPSUIManager.Of(caster).GetMagicDamageRing();
+            _ringCaster = caster;
+        }
         return _ringIndicator;
     }
 
     public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject ringIndicator = GetRingIndicator();
+        GameObject ringIndicator = GetRingIndicator(caster);
         ringIndicator.SetActive(true);
     }
 
     public override void OnCancel(GameObject caster, Skill skillData)
     {
-        GetRingIndicator().SetActive(false);
+        GetRingIndicator(caster).SetActive(false);
     }
 
     // Changes magic ring indicator position relative to camera direction.
     // Updates each frame (called on PlayerSkills).
     public override void OnHoldUpdate(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject ringIndicator = GetRingIndicator();
+        GameObject ringIndicator = GetRingIndicator(caster);
 
         Vector3 casterPos = caster.transform.position;
 
@@ -95,7 +101,7 @@ public class MagicDamageRing : SkillBehaviour
 
     public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GameObject ringIndicator = GetRingIndicator();
+        GameObject ringIndicator = GetRingIndicator(caster);
         if (!ringIndicator.activeSelf) return false;
 
         Vector3 ringAim = ringIndicator.transform.position;

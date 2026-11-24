@@ -1,6 +1,5 @@
 using Obrissom.Enemy;
 using Obrissom.Player;
-using Obrissom.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -23,41 +22,42 @@ public class DashAndStun : SkillBehaviour
 
     [SerializeField] private LayerMask _enemyLayer;
 
-    // Cached at runtime
-    private GameObject _dashArea;
-    private Transform _dashAreaTransform;
+    // Other players get a new lane length only when it changes this much
+    private const float DashSyncStep = 0.25f;
+    private float _sentDashDistance;
 
-    private GameObject GetDashArea()
-    {
-        if (_dashArea == null)
-        {
-            _dashArea = TankUIManager.Instance.GetDashArea();
-            _dashAreaTransform = _dashArea.transform;
-        }
-        return _dashArea;
-    }
+    private Vector3 DashScale(float dashDistance) => new Vector3(_dashWidth, dashDistance, 1f);
 
     public override void OnHold(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GetDashArea().SetActive(true);
+        _sentDashDistance = CalculateDashDistance(caster.transform.position, caster.transform.forward);
+        caster.GetComponent<PlayerCombat>().SetSkillArea(SkillArea.DashArea, true, DashScale(_sentDashDistance));
     }
 
     public override void OnHoldUpdate(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        Transform casterTransform = caster.transform;
-        float dashDistance = CalculateDashDistance(casterTransform.position, casterTransform.forward);
+        PlayerCombat playerCombat = caster.GetComponent<PlayerCombat>();
+        float dashDistance = CalculateDashDistance(caster.transform.position, caster.transform.forward);
 
-        _dashAreaTransform.localScale = new Vector3(_dashWidth, dashDistance, 1f);
+        if (Mathf.Abs(dashDistance - _sentDashDistance) >= DashSyncStep)
+        {
+            _sentDashDistance = dashDistance;
+            playerCombat.SetSkillArea(SkillArea.DashArea, true, DashScale(dashDistance));
+            return;
+        }
+
+        GameObject dashArea = playerCombat.GetSkillArea(SkillArea.DashArea);
+        if (dashArea != null) dashArea.transform.localScale = DashScale(dashDistance);
     }
 
     public override void OnCancel(GameObject caster, Skill skillData)
     {
-        GetDashArea().SetActive(false);
+        caster.GetComponent<PlayerCombat>().SetSkillArea(SkillArea.DashArea, false);
     }
 
     public override bool OnRelease(GameObject caster, Skill skillData, Vector3 targetPosition)
     {
-        GetDashArea().SetActive(false);
+        caster.GetComponent<PlayerCombat>().SetSkillArea(SkillArea.DashArea, false);
 
         Transform casterTransform = caster.transform;
         Vector3 origin = casterTransform.position;

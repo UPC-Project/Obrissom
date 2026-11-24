@@ -1,4 +1,5 @@
 using Obrissom.Enemy;
+using Obrissom.Environment;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -52,7 +53,7 @@ namespace Obrissom.UI
             {
                 _nextRefresh = Time.unscaledTime + RefreshInterval;
                 _player = GetLocalPlayer();
-                _target = _player != null ? FindTarget(_player) : null;
+                _target = _player != null ? RouteThroughPortal(FindTarget(_player), _player.transform.position) : null;
             }
 
             Camera cam = Camera.main;
@@ -248,6 +249,26 @@ namespace Obrissom.UI
                 }
             }
             return best;
+        }
+
+        // The church inside is only reached by portal: point to the portal on the way to the target
+        private static Transform RouteThroughPortal(Transform target, Vector3 from)
+        {
+            if (target == null) return null;
+
+            BossAwakenTrigger playerArena = BossAwakenTrigger.ArenaAt(from);
+            BossAwakenTrigger targetArena = BossAwakenTrigger.ArenaAt(target.position);
+            if (playerArena == targetArena) return target;
+
+            Transform best = null;
+            float bestDistance = float.MaxValue;
+            foreach (BossArenaPortal portal in FindObjectsByType<BossArenaPortal>(FindObjectsSortMode.None))
+            {
+                // Inside: the nearest way out. Outside: the portal into the target's room.
+                bool onTheWay = playerArena != null ? !portal.LeadsInto(playerArena) : portal.LeadsInto(targetArena);
+                if (onTheWay) Consider(portal.transform, from, ref best, ref bestDistance);
+            }
+            return best != null ? best : target;
         }
 
         private static void Consider(Transform candidate, Vector3 from, ref Transform best, ref float bestDistance)

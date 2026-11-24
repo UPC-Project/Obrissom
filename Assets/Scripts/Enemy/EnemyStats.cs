@@ -12,6 +12,10 @@ namespace Obrissom.Enemy
 
         [Header("Health")]
         [Min(1f)] public float maxHealth = 100f;
+        [Tooltip("Seconds out of combat before health starts coming back.")]
+        [Min(0f)] public float regenDelay = 5f;
+        [Tooltip("Part of max health recovered per second out of combat (0.1 = 10%). 0 = no regen.")]
+        [Min(0f)] public float regenPerSecond = 0.1f;
 
         [Header("Movement")]
         [Min(0f)] public float moveSpeed = 3.5f;

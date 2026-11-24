@@ -179,6 +179,33 @@ namespace Obrissom.Enemy
             }
 
             _stateMachine.Tick();
+            UpdateRegeneration();
+        }
+
+        // Regeneration (server only)
+
+        private const float RegenUiInterval = 0.25f;
+        private float _lastCombatTime;
+        private float _regenUiTimer;
+
+        // False for enemies that heal in their own way (the boss resets at its altar)
+        protected virtual bool CanRegenerate => true;
+
+        // Out of combat (no target, no recent hits) health comes back to max
+        private void UpdateRegeneration()
+        {
+            if (_target != null || IsTaunted) _lastCombatTime = Time.time;
+
+            if (!CanRegenerate || _stats.regenPerSecond <= 0f || _currentHealth >= _stats.maxHealth) return;
+            if (Time.time - _lastCombatTime < _stats.regenDelay) return;
+
+            _currentHealth = Mathf.Min(_currentHealth + _stats.maxHealth * _stats.regenPerSecond * Time.deltaTime, _stats.maxHealth);
+
+            // The bar is sent a few times per second, not every frame
+            _regenUiTimer -= Time.deltaTime;
+            if (_regenUiTimer > 0f && _currentHealth < _stats.maxHealth) return;
+            _regenUiTimer = RegenUiInterval;
+            _enemyUi.UpdateHealthUIRpc(_currentHealth, _stats.maxHealth);
         }
 
         //Detection
@@ -255,6 +282,7 @@ namespace Obrissom.Enemy
 
             float finalDamage = Mathf.Round(rawAmount * (1f - reduction));
             _currentHealth = Mathf.Max(_currentHealth - finalDamage, 0f);
+            _lastCombatTime = Time.time;
 
             _damagePopUp.ShowPopUpClientRpc(finalDamage.ToString(), type, isCritic, hitPos);
             PlaySoundForEveryone(type == EffectType.PhysicDamage ? AudioID.HitPhysical : AudioID.HitMagic, hitPos);

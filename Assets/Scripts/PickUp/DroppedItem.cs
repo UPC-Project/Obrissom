@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -20,6 +21,10 @@ public class DroppedItem : PickupBase
     [SerializeField] private TextMeshProUGUI _labelText;
     [SerializeField] private float _labelHeight = 0.8f;
 
+    [Header("Lifetime")]
+    [Tooltip("Seconds on the ground before it disappears. 0 = never.")]
+    [SerializeField] private float _lifetime = 30f;
+
     // LOCAL VARIABLES
     private Vector3 _startPosition;
     private Camera _camera;
@@ -37,6 +42,16 @@ public class DroppedItem : PickupBase
         _quantity.OnValueChanged += (prev, current) => UpdateLabel();
 
         ResolveItem();
+
+        // Only the server removes it; the despawn reaches every client
+        if (IsServer && _lifetime > 0f && NetworkObject.IsSceneObject != true)
+            StartCoroutine(DespawnAfterLifetime());
+    }
+
+    private IEnumerator DespawnAfterLifetime()
+    {
+        yield return new WaitForSeconds(_lifetime);
+        if (IsSpawned) NetworkObject.Despawn();
     }
 
     /// <summary>
