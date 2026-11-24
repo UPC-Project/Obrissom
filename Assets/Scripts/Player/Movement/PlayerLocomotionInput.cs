@@ -1,6 +1,8 @@
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using Obrissom.UI;
 
 namespace Obrissom.Player
@@ -66,6 +68,9 @@ namespace Obrissom.Player
 
             PlayerInput.PlayerLocomotionMap.Enable();
             PlayerInput.PlayerLocomotionMap.SetCallbacks(this);
+
+            // Skills turn this off while casting: if the camera button is still held, keep controlling the camera
+            if (IsOwner && IsCameraButtonHeld()) SetCameraPressed(true);
         }
 
         private void OnDisable()
@@ -73,12 +78,24 @@ namespace Obrissom.Player
             PlayerInput.PlayerLocomotionMap.Disable();
             PlayerInput.PlayerLocomotionMap.RemoveCallbacks(this);
 
-            if (IsOwner)
+            if (IsOwner) SetCameraPressed(false);
+        }
+
+        private bool IsCameraButtonHeld()
+        {
+            foreach (InputControl control in PlayerInput.PlayerLocomotionMap.CameraControls.controls)
             {
-                CameraPressed = false;
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                if (control is ButtonControl button && button.isPressed) return true;
             }
+            return false;
+        }
+
+        // Holding the camera button locks and hides the cursor
+        private void SetCameraPressed(bool pressed)
+        {
+            CameraPressed = pressed;
+            Cursor.visible = !pressed;
+            Cursor.lockState = pressed ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
         public override void OnDestroy()
@@ -126,9 +143,7 @@ namespace Obrissom.Player
 
         public void OnCameraControls(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
-            CameraPressed = context.ReadValueAsButton();
-            Cursor.visible = !CameraPressed;
-            Cursor.lockState = CameraPressed ? CursorLockMode.Locked : CursorLockMode.None;
+            SetCameraPressed(context.ReadValueAsButton());
         }
 
         public void OnScrollCamera(UnityEngine.InputSystem.InputAction.CallbackContext context)
