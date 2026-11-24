@@ -4,6 +4,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerInventory = Obrissom.Player.Inventory.Inventory;
 
 namespace Obrissom.UI
 {
@@ -135,9 +136,11 @@ namespace Obrissom.UI
                 case QuestObjectiveType.Talk:
                     return FindNpc(quest.IsTalkCompleted() ? template.questReceiver : objective.targetNPC);
                 case QuestObjectiveType.Kill:
-                    return FindNearestEnemy(quest, from);
+                    // Only leads to the first enemy, after that the player hunts alone
+                    return HasKills(quest) ? null : FindNearestEnemy(quest, from);
                 case QuestObjectiveType.Collect:
-                    return FindNearestCollectable(objective, from) ?? FindNpc(template.questReceiver);
+                    // Only leads to the first item, after that the player searches alone
+                    return HasCollected(quest, player) ? null : (FindNearestCollectable(objective, from) ?? FindNpc(template.questReceiver));
                 case QuestObjectiveType.Rest:
                     return FindNearestBonfire(from);
                 default:
@@ -156,6 +159,31 @@ namespace Obrissom.UI
                 if (inProgress == null && quest.status == QuestStatus.InProgress) inProgress = quest;
             }
             return inProgress;
+        }
+
+        private static bool HasKills(QuestInstance quest)
+        {
+            EnemyTarget[] targets = quest.template.objective.enemyTargets;
+            if (targets == null) return false;
+
+            for (int i = 0; i < targets.Length; i++)
+            {
+                if (quest.GetKillProgress(i) > 0) return true;
+            }
+            return false;
+        }
+
+        private static bool HasCollected(QuestInstance quest, PlayerQuestTracker player)
+        {
+            ItemTarget[] targets = quest.template.objective.itemTargets;
+            PlayerInventory inventory = player.GetComponent<PlayerInventory>();
+            if (targets == null || inventory == null) return false;
+
+            for (int i = 0; i < targets.Length; i++)
+            {
+                if (quest.GetCollectProgress(i, inventory) > 0) return true;
+            }
+            return false;
         }
 
         private static Transform FindNpc(string npcId)
