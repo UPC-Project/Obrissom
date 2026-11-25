@@ -31,6 +31,11 @@ namespace Obrissom.UI
 
         [Header("Panel")]
         [SerializeField] private TMP_FontAsset _font;
+        [Tooltip("Same frame and button as the in-game menus (exit game modal).")]
+        [SerializeField] private Sprite _frameSprite;
+        [SerializeField] private Sprite _buttonSprite;
+        [SerializeField] private Color _textColor = new Color(0.82f, 0.82f, 0.82f);
+        [SerializeField] private Color _buttonTextColor = new Color(0.89f, 0.84f, 0.58f);
         [SerializeField] private string _title = "The village is free";
         [SerializeField] private string _subtitle = "Thank you for playing";
         [SerializeField] private string _leaveText = "Leave the world";
@@ -187,15 +192,21 @@ namespace Obrissom.UI
             scaler.matchWidthOrHeight = 0.5f;
             _panel.AddComponent<GraphicRaycaster>();
 
-            CreateFullScreen("Shade", _panel.transform, new Color(0f, 0f, 0f, 0.55f));
+            CreateFullScreen("Shade", _panel.transform, new Color(0f, 0f, 0f, 0.45f));
 
-            CreateText("Title", _title, 72f, new Vector2(0f, 170f), new Vector2(1400f, 100f));
-            CreateText("Subtitle", _subtitle, 36f, new Vector2(0f, 90f), new Vector2(1400f, 60f));
-            CreateButton("Leave Button", _leaveText, new Vector2(-190f, -40f), LeaveWorld);
-            CreateButton("Stay Button", _stayText, new Vector2(190f, -40f), KeepPlaying);
+            // Gold frame like the in-game menus, everything goes inside it
+            Image frame = CreateRect("Frame", _panel.transform, Vector2.zero, new Vector2(820f, 500f)).gameObject.AddComponent<Image>();
+            frame.sprite = _frameSprite;
+            if (_frameSprite == null) frame.color = new Color(0.1f, 0.08f, 0.07f, 0.95f);
+            Transform content = frame.transform;
+
+            CreateText("Title", _title, 56f, new Vector2(0f, 120f), new Vector2(700f, 80f), content);
+            CreateText("Subtitle", _subtitle, 30f, new Vector2(0f, 55f), new Vector2(700f, 50f), content);
+            CreateButton("Leave Button", _leaveText, new Vector2(-165f, -50f), LeaveWorld, content);
+            CreateButton("Stay Button", _stayText, new Vector2(165f, -50f), KeepPlaying, content);
 
             if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost)
-                CreateText("Host Warning", _hostWarning, 24f, new Vector2(0f, -130f), new Vector2(1400f, 40f));
+                CreateText("Host Warning", _hostWarning, 22f, new Vector2(0f, -145f), new Vector2(700f, 40f), content);
         }
 
         // Own canvas under the final panel, so the panel always draws on top
@@ -235,29 +246,27 @@ namespace Obrissom.UI
             if (_font != null) label.font = _font;
             label.text = text;
             label.fontSize = size;
-            label.color = Color.white;
+            label.color = _textColor;
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
             return label;
         }
 
-        private void CreateButton(string name, string text, Vector2 position, UnityEngine.Events.UnityAction onClick)
+        private void CreateButton(string name, string text, Vector2 position, UnityEngine.Events.UnityAction onClick, Transform parent)
         {
-            RectTransform rect = CreateRect(name, _panel.transform, position, new Vector2(340f, 80f));
+            // Same size ratio as the button sprite (318x88)
+            RectTransform rect = CreateRect(name, parent, position, new Vector2(300f, 83f));
             Image background = rect.gameObject.AddComponent<Image>();
-            background.color = new Color(0.12f, 0.1f, 0.08f, 0.9f);
-
-            Outline outline = rect.gameObject.AddComponent<Outline>();
-            outline.effectColor = new Color(1f, 0.8f, 0.15f, 0.8f);
-            outline.effectDistance = new Vector2(2f, -2f);
+            background.sprite = _buttonSprite;
+            if (_buttonSprite == null) background.color = new Color(0.12f, 0.1f, 0.08f, 0.9f);
 
             Button button = rect.gameObject.AddComponent<Button>();
             button.targetGraphic = background;
             button.onClick.AddListener(onClick);
             rect.gameObject.AddComponent<UIButtonSound>();
 
-            TextMeshProUGUI label = CreateText("Label", text, 32f, Vector2.zero, rect.sizeDelta, rect);
-            label.color = new Color(1f, 0.85f, 0.4f);
+            TextMeshProUGUI label = CreateText("Label", text, 30f, Vector2.zero, rect.sizeDelta, rect);
+            label.color = _buttonTextColor;
         }
     }
 }
